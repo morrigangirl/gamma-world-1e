@@ -130,6 +130,19 @@ test("equipment rules expose automation defaults for known gear", () => {
 test("pilot animation registry resolves expanded weapons, ordnance, and support profiles", () => {
   assert.equal(resolvePilotAnimationKey("Laser Pistol", { kind: "weapon" }), "Laser Pistol");
   assert.equal(resolvePilotAnimationKey("Built-in Laser Pistol (Left)", { kind: "weapon" }), "Laser Pistol");
+  assert.equal(resolvePilotAnimationKey("Club", { kind: "weapon" }), "Club");
+  assert.equal(resolvePilotAnimationKey("Spear", { kind: "weapon" }), "Spear");
+  assert.equal(resolvePilotAnimationKey("Battle Axe", { kind: "weapon" }), "Battle Axe");
+  assert.equal(resolvePilotAnimationKey("Hand Axe", { kind: "weapon" }), "Hand Axe");
+  assert.equal(resolvePilotAnimationKey("Dagger", { kind: "weapon" }), "Dagger");
+  assert.equal(resolvePilotAnimationKey("Long Sword", { kind: "weapon" }), "Long Sword");
+  assert.equal(resolvePilotAnimationKey("Short Sword", { kind: "weapon" }), "Short Sword");
+  assert.equal(resolvePilotAnimationKey("Pole Arm", { kind: "weapon" }), "Pole Arm");
+  assert.equal(resolvePilotAnimationKey("Javelin", { kind: "weapon" }), "Javelin");
+  assert.equal(resolvePilotAnimationKey("Bow and Arrows", { kind: "weapon" }), "Bow and Arrows");
+  assert.equal(resolvePilotAnimationKey("Crossbow", { kind: "weapon" }), "Crossbow");
+  assert.equal(resolvePilotAnimationKey("Sling Stones", { kind: "weapon" }), "Sling Stones");
+  assert.equal(resolvePilotAnimationKey("Sling Bullets", { kind: "weapon" }), "Sling Bullets");
   assert.equal(resolvePilotAnimationKey("Laser Rifle", { kind: "weapon" }), "Laser Rifle");
   assert.equal(resolvePilotAnimationKey("Fusion Rifle", { kind: "weapon" }), "Fusion Rifle");
   assert.equal(resolvePilotAnimationKey("Powered Assault Fist", { kind: "weapon" }), "Powered Assault Fist");
@@ -140,6 +153,15 @@ test("pilot animation registry resolves expanded weapons, ordnance, and support 
   assert.equal(resolvePilotAnimationKey("Energy Cloak", { kind: "gear" }), "Energy Cloak");
   assert.equal(resolvePilotAnimationKey("Force Field Generation", { kind: "mutation" }), "Force Field Generation");
   assert.equal(resolvePilotAnimationKey("Stone Spear", { kind: "weapon" }), "");
+});
+
+test("animation registry covers every bundled weapon entry", () => {
+  const uncovered = equipmentPackSources()
+    .filter((item) => item.type === "weapon")
+    .map((item) => item.name)
+    .filter((name) => !resolvePilotAnimationKey(name, { kind: "weapon" }));
+
+  assert.deepEqual(uncovered, []);
 });
 
 test("mutation rules mark special actions as interactive", () => {

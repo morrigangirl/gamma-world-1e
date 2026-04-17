@@ -471,6 +471,11 @@
                     <i class="fas fa-magnifying-glass"></i>
                   </button>
                 {{/if}}
+                {{#if item.gwCanRevealFunction}}
+                  <button type="button" data-action="revealArtifactFunction" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Session.RevealFunction"}}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                {{/if}}
                 {{#if item.gwHasPowerControls}}
                   <button type="button" data-action="managePower" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}">
                     <i class="fas fa-battery-half"></i>
@@ -529,6 +534,11 @@
                     <i class="fas fa-magnifying-glass"></i>
                   </button>
                 {{/if}}
+                {{#if item.gwCanRevealFunction}}
+                  <button type="button" data-action="revealArtifactFunction" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Session.RevealFunction"}}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                {{/if}}
                 {{#if item.gwHasPowerControls}}
                   <button type="button" data-action="managePower" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}">
                     <i class="fas fa-battery-half"></i>
@@ -584,6 +594,11 @@
                 {{#if item.gwCanAnalyze}}
                   <button type="button" data-action="analyzeItem" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Analyze"}}">
                     <i class="fas fa-magnifying-glass"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanRevealFunction}}
+                  <button type="button" data-action="revealArtifactFunction" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Session.RevealFunction"}}">
+                    <i class="fas fa-eye"></i>
                   </button>
                 {{/if}}
                 {{#if item.gwHasPowerControls}}

@@ -116,6 +116,7 @@ function prepareArtifactPresentation(item) {
   const unknownArtifact = isArtifact && !operationKnown;
   item.gwDisplayName = artifactDisplayName(item);
   item.gwCanAnalyze = unknownArtifact;
+  item.gwCanRevealFunction = !!(unknownArtifact && game.user?.isGM);
   item.gwCanEdit = !unknownArtifact || !!game.user?.isGM;
   item.gwIsUnknownArtifact = unknownArtifact;
   item.gwArtifactKnown = !unknownArtifact;
@@ -317,6 +318,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       useMutation:    GammaWorldCharacterSheet.#onUseMutation,
       useItem:        GammaWorldCharacterSheet.#onUseItem,
       analyzeItem:    GammaWorldCharacterSheet.#onAnalyzeItem,
+      revealArtifactFunction: GammaWorldCharacterSheet.#onRevealArtifactFunction,
       managePower:    GammaWorldCharacterSheet.#onManagePower,
       removeEffect:   GammaWorldCharacterSheet.#onRemoveEffect,
       resetMutations: GammaWorldCharacterSheet.#onResetMutations,
@@ -718,6 +720,28 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     }
     try {
       await item.openArtifactWorkflow();
+    } finally {
+      release();
+    }
+  }
+
+  static async #onRevealArtifactFunction(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const item = this.document.items.get(itemId);
+    if (!item || !game.user?.isGM) return;
+
+    const confirm = await DialogV2.confirm({
+      window: { title: game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunction") },
+      content: `<p>${game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunctionConfirm")}</p>`
+    });
+    if (!confirm) return;
+
+    const release = GammaWorldCharacterSheet.#lockAction(this, target, "revealArtifactFunction", itemId);
+    if (!release) return;
+    try {
+      const { overrideArtifactAnalysis } = await import("../artifacts.mjs");
+      await overrideArtifactAnalysis(this.document, item);
     } finally {
       release();
     }

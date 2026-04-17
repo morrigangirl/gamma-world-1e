@@ -222,6 +222,7 @@ export class ArtifactFlowchartApp extends HandlebarsApplicationMixin(Application
       tryArtifact: ArtifactFlowchartApp.#onTryArtifact,
       resetSession: ArtifactFlowchartApp.#onResetSession,
       reassignOperator: ArtifactFlowchartApp.#onReassignOperator,
+      revealFunction: ArtifactFlowchartApp.#onRevealFunction,
       revealOutcome: ArtifactFlowchartApp.#onRevealOutcome,
       toggleDebug: ArtifactFlowchartApp.#onToggleDebug,
       changeHelpers: ArtifactFlowchartApp.#onChangeHelpers,
@@ -288,6 +289,7 @@ export class ArtifactFlowchartApp extends HandlebarsApplicationMixin(Application
     const canReset = !!snapshot && isGM;
     const canReassign = !!snapshot && isGM;
     const canReveal = !!snapshot && isGM && !!gmSession?.gmHidden?.functionCheckRolled;
+    const canRevealFunction = !!snapshot && isGM && !item?.system?.artifact?.operationKnown;
     const modifierSummary = snapshot?.modifierSummary?.length
       ? snapshot.modifierSummary.join(" · ")
       : game.i18n.localize("GAMMA_WORLD.Artifact.Session.NoSpecialMods");
@@ -350,6 +352,7 @@ export class ArtifactFlowchartApp extends HandlebarsApplicationMixin(Application
       canReset,
       canReassign,
       canReveal,
+      canRevealFunction,
       debugEnabled: this.#debug,
       gmDiagnostics
     };
@@ -441,6 +444,19 @@ export class ArtifactFlowchartApp extends HandlebarsApplicationMixin(Application
     await ArtifactFlowchartApp.#withAction(this, async () => {
       const mod = await import("./artifact-session.mjs");
       await mod.revealArtifactOutcome(null, this.itemUuid);
+    });
+  }
+
+  static async #onRevealFunction(event) {
+    event.preventDefault();
+    const confirm = await DialogV2.confirm({
+      window: { title: game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunction") },
+      content: `<p>${game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunctionConfirm")}</p>`
+    });
+    if (!confirm) return;
+    await ArtifactFlowchartApp.#withAction(this, async () => {
+      const mod = await import("./artifact-session.mjs");
+      await mod.overrideArtifactAnalysis(null, this.itemUuid);
     });
   }
 

@@ -12,6 +12,7 @@ import {
 import {
   interruptArtifactSession,
   openArtifactSession,
+  overrideArtifactAnalysis,
   registerArtifactSessionSocket,
   requestArtifactSessionSnapshot,
   resetArtifactSession,
@@ -37,6 +38,7 @@ async function postArtifactMessage(actor, item, body) {
 export {
   interruptArtifactSession,
   openArtifactSession,
+  overrideArtifactAnalysis,
   registerArtifactSessionSocket,
   requestArtifactSessionSnapshot,
   resetArtifactSession,

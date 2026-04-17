@@ -718,6 +718,48 @@ async function revealArtifactOutcomeLocal(actor, item) {
   return snapshot;
 }
 
+async function overrideArtifactAnalysisLocal(actor, item, { userId = game.user?.id ?? "" } = {}) {
+  const actingUserId = String(userId ?? "");
+  const gmOverride = !!game.users.get(actingUserId)?.isGM || !!game.user?.isGM;
+  if (!gmOverride) {
+    throw new Error(game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunctionGmOnly"));
+  }
+
+  const publicMessage = game.i18n.localize("GAMMA_WORLD.Artifact.Session.RevealFunctionPublic");
+  let session = sessionFlag(item);
+  if (session) {
+    session.currentNode = artifactChartFinishNode(session.chartId);
+    session.resolved = true;
+    session.result = "resolved-success";
+    session.publicOutcome = publicMessage;
+    session.updatedAt = nowIso();
+    session.auditLog.push(createAuditEntry("gm-reveal-function", publicMessage, {
+      userId: actingUserId
+    }));
+
+    const snapshot = await persistSession(actor, item, session, {
+      "system.artifact.identified": true,
+      "system.artifact.operationKnown": true
+    });
+    await postArtifactChat(actor, item, artifactDisplayName(item), `<p>${escapeHtml(publicMessage)}</p>`);
+    return snapshot;
+  }
+
+  await item.update({
+    "system.artifact.identified": true,
+    "system.artifact.operationKnown": true
+  }, { gammaWorldSync: true });
+  await postArtifactChat(actor, item, artifactDisplayName(item), `<p>${escapeHtml(publicMessage)}</p>`);
+  return {
+    itemUuid: item.uuid,
+    itemName: artifactDisplayName(item),
+    actorName: actor?.name ?? "",
+    resolved: true,
+    result: "resolved-success",
+    publicOutcome: publicMessage
+  };
+}
+
 async function resolveArtifactOperationCheckLocal(actor, item, { cause = "use" } = {}) {
   const session = sessionFlag(item);
   if (session) {
@@ -748,6 +790,8 @@ async function executeArtifactActionLocal(action, payload = {}) {
       return resetArtifactSessionLocal(item);
     case "reveal":
       return revealArtifactOutcomeLocal(actor, item);
+    case "reveal-function":
+      return overrideArtifactAnalysisLocal(actor, item, payload);
     case "operation-check":
       return resolveArtifactOperationCheckLocal(actor, item, payload);
     default:
@@ -863,6 +907,12 @@ export async function resetArtifactSession(actor, item) {
 
 export async function revealArtifactOutcome(actor, item) {
   return runArtifactAction("reveal", actor, item);
+}
+
+export async function overrideArtifactAnalysis(actor, item, options = {}) {
+  return runArtifactAction("reveal-function", actor, item, {
+    userId: options.userId ?? game.user?.id ?? ""
+  });
 }
 
 export async function resolveArtifactOperationCheck(actor, item, { cause = "use" } = {}) {

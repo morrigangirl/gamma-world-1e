@@ -7,6 +7,20 @@ const JB2A_MODULE_IDS = ["jb2a_patreon", "JB2A_DnD5e"];
 const SHORT_RANGES = ["15ft", "30ft", "60ft", "90ft", "05ft"];
 const LONG_RANGES = ["60ft", "90ft", "30ft", "15ft", "05ft"];
 const DEFAULT_INDEXES = [0, 1, 2, 3];
+const FULL_MELEE_INDEXES = [0, 1, 2, 3, 4, 5];
+const LIGHT_PHYSICAL_IMPACTS = [
+  "jb2a.impact.001.orange",
+  "jb2a.impact.005.white"
+];
+const PIERCING_PHYSICAL_IMPACTS = [
+  "jb2a.impact.001.yellow",
+  "jb2a.impact.005.white"
+];
+const HEAVY_PHYSICAL_IMPACTS = [
+  "jb2a.impact.005.orange",
+  "jb2a.impact.005.white",
+  "jb2a.side_impact.part.shockwave.yellow"
+];
 
 function rangeVariants(base, ranges = SHORT_RANGES) {
   return ranges.map((range) => `${base}.${range}`);
@@ -368,6 +382,132 @@ const weaponFamilies = {
     projectileScale: 0.74,
     sourceScale: 0.22,
     impactScale: 0.36
+  }),
+  club: meleeWeaponProfile({
+    swing: [
+      ...indexedVariants("jb2a.club.melee.01.white", FULL_MELEE_INDEXES),
+      ...indexedVariants("jb2a.melee_attack.02.club.01")
+    ],
+    impact: LIGHT_PHYSICAL_IMPACTS,
+    swingScale: 0.92,
+    impactScale: 0.42
+  }),
+  spearThrown: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.spear.throw.01", LONG_RANGES)
+    ],
+    impact: PIERCING_PHYSICAL_IMPACTS,
+    projectileScale: 0.92,
+    impactScale: 0.44
+  }),
+  battleAxe: meleeWeaponProfile({
+    swing: [
+      ...indexedVariants("jb2a.melee_attack.03.greataxe.01"),
+      "jb2a.greataxe.melee.standard.white"
+    ],
+    impact: HEAVY_PHYSICAL_IMPACTS,
+    swingScale: 1.04,
+    impactScale: 0.58
+  }),
+  handAxeThrown: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.handaxe.throw.01", LONG_RANGES),
+      ...rangeVariants("jb2a.handaxe.throw.02", LONG_RANGES)
+    ],
+    impact: LIGHT_PHYSICAL_IMPACTS,
+    projectileScale: 0.84,
+    impactScale: 0.44
+  }),
+  daggerThrown: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.dagger.throw.01.white", LONG_RANGES),
+      ...rangeVariants("jb2a.dagger.throw.02.white", LONG_RANGES)
+    ],
+    impact: LIGHT_PHYSICAL_IMPACTS,
+    projectileScale: 0.72,
+    impactScale: 0.38
+  }),
+  longSword: meleeWeaponProfile({
+    swing: [
+      ...indexedVariants("jb2a.sword.melee.01.white", FULL_MELEE_INDEXES),
+      ...indexedVariants("jb2a.melee_attack.03.greatsword.01")
+    ],
+    impact: [
+      "jb2a.impact.005.white",
+      "jb2a.impact.001.orange"
+    ],
+    swingScale: 1,
+    impactScale: 0.52
+  }),
+  shortSword: meleeWeaponProfile({
+    swing: [
+      ...indexedVariants("jb2a.shortsword.melee.01.white", FULL_MELEE_INDEXES),
+      ...indexedVariants("jb2a.melee_attack.01.shortsword.01")
+    ],
+    impact: LIGHT_PHYSICAL_IMPACTS,
+    swingScale: 0.94,
+    impactScale: 0.42
+  }),
+  poleArm: meleeWeaponProfile({
+    swing: [
+      ...indexedVariants("jb2a.halberd.melee.01.white", FULL_MELEE_INDEXES),
+      ...indexedVariants("jb2a.glaive.melee.01.white", FULL_MELEE_INDEXES)
+    ],
+    impact: HEAVY_PHYSICAL_IMPACTS,
+    swingScale: 1.08,
+    impactScale: 0.62
+  }),
+  javelin: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.javelin.01.throw", LONG_RANGES),
+      ...rangeVariants("jb2a.javelin.throw", LONG_RANGES)
+    ],
+    impact: PIERCING_PHYSICAL_IMPACTS,
+    projectileScale: 0.9,
+    impactScale: 0.44
+  }),
+  bowAndArrows: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.arrow.physical.white.01", LONG_RANGES),
+      ...rangeVariants("jb2a.arrow.physical.white.02", LONG_RANGES),
+      ...rangeVariants("jb2a.arrow.physical.orange", LONG_RANGES)
+    ],
+    impact: PIERCING_PHYSICAL_IMPACTS,
+    projectileScale: 0.9,
+    impactScale: 0.4
+  }),
+  crossbow: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.bolt.physical.white", LONG_RANGES),
+      ...rangeVariants("jb2a.bolt.physical.white02", LONG_RANGES),
+      ...rangeVariants("jb2a.bolt.physical.orange", LONG_RANGES)
+    ],
+    impact: [
+      "jb2a.impact.005.white",
+      "jb2a.impact.001.orange"
+    ],
+    projectileScale: 0.94,
+    impactScale: 0.44
+  }),
+  slingStones: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.slingshot", LONG_RANGES)
+    ],
+    impact: LIGHT_PHYSICAL_IMPACTS,
+    projectileScale: 0.86,
+    impactScale: 0.36
+  }),
+  slingBullets: beamWeaponProfile({
+    projectile: [
+      ...rangeVariants("jb2a.bullet.02.orange", LONG_RANGES),
+      ...rangeVariants("jb2a.slingshot", LONG_RANGES)
+    ],
+    impact: [
+      "jb2a.impact.005.orange",
+      "jb2a.impact.005.white"
+    ],
+    projectileScale: 0.82,
+    impactScale: 0.38
   }),
   vibroDagger: meleeWeaponProfile({
     sourceAura: [
@@ -991,6 +1131,19 @@ const PROFILE_DEFINITIONS = {
   "Needler (Poison)": weaponFamilies.poisonNeedler,
   "Needler (Paralysis)": weaponFamilies.paralysisNeedler,
   "Slug Thrower (.38)": weaponFamilies.slugThrower,
+  "Club": weaponFamilies.club,
+  "Spear": weaponFamilies.spearThrown,
+  "Battle Axe": weaponFamilies.battleAxe,
+  "Hand Axe": weaponFamilies.handAxeThrown,
+  "Dagger": weaponFamilies.daggerThrown,
+  "Long Sword": weaponFamilies.longSword,
+  "Short Sword": weaponFamilies.shortSword,
+  "Pole Arm": weaponFamilies.poleArm,
+  "Javelin": weaponFamilies.javelin,
+  "Bow and Arrows": weaponFamilies.bowAndArrows,
+  "Crossbow": weaponFamilies.crossbow,
+  "Sling Stones": weaponFamilies.slingStones,
+  "Sling Bullets": weaponFamilies.slingBullets,
   "Vibro Dagger": weaponFamilies.vibroDagger,
   "Vibro Blade": weaponFamilies.vibroBlade,
   "Energy Mace": weaponFamilies.energyMace,
