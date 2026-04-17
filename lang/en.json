@@ -18,7 +18,7 @@
     "Settings": {
       "PilotAnimations": {
         "Name": "Enable Pilot Animations",
-        "Hint": "Play the system's Sequencer + JB2A pilot effects for Laser Pistols, Black Ray Guns, and Force Field Generation when those modules are active."
+        "Hint": "Play the system's Sequencer + JB2A combat and support effects for energy weapons, explosives, shields, and high-value Ancient gear when those modules are active."
       }
     },
     "Sheet": {

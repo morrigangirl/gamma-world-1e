@@ -127,10 +127,17 @@ test("equipment rules expose automation defaults for known gear", () => {
   assert.equal(gearHasAction({ type: "gear", system: { action: { mode: "area-damage" } } }), true);
 });
 
-test("pilot animation registry resolves supported weapons and mutation aliases", () => {
+test("pilot animation registry resolves expanded weapons, ordnance, and support profiles", () => {
   assert.equal(resolvePilotAnimationKey("Laser Pistol", { kind: "weapon" }), "Laser Pistol");
   assert.equal(resolvePilotAnimationKey("Built-in Laser Pistol (Left)", { kind: "weapon" }), "Laser Pistol");
+  assert.equal(resolvePilotAnimationKey("Laser Rifle", { kind: "weapon" }), "Laser Rifle");
+  assert.equal(resolvePilotAnimationKey("Fusion Rifle", { kind: "weapon" }), "Fusion Rifle");
+  assert.equal(resolvePilotAnimationKey("Powered Assault Fist", { kind: "weapon" }), "Powered Assault Fist");
   assert.equal(resolvePilotAnimationKey("Black Ray Gun", { kind: "weapon" }), "Black Ray Gun");
+  assert.equal(resolvePilotAnimationKey("Built-in Micro Missile Rack", { kind: "gear" }), "Built-in Micro Missile Rack");
+  assert.equal(resolvePilotAnimationKey("Tear Gas Grenade", { kind: "gear" }), "Tear Gas Grenade");
+  assert.equal(resolvePilotAnimationKey("Life Ray", { kind: "gear" }), "Life Ray");
+  assert.equal(resolvePilotAnimationKey("Energy Cloak", { kind: "gear" }), "Energy Cloak");
   assert.equal(resolvePilotAnimationKey("Force Field Generation", { kind: "mutation" }), "Force Field Generation");
   assert.equal(resolvePilotAnimationKey("Stone Spear", { kind: "weapon" }), "");
 });

@@ -20,6 +20,15 @@ import {
 } from "./artifact-power.mjs";
 
 const DialogV2 = foundry.applications.api.DialogV2;
+const MISSILE_ORDNANCE_NAMES = new Set([
+  "Built-in Micro Missile Rack",
+  "Micro Missile",
+  "Mini Missile",
+  "Neutron Missile",
+  "Negation Missile",
+  "Fission Missile",
+  "Surface Missile"
+]);
 
 function currentTargetActors() {
   return [...(game.user?.targets ?? new Set())]
@@ -27,8 +36,66 @@ function currentTargetActors() {
     .filter(Boolean);
 }
 
+function currentTargetTokens() {
+  return [...(game.user?.targets ?? new Set())].filter(Boolean);
+}
+
 function directTargetOrSelf(actor) {
   return currentTargetActors()[0] ?? actor;
+}
+
+function sourceTokenForActor(actor) {
+  return actor.getActiveTokens?.()[0] ?? null;
+}
+
+function primaryTargetToken() {
+  return currentTargetTokens()[0] ?? null;
+}
+
+function targetTokensForActors(actors = []) {
+  return actors
+    .map((actor) => actor.getActiveTokens?.()[0] ?? null)
+    .filter(Boolean);
+}
+
+async function playOrdnanceAnimation(actor, item, { explosionOnly = false } = {}) {
+  const animations = game.gammaWorld?.animations;
+  const targetToken = primaryTargetToken();
+  if (!animations || !targetToken) return false;
+
+  const sourceToken = sourceTokenForActor(actor);
+  if (!explosionOnly) {
+    if (MISSILE_ORDNANCE_NAMES.has(item.name)) {
+      await animations.playMissileLaunch?.({ itemName: item.name, sourceToken, targetToken });
+    } else {
+      await animations.playThrownOrdnance?.({ itemName: item.name, sourceToken, targetToken });
+    }
+  }
+
+  await animations.playExplosion?.({ itemName: item.name, targetToken });
+  return true;
+}
+
+async function playSupportAnimation(actor, item, targets = [], { phase = "apply" } = {}) {
+  const animations = game.gammaWorld?.animations;
+  if (!animations) return false;
+
+  const sourceToken = sourceTokenForActor(actor);
+  const targetTokens = targetTokensForActors(targets);
+  const resolvedTargets = targetTokens.length ? targetTokens : [sourceToken].filter(Boolean);
+
+  let played = false;
+  for (const targetToken of resolvedTargets) {
+    const result = await animations.playSupportEffect?.({
+      itemName: item.name,
+      sourceToken,
+      targetToken,
+      phase
+    });
+    played = !!result || played;
+  }
+
+  return played;
 }
 
 function currentCombatDateKey() {
@@ -151,6 +218,13 @@ async function useGuidedItem(actor, item, { defaultApplyTo = "self", defaultNote
 
   await consumeGear(item);
   const trackedNames = toggled.length ? toggled.join("<br>") : "Chat guidance only";
+
+  for (let index = 0; index < targets.length; index += 1) {
+    const target = targets[index];
+    const active = toggled[index]?.endsWith("applied");
+    await playSupportAnimation(actor, item, [target], { phase: active ? "apply" : "remove" });
+  }
+
   await postItemMessage(
     actor,
     item,
@@ -197,6 +271,7 @@ async function useAreaDamage(actor, item) {
     return false;
   }
 
+  await playOrdnanceAnimation(actor, item);
   await rollScaledDamageCard({
     actor,
     sourceName: item.name,
@@ -217,6 +292,7 @@ async function useMutationBomb(actor, item) {
     return false;
   }
 
+  await playOrdnanceAnimation(actor, item);
   for (const target of targets) {
     if (actorHasForceField(target)) {
       await postItemMessage(actor, item, `<p>${target.name} is protected by a force field and ignores the blast.</p>`);
@@ -248,6 +324,7 @@ async function useGasCloud(actor, item, mode) {
     return false;
   }
 
+  await playOrdnanceAnimation(actor, item);
   for (const target of targets) {
     await applyCloudEffect(actor, item, target, mode);
   }
@@ -258,6 +335,7 @@ async function useGasCloud(actor, item, mode) {
 }
 
 async function useHealingGear(actor, item, { sourceName = item.name } = {}) {
+  const targets = currentTargetActors();
   const formula = item.system.action?.damageFormula || "1d10";
   const roll = await new Roll(formula).evaluate();
   await roll.toMessage({
@@ -265,8 +343,9 @@ async function useHealingGear(actor, item, { sourceName = item.name } = {}) {
     flavor: `${sourceName} healing`
   });
   await applyHealingToTargets(roll.total, 1, {
-    targetUuids: currentTargetActors().map((target) => target.uuid)
+    targetUuids: targets.map((target) => target.uuid)
   });
+  await playSupportAnimation(actor, item, targets);
   await consumeGear(item);
   return true;
 }
@@ -344,6 +423,7 @@ async function useLifeRay(actor, item) {
     return false;
   }
 
+  await playSupportAnimation(actor, item, [target]);
   const successRoll = await new Roll("1d100").evaluate();
   await runActorFlag(target, "lifeRayAttempted", true);
   if (successRoll.total > 50) {
@@ -462,6 +542,7 @@ async function usePhotonItem(actor, item, { fieldDamage = 100, disintegrates = f
     return false;
   }
 
+  await playOrdnanceAnimation(actor, item);
   const lines = [];
   for (const target of targets) {
     const protectedBefore = actorHasForceField(target);
@@ -488,6 +569,7 @@ async function useNegationBomb(actor, item) {
     return false;
   }
 
+  await playOrdnanceAnimation(actor, item);
   const results = [];
   for (const target of targets) {
     const state = getActorState(target);

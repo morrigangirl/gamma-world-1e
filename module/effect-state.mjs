@@ -1,11 +1,16 @@
 import { SYSTEM_ID } from "./config.mjs";
-import { syncBarrierEffectsForActor } from "./animations.mjs";
+import { syncBarrierEffectsForActor, syncTemporaryEffectsForActor } from "./animations.mjs";
 import { resolvePoison } from "./tables/resistance-tables.mjs";
 import { charismaReactionAdjustment } from "./tables/encounter-tables.mjs";
 import { runAsGM } from "./gm-executor.mjs";
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function liveActorDocument(actor) {
+  if (!(actor instanceof Actor)) return actor;
+  return game.actors?.get(actor.id) ?? actor;
 }
 
 function defaultActorState() {
@@ -36,29 +41,32 @@ function mergeWithDefaults(state) {
 }
 
 async function replaceActorStateFlag(actor, state) {
-  await actor.update({
+  return actor.update({
     [`flags.${SYSTEM_ID}.-=state`]: null,
     [`flags.${SYSTEM_ID}.state`]: state
   });
 }
 
 export function getActorState(actor) {
-  return mergeWithDefaults(actor.getFlag(SYSTEM_ID, "state"));
+  const liveActor = liveActorDocument(actor);
+  return mergeWithDefaults(liveActor.getFlag(SYSTEM_ID, "state"));
 }
 
 export async function setActorState(actor, state, { refresh = true } = {}) {
-  if (!game.user?.isGM && !actor.isOwner) {
+  const liveActor = liveActorDocument(actor);
+  if (!game.user?.isGM && !liveActor.isOwner) {
     await runAsGM("actor-set-state", {
-      actorUuid: actor.uuid,
+      actorUuid: liveActor.uuid,
       state,
       refresh
     });
     return;
   }
-  await replaceActorStateFlag(actor, state);
-  await syncBarrierEffectsForActor(actor);
-  if (refresh && ["character", "monster"].includes(actor.type)) {
-    await actor.refreshDerivedResources({ adjustCurrent: false });
+  const updatedActor = (await replaceActorStateFlag(liveActor, state)) ?? liveActor;
+  await syncBarrierEffectsForActor(updatedActor);
+  await syncTemporaryEffectsForActor(updatedActor);
+  if (refresh && ["character", "monster"].includes(updatedActor.type)) {
+    await updatedActor.refreshDerivedResources({ adjustCurrent: false });
   }
 }
 

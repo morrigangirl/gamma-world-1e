@@ -9,7 +9,7 @@ A personal-use Foundry VTT system for **Gamma World 1st Edition** with working a
 - Real Gamma World 1e weapon attack matrix, natural attack matrix, mental attack matrix, and radiation / poison resistance tables.
 - Mutation automation with passive modifiers, toggles, limited uses, cooldowns, durations, combat-round ticking, and chat output.
 - Weapon workflows for normal damage plus special on-hit effects such as poison, radiation, paralysis, stun, and instant-death weapons.
-- Optional Sequencer + JB2A pilot animations for `Laser Pistol`, `Black Ray Gun`, and `Force Field Generation`, with attack projectiles, hit impacts, and persistent shield visuals keyed to barrier state.
+- Optional Sequencer + JB2A animation support for Gamma World's combat-first kit, including beam weapons, darts, powered melee weapons, grenades, bombs, missiles, shield effects, gas clouds, and high-value support gear such as `Life Ray`, `Medi-kit`, `Portent`, and `Energy Cloak`.
 - Equipment automation for powered armor, force fields, black-ray protection, laser deflection, built-in granted weapons, grenades, bombs, missiles, Portent shields, artifact power cells, rejuv chambers, and Life Ray revival.
 - Artifact workflows for analysis, operation checks, condition/function percentages, charge tracking, and guided use of Ancient devices.
 - Robot workflows for power management, repair, immunity handling, quarter-damage impairments, and shared-sheet controls.
@@ -65,7 +65,7 @@ npm run build:compendia
 13. Import the robot sample actor and confirm power, mode, and repair actions work from the Main tab.
 14. Use `Random Encounter`, `Route Check`, and `Roll Morale` from the Main tab and confirm the chat cards match the chosen terrain and actor state.
 15. Reload the world and confirm actor state, active barriers, granted equipment, morale watches, robot impairments, and sheet tabs still persist and render.
-16. If `Sequencer` and `JB2A - Patreon Complete Collection` are active, leave `Enable Pilot Animations` on and confirm `Laser Pistol`, `Black Ray Gun`, and `Force Field Generation` play their pilot visuals without affecting the underlying rules results.
+16. If `Sequencer` and `JB2A - Patreon Complete Collection` are active, leave `Enable Pilot Animations` on and confirm representative weapons (`Laser Pistol`, `Laser Rifle`, `Fusion Rifle`), ordnance (`Fragmentation Grenade`, `Micro Missile`, `Negation Bomb`), and protections (`Force Field Generation`, `Portent`, `Energy Cloak`) play visuals without affecting the underlying rules results.
 
 ## Monster Art
 
@@ -77,5 +77,5 @@ npm run build:compendia
 ## Notes
 
 - The local rulebook PDF in `ref/` is used for transcription and validation, but it is not required at runtime.
-- JB2A supplies the animated assets only; the system's pilot animation layer uses Sequencer to fire them and safely no-ops when either dependency is unavailable or the world setting is disabled.
+- JB2A supplies the animated assets only; the system's animation layer uses Sequencer to fire them and safely no-ops when either dependency is unavailable or the world setting is disabled.
 - The system is intentionally scoped to Foundry VTT 13.
