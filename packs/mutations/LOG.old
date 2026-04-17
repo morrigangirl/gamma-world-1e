@@ -1,0 +1,7 @@
+2026/04/17-00:10:26.602930 171eef000 Recovering log #15
+2026/04/17-00:10:26.603319 171eef000 Delete type=0 #15
+2026/04/17-00:10:26.603349 171eef000 Delete type=3 #14
+2026/04/17-00:10:51.838008 176fe7000 Level-0 table #19: started
+2026/04/17-00:10:51.838026 176fe7000 Level-0 table #19: 0 bytes OK
+2026/04/17-00:10:51.838349 176fe7000 Delete type=0 #17
+2026/04/17-00:10:51.839321 176fe7000 Manual compaction at level-0 from '!items!07OqGa60N9JlC3m7' @ 72057594037927935 : 1 .. '!items!zz7Ly4TqyKizgiS6' @ 0 : 0; will stop at (end)

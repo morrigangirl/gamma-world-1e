@@ -1,0 +1,17 @@
+{
+  "name": "gamma-world-1e",
+  "version": "0.4.0",
+  "type": "module",
+  "scripts": {
+    "build:compendia": "node scripts/build-compendia.mjs",
+    "build:monster-prompts": "node scripts/build-monster-art-prompts.mjs",
+    "build:monster-assets": "python3 scripts/render-monster-assets.py",
+    "test": "node --test",
+    "test:foundry": "node scripts/foundry-smoke.mjs",
+    "test:foundry:phase2": "node scripts/foundry-phase2.mjs",
+    "test:foundry:phase3": "node scripts/foundry-phase3.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1"
+  }
+}

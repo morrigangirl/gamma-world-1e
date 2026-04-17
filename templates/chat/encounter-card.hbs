@@ -1,0 +1,55 @@
+<div class="gw-chat-card gw-encounter-card">
+  {{#if (gwEq type "reaction")}}
+    <h3>{{actorName}} reacts to {{targetName}}</h3>
+    <p>2d6 roll {{baseRoll}} with modifier {{modifier}} gives <strong>{{rollTotal}}</strong>.</p>
+    <p><strong>{{result}}</strong></p>
+  {{/if}}
+
+  {{#if (gwEq type "surprise")}}
+    <h3>Surprise Check</h3>
+    <p><strong>{{actorName}}</strong>: {{actorRoll}} {{#if actorSurprised}}(surprised){{/if}}</p>
+    <p><strong>{{targetName}}</strong>: {{targetRoll}} {{#if targetSurprised}}(surprised){{/if}}</p>
+    {{#if tieBreaker}}
+      <p>Tie broken by initiative reroll: {{tieBreaker}}</p>
+    {{/if}}
+    <p><strong>{{firstStrike}}</strong></p>
+  {{/if}}
+
+  {{#if (gwEq type "morale")}}
+    <h3>Morale Check{{#if ongoing}} (ongoing){{/if}}</h3>
+    <p><strong>{{actorName}}</strong>: d10 roll {{rollTotal}}{{#if modifier}} with modifier {{modifier}}{{/if}} gives <strong>{{total}}</strong>.</p>
+    <p>{{intelligenceLabel}} morale requires {{threshold}}+ to hold.</p>
+    {{#if actorModifier}}<p>Actor morale modifier: {{actorModifier}}</p>{{/if}}
+    {{#if manualModifier}}<p>Situational modifier: {{manualModifier}}</p>{{/if}}
+    {{#if lairBonus}}<p>Lair bonus: {{lairBonus}}</p>{{/if}}
+    {{#if reason}}<p>{{reason}}</p>{{/if}}
+    <p><strong>{{result}}</strong></p>
+  {{/if}}
+
+  {{#if (gwEq type "terrain")}}
+    <h3>Random Encounter</h3>
+    <p>{{terrain}} table, d20 roll <strong>{{rollTotal}}</strong>.</p>
+    {{#if noEncounter}}
+      <p><strong>No encounter.</strong></p>
+    {{else}}
+      <p><strong>{{resultName}}</strong>{{#if countText}} · No. Appearing {{countText}}{{/if}}</p>
+      {{#if candidateText}}<p>Compendium hint: {{candidateText}}</p>{{/if}}
+      {{#if notes}}<p>{{notes}}</p>{{/if}}
+    {{/if}}
+  {{/if}}
+
+  {{#if (gwEq type "route")}}
+    <h3>Route Encounter Check</h3>
+    <p>{{period}} travel in {{terrain}}: d6 roll <strong>{{checkRoll}}</strong>.</p>
+    {{#if encountered}}
+      <p><strong>Encounter indicated.</strong>{{#if encounterRoll}} Terrain roll {{encounterRoll}}: {{resultName}}{{/if}}</p>
+      {{#if countText}}<p>No. Appearing {{countText}}</p>{{/if}}
+      {{#if candidateText}}<p>Compendium hint: {{candidateText}}</p>{{/if}}
+      {{#if notes}}<p>{{notes}}</p>{{/if}}
+      {{#if routeTimeNote}}<p>{{routeTimeNote}}</p>{{/if}}
+    {{else}}
+      <p><strong>No encounter during this route period.</strong></p>
+      {{#if routeTimeNote}}<p>{{routeTimeNote}}</p>{{/if}}
+    {{/if}}
+  {{/if}}
+</div>

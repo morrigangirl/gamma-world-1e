@@ -1,0 +1,769 @@
+<div class="gamma-world__root">
+
+<header class="gamma-world__header">
+  <div class="gamma-world__header-top">
+    <img class="gamma-world__portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="gamma-world__header-main">
+      <input class="gamma-world__name" type="text" name="name" value="{{actor.name}}" placeholder="Name" />
+      <div class="gamma-world__meta">
+        <label>
+          {{localize "GAMMA_WORLD.Resource.Type"}}:
+          <select name="system.details.type">
+            {{#each config.CHARACTER_TYPES as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.details.type)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "GAMMA_WORLD.Resource.Level"}}
+          <input type="number" name="system.details.level" value="{{system.details.level}}" min="1" />
+        </label>
+        {{#if isMonsterSheet}}
+          <label>{{localize "GAMMA_WORLD.Resource.CreatureClass"}}
+            <input type="text" name="system.details.creatureClass" value="{{system.details.creatureClass}}" />
+          </label>
+          <label>{{localize "GAMMA_WORLD.Resource.Role"}}
+            <input type="text" name="system.details.role" value="{{system.details.role}}" />
+          </label>
+        {{else}}
+          <label>{{localize "GAMMA_WORLD.Resource.XP"}}
+            <input type="number" name="system.details.xp" value="{{system.details.xp}}" min="0" />
+          </label>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="gamma-world__header-bar">
+    <div class="gamma-world__hp">
+      <label>{{localize "GAMMA_WORLD.Resource.HPShort"}}
+        <input type="number" name="system.resources.hp.value" value="{{system.resources.hp.value}}" />
+        <span class="gamma-world__sep">/</span>
+        <input type="number" value="{{derived.hpMax}}" readonly />
+      </label>
+    </div>
+    <div class="gamma-world__ac">
+      <label>{{localize "GAMMA_WORLD.Resource.ACShort"}}
+        <input type="number" value="{{derived.ac}}" readonly />
+      </label>
+    </div>
+    {{#if isCharacterSheet}}
+      {{#if canChargen}}
+        <button type="button" class="gamma-world__chargen-btn" data-action="chargenAuto">
+          {{localize "GAMMA_WORLD.Chargen.Button"}}
+        </button>
+      {{else}}
+        <span class="gamma-world__chargen-done">{{localize "GAMMA_WORLD.Chargen.Rerolled"}}</span>
+      {{/if}}
+    {{/if}}
+  </div>
+</header>
+
+<nav class="gamma-world__tabs sheet-tabs tabs" data-group="primary">
+  {{#each tabNav as |tab|}}
+    <button type="button" class="item {{tab.cssClass}}" data-action="changeTab" data-group="primary" data-tab="{{tab.id}}">
+      <span>{{localize tab.label}}</span>
+      {{#if tab.badge}}
+        <span class="gamma-world__tab-count">{{tab.badge}}</span>
+      {{/if}}
+    </button>
+  {{/each}}
+</nav>
+
+<section class="gamma-world__content">
+
+  <div class="gamma-world__tab tab {{tabs.main.cssClass}}" data-group="primary" data-tab="main">
+    <div class="gamma-world__attributes">
+      {{#each attributeKeys as |key|}}
+        {{#with (gwLookup ../system.attributes key) as |attr|}}
+          <div class="gamma-world__attribute">
+            <label class="gamma-world__attribute-label">
+              {{localize (concat "GAMMA_WORLD.Attribute." (gwUpper key) ".abbr")}}
+            </label>
+            <input class="gamma-world__attribute-value"
+                   type="number"
+                   name="system.attributes.{{key}}.value"
+                   value="{{attr.value}}" min="1" max="21" />
+            <div class="gamma-world__attribute-mod">{{gwSigned attr.mod}}</div>
+            <button type="button"
+                    class="gamma-world__attribute-roll"
+                    data-action="rollAttribute"
+                    data-attribute="{{key}}"
+                    title="Roll {{localize (concat "GAMMA_WORLD.Attribute." (gwUpper key) ".full")}} check">
+              <i class="fas fa-dice-d20"></i>
+            </button>
+          </div>
+        {{/with}}
+      {{/each}}
+    </div>
+
+    <div class="gamma-world__resources">
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.BaseAC"}}
+          <input type="number" name="system.combat.baseAc" value="{{system.combat.baseAc}}" min="1" max="10" />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.MentalResistance"}}
+          <input type="number" value="{{derived.mentalResistance}}" readonly />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.RadResistance"}}
+          <input type="number" value="{{derived.radiationResistance}}" readonly />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.PoisonResistance"}}
+          <input type="number" value="{{derived.poisonResistance}}" readonly />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.Movement"}}
+          <input type="number" name="system.details.movement" value="{{system.details.movement}}" />
+          <span class="gamma-world__derived-note">{{derived.movement}} effective</span>
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.Flight"}}
+          <input type="number" value="{{derived.flightSpeed}}" readonly />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.Jump"}}
+          <input type="number" value="{{derived.jumpSpeed}}" readonly />
+        </label>
+      </div>
+      <div class="gamma-world__resource">
+        <label>{{localize "GAMMA_WORLD.Resource.Lift"}}
+          <input type="number" value="{{derived.liftCapacity}}" readonly />
+        </label>
+      </div>
+    </div>
+
+    <div class="gamma-world__saves">
+      <h3>{{localize "GAMMA_WORLD.Save.Mental"}} / {{localize "GAMMA_WORLD.Save.Radiation"}} / {{localize "GAMMA_WORLD.Save.Poison"}}</h3>
+      <div class="gamma-world__save-buttons">
+        <button type="button" data-action="rollSave" data-save-type="mental">{{localize "GAMMA_WORLD.Save.RollMental"}}</button>
+        <button type="button" data-action="rollSave" data-save-type="radiation">{{localize "GAMMA_WORLD.Save.RollRadiation"}}</button>
+        <button type="button" data-action="rollSave" data-save-type="poison">{{localize "GAMMA_WORLD.Save.RollPoison"}}</button>
+        <button type="button" data-action="rollSurprise">{{localize "GAMMA_WORLD.Combat.RollSurprise"}}</button>
+        {{#if isMonsterSheet}}
+          <button type="button" data-action="rollReaction">{{localize "GAMMA_WORLD.Combat.RollReaction"}}</button>
+          <button type="button" data-action="rollMorale">{{localize "GAMMA_WORLD.Encounter.RollMorale"}}</button>
+          <button type="button" data-action="routeEncounter">{{localize "GAMMA_WORLD.Encounter.RouteCheck"}}</button>
+        {{/if}}
+        <button type="button" data-action="rollNaturalAttack">{{localize "GAMMA_WORLD.Combat.NaturalAttack"}}</button>
+      </div>
+      <p class="gamma-world__derived-note">
+        Attack bonus {{gwSigned derived.toHitBonus}} · Damage bonus {{gwSigned derived.damageFlat}}
+        · Attacks / round {{derived.attacksPerRound}}
+      </p>
+      {{#if isMonsterSheet}}
+        <p class="gamma-world__derived-note">
+          Reaction {{gwSigned derived.reactionAdjustment}} · Surprise {{gwSigned derived.surpriseModifier}}
+          {{#if derived.cannotBeSurprised}}· Cannot be surprised{{/if}}
+        </p>
+        <p class="gamma-world__derived-note">
+          Encounter morale {{gwSigned derived.moraleModifier}} · Followers {{derived.maxFollowers}}
+          · Leader morale {{gwSigned derived.moraleAdjustment}} · Intelligence {{localize (gwLookup config.ENCOUNTER_INTELLIGENCE derived.encounterIntelligence)}}
+        </p>
+      {{/if}}
+      <div class="gamma-world__bio-row">
+        <label>{{localize "GAMMA_WORLD.Combat.NaturalAttackName"}}
+          <input type="text" name="system.combat.naturalAttack.name" value="{{system.combat.naturalAttack.name}}" />
+        </label>
+        <label>{{localize "GAMMA_WORLD.Combat.NaturalAttackDamage"}}
+          <input type="text" name="system.combat.naturalAttack.damage" value="{{system.combat.naturalAttack.damage}}" />
+        </label>
+      </div>
+    </div>
+
+    {{#if isRobot}}
+      <section class="gamma-world__panel">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.Sheet.Robotics"}}</h3>
+        </header>
+        <div class="gamma-world__summary-grid">
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Robot.PowerSource"}}</h4>
+            <p class="gamma-world__summary-note">{{localize (gwLookup config.ROBOT_POWER_SOURCES system.robotics.powerSource)}}</p>
+            <p class="gamma-world__summary-note">{{system.robotics.powerCurrent}} / {{system.robotics.powerMax}}</p>
+          </article>
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Robot.Mode.Controlled"}}</h4>
+            <p class="gamma-world__summary-note">{{localize (gwLookup config.ROBOT_MODES system.robotics.mode)}}</p>
+            <p class="gamma-world__summary-note">{{system.robotics.identifier}}</p>
+          </article>
+        </div>
+        <div class="gamma-world__save-buttons">
+          <button type="button" data-action="robotSpendPower">{{localize "GAMMA_WORLD.Robot.SpendPower"}}</button>
+          <button type="button" data-action="robotRecharge">{{localize "GAMMA_WORLD.Robot.Recharge"}}</button>
+          <button type="button" data-action="robotCycleMode">{{localize "GAMMA_WORLD.Robot.ToggleMode"}}</button>
+          <button type="button" data-action="robotRepair">{{localize "GAMMA_WORLD.Robot.Repair"}}</button>
+        </div>
+      </section>
+    {{/if}}
+
+    <section class="gamma-world__panel">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.Sheet.QuickActions"}}</h3>
+      </header>
+      <div class="gamma-world__summary-grid">
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Sheet.EquippedWeapons"}}</h4>
+          {{#if quickActions.weapons.length}}
+            <ul class="gamma-world__items">
+              {{#each quickActions.weapons as |item|}}
+                <li class="gamma-world__item draggable {{#if item.system.equipped}}is-equipped{{/if}}" data-item-id="{{item.id}}">
+                  <div class="gamma-world__item-body">
+                    <div class="gamma-world__item-head">
+                      <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                      {{#if item.gwRuleLine}}<span class="gamma-world__item-meta">{{item.gwRuleLine}}</span>{{/if}}
+                    </div>
+                    <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
+                  </div>
+                  <span class="gamma-world__item-actions">
+                    {{#if item.gwCanAttack}}
+                      <button type="button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Weapon.RollAttack"}}">
+                        <i class="fas fa-crosshairs"></i>
+                      </button>
+                    {{/if}}
+                  </span>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Sheet.NoneEquippedWeapons"}}</p>
+          {{/if}}
+        </article>
+
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Tab.Mutations"}}</h4>
+          {{#if quickActions.mutations.length}}
+            <ul class="gamma-world__items">
+              {{#each quickActions.mutations as |item|}}
+                <li class="gamma-world__item draggable {{#if item.gwIsEnabled}}is-equipped{{/if}}" data-item-id="{{item.id}}">
+                  <div class="gamma-world__item-body" data-action="showMutationChat" data-item-id="{{item.id}}">
+                    <div class="gamma-world__item-head">
+                      <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                      {{#if item.gwRuleLine}}<span class="gamma-world__item-meta">{{item.gwRuleLine}}</span>{{/if}}
+                    </div>
+                    {{#if item.gwDetailLine}}<div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>{{/if}}
+                  </div>
+                  <span class="gamma-world__item-actions">
+                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                      {{item.gwActionLabel}}
+                    </button>
+                  </span>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Mutation.Empty"}}</p>
+          {{/if}}
+        </article>
+
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "TYPES.Item.gear"}}</h4>
+          {{#if quickActions.gear.length}}
+            <ul class="gamma-world__items">
+              {{#each quickActions.gear as |item|}}
+                <li class="gamma-world__item draggable" data-item-id="{{item.id}}">
+                  <div class="gamma-world__item-body">
+                    <div class="gamma-world__item-head">
+                      <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                    </div>
+                    <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
+                    {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
+                  </div>
+                  <span class="gamma-world__item-actions">
+                    <button type="button" data-action="useItem" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                      {{item.gwActionLabel}}
+                    </button>
+                  </span>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Gear.Empty"}}</p>
+          {{/if}}
+        </article>
+      </div>
+    </section>
+
+    <section class="gamma-world__mutation-group">
+      <h3>{{localize "GAMMA_WORLD.Resource.ActiveEffects"}}</h3>
+      {{#if activeEffects.length}}
+        <ul class="gamma-world__items">
+          {{#each activeEffects as |effect|}}
+            <li class="gamma-world__item">
+              <span class="gamma-world__item-name">{{effect.label}}</span>
+              <span class="gamma-world__item-meta">{{effect.suffix}}</span>
+              <span class="gamma-world__item-actions">
+                {{#if effect.removable}}
+                  <button type="button" data-action="removeEffect" data-effect-id="{{effect.id}}">
+                    {{localize "GAMMA_WORLD.Button.Remove"}}
+                  </button>
+                {{/if}}
+              </span>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Effect.Empty"}}</p>
+      {{/if}}
+    </section>
+  </div>
+
+  <div class="gamma-world__tab tab {{tabs.mutations.cssClass}}" data-group="primary" data-tab="mutations">
+    <header class="gamma-world__list-header">
+      <h2>{{localize "GAMMA_WORLD.Tab.Mutations"}}</h2>
+      <span class="gamma-world__header-actions">
+        <button type="button" data-action="resetMutations">
+          <i class="fas fa-rotate-left"></i> {{localize "GAMMA_WORLD.Mutation.Reset"}}
+        </button>
+        <button type="button" data-action="itemCreate" data-type="mutation">
+          <i class="fas fa-plus"></i> {{localize "GAMMA_WORLD.Button.Create"}}
+        </button>
+      </span>
+    </header>
+
+    <div class="gamma-world__summary-grid">
+      <article class="gamma-world__summary-card">
+        <h4>{{localize "GAMMA_WORLD.Sheet.MutationTotals"}}</h4>
+        <p class="gamma-world__summary-value">{{mutationSummary.total}}</p>
+        <p class="gamma-world__summary-note">
+          {{mutationSummary.physical}} physical · {{mutationSummary.mental}} mental · {{mutationSummary.defect}} defect
+        </p>
+      </article>
+      <article class="gamma-world__summary-card">
+        <h4>{{localize "GAMMA_WORLD.Mutation.ActiveNow"}}</h4>
+        <p class="gamma-world__summary-value">{{mutationSummary.active}}</p>
+        <p class="gamma-world__summary-note">{{localize "GAMMA_WORLD.Sheet.ReadyPowers"}}</p>
+      </article>
+    </div>
+
+    {{#each mutationsBySubtype as |mutations subtype|}}
+      <section class="gamma-world__mutation-group">
+        <h3>{{localize (concat "GAMMA_WORLD.Mutation.SubtypePlural." (gwCapitalize subtype))}}</h3>
+        {{#if mutations.length}}
+          <ul class="gamma-world__items">
+            {{#each mutations as |item|}}
+              <li class="gamma-world__item draggable {{#if item.gwIsEnabled}}is-equipped{{/if}}" data-item-id="{{item.id}}">
+                <div class="gamma-world__item-body" data-action="showMutationChat" data-item-id="{{item.id}}">
+                  <div class="gamma-world__item-head">
+                    <span class="gamma-world__item-name">{{item.name}}</span>
+                    {{#if item.gwBadges.length}}
+                      <span class="gamma-world__badge-list">
+                        {{#each item.gwBadges as |badge|}}
+                          <span class="gamma-world__badge">{{badge}}</span>
+                        {{/each}}
+                      </span>
+                    {{/if}}
+                  </div>
+                  {{#if item.gwDetailLine}}<div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>{{/if}}
+                  {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
+                  {{#if item.gwDescription}}<div class="gamma-world__item-note">{{item.gwDescription}}</div>{{/if}}
+                </div>
+                <span class="gamma-world__item-actions">
+                  {{#if item.gwHasAction}}
+                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                      {{item.gwActionLabel}}
+                    </button>
+                  {{/if}}
+                  <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Edit"}}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Delete"}}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Mutation.Empty"}}</p>
+        {{/if}}
+      </section>
+    {{/each}}
+  </div>
+
+  <div class="gamma-world__tab tab {{tabs.inventory.cssClass}}" data-group="primary" data-tab="inventory">
+    <section class="gamma-world__panel">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.Sheet.InventorySummary"}}</h3>
+      </header>
+      <div class="gamma-world__summary-grid">
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Sheet.Loadout"}}</h4>
+          <p class="gamma-world__summary-note">
+            {{#if inventorySummary.equippedWeapons.length}}
+              {{inventorySummary.equippedWeapons.length}} {{localize "GAMMA_WORLD.Sheet.EquippedWeapons"}}
+            {{else}}
+              {{localize "GAMMA_WORLD.Sheet.NoneEquippedWeapons"}}
+            {{/if}}
+          </p>
+          <p class="gamma-world__summary-note">
+            {{#if inventorySummary.equippedArmor.length}}
+              {{inventorySummary.primaryArmor}}
+            {{else}}
+              {{localize "GAMMA_WORLD.Sheet.NoArmorEquipped"}}
+            {{/if}}
+          </p>
+        </article>
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Resource.AC"}}</h4>
+          <p class="gamma-world__summary-value">{{derived.ac}}</p>
+          <p class="gamma-world__summary-note">{{localize "GAMMA_WORLD.Resource.Movement"}} {{derived.movement}}</p>
+        </article>
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Sheet.Protections"}}</h4>
+          {{#if inventorySummary.protections.length}}
+            <p class="gamma-world__summary-note">{{inventorySummary.protectionSummary}}</p>
+          {{else}}
+            <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Sheet.NoProtections"}}</p>
+          {{/if}}
+        </article>
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Sheet.Artifacts"}}</h4>
+          <p class="gamma-world__summary-value">{{artifactItems.length}}</p>
+          <p class="gamma-world__summary-note">Ancient items in inventory</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="gamma-world__inv-group">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "TYPES.Item.weapon"}}s</h3>
+        <button type="button" data-action="itemCreate" data-type="weapon">
+          <i class="fas fa-plus"></i> {{localize "GAMMA_WORLD.Button.Create"}}
+        </button>
+      </header>
+      {{#if items.weapon.length}}
+        <ul class="gamma-world__items">
+          {{#each items.weapon as |item|}}
+            <li class="gamma-world__item draggable {{#if item.system.equipped}}is-equipped{{/if}}" data-item-id="{{item.id}}">
+              <div class="gamma-world__item-body">
+                <div class="gamma-world__item-head">
+                  <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                  {{#if item.gwBadges.length}}
+                    <span class="gamma-world__badge-list">
+                      {{#each item.gwBadges as |badge|}}
+                        <span class="gamma-world__badge">{{badge}}</span>
+                      {{/each}}
+                    </span>
+                  {{/if}}
+                </div>
+                <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
+                {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
+                {{#if item.gwArtifactLine}}<div class="gamma-world__item-meta">{{item.gwArtifactLine}}</div>{{/if}}
+                {{#if item.gwPowerLine}}<div class="gamma-world__item-meta">{{item.gwPowerLine}}</div>{{/if}}
+                {{#if item.gwDescription}}<div class="gamma-world__item-note">{{item.gwDescription}}</div>{{/if}}
+              </div>
+              <span class="gamma-world__item-actions">
+                {{#if item.gwCanAttack}}
+                  <button type="button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Weapon.RollAttack"}}">
+                    <i class="fas fa-crosshairs"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanAnalyze}}
+                  <button type="button" data-action="analyzeItem" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Analyze"}}">
+                    <i class="fas fa-magnifying-glass"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwHasPowerControls}}
+                  <button type="button" data-action="managePower" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}">
+                    <i class="fas fa-battery-half"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanToggleEquipped}}
+                  <button type="button" data-action="toggleEquipped" data-item-id="{{item.id}}"
+                          title="{{#if item.system.equipped}}{{localize "GAMMA_WORLD.Button.Unequip"}}{{else}}{{localize "GAMMA_WORLD.Button.Equip"}}{{/if}}">
+                    <i class="fas {{#if item.system.equipped}}fa-toggle-on{{else}}fa-toggle-off{{/if}}"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanEdit}}
+                  <button type="button" data-action="itemEdit" data-item-id="{{item.id}}"><i class="fas fa-edit"></i></button>
+                {{/if}}
+                <button type="button" data-action="itemDelete" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button>
+              </span>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Weapon.Empty"}}</p>
+      {{/if}}
+    </section>
+
+    <section class="gamma-world__inv-group">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "TYPES.Item.armor"}}</h3>
+        <button type="button" data-action="itemCreate" data-type="armor">
+          <i class="fas fa-plus"></i> {{localize "GAMMA_WORLD.Button.Create"}}
+        </button>
+      </header>
+      {{#if items.armor.length}}
+        <ul class="gamma-world__items">
+          {{#each items.armor as |item|}}
+            <li class="gamma-world__item draggable {{#if item.system.equipped}}is-equipped{{/if}}" data-item-id="{{item.id}}">
+              <div class="gamma-world__item-body">
+                <div class="gamma-world__item-head">
+                  <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                  {{#if item.gwBadges.length}}
+                    <span class="gamma-world__badge-list">
+                      {{#each item.gwBadges as |badge|}}
+                        <span class="gamma-world__badge">{{badge}}</span>
+                      {{/each}}
+                    </span>
+                  {{/if}}
+                </div>
+                <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
+                {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
+                {{#if item.gwArtifactLine}}<div class="gamma-world__item-meta">{{item.gwArtifactLine}}</div>{{/if}}
+                {{#if item.gwPowerLine}}<div class="gamma-world__item-meta">{{item.gwPowerLine}}</div>{{/if}}
+                {{#if item.gwDescription}}<div class="gamma-world__item-note">{{item.gwDescription}}</div>{{/if}}
+              </div>
+              <span class="gamma-world__item-actions">
+                {{#if item.gwCanAnalyze}}
+                  <button type="button" data-action="analyzeItem" data-item-id="{{item.id}}">
+                    <i class="fas fa-magnifying-glass"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwHasPowerControls}}
+                  <button type="button" data-action="managePower" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}">
+                    <i class="fas fa-battery-half"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanToggleEquipped}}
+                  <button type="button" data-action="toggleEquipped" data-item-id="{{item.id}}">
+                    <i class="fas {{#if item.system.equipped}}fa-toggle-on{{else}}fa-toggle-off{{/if}}"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwCanEdit}}
+                  <button type="button" data-action="itemEdit" data-item-id="{{item.id}}"><i class="fas fa-edit"></i></button>
+                {{/if}}
+                <button type="button" data-action="itemDelete" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button>
+              </span>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Armor.Empty"}}</p>
+      {{/if}}
+    </section>
+
+    <section class="gamma-world__inv-group">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "TYPES.Item.gear"}}</h3>
+        <button type="button" data-action="itemCreate" data-type="gear">
+          <i class="fas fa-plus"></i> {{localize "GAMMA_WORLD.Button.Create"}}
+        </button>
+      </header>
+      {{#if items.gear.length}}
+        <ul class="gamma-world__items">
+          {{#each items.gear as |item|}}
+            <li class="gamma-world__item draggable" data-item-id="{{item.id}}">
+              <div class="gamma-world__item-body">
+                <div class="gamma-world__item-head">
+                  <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                  {{#if item.gwBadges.length}}
+                    <span class="gamma-world__badge-list">
+                      {{#each item.gwBadges as |badge|}}
+                        <span class="gamma-world__badge">{{badge}}</span>
+                      {{/each}}
+                    </span>
+                  {{/if}}
+                </div>
+                <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
+                {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
+                {{#if item.gwArtifactLine}}<div class="gamma-world__item-meta">{{item.gwArtifactLine}}</div>{{/if}}
+                {{#if item.gwPowerLine}}<div class="gamma-world__item-meta">{{item.gwPowerLine}}</div>{{/if}}
+                {{#if item.gwDescription}}<div class="gamma-world__item-note">{{item.gwDescription}}</div>{{/if}}
+              </div>
+              <span class="gamma-world__item-actions">
+                {{#if item.gwCanAnalyze}}
+                  <button type="button" data-action="analyzeItem" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Analyze"}}">
+                    <i class="fas fa-magnifying-glass"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwHasPowerControls}}
+                  <button type="button" data-action="managePower" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}">
+                    <i class="fas fa-battery-half"></i>
+                  </button>
+                {{/if}}
+                {{#if item.gwHasAction}}
+                  <button type="button" data-action="useItem" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                    {{item.gwActionLabel}}
+                  </button>
+                {{/if}}
+                {{#if item.gwCanEdit}}
+                  <button type="button" data-action="itemEdit" data-item-id="{{item.id}}"><i class="fas fa-edit"></i></button>
+                {{/if}}
+                <button type="button" data-action="itemDelete" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button>
+              </span>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Gear.Empty"}}</p>
+      {{/if}}
+    </section>
+  </div>
+
+  <div class="gamma-world__tab tab {{tabs.bio.cssClass}}" data-group="primary" data-tab="bio">
+    <section class="gamma-world__panel">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.Sheet.Identity"}}</h3>
+      </header>
+      <div class="gamma-world__summary-grid">
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Resource.Level"}}</h4>
+          <p class="gamma-world__summary-value">{{system.details.level}}</p>
+          <p class="gamma-world__summary-note">{{identityLabel}}</p>
+        </article>
+        {{#if isCharacterSheet}}
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Resource.XP"}}</h4>
+            <p class="gamma-world__summary-value">{{system.details.xp}}</p>
+            <p class="gamma-world__summary-note">{{mutationSummary.total}} mutations</p>
+          </article>
+        {{else}}
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Resource.Role"}}</h4>
+            <p class="gamma-world__summary-note">{{system.details.role}}</p>
+            <p class="gamma-world__summary-note">
+              {{#if system.details.creatureClass}}
+                {{system.details.creatureClass}}
+              {{else}}
+                {{localize "TYPES.Actor.monster"}}
+              {{/if}}
+            </p>
+          </article>
+        {{/if}}
+        <article class="gamma-world__summary-card">
+          <h4>{{localize "GAMMA_WORLD.Resource.Alliance"}}</h4>
+          <p class="gamma-world__summary-note">{{#if system.details.alliance}}{{system.details.alliance}}{{else}}{{localize "GAMMA_WORLD.Sheet.NoAlliance"}}{{/if}}</p>
+          <p class="gamma-world__summary-note">
+            {{#if system.details.creatureClass}}
+              {{system.details.creatureClass}}
+            {{else if system.details.animalForm}}
+              {{system.details.animalForm}}
+            {{else}}
+              {{system.details.role}}
+            {{/if}}
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <div class="gamma-world__bio-row">
+      <label>{{localize "GAMMA_WORLD.Resource.AnimalForm"}}
+        <input type="text" name="system.details.animalForm" value="{{system.details.animalForm}}" />
+      </label>
+      <label>{{localize "GAMMA_WORLD.Resource.Alliance"}}
+        <input type="text" name="system.details.alliance" value="{{system.details.alliance}}" />
+      </label>
+    </div>
+
+    <div class="gamma-world__bio-row">
+      <label>{{localize "GAMMA_WORLD.Resource.Role"}}
+        <input type="text" name="system.details.role" value="{{system.details.role}}" />
+      </label>
+      <label>{{localize "GAMMA_WORLD.Resource.Speech"}}
+        <input type="text" name="system.details.speech" value="{{system.details.speech}}" />
+      </label>
+    </div>
+
+    <div class="gamma-world__bio-row">
+      <label>{{localize "GAMMA_WORLD.Resource.Languages"}}
+        <input type="text" name="system.social.languages" value="{{system.social.languages}}" />
+      </label>
+      <label>{{localize "GAMMA_WORLD.Resource.Literacy"}}
+        <input type="text" name="system.social.literacy" value="{{system.social.literacy}}" />
+      </label>
+    </div>
+
+    <div class="gamma-world__bio-row">
+      <label>{{localize "GAMMA_WORLD.Resource.Relatives"}}
+        <input type="text" name="system.social.relatives" value="{{system.social.relatives}}" />
+      </label>
+      <label>{{localize "GAMMA_WORLD.Resource.HomeRegion"}}
+        <input type="text" name="system.social.homeRegion" value="{{system.social.homeRegion}}" />
+      </label>
+    </div>
+
+    <section class="gamma-world__panel">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.Sheet.Encounter"}}</h3>
+      </header>
+      <div class="gamma-world__bio-row">
+        <label>{{localize "GAMMA_WORLD.Encounter.ReactionModifier"}}
+          <input type="number" name="system.encounter.reactionModifier" value="{{system.encounter.reactionModifier}}" min="-20" max="20" />
+        </label>
+        <label>{{localize "GAMMA_WORLD.Encounter.SurpriseModifier"}}
+          <input type="number" name="system.encounter.surpriseModifier" value="{{system.encounter.surpriseModifier}}" min="-20" max="20" />
+        </label>
+      </div>
+      <div class="gamma-world__bio-row">
+        <label>{{localize "GAMMA_WORLD.Encounter.MoraleModifier"}}
+          <input type="number" name="system.encounter.morale" value="{{system.encounter.morale}}" min="-20" max="20" />
+        </label>
+        <label>{{localize "GAMMA_WORLD.Encounter.IntelligenceLabel"}}
+          <select name="system.encounter.intelligence">
+            {{#each config.ENCOUNTER_INTELLIGENCE as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.encounter.intelligence)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+      <div class="gamma-world__bio-row">
+        <label>
+          <input type="checkbox" name="system.encounter.cannotBeSurprised" {{#if system.encounter.cannotBeSurprised}}checked{{/if}} />
+          {{localize "GAMMA_WORLD.Encounter.CannotBeSurprised"}}
+        </label>
+      </div>
+    </section>
+
+    {{#if isRobot}}
+      <section class="gamma-world__panel">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.Sheet.Robotics"}}</h3>
+        </header>
+        <div class="gamma-world__bio-row">
+          <label>{{localize "GAMMA_WORLD.Robot.Identifier"}}
+            <input type="text" name="system.robotics.identifier" value="{{system.robotics.identifier}}" />
+          </label>
+          <label>{{localize "GAMMA_WORLD.Robot.Chassis"}}
+            <input type="text" name="system.robotics.chassis" value="{{system.robotics.chassis}}" />
+          </label>
+        </div>
+        <div class="gamma-world__bio-row">
+          <label>{{localize "GAMMA_WORLD.Robot.Controller"}}
+            <input type="text" name="system.robotics.controller" value="{{system.robotics.controller}}" />
+          </label>
+          <label>{{localize "GAMMA_WORLD.Robot.Malfunction"}}
+            <input type="text" name="system.robotics.malfunction" value="{{system.robotics.malfunction}}" />
+          </label>
+        </div>
+      </section>
+    {{/if}}
+
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Bio.Biography"}}</legend>
+      <prose-mirror name="system.biography.value" value="{{system.biography.value}}" toggled="false"></prose-mirror>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Bio.Appearance"}}</legend>
+      <prose-mirror name="system.biography.appearance" value="{{system.biography.appearance}}" toggled="false"></prose-mirror>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Bio.Notes"}}</legend>
+      <prose-mirror name="system.biography.notes" value="{{system.biography.notes}}" toggled="false"></prose-mirror>
+    </fieldset>
+  </div>
+
+</section>
+
+</div>

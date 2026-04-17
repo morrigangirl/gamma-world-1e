@@ -1,0 +1,554 @@
+<form class="gw-item-form">
+
+  <header class="form-group">
+    <img src="{{item.img}}" data-edit="img" class="gamma-world__portrait" style="width:48px;height:48px;" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="Name" />
+  </header>
+
+  {{#if (gwEq type "weapon")}}
+    <fieldset>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.Class"}}</label>
+        <input type="number" name="system.weaponClass" value="{{system.weaponClass}}" min="1" max="16" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.Damage"}}</label>
+        <input type="text" name="system.damage.formula" value="{{system.damage.formula}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.DamageType"}}</label>
+        <input type="text" name="system.damage.type" value="{{system.damage.type}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.RangeShort"}} / M / L</label>
+        <span>
+          <input type="number" name="system.range.short"  value="{{system.range.short}}"  style="width:4rem;" />
+          <input type="number" name="system.range.medium" value="{{system.range.medium}}" style="width:4rem;" />
+          <input type="number" name="system.range.long"   value="{{system.range.long}}"   style="width:4rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Attack Type</label>
+        <select name="system.attackType">
+          {{#each config.ATTACK_TYPES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.attackType)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.EffectMode"}}</label>
+        <select name="system.effect.mode">
+          <option value="damage" {{#if (gwEq system.effect.mode "damage")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Damage"}}</option>
+          <option value="poison" {{#if (gwEq system.effect.mode "poison")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Poison"}}</option>
+          <option value="radiation" {{#if (gwEq system.effect.mode "radiation")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Radiation"}}</option>
+          <option value="mental" {{#if (gwEq system.effect.mode "mental")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Mental"}}</option>
+          <option value="stun" {{#if (gwEq system.effect.mode "stun")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Stun"}}</option>
+          <option value="paralysis" {{#if (gwEq system.effect.mode "paralysis")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Paralysis"}}</option>
+          <option value="death" {{#if (gwEq system.effect.mode "death")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Death"}}</option>
+          <option value="note" {{#if (gwEq system.effect.mode "note")}}selected{{/if}}>{{localize "GAMMA_WORLD.Weapon.EffectModeLabel.Note"}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.EffectFormula"}} / {{localize "GAMMA_WORLD.Weapon.EffectStatus"}}</label>
+        <span>
+          <input type="text" name="system.effect.formula" value="{{system.effect.formula}}" style="width:12rem;" />
+          <input type="text" name="system.effect.status" value="{{system.effect.status}}" style="width:10rem;" placeholder="unconscious" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.EffectNotes"}}</label>
+        <input type="text" name="system.effect.notes" value="{{system.effect.notes}}" />
+      </div>
+      <div class="form-group">
+        <label>Weapon Tag</label>
+        <input type="text" name="system.traits.tag" value="{{system.traits.tag}}" placeholder="laser / black-ray / stun" />
+      </div>
+      <div class="form-group">
+        <label>Deflection (AC 2 / AC 1)</label>
+        <span>
+          <input type="number" name="system.traits.deflectAc2Hits" value="{{system.traits.deflectAc2Hits}}" style="width:4rem;" min="0" />
+          /
+          <input type="number" name="system.traits.deflectAc1Hits" value="{{system.traits.deflectAc1Hits}}" style="width:4rem;" min="0" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Special Handling</label>
+        <span>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.traits.bypassesForceField" {{#if system.traits.bypassesForceField}}checked{{/if}} />
+            Bypasses force fields
+          </label>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.traits.requiresNoForceField" {{#if system.traits.requiresNoForceField}}checked{{/if}} />
+            Requires no force field
+          </label>
+          <label>
+            <input type="checkbox" name="system.traits.nonlethal" {{#if system.traits.nonlethal}}checked{{/if}} />
+            Nonlethal
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.Rof"}}</label>
+        <input type="number" name="system.rof" value="{{system.rof}}" min="0" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.Ammo"}} ({{localize "GAMMA_WORLD.Weapon.AmmoCurrent"}} / {{localize "GAMMA_WORLD.Weapon.AmmoMax"}})</label>
+        <span>
+          <input type="number" name="system.ammo.current" value="{{system.ammo.current}}" style="width:4rem;" />
+          /
+          <input type="number" name="system.ammo.max"     value="{{system.ammo.max}}"     style="width:4rem;" />
+          <label style="margin-left:.5rem;">
+            <input type="checkbox" name="system.ammo.consumes" {{#if system.ammo.consumes}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Weapon.ConsumesAmmo"}}
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Weapon.Quantity"}} / {{localize "GAMMA_WORLD.Weapon.Weight"}}</label>
+        <span>
+          <input type="number" name="system.quantity" value="{{system.quantity}}" style="width:4rem;" />
+          <input type="number" name="system.weight"   value="{{system.weight}}"   step="0.1" style="width:5rem;" />
+          <label style="margin-left:.5rem;">
+            <input type="checkbox" name="system.equipped" {{#if system.equipped}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Weapon.Equipped"}}
+          </label>
+        </span>
+      </div>
+    </fieldset>
+  {{/if}}
+
+  {{#if (gwEq type "armor")}}
+    <fieldset>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Armor.AC"}}</label>
+        <input type="number" name="system.acValue" value="{{system.acValue}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Armor.Type"}}</label>
+        <select name="system.armorType">
+          {{#each config.ARMOR_TYPES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.armorType)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Armor.DxPenalty"}}</label>
+        <input type="number" name="system.dxPenalty" value="{{system.dxPenalty}}" />
+      </div>
+      <div class="form-group">
+        <label>Field Mode / Capacity</label>
+        <span>
+          <select name="system.field.mode">
+            <option value="none" {{#if (gwEq system.field.mode "none")}}selected{{/if}}>None</option>
+            <option value="full" {{#if (gwEq system.field.mode "full")}}selected{{/if}}>Full</option>
+            <option value="partial" {{#if (gwEq system.field.mode "partial")}}selected{{/if}}>Partial</option>
+          </select>
+          <input type="number" name="system.field.capacity" value="{{system.field.capacity}}" style="width:5rem;" min="0" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Mobility (flight / jump / lift)</label>
+        <span>
+          <input type="number" name="system.mobility.flight" value="{{system.mobility.flight}}" style="width:4rem;" min="0" />
+          <input type="number" name="system.mobility.jump" value="{{system.mobility.jump}}" style="width:4rem;" min="0" />
+          <input type="number" name="system.mobility.lift" value="{{system.mobility.lift}}" style="width:4rem;" min="0" step="0.1" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Punch Damage</label>
+        <input type="text" name="system.offense.punchDamage" value="{{system.offense.punchDamage}}" />
+      </div>
+      <div class="form-group">
+        <label>Protection</label>
+        <span>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.protection.blackRayImmune" {{#if system.protection.blackRayImmune}}checked{{/if}} />
+            Black ray
+          </label>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.protection.radiationImmune" {{#if system.protection.radiationImmune}}checked{{/if}} />
+            Radiation
+          </label>
+          <label>
+            <input type="checkbox" name="system.protection.poisonImmune" {{#if system.protection.poisonImmune}}checked{{/if}} />
+            Poison
+          </label>
+          <label style="margin-left:1rem;">
+            <input type="checkbox" name="system.protection.laserImmune" {{#if system.protection.laserImmune}}checked{{/if}} />
+            Laser
+          </label>
+          <label style="margin-left:1rem;">
+            <input type="checkbox" name="system.protection.mentalImmune" {{#if system.protection.mentalImmune}}checked{{/if}} />
+            Mental
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Armor.Quantity"}} / {{localize "GAMMA_WORLD.Armor.Weight"}}</label>
+        <span>
+          <input type="number" name="system.quantity" value="{{system.quantity}}" style="width:4rem;" />
+          <input type="number" name="system.weight"   value="{{system.weight}}"   step="0.1" style="width:5rem;" />
+          <label style="margin-left:.5rem;">
+            <input type="checkbox" name="system.equipped" {{#if system.equipped}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Armor.Equipped"}}
+          </label>
+        </span>
+      </div>
+    </fieldset>
+  {{/if}}
+
+  {{#if (gwEq type "gear")}}
+    <fieldset>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Gear.Quantity"}}</label>
+        <input type="number" name="system.quantity" value="{{system.quantity}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Gear.Weight"}}</label>
+        <input type="number" name="system.weight" value="{{system.weight}}" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Gear.Tech"}}</label>
+        <select name="system.tech">
+          {{#each config.TECH_LEVELS as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.tech)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Action Mode</label>
+        <select name="system.action.mode">
+          <option value="none" {{#if (gwEq system.action.mode "none")}}selected{{/if}}>None</option>
+          <option value="area-damage" {{#if (gwEq system.action.mode "area-damage")}}selected{{/if}}>Area damage</option>
+          <option value="tear-gas-cloud" {{#if (gwEq system.action.mode "tear-gas-cloud")}}selected{{/if}}>Tear gas cloud</option>
+          <option value="poison-cloud" {{#if (gwEq system.action.mode "poison-cloud")}}selected{{/if}}>Poison gas cloud</option>
+          <option value="stun-cloud" {{#if (gwEq system.action.mode "stun-cloud")}}selected{{/if}}>Stun gas cloud</option>
+          <option value="mutation-bomb" {{#if (gwEq system.action.mode "mutation-bomb")}}selected{{/if}}>Mutation bomb</option>
+          <option value="photon" {{#if (gwEq system.action.mode "photon")}}selected{{/if}}>Photon / neutron kill zone</option>
+          <option value="torc" {{#if (gwEq system.action.mode "torc")}}selected{{/if}}>Torc disintegration</option>
+          <option value="trek" {{#if (gwEq system.action.mode "trek")}}selected{{/if}}>Trek disintegration</option>
+          <option value="negation" {{#if (gwEq system.action.mode "negation")}}selected{{/if}}>Negation pulse</option>
+          <option value="healing" {{#if (gwEq system.action.mode "healing")}}selected{{/if}}>Healing</option>
+          <option value="radiation-heal" {{#if (gwEq system.action.mode "radiation-heal")}}selected{{/if}}>Radiation healing</option>
+          <option value="rejuv" {{#if (gwEq system.action.mode "rejuv")}}selected{{/if}}>Rejuv chamber</option>
+          <option value="portent" {{#if (gwEq system.action.mode "portent")}}selected{{/if}}>Portent shield</option>
+          <option value="charger" {{#if (gwEq system.action.mode "charger")}}selected{{/if}}>Cell charger</option>
+          <option value="life-ray" {{#if (gwEq system.action.mode "life-ray")}}selected{{/if}}>Life Ray</option>
+          <option value="guided" {{#if (gwEq system.action.mode "guided")}}selected{{/if}}>Guided workflow</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Damage / Intensity / Duration</label>
+        <span>
+          <input type="text" name="system.action.damageFormula" value="{{system.action.damageFormula}}" style="width:8rem;" placeholder="damage" />
+          <input type="text" name="system.action.intensityFormula" value="{{system.action.intensityFormula}}" style="width:8rem;" placeholder="intensity" />
+          <input type="text" name="system.action.durationFormula" value="{{system.action.durationFormula}}" style="width:8rem;" placeholder="duration" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Radius / AC Delta / To-Hit Delta</label>
+        <span>
+          <input type="number" name="system.action.radius" value="{{system.action.radius}}" style="width:4rem;" min="0" />
+          <input type="number" name="system.action.acDelta" value="{{system.action.acDelta}}" style="width:4rem;" />
+          <input type="number" name="system.action.toHitDelta" value="{{system.action.toHitDelta}}" style="width:4rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Save Type / Status / Qty Used</label>
+        <span>
+          <input type="text" name="system.action.saveType" value="{{system.action.saveType}}" style="width:7rem;" />
+          <input type="text" name="system.action.status" value="{{system.action.status}}" style="width:7rem;" />
+          <input type="number" name="system.action.consumeQuantity" value="{{system.action.consumeQuantity}}" style="width:4rem;" min="0" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Action Notes</label>
+        <input type="text" name="system.action.notes" value="{{system.action.notes}}" />
+      </div>
+    </fieldset>
+  {{/if}}
+
+  {{#if (gwEq type "mutation")}}
+    <fieldset>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Subtype.Physical"}} / {{localize "GAMMA_WORLD.Mutation.Subtype.Mental"}} / {{localize "GAMMA_WORLD.Mutation.Subtype.Defect"}}</label>
+        <select name="system.subtype">
+          {{#each config.MUTATION_SUBTYPES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.subtype)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Category.Beneficial"}} / {{localize "GAMMA_WORLD.Mutation.Category.Defect"}}</label>
+        <select name="system.category">
+          {{#each config.MUTATION_CATEGORIES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.category)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Summary"}}</label>
+        <input type="text" name="system.summary" value="{{system.summary}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Code"}} / {{localize "GAMMA_WORLD.Mutation.Page"}}</label>
+        <span>
+          <input type="number" name="system.code" value="{{system.code}}" style="width:4rem;" />
+          /
+          <input type="number" name="system.reference.page" value="{{system.reference.page}}" style="width:4rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Reference"}}</label>
+        <input type="text" name="system.reference.table" value="{{system.reference.table}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Variant"}}</label>
+        <input type="text" name="system.reference.variant" value="{{system.reference.variant}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Activation"}}</label>
+        <select name="system.activation.mode">
+          <option value="passive" {{#if (gwEq system.activation.mode "passive")}}selected{{/if}}>Passive</option>
+          <option value="action" {{#if (gwEq system.activation.mode "action")}}selected{{/if}}>Action</option>
+          <option value="toggle" {{#if (gwEq system.activation.mode "toggle")}}selected{{/if}}>Toggle</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Active"}}</label>
+        <span>
+          <input type="checkbox" name="system.active" {{#if system.active}}checked{{/if}} />
+          <label style="margin-left:.5rem;">
+            <input type="checkbox" name="system.activation.enabled" {{#if system.activation.enabled}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Mutation.ActiveNow"}}
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Range"}}</label>
+        <input type="text" name="system.range" value="{{system.range}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Duration"}}</label>
+        <input type="text" name="system.duration" value="{{system.duration}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Remaining"}}</label>
+        <input type="number" name="system.activation.remaining" value="{{system.activation.remaining}}" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Mutation.UsageLabel"}} / {{localize "GAMMA_WORLD.Mutation.Cooldown"}}</legend>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Limited"}}</label>
+        <input type="checkbox" name="system.usage.limited" {{#if system.usage.limited}}checked{{/if}} />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Per"}}</label>
+        <select name="system.usage.per">
+          {{#each config.USAGE_PERIODS as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.usage.per)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Uses"}} / {{localize "GAMMA_WORLD.Mutation.Max"}}</label>
+        <span>
+          <input type="number" name="system.usage.uses" value="{{system.usage.uses}}" style="width:4rem;" />
+          /
+          <input type="number" name="system.usage.max"  value="{{system.usage.max}}"  style="width:4rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Cooldown"}}</label>
+        <span>
+          <input type="number" name="system.cooldown.current" value="{{system.cooldown.current}}" style="width:4rem;" />
+          /
+          <input type="number" name="system.cooldown.max" value="{{system.cooldown.max}}" style="width:4rem;" />
+        </span>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Mutation.Effect"}}</legend>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Formula"}}</label>
+        <input type="text" name="system.effect.formula" value="{{system.effect.formula}}" />
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.SaveType"}}</label>
+        <select name="system.effect.saveType">
+          <option value="" {{#if (gwEq system.effect.saveType "")}}selected{{/if}}>—</option>
+          {{#each config.SAVE_TYPES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.effect.saveType)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Mutation.Notes"}}</label>
+        <input type="text" name="system.effect.notes" value="{{system.effect.notes}}" />
+      </div>
+    </fieldset>
+  {{/if}}
+
+  {{#if (gwOr (gwEq type "weapon") (gwEq type "armor") (gwEq type "gear"))}}
+    <fieldset>
+      <legend>{{localize "GAMMA_WORLD.Artifact.Title"}}</legend>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Title"}}</label>
+        <span>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.artifact.isArtifact" {{#if system.artifact.isArtifact}}checked{{/if}} />
+            Ancient item
+          </label>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.artifact.identified" {{#if system.artifact.identified}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Artifact.Identified"}}
+          </label>
+          <label>
+            <input type="checkbox" name="system.artifact.operationKnown" {{#if system.artifact.operationKnown}}checked{{/if}} />
+            {{localize "GAMMA_WORLD.Artifact.OperationKnown"}}
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Category.Pistol"}} / Chart / Condition</label>
+        <span>
+          <select name="system.artifact.category">
+            {{#each config.ARTIFACT_CATEGORIES as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.category)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          <select name="system.artifact.chart">
+            {{#each config.ARTIFACT_CHARTS as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.chart)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          <select name="system.artifact.condition">
+            {{#each config.ARTIFACT_CONDITIONS as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.condition)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.FunctionChance"}} / {{localize "GAMMA_WORLD.Artifact.Attempts"}}</label>
+        <span>
+          <input type="number" name="system.artifact.functionChance" value="{{system.artifact.functionChance}}" min="0" max="100" style="width:5rem;" />
+          <input type="number" name="system.artifact.attempts" value="{{system.artifact.attempts}}" min="0" style="width:5rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Hazard Flags</label>
+        <span>
+          <label style="margin-right:1rem;">
+            <input type="checkbox" name="system.artifact.canShortOut" {{#if system.artifact.canShortOut}}checked{{/if}} />
+            Can short out
+          </label>
+          <label>
+            <input type="checkbox" name="system.artifact.canExplode" {{#if system.artifact.canExplode}}checked{{/if}} />
+            Can explode
+          </label>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Harm Type / Callback</label>
+        <span>
+          <input type="text" name="system.artifact.harmResolutionType" value="{{system.artifact.harmResolutionType}}" />
+          <input type="text" name="system.artifact.harmCallback" value="{{system.artifact.harmCallback}}" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Power.Requirement.Label"}} / {{localize "GAMMA_WORLD.Artifact.Power.CompatibleCells"}}</label>
+        <span>
+          <select name="system.artifact.power.requirement">
+            {{#each config.ARTIFACT_POWER_REQUIREMENTS as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.power.requirement)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          <input type="text" name="system.artifact.power.compatibleCells" value="{{system.artifact.power.compatibleCells}}" placeholder="chemical,solar" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Power.Cells"}} / {{localize "GAMMA_WORLD.Artifact.Power.Installed"}}</label>
+        <span>
+          <input type="number" name="system.artifact.power.cellSlots" value="{{system.artifact.power.cellSlots}}" min="0" style="width:4rem;" />
+          /
+          <input type="number" name="system.artifact.power.cellsInstalled" value="{{system.artifact.power.cellsInstalled}}" min="0" style="width:4rem;" />
+          <select name="system.artifact.power.installedType">
+            {{#each config.POWER_CELL_TYPES as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.power.installedType)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Power.Ambient.Label"}} / {{localize "GAMMA_WORLD.Artifact.Power.Ambient.Available"}}</label>
+        <span>
+          <select name="system.artifact.power.ambientSource">
+            {{#each config.ARTIFACT_AMBIENT_SOURCES as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.power.ambientSource)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          {{#if isGM}}
+            <label style="margin-left:0.5rem;">
+              <input type="checkbox" name="system.artifact.power.ambientAvailable" {{#if system.artifact.power.ambientAvailable}}checked{{/if}} />
+              {{localize "GAMMA_WORLD.Artifact.Power.Ambient.Available"}}
+            </label>
+          {{else}}
+            <span style="margin-left:0.5rem;">
+              {{localize "GAMMA_WORLD.Artifact.Power.Ambient.Available"}}:
+              {{#if system.artifact.power.ambientAvailable}}Yes{{else}}No{{/if}}
+              (DM controlled)
+            </span>
+          {{/if}}
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.PowerSource"}} / {{localize "GAMMA_WORLD.Artifact.Charges"}}</label>
+        <span>
+          <select name="system.artifact.powerSource">
+            {{#each config.POWER_CELL_TYPES as |label key|}}
+              <option value="{{key}}" {{#if (gwEq key ../system.artifact.powerSource)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          <input type="number" name="system.artifact.charges.current" value="{{system.artifact.charges.current}}" style="width:4rem;" />
+          /
+          <input type="number" name="system.artifact.charges.max" value="{{system.artifact.charges.max}}" style="width:4rem;" />
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Artifact.Malfunction"}}</label>
+        <input type="text" name="system.artifact.malfunction" value="{{system.artifact.malfunction}}" />
+      </div>
+      {{#if artifactSession}}
+        <div class="form-group">
+          <label>Session Status</label>
+          <span>{{artifactSessionStatus}}</span>
+        </div>
+        <div class="form-group">
+          <label>Operator / Node</label>
+          <span>{{artifactSession.operatorName}} / {{artifactSession.currentNode}}</span>
+        </div>
+        <div class="form-group">
+          <label>Visible Outcome</label>
+          <span>{{artifactSession.publicOutcome}}</span>
+        </div>
+      {{/if}}
+      {{#if artifactPowerSummary}}
+        <div class="form-group">
+          <label>{{localize "GAMMA_WORLD.Artifact.Power.Manage"}}</label>
+          <span>{{artifactPowerSummary}}</span>
+        </div>
+      {{/if}}
+    </fieldset>
+  {{/if}}
+
+  <fieldset>
+    <legend>Description</legend>
+    <prose-mirror name="system.description.value" value="{{system.description.value}}" toggled="false"></prose-mirror>
+  </fieldset>
+
+</form>

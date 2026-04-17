@@ -1,0 +1,29 @@
+<div class="gw-chat-card gw-save-card">
+  <h3>{{typeLabel}}</h3>
+  <div class="gw-card-meta">
+    {{actorName}}
+    {{#if sourceName}} &middot; Source: {{sourceName}}{{/if}}
+    &middot; resistance {{resistance}}
+    &middot; intensity {{intensity}}
+  </div>
+  <div class="gw-card-result {{#if success}}is-hit{{else}}is-miss{{/if}}">
+    Result: {{target}}
+  </div>
+  <div class="gw-card-meta">{{outcome}}</div>
+  {{#if damageFormula}}
+    <div class="gw-card-meta">Damage: {{damageFormula}} = {{damageTotal}}</div>
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-hazard-damage">Apply Damage</button>
+    </div>
+  {{/if}}
+  {{#if (gwEq target "M")}}
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-hazard-mutation">Grant Mutation</button>
+    </div>
+  {{/if}}
+  {{#if (gwEq target "D")}}
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-hazard-lethal">Resolve Lethal Result</button>
+    </div>
+  {{/if}}
+</div>

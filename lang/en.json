@@ -1,0 +1,525 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "monster": "Monster"
+    },
+    "Item": {
+      "weapon": "Weapon",
+      "armor": "Armor",
+      "gear": "Gear",
+      "mutation": "Mutation"
+    }
+  },
+  "GAMMA_WORLD": {
+    "System": {
+      "Title": "Gamma World 1st Edition"
+    },
+    "Settings": {
+      "PilotAnimations": {
+        "Name": "Enable Pilot Animations",
+        "Hint": "Play the system's Sequencer + JB2A pilot effects for Laser Pistols, Black Ray Guns, and Force Field Generation when those modules are active."
+      }
+    },
+    "Sheet": {
+      "Character": "Character Sheet",
+      "Monster": "Monster Sheet",
+      "Item": "Item Sheet",
+      "QuickActions": "Quick Actions",
+      "InventorySummary": "Inventory Summary",
+      "Loadout": "Loadout",
+      "Protections": "Protections",
+      "EquippedWeapons": "Equipped Weapons",
+      "NoneEquippedWeapons": "No equipped weapons.",
+      "NoArmorEquipped": "No armor equipped.",
+      "NoProtections": "No special protections active.",
+      "Identity": "Identity",
+      "Encounter": "Encounter",
+      "Artifacts": "Artifacts",
+      "Social": "Social",
+      "Robotics": "Robotics",
+      "NoAlliance": "No alliance recorded.",
+      "NoAnimalForm": "No animal form recorded.",
+      "MutationTotals": "Mutation Totals",
+      "ReadyPowers": "Currently active or ready to fire."
+    },
+    "CharacterType": {
+      "PSH": "Pure Strain Human",
+      "Humanoid": "Humanoid",
+      "MutatedAnimal": "Mutated Animal",
+      "Robot": "Robot"
+    },
+    "Attribute": {
+      "MS": { "label": "Mental Strength", "abbr": "MS", "full": "Mental Strength" },
+      "IN": { "label": "Intelligence", "abbr": "IN", "full": "Intelligence" },
+      "DX": { "label": "Dexterity", "abbr": "DX", "full": "Dexterity" },
+      "CH": { "label": "Charisma", "abbr": "CH", "full": "Charisma" },
+      "CN": { "label": "Constitution", "abbr": "CN", "full": "Constitution" },
+      "PS": { "label": "Physical Strength", "abbr": "PS", "full": "Physical Strength" }
+    },
+    "Resource": {
+      "HP": "Hit Points",
+      "HPShort": "HP",
+      "AC": "Armor Class",
+      "ACShort": "AC",
+      "MentalResistance": "Mental Resistance",
+      "MRShort": "MR",
+      "RadResistance": "Radiation Resistance",
+      "RRShort": "RR",
+      "PoisonResistance": "Poison Resistance",
+      "PRShort": "PR",
+      "Level": "Level",
+      "XP": "XP",
+      "Type": "Type",
+      "Movement": "Movement",
+      "BaseAC": "Base AC",
+      "Alliance": "Cryptic Alliance",
+      "Role": "Role",
+      "Speech": "Speech",
+      "CreatureClass": "Creature Class",
+      "AnimalForm": "Animal Form",
+      "Flight": "Flight",
+      "Jump": "Jump",
+      "Lift": "Lift",
+      "ActiveEffects": "Active Effects",
+      "Languages": "Languages",
+      "Literacy": "Literacy",
+      "Relatives": "Relatives",
+      "HomeRegion": "Home Region",
+      "Reputation": "Reputation"
+    },
+    "Save": {
+      "Radiation": "Radiation",
+      "Poison": "Poison",
+      "Mental": "Mental",
+      "RollRadiation": "Roll Radiation Save",
+      "RollPoison": "Roll Poison Save",
+      "RollMental": "Roll Mental Save"
+    },
+    "Combat": {
+      "NaturalAttack": "Natural Attack",
+      "NaturalAttackName": "Natural Attack Name",
+      "NaturalAttackDamage": "Natural Attack Damage",
+      "Surprise": "Surprise",
+      "Reaction": "Reaction",
+      "RollSurprise": "Roll Surprise",
+      "RollReaction": "Roll Reaction",
+      "EncounterRole": "Encounter Role"
+    },
+    "Tab": {
+      "Main": "Main",
+      "Mutations": "Mutations",
+      "Inventory": "Inventory",
+      "Bio": "Bio"
+    },
+    "Mutation": {
+      "Subtype": {
+        "Physical": "Physical Mutation",
+        "Mental": "Mental Mutation",
+        "Defect": "Defect"
+      },
+      "SubtypePlural": {
+        "Physical": "Physical Mutations",
+        "Mental": "Mental Mutations",
+        "Defect": "Defects"
+      },
+      "Category": {
+        "Beneficial": "Beneficial",
+        "Defect": "Defect"
+      },
+      "Usage": {
+        "Day": "Per Day",
+        "Week": "Per Week",
+        "Encounter": "Per Encounter",
+        "Scene": "Per Scene",
+        "AtWill": "At Will"
+      },
+      "Active": "Active power",
+      "ActiveNow": "Active now",
+      "Activation": "Activation",
+      "Code": "Code",
+      "Cooldown": "Cooldown",
+      "Range": "Range",
+      "Duration": "Duration",
+      "Summary": "Summary",
+      "Reference": "Reference Table",
+      "Variant": "Variant",
+      "Page": "Page",
+      "Remaining": "Rounds Remaining",
+      "Reset": "Refresh Powers",
+      "UsageLabel": "Usage",
+      "Uses": "Uses",
+      "Max": "Max",
+      "Limited": "Limited uses",
+      "Per": "Per",
+      "Effect": "Effect",
+      "Formula": "Formula",
+      "SaveType": "Save Type",
+      "Notes": "Notes",
+      "Use": "Use",
+      "Empty": "No mutations yet."
+    },
+    "Weapon": {
+      "Class": "Weapon Class",
+      "Damage": "Damage",
+      "DamageType": "Damage Type",
+      "Range": "Range",
+      "RangeShort": "Short",
+      "RangeMedium": "Medium",
+      "RangeLong": "Long",
+      "Rof": "Rate of Fire",
+      "Ammo": "Ammo",
+      "AmmoCurrent": "Current",
+      "AmmoMax": "Max",
+      "ConsumesAmmo": "Consumes ammo on use",
+      "Equipped": "Equipped",
+      "Quantity": "Qty",
+      "Weight": "Weight",
+      "Type": {
+        "Melee": "Melee",
+        "Ranged": "Ranged",
+        "Thrown": "Thrown",
+        "Energy": "Energy"
+      },
+      "ClassLabel": {
+        "1": "Class 1",
+        "2": "Class 2",
+        "3": "Class 3",
+        "4": "Class 4",
+        "5": "Class 5",
+        "6": "Class 6",
+        "7": "Class 7",
+        "8": "Class 8",
+        "9": "Class 9",
+        "10": "Class 10",
+        "11": "Class 11",
+        "12": "Class 12",
+        "13": "Class 13",
+        "14": "Class 14",
+        "15": "Class 15",
+        "16": "Class 16"
+      },
+      "EffectMode": "On-Hit Effect",
+      "EffectFormula": "Effect Formula",
+      "EffectStatus": "Status",
+      "EffectNotes": "Effect Notes",
+      "EffectModeLabel": {
+        "Damage": "Damage",
+        "Poison": "Poison",
+        "Radiation": "Radiation",
+        "Mental": "Mental",
+        "Stun": "Stun",
+        "Paralysis": "Paralysis",
+        "Death": "Instant Death",
+        "Note": "Reference / Note"
+      },
+      "RollAttack": "Attack",
+      "Empty": "No weapons."
+    },
+    "Armor": {
+      "AC": "AC Value",
+      "Type": "Type",
+      "DxPenalty": "DX Penalty",
+      "Equipped": "Equipped",
+      "Quantity": "Qty",
+      "Weight": "Weight",
+      "TypeLabel": {
+        "None": "None",
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy",
+        "Shield": "Shield"
+      },
+      "Empty": "No armor."
+    },
+    "Gear": {
+      "Quantity": "Qty",
+      "Weight": "Weight",
+      "Tech": "Tech Level",
+      "Empty": "No gear."
+    },
+    "Tech": {
+      "None": "—",
+      "I": "Tech Level I",
+      "II": "Tech Level II",
+      "III": "Tech Level III",
+      "IV": "Tech Level IV",
+      "V": "Tech Level V",
+      "VI": "Tech Level VI"
+    },
+    "Robot": {
+      "Mode": {
+        "Inactive": "Inactive",
+        "Programmed": "Programmed",
+        "Wild": "Wild",
+        "Controlled": "Controlled"
+      },
+      "Power": {
+        "None": "No dedicated power source",
+        "Broadcast": "Broadcast power",
+        "Nuclear": "Nuclear plant",
+        "Hydrogen": "Hydrogen cell",
+        "Solar": "Solar cell",
+        "Chemical": "Chemical battery"
+      },
+      "IsRobot": "Robotic unit",
+      "Identifier": "Identifier",
+      "Controller": "Controller",
+      "Chassis": "Chassis / Model",
+      "PowerSource": "Power Source",
+      "PowerCurrent": "Current Power",
+      "PowerMax": "Maximum Power",
+      "BackupHours": "Backup Hours",
+      "BroadcastCapable": "Broadcast capable",
+      "RepairDifficulty": "Repair Difficulty",
+      "Malfunction": "Malfunction",
+      "SpendPower": "Spend Power",
+      "Recharge": "Recharge",
+      "ToggleMode": "Change Mode",
+      "Repair": "Repair"
+    },
+    "Artifact": {
+      "Title": "Artifact",
+      "Analyze": "Analyze",
+      "Use": "Use Artifact",
+      "Power": {
+        "Manage": "Manage Power",
+        "Requirement": {
+          "Label": "Power Requirement",
+          "None": "No separate power source",
+          "Cells": "Installable cells",
+          "Ambient": "External power only",
+          "CellsOrAmbient": "Cells or external power"
+        },
+        "CompatibleCells": "Compatible Cells",
+        "Cells": "Cell Slots",
+        "Installed": "Installed Cells",
+        "Ambient": {
+          "Label": "External Power",
+          "None": "No external source",
+          "Line": "Facility line power",
+          "Broadcast": "Broadcast power",
+          "LineOrBroadcast": "Line or broadcast power",
+          "Available": "Available now"
+        }
+      },
+      "Category": {
+        "None": "Non-artifact",
+        "Pistol": "Pistol",
+        "Rifle": "Rifle",
+        "EnergyWeapon": "Energy Weapon",
+        "Grenade": "Grenade",
+        "Bomb": "Bomb or Missile",
+        "Armor": "Armor",
+        "Vehicle": "Vehicle",
+        "EnergyDevice": "Energy Device",
+        "RoboticUnit": "Robotic Unit",
+        "Medical": "Medical Equipment"
+      },
+      "Condition": {
+        "Broken": "Obviously Broken",
+        "Poor": "Poor",
+        "Fair": "Fair",
+        "Good": "Good",
+        "Excellent": "Excellent",
+        "Perfect": "Perfect"
+      },
+      "Chart": {
+        "None": "No chart",
+        "A": "Chart A",
+        "B": "Chart B",
+        "C": "Chart C"
+      },
+      "FunctionChance": "Function %",
+      "Identified": "Purpose known",
+      "OperationKnown": "Operation known",
+      "UnknownName": "Unknown Artifact",
+      "UnknownBadge": "Unknown",
+      "AnalysisRequired": "Unidentified Ancient item. Analyze to determine its function.",
+      "NotUsable": "Not yet usable",
+      "Attempts": "Attempts",
+      "PowerSource": "Artifact Power",
+      "Charges": "Charges",
+      "Malfunction": "Malfunction",
+      "NotArtifact": "Not an artifact.",
+      "Session": {
+        "Title": "Artifact Identification",
+        "UnknownOperator": "Unknown Operator",
+        "Operator": "Operator",
+        "Rolls": "Rolls",
+        "Time": "Time",
+        "Modifier": "Roll Modifier",
+        "ChartLegend": "Chart Coverage",
+        "Controls": "Controls",
+        "Roll": "Roll",
+        "ForceRoll": "Force Roll",
+        "Interrupt": "Interrupt Attempt",
+        "InterruptConfirm": "Interrupt the current uninterrupted attempt and reset the visible path to Start?",
+        "TryItOut": "Try It Out",
+        "Close": "Close Window",
+        "Helpers": "Helpers",
+        "Reassign": "Reassign Operator",
+        "Reveal": "Reveal Hidden Outcome",
+        "Reset": "Reset Session",
+        "ResetConfirm": "Clear this shared artifact session for everyone?",
+        "ShowDebug": "Show Node IDs",
+        "HideDebug": "Hide Node IDs",
+        "Waiting": "Waiting On Shared Session",
+        "WaitingHint": "This client is waiting for the current artifact session state from the GM.",
+        "LatestRoll": "Latest Roll",
+        "NoRollsYet": "No public rolls have been made yet.",
+        "History": "Step History",
+        "GmDiagnostics": "GM Diagnostics",
+        "Condition": "Condition",
+        "FunctionRoll": "Function Check",
+        "MishapRoll": "Mishap Check",
+        "ObservableOutcome": "Observable Outcome",
+        "GmWhisper": "Artifact Hidden Checks",
+        "StatusActive": "Identification In Progress",
+        "StatusSuccess": "Function Understood",
+        "StatusHarm": "Dangerous Result",
+        "OperationUnknown": "This artifact's operation is not yet understood. Use the shared identification flowchart first.",
+        "SuccessPublic": "The artifact's function has been worked out.",
+        "HarmPublic": "A dangerous interaction has occurred.",
+        "InstantSuccess": "Molecular Understanding reveals the artifact instantly.",
+        "RollHeading": "Artifact Progress",
+        "NoSpecialMods": "No special artifact modifiers",
+        "InterruptedPublic": "The attempt is interrupted; the visible trail resets to Start.",
+        "Public": {
+          "Hum": "It hums to life.",
+          "Nothing": "Nothing happens.",
+          "Burst": "A sharp crack and burst of energy lash out!"
+        },
+        "Note": {
+          "Advance": "Advance",
+          "Loop": "Loop",
+          "Return": "Return",
+          "Success": "Success",
+          "Harm": "Harm"
+        },
+        "Malfunction": {
+          "ShortCircuit": "Short circuit during operation",
+          "Exploded": "Exploded during operation"
+        }
+      },
+      "AnalysisSuccess": "The artifact's purpose and basic operation are understood.",
+      "AnalysisFailure": "The artifact remains mysterious.",
+      "OperationFailure": "The artifact does not respond.",
+      "ShortCircuit": "The artifact shorts out during use."
+    },
+    "PowerCell": {
+      "None": "No power cell"
+    },
+    "Encounter": {
+      "ReactionResult": {
+        "2": "Extremely hostile",
+        "3-5": "Hostile / distrustful",
+        "6-8": "Uncertain",
+        "9-11": "Friendly / helpful",
+        "12": "Enthusiastic / loyal"
+      },
+      "Terrain": {
+        "Clear": "Clear",
+        "Mountains": "Mountains",
+        "Forest": "Forest",
+        "Desert": "Desert",
+        "Water": "Water Areas",
+        "Ruins": "Ruins",
+        "Zones": "Radioactive Zones"
+      },
+      "Intelligence": {
+        "Auto": "Auto",
+        "NonIntelligent": "Non-intelligent",
+        "SemiIntelligent": "Semi-intelligent",
+        "Intelligent": "Intelligent"
+      },
+      "Route": {
+        "Day": "Day",
+        "Night": "Night",
+        "Period": "Route Period"
+      },
+      "Morale": "Morale",
+      "MoraleWatch": "Morale Watch",
+      "RollMorale": "Roll Morale",
+      "RandomEncounter": "Random Encounter",
+      "RouteCheck": "Route Check",
+      "TerrainLabel": "Terrain",
+      "Scope": "Check For",
+      "ScopeSelf": "This actor",
+      "ScopeTargets": "Current targets",
+      "ScopeControlled": "Controlled tokens",
+      "NoScopeActors": "No actors matched that encounter scope.",
+      "Reason": "Reason",
+      "Modifier": "Situational Modifier",
+      "DefendingLair": "Defending a lair",
+      "LairYoung": "Lair contains young",
+      "TrackMorale": "Continue checking each combat round",
+      "ReactionModifier": "Reaction Modifier",
+      "SurpriseModifier": "Surprise Modifier",
+      "MoraleModifier": "Morale Modifier",
+      "IntelligenceLabel": "Intelligence",
+      "CannotBeSurprised": "Cannot be surprised",
+      "MoraleContinue": "Holds morale and continues the fight.",
+      "MoraleFlee": "Breaks morale and flees.",
+      "BelowHalfHp": "Below half hit points.",
+      "RouteTimeNote": "If an encounter occurs during route movement, the referee should still determine the exact time and location.",
+      "FirstStrike": "First strike",
+      "Simultaneous": "Simultaneous"
+    },
+    "Bio": {
+      "Biography": "Biography",
+      "Appearance": "Appearance",
+      "Notes": "Notes"
+    },
+    "Chargen": {
+      "Button": "Roll Character (Auto)",
+      "Rerolled": "Chargen Complete",
+      "Title": "Character Generation",
+      "ChooseMethod": "Choose stat roll method",
+      "ChooseType": "Choose character type",
+      "ChooseMutationMethod": "Choose mutation generation",
+      "AnimalForm": "Base animal stock",
+      "Assign": "Assign values to attributes",
+      "Accept": "Accept",
+      "Cancel": "Cancel",
+      "Reroll": "Reroll",
+      "PointsLeft": "Points Remaining",
+      "Method": {
+        "Raw": "RAW 3d6 in order",
+        "4d6dl": "4d6 drop lowest",
+        "StandardArray": "Standard Array (15, 14, 13, 12, 10, 8)",
+        "PointBuy": "Point Buy (27 points)"
+      },
+      "MutationMethod": {
+        "Random": "Roll mutations randomly",
+        "Choose": "Choose mutations, defects assigned by the referee rules"
+      },
+      "Chat": {
+        "Generated": "Character generated",
+        "Method": "Method",
+        "Stats": "Stats",
+        "Derived": "Derived",
+        "Mutations": "Mutations"
+      }
+    },
+    "Effect": {
+      "Empty": "No temporary effects."
+    },
+    "Button": {
+      "Create": "Create",
+      "Edit": "Edit",
+      "Delete": "Delete",
+      "Equip": "Equip",
+      "Unequip": "Unequip",
+      "Remove": "Remove",
+      "Analyze": "Analyze",
+      "Use": "Use",
+      "Reset": "Reset"
+    },
+    "Error": {
+      "NoTarget": "No target selected.",
+      "ChargenAlreadyRolled": "This character has already been rolled.",
+      "MutationNoUses": "No uses remaining."
+    }
+  }
+}

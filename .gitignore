@@ -1,0 +1,25 @@
+# Rulebook and other local-only reference materials (copyright)
+ref/
+
+# macOS
+.DS_Store
+
+# Claude Code local state
+.claude/
+
+# Editor state
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (in case we ever add tooling)
+node_modules/
+npm-debug.log
+__pycache__/
+*.pyc
+
+# Generated validation and working artifacts
+output/
+test-results/
+tmp/

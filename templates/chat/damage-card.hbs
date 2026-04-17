@@ -1,0 +1,15 @@
+<div class="gw-chat-card gw-damage-card">
+  <h3>{{weaponName}} &mdash; Damage</h3>
+  <div class="gw-card-meta">
+    {{actorName}} &middot; {{formula}}{{#if dmgType}} ({{dmgType}}){{/if}}
+  </div>
+  <div class="gw-card-result">Damage: {{total}}</div>
+  {{#if notes}}
+    <div class="gw-card-meta">{{notes}}</div>
+  {{/if}}
+  <div class="gw-card-actions">
+    <button type="button" data-action="gw-apply-damage" data-multiplier="1">Apply</button>
+    <button type="button" data-action="gw-apply-damage" data-multiplier="0.5">Apply Half</button>
+    <button type="button" data-action="gw-apply-damage" data-multiplier="0.25">Apply Quarter</button>
+  </div>
+</div>

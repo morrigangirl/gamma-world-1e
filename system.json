@@ -1,0 +1,89 @@
+{
+  "id": "gamma-world-1e",
+  "title": "Gamma World 1st Edition",
+  "description": "A Foundry VTT v13 game system for Gamma World 1st Edition with chargen, combat, mutations, artifacts, robots, encounter automation, and bundled compendia for gear, sample actors, monsters, and system docs.",
+  "version": "0.4.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    { "name": "aoibhwood" }
+  ],
+  "esmodules": [
+    "gamma-world.mjs"
+  ],
+  "styles": [
+    "gamma-world.css"
+  ],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "packs": [
+    {
+      "name": "mutations",
+      "label": "Mutation Index",
+      "path": "packs/mutations",
+      "type": "Item",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "equipment",
+      "label": "Armory and Gear",
+      "path": "packs/equipment",
+      "type": "Item",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "sample-actors",
+      "label": "Sample Actors",
+      "path": "packs/sample-actors",
+      "type": "Actor",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "monsters",
+      "label": "Monsters and Beasts",
+      "path": "packs/monsters",
+      "type": "Actor",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "encounter-tables",
+      "label": "Encounter Tables",
+      "path": "packs/encounter-tables",
+      "type": "RollTable",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "system-docs",
+      "label": "System Documentation",
+      "path": "packs/system-docs",
+      "type": "JournalEntry",
+      "system": "gamma-world-1e"
+    }
+  ],
+  "grid": {
+    "distance": 10,
+    "units": "ft"
+  },
+  "primaryTokenAttribute": "resources.hp",
+  "secondaryTokenAttribute": null,
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": ["biography.value", "biography.appearance", "biography.notes"]
+      },
+      "monster": {
+        "htmlFields": ["biography.value", "biography.appearance", "biography.notes"]
+      }
+    },
+    "Item": {
+      "weapon":   { "htmlFields": ["description.value"] },
+      "armor":    { "htmlFields": ["description.value"] },
+      "gear":     { "htmlFields": ["description.value"] },
+      "mutation": { "htmlFields": ["description.value"] }
+    }
+  }
+}
