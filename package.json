@@ -5,7 +5,9 @@
   "scripts": {
     "build:compendia": "node scripts/build-compendia.mjs",
     "build:monster-prompts": "node scripts/build-monster-art-prompts.mjs",
+    "build:monster-art": "python3 scripts/generate-monster-art.py",
     "build:monster-assets": "python3 scripts/render-monster-assets.py",
+    "audit:monster-art": "node scripts/monster-art-audit.mjs",
     "extract:rulebook-prose": "node scripts/extract-rulebook-prose.mjs",
     "import:rulebook-prose": "node scripts/import-rulebook-prose.mjs",
     "prose:refresh": "npm run extract:rulebook-prose && npm run import:rulebook-prose && npm run build:compendia",

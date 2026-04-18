@@ -1,0 +1,13 @@
+# Python dependencies for the monster art pipeline (optional — only
+# needed if you run the scripts in `scripts/` that do image work).
+#
+# Install with:
+#   python3 -m pip install -r requirements.txt
+# or, on Python installs that are PEP 668 externally-managed:
+#   python3 -m pip install --break-system-packages -r requirements.txt
+#
+# scripts/render-monster-assets.py    — composites base PNGs → portraits/tokens
+# scripts/generate-monster-art.py     — calls OpenAI to produce missing bases
+
+Pillow>=10.0
+openai>=1.40
