@@ -1,7 +1,17 @@
-<section class="gw-config">
+<nav class="gw-config__tabs" aria-label="Gamma World Configuration tabs">
   {{#each sections}}
-    <fieldset class="gw-config__section">
-      <legend>{{this.title}}</legend>
+    <button type="button"
+            class="gw-config__tab-button{{#if this.active}} active{{/if}}"
+            data-tab="{{this.id}}">
+      {{#if this.icon}}<i class="{{this.icon}}"></i>{{/if}}
+      <span>{{this.title}}</span>
+    </button>
+  {{/each}}
+</nav>
+
+<section class="gw-config__body">
+  {{#each sections}}
+    <div class="gw-config__panel{{#if this.active}} active{{/if}}" data-panel="{{this.id}}">
       {{#each this.fields}}
         <div class="form-group gw-config__field gw-config__field--{{this.kind}}">
           <label for="gw-config-{{this.key}}">{{this.name}}</label>
@@ -35,6 +45,6 @@
           {{/if}}
         </div>
       {{/each}}
-    </fieldset>
+    </div>
   {{/each}}
 </section>

@@ -29,6 +29,7 @@ const SECTIONS = [
   {
     id: "houseRules",
     title: "GAMMA_WORLD.Settings.Config.Section.HouseRules",
+    icon: "fa-solid fa-scroll",
     settings: [
       "pshTechReliable",
       "autoApplyOnHitConditions",
@@ -40,6 +41,7 @@ const SECTIONS = [
   {
     id: "combatAutomation",
     title: "GAMMA_WORLD.Settings.Config.Section.CombatAutomation",
+    icon: "fa-solid fa-swords",
     settings: [
       "npcDamageMode",
       "promptBeforeApplyDamage",
@@ -50,6 +52,7 @@ const SECTIONS = [
   {
     id: "rollVisibility",
     title: "GAMMA_WORLD.Settings.Config.Section.RollVisibility",
+    icon: "fa-solid fa-dice-d20",
     settings: [
       "attackRollMode",
       "damageRollMode",
@@ -61,12 +64,15 @@ const SECTIONS = [
   {
     id: "templates",
     title: "GAMMA_WORLD.Settings.Config.Section.Templates",
+    icon: "fa-solid fa-bullseye",
     settings: [
       "grenadePersistentRounds",
       "autoRemoveInstantTemplate"
     ]
   }
 ];
+
+const DEFAULT_TAB = SECTIONS[0].id;
 
 function settingDefinition(key) {
   // Read the registered config from game.settings.settings, a Map keyed
@@ -134,14 +140,17 @@ function buildFieldDescriptor(key) {
 
 export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) {
 
+  /** Currently-active tab id. Persists across re-renders so Save doesn't
+   *  snap the user back to the first tab. */
+  #activeTab = DEFAULT_TAB;
+
   static DEFAULT_OPTIONS = {
     id: "gamma-world-config",
     classes: ["gamma-world", "gamma-world-config"],
-    // An explicit height is required for the window to be resizable in
-    // ApplicationV2. `height: "auto"` fits-to-content and disables the
-    // resize handle; it also lets the window grow past the viewport so
-    // fields off the bottom become unreachable.
-    position: { width: 640, height: 680 },
+    // An explicit height is required for ApplicationV2's resize handle
+    // to activate. The tabs keep per-panel content bounded so a single
+    // window size reads comfortably without scrolling within a tab.
+    position: { width: 640, height: 520 },
     window: {
       title: "GAMMA_WORLD.Settings.Config.WindowTitle",
       icon: "fa-solid fa-sliders",
@@ -161,10 +170,10 @@ export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) 
   static PARTS = {
     form: {
       template: `systems/${SYSTEM_ID}/templates/apps/gm-automation-config.hbs`,
-      // Declaring the scroll container lets the framework persist scroll
-      // position across re-renders (e.g. after a Save). The actual
-      // overflow behavior is set in gamma-world.css.
-      scrollable: [".gw-config"]
+      // The body is the scroll container for any single tab panel that
+      // exceeds the window's height at the user's chosen zoom. Tabs
+      // keep panels small enough that this rarely fires.
+      scrollable: [".gw-config__body"]
     },
     footer: {
       template: "templates/generic/form-footer.hbs"
@@ -172,9 +181,14 @@ export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) 
   };
 
   async _prepareContext() {
+    const activeTab = this.#activeTab && SECTIONS.some((s) => s.id === this.#activeTab)
+      ? this.#activeTab
+      : DEFAULT_TAB;
     const sections = SECTIONS.map((section) => ({
       id: section.id,
       title: localizeLabel(section.title, section.id),
+      icon: section.icon || "",
+      active: section.id === activeTab,
       fields: section.settings
         .map((key) => buildFieldDescriptor(key))
         .filter(Boolean)
@@ -187,6 +201,33 @@ export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) 
         { type: "submit", icon: "fa-solid fa-floppy-disk", label: "GAMMA_WORLD.Settings.Config.Save" }
       ]
     };
+  }
+
+  /**
+   * ApplicationV2 lifecycle hook — called after every render. Wires the
+   * tab-strip click handlers manually; a single Save still commits every
+   * tab's fields because the whole form stays in the DOM (only visual
+   * active/inactive classes toggle).
+   */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    const root = this.element;
+    if (!root) return;
+
+    root.querySelectorAll(".gw-config__tab-button").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const tabId = button.dataset.tab;
+        if (!tabId || tabId === this.#activeTab) return;
+        this.#activeTab = tabId;
+        root.querySelectorAll(".gw-config__tab-button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.tab === tabId);
+        });
+        root.querySelectorAll(".gw-config__panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.panel === tabId);
+        });
+      });
+    });
   }
 
   /**

@@ -2001,11 +2001,9 @@ body.system-gamma-world-1e,
 
 /* ----- Gamma World Configuration window (Phase 1.5) -------------------- */
 
-/* ApplicationV2 renders the window's form as a flex column with the
-   form-footer pinned below. The body PART (our .gw-config section) needs
-   to flex-grow into the remaining space and scroll internally when its
-   sections overflow. Without this the window either clips the bottom
-   fields or refuses to resize. */
+/* The config window is a flex column: tabs nav at top, body flex-grows
+   and scrolls when a panel overflows, footer is pinned with its buttons
+   laid out horizontally along the bottom edge. */
 .gamma-world-config form {
   display: flex;
   flex-direction: column;
@@ -2014,28 +2012,65 @@ body.system-gamma-world-1e,
   min-height: 0;
 }
 
-.gamma-world-config .gw-config {
+/* Tab strip ------------------------------------------------------------ */
+.gamma-world-config .gw-config__tabs {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #7a7971);
+  padding: 0 0.25rem;
+}
+
+.gamma-world-config .gw-config__tab-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  color: inherit;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-size: var(--font-size-13, 13px);
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.gamma-world-config .gw-config__tab-button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.gamma-world-config .gw-config__tab-button.active {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: var(--color-border-light-tertiary, #7a7971);
+  /* Pull the active tab down one pixel so it reads as attached to the
+     panel below, not floating. */
+  margin-bottom: -1px;
+}
+
+/* Body — the scrollable panel container -------------------------------- */
+.gamma-world-config .gw-config__body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: 0.25rem 0.5rem 0.5rem;
-}
-
-.gamma-world-config .gw-config__section {
-  border: 1px solid var(--color-border-light-tertiary, #7a7971);
-  border-radius: 4px;
   padding: 0.5rem 0.75rem;
-  margin-bottom: 0.5rem;
 }
 
-.gamma-world-config .gw-config__section > legend {
-  padding: 0 0.35rem;
-  font-weight: 600;
-  font-size: var(--font-size-14, 14px);
+.gamma-world-config .gw-config__panel {
+  display: none;
+}
+
+.gamma-world-config .gw-config__panel.active {
+  display: block;
 }
 
 .gamma-world-config .gw-config__field {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .gamma-world-config .gw-config__field .hint {
@@ -2044,7 +2079,19 @@ body.system-gamma-world-1e,
   color: var(--color-text-dark-secondary, #5a5a5a);
 }
 
-/* Footer stays pinned; form-footer.hbs supplies its own layout. */
+/* Footer buttons — horizontal row pinned along the bottom -------------- */
 .gamma-world-config .form-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.5rem;
   flex: 0 0 auto;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--color-border-light-tertiary, #7a7971);
+}
+
+.gamma-world-config .form-footer button {
+  flex: 0 1 auto;
+  min-width: 9rem;
+  white-space: nowrap;
 }
