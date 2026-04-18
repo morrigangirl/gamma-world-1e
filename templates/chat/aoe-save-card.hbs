@@ -1,0 +1,50 @@
+<div class="gw-chat-card gw-aoe-card">
+  <h3>{{sourceName}}</h3>
+  <div class="gw-card-meta">
+    {{actorName}}
+    {{#if damageFormula}} &middot; {{damageFormula}} = {{damageTotal}}{{/if}}
+    {{#if saveType}} &middot; {{saveTypeLabel}} save{{/if}}
+  </div>
+
+  {{#if targets.length}}
+    <table class="gw-aoe-saves">
+      <thead>
+        <tr>
+          <th>{{localize "GAMMA_WORLD.AOE.Target"}}</th>
+          <th>{{localize "GAMMA_WORLD.AOE.Owner"}}</th>
+          <th>{{localize "GAMMA_WORLD.AOE.Action"}}</th>
+          <th>{{localize "GAMMA_WORLD.AOE.Result"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each targets}}
+          <tr data-token-uuid="{{tokenUuid}}" data-actor-uuid="{{actorUuid}}" class="gw-aoe-row is-{{status}}">
+            <td>{{name}}</td>
+            <td>
+              {{#if isPlayerOwned}}
+                {{localize "GAMMA_WORLD.AOE.Player"}}
+              {{else}}
+                {{localize "GAMMA_WORLD.AOE.NPC"}}
+              {{/if}}
+            </td>
+            <td>
+              {{#unless (gwEq status "resolved")}}
+                <button type="button" data-action="gw-aoe-save" data-token-uuid="{{tokenUuid}}">
+                  {{localize "GAMMA_WORLD.AOE.RollSave"}}
+                </button>
+              {{/unless}}
+            </td>
+            <td class="gw-aoe-result">{{resultText}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-aoe-resolve-all">
+        {{localize "GAMMA_WORLD.AOE.ResolveAll"}}
+      </button>
+    </div>
+  {{else}}
+    <div class="gw-card-meta">{{localize "GAMMA_WORLD.AOE.NoTargets"}}</div>
+  {{/if}}
+</div>

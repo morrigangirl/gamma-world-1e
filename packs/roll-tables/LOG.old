@@ -1,23 +1,3 @@
-2026/04/18-01:58:08.311468 171163000 Recovering log #9
-2026/04/18-01:58:08.311633 171163000 Level-0 table #11: started
-2026/04/18-01:58:08.311954 171163000 Level-0 table #11: 54743 bytes OK
-2026/04/18-01:58:08.312225 171163000 Delete type=3 #8
-2026/04/18-01:58:08.312255 171163000 Delete type=0 #9
-2026/04/18-01:58:08.313502 172207000 Level-0 table #14: started
-2026/04/18-01:58:08.313511 172207000 Level-0 table #14: 0 bytes OK
-2026/04/18-01:58:08.313573 172207000 Delete type=0 #12
-2026/04/18-01:58:08.313602 172207000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1
-2026/04/18-01:58:08.313606 172207000 Compacting 1@0 + 0@1 files
-2026/04/18-01:58:08.314026 172207000 Generated table #15@0: 296 keys, 54743 bytes
-2026/04/18-01:58:08.314030 172207000 Compacted 1@0 + 0@1 files => 54743 bytes
-2026/04/18-01:58:08.314066 172207000 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/04/18-01:58:08.314090 172207000 Delete type=2 #11
-2026/04/18-01:58:08.314135 172207000 Manual compaction at level-0 from '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
-2026/04/18-01:58:08.314150 172207000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1
-2026/04/18-01:58:08.314154 172207000 Compacting 1@1 + 1@2 files
-2026/04/18-01:58:08.314606 172207000 Generated table #16@1: 296 keys, 54743 bytes
-2026/04/18-01:58:08.314609 172207000 Compacted 1@1 + 1@2 files => 54743 bytes
-2026/04/18-01:58:08.314644 172207000 compacted to: files[ 0 0 1 0 0 0 0 ]
-2026/04/18-01:58:08.314661 172207000 Delete type=2 #15
-2026/04/18-01:58:08.314688 172207000 Delete type=2 #5
-2026/04/18-01:58:08.314738 172207000 Manual compaction at level-1 from '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-01:58:22.833435 16e907000 Recovering log #13
+2026/04/18-01:58:22.833891 16e907000 Delete type=0 #13
+2026/04/18-01:58:22.833919 16e907000 Delete type=3 #10

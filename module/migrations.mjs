@@ -48,6 +48,52 @@ export function registerMigrationSettings() {
     type: Boolean,
     default: true
   });
+
+  game.settings.register(SYSTEM_ID, "autoRollNpcDamage", {
+    name: "GAMMA_WORLD.Settings.AutoRollNpcDamage.Name",
+    hint: "GAMMA_WORLD.Settings.AutoRollNpcDamage.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register(SYSTEM_ID, "autoTickFatigue", {
+    name: "GAMMA_WORLD.Settings.AutoTickFatigue.Name",
+    hint: "GAMMA_WORLD.Settings.AutoTickFatigue.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(SYSTEM_ID, "resetFatigueOnCombatEnd", {
+    name: "GAMMA_WORLD.Settings.ResetFatigueOnCombatEnd.Name",
+    hint: "GAMMA_WORLD.Settings.ResetFatigueOnCombatEnd.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(SYSTEM_ID, "autoApplyOnHitConditions", {
+    name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
+    hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(SYSTEM_ID, "grenadePersistentRounds", {
+    name: "GAMMA_WORLD.Settings.GrenadePersistentRounds.Name",
+    hint: "GAMMA_WORLD.Settings.GrenadePersistentRounds.Hint",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 3,
+    range: { min: 0, max: 20, step: 1 }
+  });
 }
 
 function mutationUpdateData(item) {

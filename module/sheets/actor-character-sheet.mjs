@@ -359,7 +359,6 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       rollAttribute:  GammaWorldCharacterSheet.#onRollAttribute,
       rollSave:       GammaWorldCharacterSheet.#onRollSave,
       rollReaction:   GammaWorldCharacterSheet.#onRollReaction,
-      rollSurprise:   GammaWorldCharacterSheet.#onRollSurprise,
       rollMorale:     GammaWorldCharacterSheet.#onRollMorale,
       routeEncounter: GammaWorldCharacterSheet.#onRouteEncounter,
       randomEncounter: GammaWorldCharacterSheet.#onRandomEncounter,
@@ -584,12 +583,6 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     event.preventDefault();
     const { rollReaction } = await import("../encounters.mjs");
     await rollReaction(this.document);
-  }
-
-  static async #onRollSurprise(event, _target) {
-    event.preventDefault();
-    const { rollSurprise } = await import("../encounters.mjs");
-    await rollSurprise(this.document);
   }
 
   static async #onRollMorale(event, _target) {

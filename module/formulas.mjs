@@ -61,3 +61,19 @@ export function scaleFormula(formula, multiplier = 1) {
   parsed.modifier *= scale;
   return formatSimpleDiceFormula(parsed);
 }
+
+/**
+ * Double the dice count of every `NdM` term in a compound formula. Flat
+ * bonuses and keep-high/explode suffixes are left untouched — this implements
+ * the standard 5e-style crit convention where dice (but not static
+ * modifiers) are doubled. Accepts multi-term formulas like `2d6+1d4+3`.
+ */
+export function doubleDiceInFormula(formula) {
+  if (formula == null) return formula;
+  const str = String(formula);
+  if (!str) return str;
+  return str.replace(/(\d*)d(\d+)/gi, (_, countStr, facesStr) => {
+    const count = Math.max(1, Number(countStr || 1));
+    return `${count * 2}d${facesStr}`;
+  });
+}

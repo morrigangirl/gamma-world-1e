@@ -648,4 +648,91 @@ export async function tickCombatActorState(combat, changed) {
   for (const actor of actors) {
     await tickActorStateForActor(actor);
   }
+
+  try {
+    if (game.settings.get(SYSTEM_ID, "autoTickFatigue")) {
+      await advanceCombatFatigue(combat);
+    }
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | fatigue auto-tick failed`, error);
+  }
+
+  // Expire persistent AOE templates (gas / smoke clouds) that have outlived
+  // their `persistentRounds`. Deferred import keeps the dependency graph flat.
+  try {
+    const { cleanupExpiredTemplates } = await import("./aoe.mjs");
+    await cleanupExpiredTemplates(combat);
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | AOE template cleanup failed`, error);
+  }
+}
+
+/**
+ * Increment `system.combat.fatigue.round` by 1 on every combatant whose actor
+ * can fatigue. Skips defeated combatants and actors at 0 HP or below.
+ * Only called on the GM client; invoked from the `updateCombat` hook.
+ */
+export async function advanceCombatFatigue(combat) {
+  if (!game.user?.isGM) return;
+  if (!combat?.combatants) return;
+
+  for (const combatant of combat.combatants) {
+    if (combatant.isDefeated || combatant.defeated) continue;
+    const actor = combatant.actor;
+    if (!actor) continue;
+    if (!["character", "monster"].includes(actor.type)) continue;
+    const fatigue = actor.system?.combat?.fatigue;
+    if (!fatigue) continue;
+    const hpValue = Number(actor.system?.resources?.hp?.value ?? 0);
+    if (hpValue <= 0) continue;
+    const next = Math.max(0, Number(fatigue.round ?? 0)) + 1;
+    await actor.update(
+      { "system.combat.fatigue.round": next },
+      { gammaWorldSync: true }
+    );
+  }
+}
+
+/**
+ * Reset `system.combat.fatigue.round` to 0 on every combatant's actor. Called
+ * from the `deleteCombat` hook when the `resetFatigueOnCombatEnd` setting is
+ * on, and invoked ad-hoc when the GM uses a rest/heal action.
+ */
+export async function resetCombatFatigue(combat) {
+  if (!game.user?.isGM) return;
+  if (!combat?.combatants) return;
+
+  for (const combatant of combat.combatants) {
+    const actor = combatant.actor;
+    if (!actor) continue;
+    if (!["character", "monster"].includes(actor.type)) continue;
+    const fatigue = actor.system?.combat?.fatigue;
+    if (!fatigue) continue;
+    if (Number(fatigue.round ?? 0) === 0) continue;
+    await actor.update(
+      { "system.combat.fatigue.round": 0 },
+      { gammaWorldSync: true }
+    );
+  }
+}
+
+/** Reset a single actor's fatigue round to 0 (used by rest / heal flows). */
+export async function resetActorFatigue(actor) {
+  if (!actor) return;
+  if (!["character", "monster"].includes(actor.type)) return;
+  const fatigue = actor.system?.combat?.fatigue;
+  if (!fatigue) return;
+  if (Number(fatigue.round ?? 0) === 0) return;
+  if (game.user?.isGM || actor.isOwner) {
+    await actor.update(
+      { "system.combat.fatigue.round": 0 },
+      { gammaWorldSync: true }
+    );
+  } else {
+    await runAsGM("actor-update", {
+      actorUuid: actor.uuid,
+      update: { "system.combat.fatigue.round": 0 },
+      options: { gammaWorldSync: true }
+    });
+  }
 }

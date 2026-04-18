@@ -263,6 +263,77 @@ export const ARTIFACT_CHARTS = {
   c: "GAMMA_WORLD.Artifact.Chart.C"
 };
 
+/**
+ * Status effects introduced by Gamma World automation. These are appended to
+ * Foundry's default `CONFIG.statusEffects` list at init so that
+ * `actor.toggleStatusEffect(<id>, { active })` works for any id referenced by
+ * the system's on-hit / hazard / condition flows.
+ *
+ * IDs that already exist in core Foundry (v13) — `poison`, `paralysis`,
+ * `stun`, `sleep`, `unconscious`, `blind`, `deaf` — are intentionally not
+ * duplicated here; the dedupe in `registerGammaWorldStatusEffects()` keeps
+ * core behavior untouched.
+ */
+export const GAMMA_WORLD_STATUS_EFFECTS = [
+  {
+    id: "irradiated",
+    name: "GAMMA_WORLD.Status.Irradiated",
+    img: "icons/svg/radiation.svg"
+  },
+  {
+    id: "poisoned",
+    name: "GAMMA_WORLD.Status.Poisoned",
+    img: "icons/svg/poison.svg"
+  },
+  {
+    id: "stunned",
+    name: "GAMMA_WORLD.Status.Stunned",
+    img: "icons/svg/daze.svg"
+  },
+  {
+    id: "paralyzed",
+    name: "GAMMA_WORLD.Status.Paralyzed",
+    img: "icons/svg/paralysis.svg"
+  },
+  {
+    id: "confused",
+    name: "GAMMA_WORLD.Status.Confused",
+    img: "icons/svg/daze.svg"
+  },
+  {
+    id: "blinded",
+    name: "GAMMA_WORLD.Status.Blinded",
+    img: "icons/svg/blind.svg"
+  },
+  {
+    id: "deafened",
+    name: "GAMMA_WORLD.Status.Deafened",
+    img: "icons/svg/deaf.svg"
+  },
+  {
+    id: "sleeping",
+    name: "GAMMA_WORLD.Status.Sleeping",
+    img: "icons/svg/sleep.svg"
+  }
+];
+
+/**
+ * Merge the GW status-effect list into `CONFIG.statusEffects`, skipping any
+ * id that already exists (so core Foundry entries win). Safe to call
+ * multiple times; the dedupe by id makes it idempotent.
+ */
+export function registerGammaWorldStatusEffects() {
+  const list = CONFIG.statusEffects ?? [];
+  const existing = new Set(list.map((effect) => effect.id));
+  for (const effect of GAMMA_WORLD_STATUS_EFFECTS) {
+    if (!existing.has(effect.id)) {
+      list.push(effect);
+      existing.add(effect.id);
+    }
+  }
+  CONFIG.statusEffects = list;
+}
+
 /** Single namespace assembled from all the named exports. */
 export const GAMMA_WORLD = {
   SYSTEM_ID,

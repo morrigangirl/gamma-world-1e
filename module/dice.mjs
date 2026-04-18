@@ -1,5 +1,5 @@
 import { SYSTEM_ID } from "./config.mjs";
-import { addDiceToFormula, addFlatBonusToFormula, addPerDieBonusToFormula, scaleFormula } from "./formulas.mjs";
+import { addDiceToFormula, addFlatBonusToFormula, addPerDieBonusToFormula, doubleDiceInFormula, scaleFormula } from "./formulas.mjs";
 import { naturalAttackTarget, weaponAttackTarget } from "./tables/combat-matrix.mjs";
 import {
   combinedFatigueFactor,
@@ -13,6 +13,8 @@ import {
   applyTemporaryEffect
 } from "./effect-state.mjs";
 import { runAsUser } from "./gm-executor.mjs";
+import { autoApplyOnHitEffect, shouldHideManualFollowUp } from "./on-hit-effects.mjs";
+import { determineRangeBand } from "./range.mjs";
 import {
   clampSaveScore,
   evaluateSaveForActor,
@@ -24,6 +26,21 @@ const DialogV2 = foundry.applications.api.DialogV2;
 
 async function renderTemplate(path, data) {
   return foundry.applications.handlebars.renderTemplate(path, data);
+}
+
+/**
+ * World-setting gate for auto-rolling NPC damage after an attack card posts.
+ * Returns false for any player-owned attacker (so PCs always click their own
+ * damage button) and for any case where the setting is off or unreadable.
+ */
+function shouldAutoRollNpcDamage(actor) {
+  if (!actor) return false;
+  if (actor.hasPlayerOwner) return false;
+  try {
+    return !!game.settings?.get(SYSTEM_ID, "autoRollNpcDamage");
+  } catch (_error) {
+    return false;
+  }
 }
 
 function tokenCenter(token) {
@@ -287,21 +304,7 @@ async function resolveAttackTarget(actor, { allowManualAc = true } = {}) {
   };
 }
 
-function determineRangeBand(weapon, distance = 0) {
-  const attackType = weapon.system.attackType;
-  if (attackType === "melee") return { label: "melee", penalty: 0 };
-
-  const short = Number(weapon.system.range.short ?? 0);
-  const medium = Number(weapon.system.range.medium ?? 0);
-  const long = Number(weapon.system.range.long ?? 0);
-
-  if (!short && !medium && !long) return { label: "unlimited", penalty: 0 };
-  if (distance <= short || (!short && distance <= medium)) return { label: "short", penalty: 0 };
-  if (medium && distance <= medium) return { label: "medium", penalty: -2 };
-  if (long && distance <= long) return { label: "long", penalty: -5 };
-  if (short && !long && distance <= short * 2) return { label: "long", penalty: -5 };
-  return { label: "out", penalty: -999 };
-}
+export { determineRangeBand };
 
 function computeWeaponDamageFormula(actor, weapon) {
   let formula = weapon.system.damage?.formula || "1d6";
@@ -329,18 +332,23 @@ async function createDamageCard({
   sourceKind = "weapon",
   weaponTag = "",
   nonlethal = false,
-  notes = ""
+  notes = "",
+  isCritical = false
 }) {
-  const roll = await new Roll(formula).evaluate();
+  const effectiveFormula = isCritical ? doubleDiceInFormula(formula) : formula;
+  const roll = await new Roll(effectiveFormula).evaluate();
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/damage-card.hbs`,
     {
       actorName: actor.name,
       weaponName: sourceName,
-      formula,
+      formula: effectiveFormula,
       total: roll.total,
       dmgType: damageType,
-      notes
+      notes: isCritical
+        ? [notes, game.i18n.localize("GAMMA_WORLD.Combat.CriticalHit")].filter(Boolean).join(" · ")
+        : notes,
+      isCritical
     }
   );
 
@@ -514,8 +522,13 @@ export async function rollAttack(actor, weapon) {
   const effectiveWeaponClass = Math.max(1, Number(weapon.system.weaponClass ?? 1) + fatigueFactor);
   const targetNumber = weaponAttackTarget(effectiveWeaponClass, target.armorClass);
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
-  const hit = roll.total >= targetNumber;
+  const d20Value = roll.terms?.[0]?.total ?? roll.total;
+  const isCritical = d20Value === 20;
+  const isFumble = d20Value === 1;
+  const hit = isCritical || (!isFumble && roll.total >= targetNumber);
   const damageFormula = computeWeaponDamageFormula(actor, weapon);
+  const effectMode = weapon.system.effect?.mode || "damage";
+  const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
@@ -525,15 +538,18 @@ export async function rollAttack(actor, weapon) {
       attackerLevel: actor.system.details.level ?? 1,
       targetAc: target.armorClass,
       hitTarget: targetNumber,
-      d20: roll.terms?.[0]?.total ?? roll.total,
+      d20: d20Value,
       total: roll.total,
       hit,
+      isCritical,
+      isFumble,
       targetName: target.targetName,
       attackBonus,
       rangeLabel: range.label,
+      rangePenalty: range.penalty,
       distance: target.distance ?? 0,
       followUpLabel: followUpLabelForWeapon(weapon),
-      showFollowUp: true
+      showFollowUp: !hideFollowUp
     }
   );
 
@@ -552,6 +568,29 @@ export async function rollAttack(actor, weapon) {
     targetToken: target.targetToken ?? null
   });
 
+  const attackFlags = {
+    actorUuid: actor.uuid,
+    weaponUuid: weapon.uuid,
+    targetUuid: target.targetUuid,
+    sourceTokenUuid: tokenDocumentUuid(sourceToken),
+    targetTokenUuid: target.targetTokenUuid,
+    targetAc: target.armorClass,
+    targetNumber,
+    hit,
+    isCritical,
+    isFumble,
+    damageFormula,
+    damageType: weapon.system.damage?.type ?? "",
+    sourceName: weapon.name,
+    sourceKind: "weapon",
+    effectMode,
+    effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "",
+    nonlethal: !!weapon.system.traits?.nonlethal
+  };
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -559,29 +598,25 @@ export async function rollAttack(actor, weapon) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: {
-          actorUuid: actor.uuid,
-          weaponUuid: weapon.uuid,
-          targetUuid: target.targetUuid,
-          sourceTokenUuid: tokenDocumentUuid(sourceToken),
-          targetTokenUuid: target.targetTokenUuid,
-          targetAc: target.armorClass,
-          targetNumber,
-          hit,
-          damageFormula,
-          damageType: weapon.system.damage?.type ?? "",
-          sourceName: weapon.name,
-          sourceKind: "weapon",
-          effectMode: weapon.system.effect?.mode || "damage",
-          effectFormula: weapon.system.effect?.formula || "",
-          effectStatus: weapon.system.effect?.status || "",
-          effectNotes: weapon.system.effect?.notes || "",
-          weaponTag: weapon.system.traits?.tag || "",
-          nonlethal: !!weapon.system.traits?.nonlethal
-        }
+        attack: attackFlags
       }
     }
   });
+
+  if (hit && hideFollowUp) {
+    const targetActor = await resolveActorFromUuid(attackFlags.targetUuid);
+    try {
+      await autoApplyOnHitEffect(attackFlags, { actor, target: targetActor });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | auto-apply on-hit effect failed`, error);
+    }
+  } else if (hit && shouldAutoRollNpcDamage(actor)) {
+    try {
+      await rollDamageFromFlags(attackFlags);
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | auto-roll NPC damage failed`, error);
+    }
+  }
 }
 
 export async function rollNaturalWeaponAttack(actor, weapon) {
@@ -608,8 +643,13 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
 
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
-  const hit = roll.total >= targetNumber;
+  const d20Value = roll.terms?.[0]?.total ?? roll.total;
+  const isCritical = d20Value === 20;
+  const isFumble = d20Value === 1;
+  const hit = isCritical || (!isFumble && roll.total >= targetNumber);
   const damageFormula = computeWeaponDamageFormula(actor, weapon);
+  const effectMode = weapon.system.effect?.mode || "damage";
+  const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
@@ -619,21 +659,47 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
       attackerLevel: actor.system.details.level ?? 1,
       targetAc: target.armorClass,
       hitTarget: targetNumber,
-      d20: roll.terms?.[0]?.total ?? roll.total,
+      d20: d20Value,
       total: roll.total,
       hit,
+      isCritical,
+      isFumble,
       targetName: target.targetName,
       attackBonus,
       rangeLabel: range.label,
+      rangePenalty: range.penalty,
       distance: target.distance ?? 0,
       followUpLabel: followUpLabelForWeapon(weapon),
-      showFollowUp: true
+      showFollowUp: !hideFollowUp
     }
   );
 
   if (weapon.system.ammo.consumes) {
     await weapon.update({ "system.ammo.current": Math.max(0, Number(weapon.system.ammo.current ?? 0) - 1) });
   }
+
+  const attackFlags = {
+    actorUuid: actor.uuid,
+    weaponUuid: weapon.uuid,
+    targetUuid: target.targetUuid,
+    sourceTokenUuid: tokenDocumentUuid(sourceToken),
+    targetTokenUuid: target.targetTokenUuid,
+    targetAc: target.armorClass,
+    targetNumber,
+    hit,
+    isCritical,
+    isFumble,
+    damageFormula,
+    damageType: weapon.system.damage?.type ?? "physical",
+    sourceName: weapon.name,
+    sourceKind: "natural",
+    effectMode,
+    effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "natural",
+    nonlethal: !!weapon.system.traits?.nonlethal
+  };
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -642,29 +708,25 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: {
-          actorUuid: actor.uuid,
-          weaponUuid: weapon.uuid,
-          targetUuid: target.targetUuid,
-          sourceTokenUuid: tokenDocumentUuid(sourceToken),
-          targetTokenUuid: target.targetTokenUuid,
-          targetAc: target.armorClass,
-          targetNumber,
-          hit,
-          damageFormula,
-          damageType: weapon.system.damage?.type ?? "physical",
-          sourceName: weapon.name,
-          sourceKind: "natural",
-          effectMode: weapon.system.effect?.mode || "damage",
-          effectFormula: weapon.system.effect?.formula || "",
-          effectStatus: weapon.system.effect?.status || "",
-          effectNotes: weapon.system.effect?.notes || "",
-          weaponTag: weapon.system.traits?.tag || "natural",
-          nonlethal: !!weapon.system.traits?.nonlethal
-        }
+        attack: attackFlags
       }
     }
   });
+
+  if (hit && hideFollowUp) {
+    const targetActor = await resolveActorFromUuid(attackFlags.targetUuid);
+    try {
+      await autoApplyOnHitEffect(attackFlags, { actor, target: targetActor });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | auto-apply on-hit effect failed`, error);
+    }
+  } else if (hit && shouldAutoRollNpcDamage(actor)) {
+    try {
+      await rollDamageFromFlags(attackFlags);
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | auto-roll NPC damage failed`, error);
+    }
+  }
 }
 
 export async function rollNaturalAttack(actor) {
@@ -675,7 +737,10 @@ export async function rollNaturalAttack(actor) {
   const attackBonus = actor.gw?.toHitBonus ?? 0;
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
-  const hit = roll.total >= targetNumber;
+  const d20Value = roll.terms?.[0]?.total ?? roll.total;
+  const isCritical = d20Value === 20;
+  const isFumble = d20Value === 1;
+  const hit = isCritical || (!isFumble && roll.total >= targetNumber);
   const attackName = actor.system.combat?.naturalAttack?.name || "Natural Attack";
   const baseFormula = actor.system.combat?.naturalAttack?.damage || "1d3";
   const damageFormula = addFlatBonusToFormula(baseFormula, actor.gw?.damageFlat ?? 0);
@@ -688,17 +753,37 @@ export async function rollNaturalAttack(actor) {
       attackerLevel: actor.system.details.level ?? 1,
       targetAc: target.armorClass,
       hitTarget: targetNumber,
-      d20: roll.terms?.[0]?.total ?? roll.total,
+      d20: d20Value,
       total: roll.total,
       hit,
+      isCritical,
+      isFumble,
       targetName: target.targetName,
       attackBonus,
       rangeLabel: "melee",
+      rangePenalty: 0,
       distance: target.distance ?? 0,
       followUpLabel: "Roll Damage",
       showFollowUp: true
     }
   );
+
+  const attackFlags = {
+    actorUuid: actor.uuid,
+    weaponUuid: null,
+    targetUuid: target.targetUuid,
+    sourceTokenUuid: tokenDocumentUuid(sourceToken),
+    targetTokenUuid: target.targetTokenUuid,
+    targetAc: target.armorClass,
+    targetNumber,
+    hit,
+    isCritical,
+    isFumble,
+    damageFormula,
+    damageType: "physical",
+    sourceName: attackName,
+    sourceKind: "natural"
+  };
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -707,23 +792,18 @@ export async function rollNaturalAttack(actor) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: {
-          actorUuid: actor.uuid,
-          weaponUuid: null,
-          targetUuid: target.targetUuid,
-          sourceTokenUuid: tokenDocumentUuid(sourceToken),
-          targetTokenUuid: target.targetTokenUuid,
-          targetAc: target.armorClass,
-          targetNumber,
-          hit,
-          damageFormula,
-          damageType: "physical",
-          sourceName: attackName,
-          sourceKind: "natural"
-        }
+        attack: attackFlags
       }
     }
   });
+
+  if (hit && shouldAutoRollNpcDamage(actor)) {
+    try {
+      await rollDamageFromFlags(attackFlags);
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | auto-roll NPC damage failed`, error);
+    }
+  }
 }
 
 export async function rollDamageFromFlags(flags) {
@@ -814,7 +894,8 @@ export async function rollDamageFromFlags(flags) {
     weaponTag: flags.weaponTag ?? "",
     nonlethal: !!flags.nonlethal,
     sourceUuid: flags.weaponUuid ?? flags.sourceUuid ?? null,
-    sourceKind: flags.sourceKind ?? "weapon"
+    sourceKind: flags.sourceKind ?? "weapon",
+    isCritical: !!flags.isCritical
   });
 }
 

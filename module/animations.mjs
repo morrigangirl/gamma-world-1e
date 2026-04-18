@@ -1749,6 +1749,78 @@ export async function playExplosion({ itemName = "", targetToken = null } = {}) 
   return playStandaloneExplosion(profile, targetToken);
 }
 
+/**
+ * Play an animation that fills a MeasuredTemplate's footprint. For
+ * instantaneous effects a one-shot explosion is centered on the template.
+ * For persistent effects (`persistentRounds > 0`), a looping Sequencer
+ * animation is attached to the template document so it stays visible until
+ * the AOE expiry sweep deletes the template.
+ *
+ * The animationKey is a soft hint into the existing `profileFor()` registry;
+ * when absent or unresolved, we fall back to a generic jb2a explosion so the
+ * card still feels responsive.
+ */
+export async function playAreaEffect({
+  template = null,
+  animationKey = "",
+  itemName = "",
+  persistentRounds = 0
+} = {}) {
+  if (!template || !runtimeAvailable({ warn: false })) return false;
+
+  // Resolve a profile by animation-key override, item-name lookup, or a
+  // generic ordnance match. All three may miss in a world without JB2A.
+  let profile = null;
+  if (animationKey) profile = profileFor(animationKey, { kind: "gear", ordnance: true });
+  if (!profile && itemName) profile = profileFor(itemName, { kind: "gear", ordnance: true });
+
+  const explosionPath = profile ? firstAvailableDataPath(profile.explosion) : null;
+  const loopPath = profile ? firstAvailableDataPath(profile.loop ?? profile.loopBelow ?? []) : null;
+
+  // One-shot detonation for instantaneous effects.
+  if (persistentRounds <= 0) {
+    if (!explosionPath) return false;
+    return playSequence(
+      new globalThis.Sequence()
+        .effect()
+        .file(explosionPath)
+        .atLocation({ x: template.x, y: template.y })
+        .scale(profile?.explosionScale ?? 1)
+        .opacity(0.9)
+        .fadeOut(260)
+    );
+  }
+
+  // Persistent cloud: attach a looping effect to the template doc and tag it
+  // so the AOE expiry sweep can find and remove it. If no loop asset exists
+  // for this item, we at least play the one-shot explosion so something
+  // happens — better than silent placement.
+  const effectName = `${SYSTEM_ID}.aoe.${template.id ?? template.uuid ?? Date.now()}`;
+  const sequence = new globalThis.Sequence();
+
+  if (explosionPath) {
+    sequence
+      .effect()
+      .file(explosionPath)
+      .atLocation({ x: template.x, y: template.y })
+      .scale(profile?.explosionScale ?? 1)
+      .opacity(0.85)
+      .fadeOut(200);
+  }
+
+  if (loopPath) {
+    sequence
+      .effect()
+      .file(loopPath)
+      .attachTo(template)
+      .persist(true)
+      .name(effectName)
+      .opacity(0.7);
+  }
+
+  return playSequence(sequence);
+}
+
 export async function startBarrierEffect({ actor = null, token = null, barrierId = "", sourceName = "" } = {}) {
   if (!actor || !token || !barrierId) return false;
   return startBarrierSequence(token, {
@@ -1883,6 +1955,7 @@ export function createAnimationApi() {
     playThrownOrdnance,
     playMissileLaunch,
     playExplosion,
+    playAreaEffect,
     playSupportEffect,
     startBarrierEffect,
     stopBarrierEffect,

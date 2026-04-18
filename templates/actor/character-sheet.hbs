@@ -146,7 +146,6 @@
         <button type="button" data-action="rollSave" data-save-type="mental">{{localize "GAMMA_WORLD.Save.RollMental"}}</button>
         <button type="button" data-action="rollSave" data-save-type="radiation">{{localize "GAMMA_WORLD.Save.RollRadiation"}}</button>
         <button type="button" data-action="rollSave" data-save-type="poison">{{localize "GAMMA_WORLD.Save.RollPoison"}}</button>
-        <button type="button" data-action="rollSurprise">{{localize "GAMMA_WORLD.Combat.RollSurprise"}}</button>
         {{#if isMonsterSheet}}
           <button type="button" data-action="rollReaction">{{localize "GAMMA_WORLD.Combat.RollReaction"}}</button>
           <button type="button" data-action="rollMorale">{{localize "GAMMA_WORLD.Encounter.RollMorale"}}</button>
@@ -157,6 +156,7 @@
       <p class="gamma-world__derived-note">
         Attack bonus {{gwSigned derived.toHitBonus}} · Damage bonus {{gwSigned derived.damageFlat}}
         · Attacks / round {{derived.attacksPerRound}}
+        {{#if system.combat.fatigue.round}} · {{localize "GAMMA_WORLD.Combat.Fatigue"}} {{localize "GAMMA_WORLD.Combat.FatigueRound"}} {{system.combat.fatigue.round}}{{/if}}
       </p>
       {{#if isMonsterSheet}}
         <p class="gamma-world__derived-note">

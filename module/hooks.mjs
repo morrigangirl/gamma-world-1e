@@ -8,7 +8,8 @@ import {
   rollDamageFromFlags
 } from "./dice.mjs";
 import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate } from "./equipment-rules.mjs";
-import { syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
+import { resetCombatFatigue, syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
+import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
@@ -19,7 +20,8 @@ const GM_ONLY_CHAT_ACTIONS = new Set([
   "gw-apply-healing",
   "gw-hazard-damage",
   "gw-hazard-lethal",
-  "gw-hazard-mutation"
+  "gw-hazard-mutation",
+  "gw-aoe-resolve-all"
 ]);
 
 export function registerHooks() {
@@ -33,6 +35,18 @@ export function registerHooks() {
   Hooks.on("updateActor", onActorRefresh);
   Hooks.on("updateCombat", tickCombatMutationState);
   Hooks.on("updateCombat", tickCombatActorState);
+  Hooks.on("deleteCombat", onCombatDelete);
+}
+
+async function onCombatDelete(combat) {
+  if (!game.user?.isGM) return;
+  try {
+    if (game.settings.get(SYSTEM_ID, "resetFatigueOnCombatEnd")) {
+      await resetCombatFatigue(combat);
+    }
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | fatigue reset on combat end failed`, error);
+  }
 }
 
 async function onActorCreate(actor, options = {}) {
@@ -160,6 +174,23 @@ function onRenderChatMessage(message, html) {
       event.preventDefault();
       if (!flags.hazard) return;
       await resolveHazardMutation(flags.hazard);
+    });
+  });
+
+  html.querySelectorAll('[data-action="gw-aoe-save"]').forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const tokenUuid = button.dataset.tokenUuid ?? "";
+      if (!flags.aoe || !tokenUuid) return;
+      await resolveAoeSaveRow(message.id, tokenUuid);
+    });
+  });
+
+  html.querySelectorAll('[data-action="gw-aoe-resolve-all"]').forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      if (!flags.aoe) return;
+      await resolveAllPendingAoe(message.id);
     });
   });
 }

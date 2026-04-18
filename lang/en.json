@@ -23,6 +23,26 @@
       "PshTechReliable": {
         "Name": "PSH technology always works once figured out",
         "Hint": "Homebrew: once a Pure Strain Human has analysed an Ancient artifact (operation known), further uses by that PSH actor bypass the condition and malfunction rolls. Non-PSH actors and unanalysed artifacts still follow RAW."
+      },
+      "AutoRollNpcDamage": {
+        "Name": "Auto-roll damage for NPC attacks",
+        "Hint": "When enabled, NPC (non-player-owned) attackers automatically roll damage right after a hit. Player characters always click their own damage button. HP never mutates until the GM clicks Apply Damage."
+      },
+      "AutoTickFatigue": {
+        "Name": "Auto-tick fatigue per combat round",
+        "Hint": "When enabled, each combatant's Fatigue round counter increments by 1 every new combat round. Disable to manage fatigue manually."
+      },
+      "ResetFatigueOnCombatEnd": {
+        "Name": "Reset fatigue when combat ends",
+        "Hint": "When enabled, every combatant's Fatigue round counter resets to 0 when the combat is deleted. Rest actions also clear fatigue regardless of this setting."
+      },
+      "AutoApplyOnHitConditions": {
+        "Name": "Auto-apply on-hit save and condition effects",
+        "Hint": "When enabled, hits from weapons with a special on-hit effect (poison, paralysis, radiation, stun, etc.) auto-post a save card: NPCs resolve locally, PCs get a save dialog. On fail the matching timed status effect is applied. Disable to keep the manual Apply Effect follow-up button."
+      },
+      "GrenadePersistentRounds": {
+        "Name": "Default persistent grenade duration (rounds)",
+        "Hint": "Number of rounds that gas or smoke grenade templates stay visible after detonation when the item itself does not specify a duration. Instantaneous grenades ignore this."
       }
     },
     "Sheet": {
@@ -148,9 +168,34 @@
       "NaturalAttackDamage": "Natural Attack Damage",
       "Surprise": "Surprise",
       "Reaction": "Reaction",
-      "RollSurprise": "Roll Surprise",
       "RollReaction": "Roll Reaction",
-      "EncounterRole": "Encounter Role"
+      "EncounterRole": "Encounter Role",
+      "Fatigue": "Fatigue",
+      "FatigueRound": "round",
+      "CriticalHit": "Critical Hit",
+      "CriticalMiss": "Critical Miss",
+      "Range": "Range"
+    },
+    "Status": {
+      "Irradiated": "Irradiated",
+      "Poisoned": "Poisoned",
+      "Stunned": "Stunned",
+      "Paralyzed": "Paralyzed",
+      "Confused": "Confused",
+      "Blinded": "Blinded",
+      "Deafened": "Deafened",
+      "Sleeping": "Sleeping"
+    },
+    "AOE": {
+      "Target": "Target",
+      "Owner": "Owner",
+      "Action": "Action",
+      "Result": "Result",
+      "Player": "Player",
+      "NPC": "NPC",
+      "RollSave": "Roll Save",
+      "ResolveAll": "Resolve NPCs",
+      "NoTargets": "No tokens inside the area."
     },
     "Tab": {
       "Main": "Main",

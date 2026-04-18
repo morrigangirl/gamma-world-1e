@@ -19,6 +19,7 @@
  */
 
 import { SYSTEM_ID } from "./config.mjs";
+import { resetActorFatigue } from "./effect-state.mjs";
 
 export const MEDICAL_DEVICES = {
   "pain-reducer":       { heal: "1d4",  period: "day",      message: "Pain is dulled and minor wounds close." },
@@ -58,6 +59,8 @@ export async function applyRest(actor, { hours = 24 } = {}) {
   const daily = Number(actor.system.resources?.hp?.restDaily ?? 1);
   const days = Math.max(0, hours / 24);
   const heal = Math.floor(daily * days);
+  // Rest always clears fatigue per RAW, regardless of whether any HP is gained.
+  await resetActorFatigue(actor);
   if (heal <= 0) return 0;
   await actor.heal?.(heal) ?? applyHealFallback(actor, heal);
   await postHealingChat(actor, {

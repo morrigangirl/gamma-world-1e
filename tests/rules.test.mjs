@@ -5,6 +5,7 @@ import {
   addDiceToFormula,
   addFlatBonusToFormula,
   addPerDieBonusToFormula,
+  doubleDiceInFormula,
   parseSimpleDiceFormula,
   scaleFormula
 } from "../module/formulas.mjs";
@@ -50,6 +51,8 @@ import {
   clampArtifactUseRoll
 } from "../module/artifact-rules.mjs";
 import { getMutationRule } from "../module/mutation-rules.mjs";
+import { onHitEffectDescriptor } from "../module/on-hit-effects.mjs";
+import { determineRangeBand } from "../module/range.mjs";
 import { artifactDifficulty, artifactFunctionChance } from "../module/tables/artifact-tables.mjs";
 import {
   artifactChartFinishNode,
@@ -78,6 +81,143 @@ test("simple dice helpers rewrite formulas predictably", () => {
   assert.equal(addFlatBonusToFormula("1d8", 3), "1d8+3");
   assert.equal(addPerDieBonusToFormula("2d6", 3), "2d6+6");
   assert.equal(scaleFormula("2d4+1", 3), "6d4+3");
+});
+
+test("doubleDiceInFormula doubles dice counts but leaves flat bonuses alone", () => {
+  assert.equal(doubleDiceInFormula("1d6"), "2d6");
+  assert.equal(doubleDiceInFormula("2d10"), "4d10");
+  assert.equal(doubleDiceInFormula("1d6+2"), "2d6+2");
+  assert.equal(doubleDiceInFormula("2d6+3"), "4d6+3");
+  assert.equal(doubleDiceInFormula("3d4+1d6"), "6d4+2d6");
+  assert.equal(doubleDiceInFormula("1d8+1d6+3"), "2d8+2d6+3");
+  assert.equal(doubleDiceInFormula("1d6+1d4-1"), "2d6+2d4-1");
+  assert.equal(doubleDiceInFormula("d6"), "2d6");
+  assert.equal(doubleDiceInFormula(""), "");
+  assert.equal(doubleDiceInFormula("5"), "5");
+});
+
+test("determineRangeBand handles melee, unlimited, boundary distances, and out-of-range", () => {
+  // Melee weapons ignore distance entirely.
+  assert.deepEqual(
+    determineRangeBand({ system: { attackType: "melee", range: { short: 0, medium: 0, long: 0 } } }, 0),
+    { label: "melee", penalty: 0 }
+  );
+  assert.deepEqual(
+    determineRangeBand({ system: { attackType: "melee", range: { short: 0, medium: 0, long: 0 } } }, 500),
+    { label: "melee", penalty: 0 }
+  );
+
+  // Weapon without any configured range -> unlimited.
+  assert.deepEqual(
+    determineRangeBand({ system: { attackType: "ranged", range: { short: 0, medium: 0, long: 0 } } }, 100),
+    { label: "unlimited", penalty: 0 }
+  );
+
+  // Laser pistol-ish profile: short 15, medium 30, long 60.
+  const laser = { system: { attackType: "energy", range: { short: 15, medium: 30, long: 60 } } };
+  assert.deepEqual(determineRangeBand(laser, 0), { label: "short", penalty: 0 });
+  assert.deepEqual(determineRangeBand(laser, 15), { label: "short", penalty: 0 });
+  assert.deepEqual(determineRangeBand(laser, 16), { label: "medium", penalty: -2 });
+  assert.deepEqual(determineRangeBand(laser, 30), { label: "medium", penalty: -2 });
+  assert.deepEqual(determineRangeBand(laser, 31), { label: "long", penalty: -5 });
+  assert.deepEqual(determineRangeBand(laser, 60), { label: "long", penalty: -5 });
+  assert.deepEqual(determineRangeBand(laser, 61), { label: "out", penalty: -999 });
+
+  // Weapon with only a short range falls back to 2×short for the long band.
+  const thrown = { system: { attackType: "thrown", range: { short: 10, medium: 0, long: 0 } } };
+  assert.deepEqual(determineRangeBand(thrown, 5), { label: "short", penalty: 0 });
+  assert.deepEqual(determineRangeBand(thrown, 10), { label: "short", penalty: 0 });
+  assert.deepEqual(determineRangeBand(thrown, 15), { label: "long", penalty: -5 });
+  assert.deepEqual(determineRangeBand(thrown, 20), { label: "long", penalty: -5 });
+  assert.deepEqual(determineRangeBand(thrown, 21), { label: "out", penalty: -999 });
+});
+
+test("onHitEffectDescriptor maps canonical effect modes, allows item overrides, and skips damage/note", () => {
+  // Pass-through modes (no automated follow-up) return null so the attack
+  // flow keeps its manual button / damage-card path.
+  assert.equal(onHitEffectDescriptor({ effectMode: "" }), null);
+  assert.equal(onHitEffectDescriptor({ effectMode: "damage" }), null);
+  assert.equal(onHitEffectDescriptor({ effectMode: "note" }), null);
+  assert.equal(onHitEffectDescriptor(null), null);
+  assert.equal(onHitEffectDescriptor({ effectMode: "nonsense" }), null);
+
+  // Save-only modes: poison / radiation / mental delegate to the hazard chain,
+  // so needsSave stays false and the descriptor mostly labels the card.
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "poison" }), {
+    mode: "poison",
+    saveType: "poison",
+    statusId: "poisoned",
+    durationFormula: "",
+    needsSave: false
+  });
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "radiation" }), {
+    mode: "radiation",
+    saveType: "radiation",
+    statusId: "irradiated",
+    durationFormula: "",
+    needsSave: false
+  });
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "mental" }), {
+    mode: "mental",
+    saveType: "mental",
+    statusId: "stunned",
+    durationFormula: "1d4",
+    needsSave: false
+  });
+
+  // Stun / paralysis interpose a physique (poison-track) save. Status IDs
+  // mirror what rollDamageFromFlags applies when no item override is present.
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "stun" }), {
+    mode: "stun",
+    saveType: "poison",
+    statusId: "unconscious",
+    durationFormula: "1d6",
+    needsSave: true
+  });
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "paralysis" }), {
+    mode: "paralysis",
+    saveType: "poison",
+    statusId: "paralysis",
+    durationFormula: "1d10",
+    needsSave: true
+  });
+
+  // Death bypasses the condition flow — rollDamageFromFlags handles the KO.
+  assert.deepEqual(onHitEffectDescriptor({ effectMode: "death" }), {
+    mode: "death",
+    saveType: null,
+    statusId: null,
+    durationFormula: "",
+    needsSave: false
+  });
+
+  // Item-side overrides on effectFormula / effectStatus win over defaults.
+  assert.deepEqual(
+    onHitEffectDescriptor({
+      effectMode: "paralysis",
+      effectFormula: "2d6",
+      effectStatus: "custom-paralysis"
+    }),
+    {
+      mode: "paralysis",
+      saveType: "poison",
+      statusId: "custom-paralysis",
+      durationFormula: "2d6",
+      needsSave: true
+    }
+  );
+
+  // Accepts the item-like shape (system.effect.*) as well as the flag shape.
+  assert.deepEqual(
+    onHitEffectDescriptor({ system: { effect: { mode: "stun", formula: "3d6" } } }),
+    {
+      mode: "stun",
+      saveType: "poison",
+      statusId: "unconscious",
+      durationFormula: "3d6",
+      needsSave: true
+    }
+  );
 });
 
 test("combat matrices return known table values", () => {

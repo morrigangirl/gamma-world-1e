@@ -3,7 +3,7 @@
  * Entry point (registered in system.json as esmodules).
  */
 
-import { GAMMA_WORLD, SYSTEM_ID } from "./module/config.mjs";
+import { GAMMA_WORLD, SYSTEM_ID, registerGammaWorldStatusEffects } from "./module/config.mjs";
 import {
   CharacterData,
   WeaponData,
@@ -46,6 +46,10 @@ Hooks.once("init", () => {
 
   // Initiative
   CONFIG.Combat.initiative = { formula: "1d20 + @attributes.dx.mod", decimals: 0 };
+
+  // Status effects — ensure Gamma World-specific condition ids exist so the
+  // on-hit auto-apply flow can toggle them on actor tokens.
+  registerGammaWorldStatusEffects();
 
   const api = createSystemApi();
   game.gammaWorld = api;

@@ -1,16 +1,21 @@
-<div class="gw-chat-card gw-attack-card">
+<div class="gw-chat-card gw-attack-card{{#if isCritical}} is-critical-hit{{/if}}{{#if isFumble}} is-critical-miss{{/if}}">
   <h3>{{weaponName}}</h3>
   <div class="gw-card-meta">
     {{actorName}} &rarr; {{targetName}}
     {{#if distance}}&middot; {{distance}} m{{/if}}
-    {{#if rangeLabel}}&middot; {{rangeLabel}}{{/if}}
+    {{#if rangeLabel}}&middot; {{localize "GAMMA_WORLD.Combat.Range"}} {{rangeLabel}}{{#if rangePenalty}} {{gwSigned rangePenalty}}{{/if}}{{/if}}
   </div>
   <div class="gw-card-meta">
     Target {{hitTarget}}+{{#if attackBonus}} &middot; bonus {{gwSigned attackBonus}}{{/if}}
     {{#if targetAc}}&middot; defense {{targetAc}}{{/if}}
   </div>
   <div class="gw-card-result {{#if hit}}is-hit{{else}}is-miss{{/if}}">
-    Roll: {{d20}}{{#if total}} (total {{total}}){{/if}} &mdash; {{#if hit}}HIT{{else}}MISS{{/if}}
+    Roll: {{d20}}{{#if total}} (total {{total}}){{/if}} &mdash;
+    {{#if isCritical}}{{localize "GAMMA_WORLD.Combat.CriticalHit"}}
+    {{else if isFumble}}{{localize "GAMMA_WORLD.Combat.CriticalMiss"}}
+    {{else if hit}}HIT
+    {{else}}MISS
+    {{/if}}
   </div>
   {{#if notes}}
     <div class="gw-card-meta">{{notes}}</div>

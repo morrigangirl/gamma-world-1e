@@ -622,6 +622,17 @@ export async function useGear(actor, item, { skipArtifactCheck = false } = {}) {
     return useArtifactItem(actor, item);
   }
 
+  // Any gear item with a non-zero `system.area.radius` routes through the
+  // MeasuredTemplate-based AOE flow before falling back to the legacy
+  // action-mode dispatch. The AOE flow posts its own consolidated save card.
+  if (Number(item.system.area?.radius ?? 0) > 0) {
+    const { useAoeOrdnance } = await import("./aoe.mjs");
+    const resolved = await useAoeOrdnance(actor, item);
+    if (resolved) return true;
+    // Fall through when the template placement was canceled — lets the legacy
+    // action path still work if somebody has it configured.
+  }
+
   switch (item.system.action?.mode) {
     case "area-damage":
       return useAreaDamage(actor, item);

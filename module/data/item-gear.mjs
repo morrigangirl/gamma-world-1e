@@ -55,6 +55,31 @@ export class GearData extends foundry.abstract.TypeDataModel {
         notes:           str({ initial: "" })
       }),
 
+      /**
+       * Area-of-effect descriptor for grenades, gas clouds, explosives, and
+       * other ordnance. A gear item is treated as an AOE when
+       * `system.area.radius > 0`. Non-circle shapes and animation hooks are
+       * optional and default to sensible fallbacks.
+       *
+       * Fields:
+       *   shape             — "circle" | "cone" | "line" (default circle)
+       *   radius            — meters; 0 disables the AOE flow
+       *   persistentRounds  — 0 = instantaneous; >0 = cloud lingers N rounds
+       *   animationKey      — key into animations.mjs profile registry
+       *   saveType          — "poison" | "radiation" | "mental" | "" (no save)
+       *   onFailStatus      — statusId applied to victims on a failed save
+       *   halfDamageOnSave  — when true, saving yields half damage
+       */
+      area: new SchemaField({
+        shape:            str({ initial: "circle", choices: ["circle", "cone", "line"] }),
+        radius:           num({ initial: 0, min: 0 }),
+        persistentRounds: int({ initial: 0, min: 0 }),
+        animationKey:     str({ initial: "" }),
+        saveType:         str({ initial: "" }),
+        onFailStatus:     str({ initial: "" }),
+        halfDamageOnSave: new BooleanField({ initial: false })
+      }),
+
       artifact: new SchemaField({
         isArtifact: new BooleanField({ initial: false }),
         category: str({ initial: "none" }),
