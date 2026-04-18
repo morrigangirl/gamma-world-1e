@@ -199,7 +199,7 @@ export class GammaWorldActor extends Actor {
     this.system.resources.radResistance = this.gw.radiationResistance;
     this.system.resources.poisonResistance = this.gw.poisonResistance;
 
-    this.#prepareEncumbrance();
+    this._prepareEncumbrance();
   }
 
   /**
@@ -207,8 +207,16 @@ export class GammaWorldActor extends Actor {
    * Strict mode (per world design):
    *   - encumbered (carried > cap): halve movement, -1 to-hit on physical attacks, DX-AC bonus zeroed.
    *   - overloaded (carried > cap*2): movement = 0, attacks refused, mutations cannot be activated.
+   *
+   * Convention: underscore-prefixed instead of ES `#private` fields. Private
+   * methods trip V8's receiver brand check when Foundry's ActorDelta
+   * reconstructs a synthetic actor for an unlinked token — the receiver
+   * passed through the synthetic pipeline isn't the direct class instance
+   * the private method was declared on, so `this.#foo()` throws
+   * "Receiver must be an instance of class GammaWorldActor". Foundry core
+   * uses the same `_` convention for exactly this reason.
    */
-  #prepareEncumbrance() {
+  _prepareEncumbrance() {
     const system = this.system;
     const physStrength = Number(system.attributes?.ps?.value ?? 10);
     const baseCarry = physStrength * 10;
