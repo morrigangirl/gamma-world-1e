@@ -434,6 +434,30 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     context.identityLabel = compact(context.actorKindLabel, context.characterTypeLabel).join(" · ");
     context.isRobot = !!(system.robotics?.isRobot || system.details.type === "robot");
 
+    // Fatigue klaxon — green/yellow/red indicator next to the Level
+    // input. Thresholds follow the Fatigue Factors matrix:
+    //   - 0–10: green (no weapon fatigues yet)
+    //   - 11–13: yellow (heavy weapons start — flail / pole-arm / two-
+    //            handed sword begin accruing penalties)
+    //   - 14+: red + flashing (common weapons all fatiguing; penalties
+    //          stacking into -4 and worse across the board)
+    const fatigueRound = Math.max(0, Number(system?.combat?.fatigue?.round ?? 0) || 0);
+    let fatigueLevel = "green";
+    let fatigueLabel = "Fresh";
+    if (fatigueRound >= 14) {
+      fatigueLevel = "red";
+      fatigueLabel = "Severely fatigued";
+    } else if (fatigueRound >= 11) {
+      fatigueLevel = "yellow";
+      fatigueLabel = "Caution — heavy weapons fatiguing";
+    }
+    context.fatigueState = {
+      round: fatigueRound,
+      level: fatigueLevel,
+      label: fatigueLabel,
+      title: `Fatigue round ${fatigueRound} — ${fatigueLabel}`
+    };
+
     // Group embedded items by type.
     const grouped = { weapon: [], armor: [], gear: [], mutation: [] };
     for (const item of actor.items) {

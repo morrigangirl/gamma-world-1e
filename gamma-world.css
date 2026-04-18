@@ -2458,3 +2458,117 @@ body.system-gamma-world-1e,
   font-size: 0.75rem;
   padding: 0.3rem 0.5rem;
 }
+
+/* ----- Fatigue klaxon (80s alert-bulb, next to the Level input) ------ */
+
+.application.gamma-world .gw-level-with-klaxon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.application.gamma-world .gw-level-with-klaxon__row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.application.gamma-world .gw-level-with-klaxon__row > input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.application.gamma-world .gw-fatigue-klaxon {
+  /* The recessed chrome base the bulb sits on. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 35%, #4a4e53 0%, #2c2f33 55%, #14161a 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+  cursor: help;
+}
+
+/* Chrome hooding ring lip — a thin inner ring so the bulb reads recessed. */
+.application.gamma-world .gw-fatigue-klaxon__ring {
+  position: absolute;
+  inset: 0.12rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+/* The bulb itself. Colors swap via the level modifier below. */
+.application.gamma-world .gw-fatigue-klaxon__bulb {
+  position: relative;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(255, 255, 255, 0.72) 0%, transparent 35%),
+    radial-gradient(circle at 50% 55%, var(--klaxon-bulb, #2a2a2a) 0%,
+                    var(--klaxon-edge, #0d0d0d) 75%);
+  box-shadow:
+    inset 0 0 3px rgba(0, 0, 0, 0.55),
+    0 0 var(--klaxon-glow-spread, 0.3rem) var(--klaxon-glow, transparent);
+  transition: box-shadow 180ms ease, background 180ms ease;
+}
+
+/* Green — fresh, rounds 0–10 */
+.application.gamma-world .gw-fatigue-klaxon--green {
+  --klaxon-bulb: #46d26b;
+  --klaxon-edge: #0f5a24;
+  --klaxon-glow: rgba(70, 210, 107, 0.55);
+  --klaxon-glow-spread: 0.3rem;
+}
+
+/* Yellow — caution, rounds 11–13 */
+.application.gamma-world .gw-fatigue-klaxon--yellow {
+  --klaxon-bulb: #f2c430;
+  --klaxon-edge: #7a5a00;
+  --klaxon-glow: rgba(242, 196, 48, 0.65);
+  --klaxon-glow-spread: 0.35rem;
+}
+
+/* Red — severe, rounds 14+. Pulses like a klaxon. */
+.application.gamma-world .gw-fatigue-klaxon--red {
+  --klaxon-bulb: #e63737;
+  --klaxon-edge: #5a0a0a;
+  --klaxon-glow: rgba(230, 55, 55, 0.85);
+  --klaxon-glow-spread: 0.55rem;
+}
+
+.application.gamma-world .gw-fatigue-klaxon--red .gw-fatigue-klaxon__bulb {
+  animation: gw-klaxon-pulse 900ms ease-in-out infinite;
+}
+
+@keyframes gw-klaxon-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 3px rgba(0, 0, 0, 0.55),
+      0 0 0.35rem rgba(230, 55, 55, 0.55);
+    filter: brightness(0.85);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 3px rgba(0, 0, 0, 0.55),
+      0 0 0.9rem rgba(230, 55, 55, 1);
+    filter: brightness(1.25);
+  }
+}
+
+/* Users who prefer reduced motion get a calmer red steady-state. */
+@media (prefers-reduced-motion: reduce) {
+  .application.gamma-world .gw-fatigue-klaxon--red .gw-fatigue-klaxon__bulb {
+    animation: none;
+  }
+}
