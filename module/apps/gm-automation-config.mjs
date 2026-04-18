@@ -137,7 +137,11 @@ export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) 
   static DEFAULT_OPTIONS = {
     id: "gamma-world-config",
     classes: ["gamma-world", "gamma-world-config"],
-    position: { width: 640, height: "auto" },
+    // An explicit height is required for the window to be resizable in
+    // ApplicationV2. `height: "auto"` fits-to-content and disables the
+    // resize handle; it also lets the window grow past the viewport so
+    // fields off the bottom become unreachable.
+    position: { width: 640, height: 680 },
     window: {
       title: "GAMMA_WORLD.Settings.Config.WindowTitle",
       icon: "fa-solid fa-sliders",
@@ -156,7 +160,11 @@ export class GammaWorldConfig extends HandlebarsApplicationMixin(ApplicationV2) 
 
   static PARTS = {
     form: {
-      template: `systems/${SYSTEM_ID}/templates/apps/gm-automation-config.hbs`
+      template: `systems/${SYSTEM_ID}/templates/apps/gm-automation-config.hbs`,
+      // Declaring the scroll container lets the framework persist scroll
+      // position across re-renders (e.g. after a Save). The actual
+      // overflow behavior is set in gamma-world.css.
+      scrollable: [".gw-config"]
     },
     footer: {
       template: "templates/generic/form-footer.hbs"

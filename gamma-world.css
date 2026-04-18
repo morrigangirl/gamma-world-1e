@@ -1998,3 +1998,53 @@ body.system-gamma-world-1e,
     justify-content: flex-start;
   }
 }
+
+/* ----- Gamma World Configuration window (Phase 1.5) -------------------- */
+
+/* ApplicationV2 renders the window's form as a flex column with the
+   form-footer pinned below. The body PART (our .gw-config section) needs
+   to flex-grow into the remaining space and scroll internally when its
+   sections overflow. Without this the window either clips the bottom
+   fields or refuses to resize. */
+.gamma-world-config form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  min-height: 0;
+}
+
+.gamma-world-config .gw-config {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+
+.gamma-world-config .gw-config__section {
+  border: 1px solid var(--color-border-light-tertiary, #7a7971);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.gamma-world-config .gw-config__section > legend {
+  padding: 0 0.35rem;
+  font-weight: 600;
+  font-size: var(--font-size-14, 14px);
+}
+
+.gamma-world-config .gw-config__field {
+  margin-bottom: 0.5rem;
+}
+
+.gamma-world-config .gw-config__field .hint {
+  margin-top: 0.125rem;
+  font-size: var(--font-size-12, 12px);
+  color: var(--color-text-dark-secondary, #5a5a5a);
+}
+
+/* Footer stays pinned; form-footer.hbs supplies its own layout. */
+.gamma-world-config .form-footer {
+  flex: 0 0 auto;
+}
