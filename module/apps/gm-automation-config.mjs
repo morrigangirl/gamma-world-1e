@@ -69,6 +69,22 @@ const SECTIONS = [
       "grenadePersistentRounds",
       "autoRemoveInstantTemplate"
     ]
+  },
+  {
+    id: "soundCues",
+    title: "GAMMA_WORLD.Settings.Config.Section.SoundCues",
+    icon: "fa-solid fa-volume-high",
+    settings: [
+      "soundCuesEnabled",
+      "soundCueAttackHit",
+      "soundCueAttackMiss",
+      "soundCueAttackCrit",
+      "soundCueAttackFumble",
+      "soundCueDamageApplied",
+      "soundCueSaveSuccess",
+      "soundCueSaveFail",
+      "soundCueConditionApplied"
+    ]
   }
 ];
 
@@ -85,6 +101,9 @@ function settingKind(definition) {
   if (definition.choices) return "select";
   if (definition.type === Boolean) return "boolean";
   if (definition.type === Number) return "number";
+  // Phase 6: audio-file string settings render as a FilePicker-backed
+  // input via the config window so the GM can browse for the clip.
+  if (definition.filePicker === "audio") return "filePickerAudio";
   return "string";
 }
 

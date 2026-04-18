@@ -236,6 +236,55 @@ export function registerMigrationSettings() {
     default: 3,
     range: { min: 0, max: 20, step: 1 }
   });
+
+  // Phase 6: Sound cues. Master toggle + 8 file-path settings, one per
+  // combat event routed from the public hook surface. Leaving a path
+  // empty silences that specific cue; flipping the master off silences
+  // all cues without losing the configured paths.
+  game.settings.register(SYSTEM_ID, "soundCuesEnabled", {
+    name: "GAMMA_WORLD.Settings.SoundCuesEnabled.Name",
+    hint: "GAMMA_WORLD.Settings.SoundCuesEnabled.Hint",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  const registerSoundCue = (key, nameLoc, hintLoc) => {
+    game.settings.register(SYSTEM_ID, key, {
+      name: nameLoc,
+      hint: hintLoc,
+      scope: "world",
+      config: false,
+      type: String,
+      default: "",
+      filePicker: "audio"
+    });
+  };
+  registerSoundCue("soundCueAttackHit",
+    "GAMMA_WORLD.Settings.SoundCueAttackHit.Name",
+    "GAMMA_WORLD.Settings.SoundCueAttackHit.Hint");
+  registerSoundCue("soundCueAttackMiss",
+    "GAMMA_WORLD.Settings.SoundCueAttackMiss.Name",
+    "GAMMA_WORLD.Settings.SoundCueAttackMiss.Hint");
+  registerSoundCue("soundCueAttackCrit",
+    "GAMMA_WORLD.Settings.SoundCueAttackCrit.Name",
+    "GAMMA_WORLD.Settings.SoundCueAttackCrit.Hint");
+  registerSoundCue("soundCueAttackFumble",
+    "GAMMA_WORLD.Settings.SoundCueAttackFumble.Name",
+    "GAMMA_WORLD.Settings.SoundCueAttackFumble.Hint");
+  registerSoundCue("soundCueDamageApplied",
+    "GAMMA_WORLD.Settings.SoundCueDamageApplied.Name",
+    "GAMMA_WORLD.Settings.SoundCueDamageApplied.Hint");
+  registerSoundCue("soundCueSaveSuccess",
+    "GAMMA_WORLD.Settings.SoundCueSaveSuccess.Name",
+    "GAMMA_WORLD.Settings.SoundCueSaveSuccess.Hint");
+  registerSoundCue("soundCueSaveFail",
+    "GAMMA_WORLD.Settings.SoundCueSaveFail.Name",
+    "GAMMA_WORLD.Settings.SoundCueSaveFail.Hint");
+  registerSoundCue("soundCueConditionApplied",
+    "GAMMA_WORLD.Settings.SoundCueConditionApplied.Name",
+    "GAMMA_WORLD.Settings.SoundCueConditionApplied.Hint");
 }
 
 function mutationUpdateData(item) {

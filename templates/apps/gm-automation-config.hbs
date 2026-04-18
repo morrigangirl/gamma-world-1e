@@ -33,6 +33,11 @@
                      name="{{this.key}}"
                      value="{{this.value}}"
                      {{#if this.hasRange}}min="{{this.min}}" max="{{this.max}}" step="{{this.step}}"{{/if}}>
+            {{else if (gwEq this.kind "filePickerAudio")}}
+              <file-picker type="audio"
+                           id="gw-config-{{this.key}}"
+                           name="{{this.key}}"
+                           value="{{this.text}}"></file-picker>
             {{else}}
               <input type="text"
                      id="gw-config-{{this.key}}"

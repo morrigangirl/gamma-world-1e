@@ -17,6 +17,7 @@ import { GammaWorldCharacterSheet, GammaWorldMonsterSheet } from "./module/sheet
 import { GammaWorldItemSheet }      from "./module/sheets/item-sheet.mjs";
 import { registerHelpers } from "./module/helpers.mjs";
 import { registerHooks }   from "./module/hooks.mjs";
+import { registerSoundCueHooks } from "./module/sound-cues.mjs";
 import { migrateWorld, registerMigrationSettings } from "./module/migrations.mjs";
 import { createSystemApi } from "./module/api.mjs";
 import { registerAnimationHooks, registerAnimationSettings } from "./module/animations.mjs";
@@ -90,6 +91,7 @@ Hooks.once("init", () => {
   // Hooks (chat card wiring)
   registerHooks();
   registerAnimationHooks();
+  registerSoundCueHooks();
 });
 
 Hooks.once("ready", () => {

@@ -25,7 +25,8 @@
           "HouseRules": "House Rules & Gameplay",
           "CombatAutomation": "Combat Automation",
           "RollVisibility": "Roll Visibility & Dice",
-          "Templates": "Templates & Grenades"
+          "Templates": "Templates & Grenades",
+          "SoundCues": "Sound Cues"
         },
         "Save": "Save",
         "ResetDefaults": "Reset to Defaults",
@@ -129,7 +130,19 @@
       "AutoConsumeCharges": {
         "Name": "Auto-consume weapon ammo and artifact charges on use",
         "Hint": "When enabled, firing a weapon with consumable ammo decrements its count and using an Ancient artifact with charges debits them. Disable to track resources manually (sandbox play, pretend-infinite arsenal)."
-      }
+      },
+      "SoundCuesEnabled": {
+        "Name": "Enable combat sound cues",
+        "Hint": "Master toggle for the sound-cue pipeline. When on, configured audio files play on the matching combat event (attack hit/miss/crit/fumble, damage applied, save success/fail, condition applied). Leave a specific cue's file empty to silence just that event."
+      },
+      "SoundCueAttackHit":        { "Name": "Cue — attack hits",        "Hint": "Played on every attack-card result where the roll hits and is not a critical." },
+      "SoundCueAttackMiss":       { "Name": "Cue — attack misses",      "Hint": "Played on every miss that is not a natural 1 fumble." },
+      "SoundCueAttackCrit":       { "Name": "Cue — critical hit",       "Hint": "Played on a natural 20 attack result." },
+      "SoundCueAttackFumble":     { "Name": "Cue — critical miss",      "Hint": "Played on a natural 1 attack result." },
+      "SoundCueDamageApplied":    { "Name": "Cue — damage applied",     "Hint": "Played when non-zero damage lands on a target after the apply flow." },
+      "SoundCueSaveSuccess":      { "Name": "Cue — save succeeded",     "Hint": "Played when any save roll succeeds." },
+      "SoundCueSaveFail":         { "Name": "Cue — save failed",        "Hint": "Played when any save roll fails." },
+      "SoundCueConditionApplied": { "Name": "Cue — condition applied",  "Hint": "Played when a timed condition is applied to an actor (paralysis, poison, stun, blind, etc.)." }
     },
     "Sheet": {
       "Character": "Character Sheet",
