@@ -1,3 +1,21 @@
-2026/04/18-15:34:07.946793 171f5b000 Recovering log #18
-2026/04/18-15:34:07.947116 171f5b000 Delete type=3 #17
-2026/04/18-15:34:07.947150 171f5b000 Delete type=0 #18
+2026/04/18-18:10:51.328936 172183000 Recovering log #20
+2026/04/18-18:10:51.329215 172183000 Delete type=3 #19
+2026/04/18-18:10:51.329247 172183000 Delete type=0 #20
+2026/04/18-18:10:51.330350 173a33000 Level-0 table #24: started
+2026/04/18-18:10:51.330360 173a33000 Level-0 table #24: 0 bytes OK
+2026/04/18-18:10:51.330428 173a33000 Delete type=0 #22
+2026/04/18-18:10:51.330460 173a33000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1
+2026/04/18-18:10:51.330463 173a33000 Compacting 1@0 + 0@1 files
+2026/04/18-18:10:51.330903 173a33000 Generated table #25@0: 296 keys, 54743 bytes
+2026/04/18-18:10:51.330907 173a33000 Compacted 1@0 + 0@1 files => 54743 bytes
+2026/04/18-18:10:51.330943 173a33000 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/04/18-18:10:51.330963 173a33000 Delete type=2 #15
+2026/04/18-18:10:51.331030 173a33000 Manual compaction at level-0 from '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-18:10:51.331041 173a33000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1
+2026/04/18-18:10:51.331044 173a33000 Compacting 1@1 + 1@2 files
+2026/04/18-18:10:51.331508 173a33000 Generated table #26@1: 296 keys, 54743 bytes
+2026/04/18-18:10:51.331515 173a33000 Compacted 1@1 + 1@2 files => 54743 bytes
+2026/04/18-18:10:51.331551 173a33000 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/04/18-18:10:51.331572 173a33000 Delete type=2 #5
+2026/04/18-18:10:51.331622 173a33000 Delete type=2 #25
+2026/04/18-18:10:51.331665 173a33000 Manual compaction at level-1 from '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 591 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)

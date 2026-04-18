@@ -1,3 +1,21 @@
-2026/04/18-15:34:07.950891 17174f000 Recovering log #18
-2026/04/18-15:34:07.951218 17174f000 Delete type=3 #17
-2026/04/18-15:34:07.951250 17174f000 Delete type=0 #18
+2026/04/18-18:10:51.333657 17298f000 Recovering log #20
+2026/04/18-18:10:51.333897 17298f000 Delete type=3 #19
+2026/04/18-18:10:51.333929 17298f000 Delete type=0 #20
+2026/04/18-18:10:51.334215 173a33000 Level-0 table #24: started
+2026/04/18-18:10:51.334223 173a33000 Level-0 table #24: 0 bytes OK
+2026/04/18-18:10:51.334285 173a33000 Delete type=0 #22
+2026/04/18-18:10:51.334313 173a33000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!journal.pages!xp8TZc9c6kTq5XiX.P8hGGcpQwJIlufdA' @ 71 : 1
+2026/04/18-18:10:51.334316 173a33000 Compacting 1@0 + 0@1 files
+2026/04/18-18:10:51.334497 173a33000 Generated table #25@0: 36 keys, 8752 bytes
+2026/04/18-18:10:51.334501 173a33000 Compacted 1@0 + 0@1 files => 8752 bytes
+2026/04/18-18:10:51.334538 173a33000 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/04/18-18:10:51.334561 173a33000 Delete type=2 #15
+2026/04/18-18:10:51.334617 173a33000 Manual compaction at level-0 from '!journal.pages!xp8TZc9c6kTq5XiX.P8hGGcpQwJIlufdA' @ 71 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-18:10:51.334628 173a33000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!journal.pages!xp8TZc9c6kTq5XiX.P8hGGcpQwJIlufdA' @ 71 : 1
+2026/04/18-18:10:51.334631 173a33000 Compacting 1@1 + 1@2 files
+2026/04/18-18:10:51.334793 173a33000 Generated table #26@1: 36 keys, 8752 bytes
+2026/04/18-18:10:51.334797 173a33000 Compacted 1@1 + 1@2 files => 8752 bytes
+2026/04/18-18:10:51.334835 173a33000 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/04/18-18:10:51.334854 173a33000 Delete type=2 #5
+2026/04/18-18:10:51.335144 173a33000 Delete type=2 #25
+2026/04/18-18:10:51.335181 173a33000 Manual compaction at level-1 from '!journal.pages!xp8TZc9c6kTq5XiX.P8hGGcpQwJIlufdA' @ 71 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
