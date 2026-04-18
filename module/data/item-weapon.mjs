@@ -1,6 +1,6 @@
 /** WeaponData — Item.type === "weapon". */
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -15,13 +15,33 @@ const str = (opts = {}) => new StringField({
 
 export class WeaponData extends foundry.abstract.TypeDataModel {
 
+  /**
+   * 0.8.1 migrated `ammoType` from a single StringField to a SetField so a
+   * weapon can accept more than one kind of ammo (e.g. the Needler takes
+   * poison OR paralysis darts). Legacy string values are still flowing in
+   * from old world data and from compendium packs built on 0.8.0 — coerce
+   * them to a one-element array before the SetField validator runs.
+   */
+  static migrateData(source) {
+    if (typeof source?.ammoType === "string") {
+      const trimmed = source.ammoType.trim();
+      source.ammoType = trimmed ? [trimmed] : [];
+    }
+    return super.migrateData(source);
+  }
+
   static defineSchema() {
     return {
       weaponClass: int({ initial: 1, min: 1, max: 16 }),
       category: str({ initial: "primitive",
         choices: ["primitive", "modern", "artifact", "natural"] }),
-      /** Ammo type key (see AMMO_TYPES in config.mjs). Empty = no ammo required. */
-      ammoType: str({ initial: "" }),
+      /**
+       * Set of ammo-type keys the weapon accepts (see AMMO_TYPES in
+       * config.mjs). Empty set = no ammo required. A weapon with more than
+       * one entry (e.g. Needler) prompts the player at fire-time which
+       * loaded stack to consume.
+       */
+      ammoType: new SetField(new StringField(), { initial: [] }),
 
       damage: new SchemaField({
         formula: str({ initial: "1d6" }),

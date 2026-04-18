@@ -113,17 +113,14 @@
         <label>{{localize "GAMMA_WORLD.Weapon.Rof"}}</label>
         <input type="number" name="system.rof" value="{{system.rof}}" min="0" />
       </div>
-      <div class="form-group">
-        <label>{{localize "GAMMA_WORLD.Weapon.Ammo"}} ({{localize "GAMMA_WORLD.Weapon.AmmoCurrent"}} / {{localize "GAMMA_WORLD.Weapon.AmmoMax"}})</label>
-        <span>
-          <input type="number" name="system.ammo.current" value="{{system.ammo.current}}" style="width:4rem;" />
-          /
-          <input type="number" name="system.ammo.max"     value="{{system.ammo.max}}"     style="width:4rem;" />
-          <label style="margin-left:.5rem;">
-            <input type="checkbox" name="system.ammo.consumes" {{#if system.ammo.consumes}}checked{{/if}} />
-            {{localize "GAMMA_WORLD.Weapon.ConsumesAmmo"}}
-          </label>
-        </span>
+      <div class="form-group gw-trait-select">
+        <label>{{localize "GAMMA_WORLD.Weapon.AmmoTypes"}}</label>
+        <multi-select name="system.ammoType">
+          {{#each ammoTypeOptions}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </multi-select>
+        <p class="hint">{{localize "GAMMA_WORLD.Weapon.AmmoTypesHint"}}</p>
       </div>
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Weapon.Quantity"}} / {{localize "GAMMA_WORLD.Weapon.Weight"}}</label>

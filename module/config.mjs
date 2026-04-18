@@ -234,7 +234,12 @@ export const AMMO_TYPES = {
   "needler-poison":     "GAMMA_WORLD.Ammo.NeedlerPoison",
   "stun-cell":          "GAMMA_WORLD.Ammo.StunCell",
   "javelin":            "GAMMA_WORLD.Ammo.Javelin",
-  "gyrojet":            "GAMMA_WORLD.Ammo.Gyrojet"
+  "gyrojet":            "GAMMA_WORLD.Ammo.Gyrojet",
+  // 0.8.1: energy-weapon cells.
+  "energy-clip":        "GAMMA_WORLD.Ammo.EnergyClip",
+  "blaster-pack":       "GAMMA_WORLD.Ammo.BlasterPack",
+  "black-ray-cell":     "GAMMA_WORLD.Ammo.BlackRayCell",
+  "fusion-cell":        "GAMMA_WORLD.Ammo.FusionCell"
 };
 
 export const AMMO_TYPE_KEYS = Object.keys(AMMO_TYPES).filter((key) => key !== "");

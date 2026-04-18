@@ -440,7 +440,10 @@
       "AmmoCurrent": "Current",
       "AmmoMax": "Max",
       "AmmoType": "Ammo Type",
+      "AmmoTypes": "Accepted Ammo",
+      "AmmoTypesHint": "Leave empty for weapons that never consume ammo. Select multiple types for weapons that accept alternates (e.g. the Needler fires poison OR paralysis darts).",
       "NoAmmo": "No {ammoType} ammunition available.",
+      "NoMatchingAmmo": "No matching ammunition loaded.",
       "ConsumesAmmo": "Consumes ammo on use",
       "Equipped": "Equipped",
       "Quantity": "Qty",
@@ -537,7 +540,11 @@
       "NeedlerPoison": "Needler Dart (Poison)",
       "StunCell": "Stun Rifle Cell",
       "Javelin": "Javelin (bundle)",
-      "Gyrojet": "Gyrojet Slug"
+      "Gyrojet": "Gyrojet Slug",
+      "EnergyClip": "Energy Clip",
+      "BlasterPack": "Blaster Pack",
+      "BlackRayCell": "Black Ray Cell",
+      "FusionCell": "Fusion Cell"
     },
     "Tech": {
       "None": "—",

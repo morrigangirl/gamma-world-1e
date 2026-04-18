@@ -1128,8 +1128,15 @@ const PROFILE_DEFINITIONS = {
   "Fusion Rifle": weaponFamilies.fusionRifle,
   "Stun Ray Pistol": weaponFamilies.stunRay,
   "Stun Rifle": weaponFamilies.stunRifle,
+  // 0.8.1: collapsed Needler (poison + paralysis) into a single weapon.
+  // The green-bolt poison animation is the default; ammo-type-specific
+  // variants could be wired up here if the chat card ever reports which
+  // dart was consumed. Legacy keys kept so existing in-world instances
+  // still resolve until the migration renames them.
+  "Needler": weaponFamilies.poisonNeedler,
   "Needler (Poison)": weaponFamilies.poisonNeedler,
   "Needler (Paralysis)": weaponFamilies.paralysisNeedler,
+  "Slug Thrower": weaponFamilies.slugThrower,
   "Slug Thrower (.38)": weaponFamilies.slugThrower,
   "Club": weaponFamilies.club,
   "Spear": weaponFamilies.spearThrown,
@@ -1140,8 +1147,14 @@ const PROFILE_DEFINITIONS = {
   "Short Sword": weaponFamilies.shortSword,
   "Pole Arm": weaponFamilies.poleArm,
   "Javelin": weaponFamilies.javelin,
+  // 0.8.1: Bow (renamed from "Bow and Arrows") + Sling (renamed from
+  // "Sling Stones", now fires either stones or bullets via gear ammo).
+  // Legacy keys kept so existing in-world instances still resolve until
+  // the migration renames them.
+  "Bow": weaponFamilies.bowAndArrows,
   "Bow and Arrows": weaponFamilies.bowAndArrows,
   "Crossbow": weaponFamilies.crossbow,
+  "Sling": weaponFamilies.slingStones,
   "Sling Stones": weaponFamilies.slingStones,
   "Sling Bullets": weaponFamilies.slingBullets,
   "Vibro Dagger": weaponFamilies.vibroDagger,

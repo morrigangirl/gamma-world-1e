@@ -36,12 +36,17 @@ function weaponSource({
   long = 0,
   effect = {},
   description = "",
-  ammo = { current: 0, max: 0, consumes: false },
-  ammoType = "",
+  ammoType = [],
   category,
   rof = 1,
   weight = 0
 }) {
+  // 0.8.1: ammoType is a SetField of strings on the weapon schema. Accept
+  // both array and string inputs so legacy callers still work.
+  const ammoTypeList = Array.isArray(ammoType)
+    ? ammoType.filter(Boolean)
+    : (ammoType ? [String(ammoType)] : []);
+
   const source = {
     name,
     type: "weapon",
@@ -49,12 +54,14 @@ function weaponSource({
     system: {
       weaponClass,
       category: category ?? "",
-      ammoType,
+      ammoType: ammoTypeList,
       damage: { formula: damage, type: attackType === "energy" ? "energy" : "physical" },
       range: { short, medium, long },
       attackType,
       rof,
-      ammo,
+      // 0.8.1: no inline ammo counter on pack weapons; consumption reads
+      // from a matching `gear` item with `system.ammo.type` at fire-time.
+      ammo: { current: 0, max: 0, consumes: false },
       effect: {
         mode: effect.mode ?? "damage",
         formula: effect.formula ?? "",
@@ -498,14 +505,13 @@ export function equipmentPackSources() {
       description: htmlParagraphs("Thrown spear balanced for range.")
     }),
     weaponSource({
-      name: "Bow and Arrows",
+      name: "Bow",
       weaponClass: 9,
       damage: "1d6",
       attackType: "ranged",
       short: 100,
       long: 200,
-      ammoType: "arrow",
-      ammo: { current: 15, max: 15, consumes: true },
+      ammoType: ["arrow"],
       description: htmlParagraphs("Primitive missile weapon.", "Effective range 100 meters, maximum range 200 meters.")
     }),
     weaponSource({
@@ -515,62 +521,43 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 120,
       long: 240,
-      ammoType: "crossbow-bolt",
-      ammo: { current: 15, max: 15, consumes: true },
+      ammoType: ["crossbow-bolt"],
       description: htmlParagraphs("Heavy mechanical bow with slower but reliable shots.")
     }),
     weaponSource({
-      name: "Sling Stones",
+      name: "Sling",
       weaponClass: 9,
       damage: "1d4",
       attackType: "ranged",
       short: 80,
       long: 160,
-      description: htmlParagraphs("Stone sling ammunition.")
+      // Accepts either river-smoothed stones or shaped lead bullets.
+      ammoType: ["sling-stone", "sling-bullet"],
+      description: htmlParagraphs("A leather-and-cord sling for hurling stones or cast-lead bullets.", "Load with Sling Stones for standard damage; shaped Sling Bullets add +1.")
     }),
     weaponSource({
-      name: "Sling Bullets",
-      weaponClass: 9,
-      damage: "1d4 + 1",
-      attackType: "ranged",
-      short: 100,
-      long: 200,
-      description: htmlParagraphs("Shaped lead sling bullets.")
-    }),
-    weaponSource({
-      name: "Slug Thrower (.38)",
+      name: "Slug Thrower",
       weaponClass: 10,
       damage: "2d6",
       attackType: "ranged",
       short: 20,
       long: 40,
-      ammoType: "slug",
-      ammo: { current: 15, max: 15, consumes: true },
+      ammoType: ["slug"],
       description: htmlParagraphs("Police riot-control sidearm firing stunning slugs.", "Track unconsciousness when stun damage reaches half the target's original hit points.", "Powered by a hydrogen energy cell good for about five clips.")
     }),
     weaponSource({
-      name: "Needler (Poison)",
+      // 0.8.1: collapsed the two legacy entries (Needler Poison + Needler
+      // Paralysis) into a single weapon that accepts either ammo stack.
+      // At fire-time the player picks which to consume when both are loaded.
+      name: "Needler",
       weaponClass: 11,
       damage: "0",
       attackType: "ranged",
       short: 50,
       long: 100,
-      ammoType: "needler-poison",
-      ammo: { current: 10, max: 10, consumes: true },
-      effect: { mode: "poison", formula: "17", notes: "Resolve as poison intensity 17." },
-      description: htmlParagraphs("Soundless dart weapon loaded with poison capsules.")
-    }),
-    weaponSource({
-      name: "Needler (Paralysis)",
-      weaponClass: 11,
-      damage: "0",
-      attackType: "ranged",
-      short: 50,
-      long: 100,
-      ammoType: "needler-paralysis",
-      ammo: { current: 10, max: 10, consumes: true },
-      effect: { mode: "paralysis", formula: "20", status: "paralysis", notes: "Victim is paralyzed for up to 20 minutes, less one minute per point of Constitution." },
-      description: htmlParagraphs("Needler loaded with paralysis darts.")
+      ammoType: ["needler-poison", "needler-paralysis"],
+      effect: { mode: "poison", formula: "17", notes: "Poison darts: resolve as poison intensity 17. Paralysis darts: paralyze victim for up to 20 minutes, less one minute per point of Constitution." },
+      description: htmlParagraphs("Soundless dart weapon. Fires poison or paralysis capsules — load whichever ammo stack the situation calls for.")
     }),
     weaponSource({
       name: "Stun Ray Pistol",
@@ -579,8 +566,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 25,
       long: 50,
-      ammoType: "stun-cell",
-      ammo: { current: 10, max: 10, consumes: true },
+      ammoType: ["stun-cell"],
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Short-ranged solar-cell stun weapon.", "One solar cell powers about ten shots.")
     }),
@@ -591,8 +577,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 100,
       long: 200,
-      ammoType: "stun-cell",
-      ammo: { current: 5, max: 5, consumes: true },
+      ammoType: ["stun-cell"],
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Long-ranged stunning rifle.")
     }),
@@ -603,7 +588,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 100,
       long: 200,
-      ammo: { current: 10, max: 10, consumes: true },
+      ammoType: ["energy-clip"],
       description: htmlParagraphs("Hydrogen-cell laser sidearm.", "Class 2 armor deflects the first hit; class 1 armor deflects the first two hits.")
     }),
     weaponSource({
@@ -613,7 +598,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 300,
       long: 600,
-      ammo: { current: 5, max: 5, consumes: true },
+      ammoType: ["energy-clip"],
       description: htmlParagraphs("Military laser rifle.", "Class 2 armor deflects the first hit; class 1 armor deflects the first two hits.")
     }),
     weaponSource({
@@ -623,7 +608,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 75,
       long: 150,
-      ammo: { current: 5, max: 5, consumes: true },
+      ammoType: ["blaster-pack"],
       description: htmlParagraphs("Disrupting-ray pistol that bores holes through inanimate matter and slain targets.")
     }),
     weaponSource({
@@ -633,7 +618,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 225,
       long: 450,
-      ammo: { current: 5, max: 5, consumes: true },
+      ammoType: ["blaster-pack"],
       description: htmlParagraphs("Heavy disruptor rifle.")
     }),
     weaponSource({
@@ -643,7 +628,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 25,
       long: 50,
-      ammo: { current: 4, max: 4, consumes: true },
+      ammoType: ["black-ray-cell"],
       effect: { mode: "death", notes: "Instant death to living targets not protected by force fields." },
       description: htmlParagraphs("The ultimate hand-held weapon; living targets without force-field protection die instantly.", "Powered by a chemical energy cell for four shots.")
     }),
@@ -654,7 +639,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 350,
       long: 700,
-      ammo: { current: 10, max: 10, consumes: true },
+      ammoType: ["fusion-cell"],
       effect: { mode: "radiation", formula: "18", notes: "Resolve as radiation intensity 18." },
       description: htmlParagraphs("Projects twin beams of intensity-18 radiation.", "Requires an atomic energy cell carried in a converter backpack linked by cable.")
     }),
@@ -1146,6 +1131,11 @@ export function equipmentPackSources() {
     ammoSource({ name: "Stun Rifle Cell (10 shots)", ammoType: "stun-cell",         rounds: 10, description: "Replacement energy cell for stun ray pistols and stun rifles." }),
     ammoSource({ name: "Javelin (single)",           ammoType: "javelin",           rounds: 1,  weight: 2, description: "A thrown javelin. Retrievable after use unless broken." }),
     ammoSource({ name: "Gyrojet Slugs (clip of 10)", ammoType: "gyrojet",           rounds: 10, description: "Micro-rocket slugs for the pre-war gyrojet pistol." }),
+    // 0.8.1 energy-weapon ammunition gear. One shot per round consumed.
+    ammoSource({ name: "Energy Clip (10 shots)",     ammoType: "energy-clip",       rounds: 10, description: "Hydrogen energy cell for laser pistols and laser rifles." }),
+    ammoSource({ name: "Blaster Pack (5 shots)",     ammoType: "blaster-pack",      rounds: 5,  description: "Compact energy pack for Mark V and Mark VII disruptor blasters." }),
+    ammoSource({ name: "Black Ray Cell (4 shots)",   ammoType: "black-ray-cell",    rounds: 4,  description: "Chemical energy cell for the Black Ray Gun. Four shots per cell." }),
+    ammoSource({ name: "Fusion Cell (10 shots)",     ammoType: "fusion-cell",       rounds: 10, weight: 2, description: "Atomic energy cell carried in a converter backpack. Powers the fusion rifle for ten shots." }),
     // -- Containers ----------------------------------------------------------
     containerSource({ name: "Belt Pouch",     capacity: 10,  weight: 0.5, description: "A small leather pouch that hangs from a belt." }),
     containerSource({ name: "Satchel",        capacity: 25,  weight: 1,   description: "A shoulder bag for light loads." }),
@@ -1361,7 +1351,7 @@ export function actorPackSources() {
       hp: 26,
       role: "ancient tech restorer",
       biography: "A pre-war engineering specialist sworn to rebuild humanity's civilization. Carries a kit of tools and a working slug-thrower.",
-      items: ["Slug Thrower (.38)", "Slug-Thrower Rounds (clip of 15)", "Wrench", "Small Backpack", "Chemical Energy Cell"]
+      items: ["Slug Thrower", "Slug-Thrower Rounds (clip of 15)", "Wrench", "Small Backpack", "Chemical Energy Cell"]
     }),
     alliancePregen({
       name: "Healer Medic",

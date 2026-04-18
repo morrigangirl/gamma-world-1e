@@ -3,7 +3,7 @@
  * One class, one template, branches on this.document.type.
  */
 
-import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from "../config.mjs";
+import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, AMMO_TYPES, AMMO_TYPE_KEYS } from "../config.mjs";
 import { artifactPowerSummary } from "../artifact-power.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
@@ -73,6 +73,23 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
       grantsImmunity:      buildTraitOptions(traitsGranted.grantsImmunity),
       grantsVulnerability: buildTraitOptions(traitsGranted.grantsVulnerability)
     };
+
+    // 0.8.1: weapon ammo types as a multi-select. SetField reads as a Set
+    // on the data model; coerce to an array before membership checks so
+    // the template's `selected` flag is set correctly.
+    if (item.type === "weapon") {
+      const ammoSet = item.system?.ammoType;
+      const selectedAmmo = new Set(
+        ammoSet instanceof Set
+          ? [...ammoSet]
+          : Array.isArray(ammoSet) ? ammoSet : []
+      );
+      context.ammoTypeOptions = AMMO_TYPE_KEYS.map((key) => ({
+        value: key,
+        label: localize(AMMO_TYPES[key] ?? key),
+        selected: selectedAmmo.has(key)
+      }));
+    }
 
     const enrich = foundry.applications.ux.TextEditor.implementation.enrichHTML.bind(
       foundry.applications.ux.TextEditor.implementation

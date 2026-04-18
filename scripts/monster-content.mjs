@@ -409,7 +409,7 @@ const MONSTER_PACK = [
     biography: htmlParagraphs("Humaniform labor machine with tremendous endurance and strength.", "Worker androids are still dangerous once armed or cornered."),
     armor: armorSource({ name: "Android Frame", acValue: 5, description: "Industrial-grade shell.", protection: { poisonImmune: true, radiationImmune: true, mentalImmune: true } }),
     weapons: [
-      weaponSource({ name: "Slug Thrower (.38)", damage: "2d6", attackType: "ranged", short: 20, long: 40, traits: { tag: "slug", nonlethal: true }, description: "Typical riot-control sidearm." }),
+      weaponSource({ name: "Slug Thrower", damage: "2d6", attackType: "ranged", short: 20, long: 40, traits: { tag: "slug", nonlethal: true }, description: "Typical riot-control sidearm." }),
       naturalWeaponSource({ name: "Servo Slam", damage: "1d8", description: "Industrial arms and reinforced frame." })
     ],
     robotics: {

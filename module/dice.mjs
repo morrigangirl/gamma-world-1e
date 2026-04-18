@@ -652,12 +652,33 @@ export async function applyHealingToTargets(amount, multiplier = 1, {
   }
 }
 
-function findAmmoGearItem(actor, ammoType) {
-  if (!ammoType || !actor?.items) return null;
+/**
+ * Normalize a weapon's ammoType into an array of trimmed, non-empty slug
+ * strings. Accepts a Set (0.8.1 SetField), an Array, a single string, or
+ * nullish. Returns `[]` when the weapon takes no ammo.
+ */
+function normalizeAmmoTypeList(value) {
+  if (!value) return [];
+  if (value instanceof Set) return [...value].map((v) => String(v).trim()).filter(Boolean);
+  if (Array.isArray(value)) return value.map((v) => String(v).trim()).filter(Boolean);
+  const s = String(value).trim();
+  return s ? [s] : [];
+}
+
+/**
+ * Find an ammo gear stack on the actor matching any of the supplied ammo
+ * types. Accepts set / array / string input. Returns the first non-empty
+ * matching stack (Commit 3 will add a DialogV2 picker when more than one
+ * type is loaded).
+ */
+function findAmmoGearItem(actor, ammoTypes) {
+  const types = normalizeAmmoTypeList(ammoTypes);
+  if (!types.length || !actor?.items) return null;
+  const typeSet = new Set(types);
   return actor.items.find((item) =>
     item?.type === "gear"
     && item.system?.subtype === "ammunition"
-    && item.system?.ammo?.type === ammoType
+    && typeSet.has(item.system?.ammo?.type)
     && Number(item.system?.ammo?.rounds ?? 0) > 0
   ) ?? null;
 }
@@ -668,13 +689,18 @@ export async function rollAttack(actor, weapon) {
   const sourceToken = actor.getActiveTokens?.()[0] ?? null;
 
   // Ammunition resolution: prefer a matching gear item; fall back to the
-  // weapon's legacy inline counter so older content still fires.
-  const ammoType = String(weapon.system.ammoType ?? "").trim();
+  // weapon's legacy inline counter so older content still fires. A weapon
+  // may accept one or more ammo types (Needler = poison + paralysis); the
+  // helper returns the first loaded stack that matches any accepted type.
+  const ammoTypes = normalizeAmmoTypeList(weapon.system.ammoType);
   let ammoItem = null;
-  if (ammoType) {
-    ammoItem = findAmmoGearItem(actor, ammoType);
+  if (ammoTypes.length) {
+    ammoItem = findAmmoGearItem(actor, ammoTypes);
     if (!ammoItem && (!weapon.system.ammo?.consumes || Number(weapon.system.ammo?.current ?? 0) <= 0)) {
-      ui.notifications?.warn(`No ${ammoType.replace(/-/g, " ")} ammunition available.`);
+      const label = ammoTypes.length === 1
+        ? ammoTypes[0].replace(/-/g, " ")
+        : "matching";
+      ui.notifications?.warn(`No ${label} ammunition available.`);
       return;
     }
   } else if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
