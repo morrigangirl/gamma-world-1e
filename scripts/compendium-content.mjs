@@ -139,7 +139,13 @@ function gearSource({
   weight = 0,
   tech = "none",
   description = "",
-  action = {}
+  action = {},
+  // Gap #2: area-of-effect descriptor for grenades / missiles / bombs.
+  // Populating this lights up the Phase H `useAoeOrdnance` flow when the
+  // item is used. `radius` in meters, `persistentRounds` > 0 keeps the
+  // template visible for N rounds (gas clouds). Leave all zero / empty
+  // for a non-AOE gear item (the default).
+  area = {}
 }) {
   const source = {
     name,
@@ -162,6 +168,15 @@ function gearSource({
         consumeQuantity: action.consumeQuantity ?? 0,
         ongoing: !!action.ongoing,
         notes: action.notes ?? ""
+      },
+      area: {
+        shape: area.shape ?? "circle",
+        radius: Number(area.radius ?? 0) || 0,
+        persistentRounds: Number(area.persistentRounds ?? 0) || 0,
+        animationKey: area.animationKey ?? "",
+        saveType: area.saveType ?? "",
+        onFailStatus: area.onFailStatus ?? "",
+        halfDamageOnSave: !!area.halfDamageOnSave
       },
       description: { value: description }
     }
@@ -644,31 +659,36 @@ export function equipmentPackSources() {
       description: htmlParagraphs("Projects twin beams of intensity-18 radiation.", "Requires an atomic energy cell carried in a converter backpack linked by cable.")
     }),
     weaponSource({
+      // Gap #1: Vibro-style blades and energy melee weapons are physical-reach
+      // weapons; their "energy" flavor is that the cutting edge is a force-
+      // field projection, not a beam. Set attackType to "melee" so
+      // determineRangeBand() returns melee (no range bands, no "unlimited"
+      // default) and the PS melee to-hit / damage bonuses apply.
       name: "Vibro Dagger",
       weaponClass: 4,
       damage: "10",
-      attackType: "energy",
+      attackType: "melee",
       description: htmlParagraphs("Force-field dagger. Cuts anything except another force field.")
     }),
     weaponSource({
       name: "Vibro Blade",
       weaponClass: 5,
       damage: "25",
-      attackType: "energy",
+      attackType: "melee",
       description: htmlParagraphs("Force-field sword. Cuts anything except another force field.")
     }),
     weaponSource({
       name: "Energy Mace",
       weaponClass: 5,
       damage: "30",
-      attackType: "energy",
+      attackType: "melee",
       description: htmlParagraphs("Energized club. Cannot damage targets protected by energy shields.")
     }),
     weaponSource({
       name: "Stun Whip",
       weaponClass: 6,
       damage: "0",
-      attackType: "energy",
+      attackType: "melee",
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Three-meter energized whip that inflicts stun.")
     }),
@@ -774,110 +794,139 @@ export function equipmentPackSources() {
       weight: 1,
       description: htmlParagraphs("Unusual but often practical scavenger tools.")
     }),
+    // ---- AOE ordnance --------------------------------------------------
+    // Gap #2: every explosive / gas / missile gets a system.area descriptor so
+    // Phase H's useAoeOrdnance flow activates on use. `persistentRounds: 0` =
+    // instantaneous blast (template cleans up after resolution); > 0 = cloud
+    // that lingers that many combat rounds. `saveType` routes save cards
+    // through the system's save pipeline; `onFailStatus` applies a timed
+    // condition on a failed save; `halfDamageOnSave` is the classic save-for-
+    // half rule on explosives.
     gearSource({
       name: "Tear Gas Grenade",
       tech: "iii",
-      description: htmlParagraphs("10 meter radius cloud for 1d6 minutes. Each melee turn in the gas lowers armor class by 1 and adds 2 to attack rolls against the victim.")
+      description: htmlParagraphs("10 meter radius cloud for 1d6 minutes. Each melee turn in the gas lowers armor class by 1 and adds 2 to attack rolls against the victim."),
+      area: { shape: "circle", radius: 10, persistentRounds: 10, saveType: "poison", onFailStatus: "blinded" }
     }),
     gearSource({
       name: "Stun Grenade",
       tech: "iii",
-      description: htmlParagraphs("10 meter radius cloud for 1d4 minutes. Each victim saves vs poison against a random intensity or is stunned for 20 minutes less Constitution.")
+      description: htmlParagraphs("10 meter radius cloud for 1d4 minutes. Each victim saves vs poison against a random intensity or is stunned for 20 minutes less Constitution."),
+      area: { shape: "circle", radius: 10, persistentRounds: 6, saveType: "poison", onFailStatus: "unconscious" }
     }),
     gearSource({
       name: "Poison Gas Grenade",
       tech: "iii",
-      description: htmlParagraphs("10 meter radius cloud for 1d6 minutes. Victims save vs poison each melee turn spent in the cloud.")
+      description: htmlParagraphs("10 meter radius cloud for 1d6 minutes. Victims save vs poison each melee turn spent in the cloud."),
+      area: { shape: "circle", radius: 10, persistentRounds: 10, saveType: "poison" }
     }),
     gearSource({
       name: "Fragmentation Grenade",
       tech: "iii",
-      description: htmlParagraphs("10 meter blast radius. Deals 5d6 damage to every target in the area.")
+      description: htmlParagraphs("10 meter blast radius. Deals 5d6 damage to every target in the area."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Chemical Explosive Grenade",
       tech: "iii",
-      description: htmlParagraphs("10 meter blast radius. Deals 10d6 damage to every target in the area.")
+      description: htmlParagraphs("10 meter blast radius. Deals 10d6 damage to every target in the area."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Micro Missile",
       tech: "iv",
-      description: htmlParagraphs("500 meter effective range, 10 meter blast radius, 7d6 damage to each target in the area.")
+      description: htmlParagraphs("500 meter effective range, 10 meter blast radius, 7d6 damage to each target in the area."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Mini Missile",
       tech: "iv",
-      description: htmlParagraphs("1 kilometer effective range, 20 meter blast radius, 50 damage to each target in the area.")
+      description: htmlParagraphs("1 kilometer effective range, 20 meter blast radius, 50 damage to each target in the area."),
+      area: { shape: "circle", radius: 20, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Mutation Bomb",
       tech: "v",
-      description: htmlParagraphs("30 meter radius. Living creatures without force-field protection either gain a random mutational defect (60%) or suffer intensity-12 radiation (40%).")
+      description: htmlParagraphs("30 meter radius. Living creatures without force-field protection either gain a random mutational defect (60%) or suffer intensity-12 radiation (40%)."),
+      area: { shape: "circle", radius: 30, saveType: "radiation" }
     }),
     gearSource({
       name: "Energy Grenade",
       tech: "iv",
-      description: htmlParagraphs("10 meter blast radius. Deals 12d6 damage, but only half damage against armor classes 8 and 9.")
+      description: htmlParagraphs("10 meter blast radius. Deals 12d6 damage, but only half damage against armor classes 8 and 9."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Photon Grenade",
       tech: "v",
-      description: htmlParagraphs("10 meter blast radius. Instantly kills creatures not protected by force fields or energy shields.")
+      description: htmlParagraphs("10 meter blast radius. Instantly kills creatures not protected by force fields or energy shields."),
+      area: { shape: "circle", radius: 10 }
     }),
     gearSource({
       name: "Torc Grenade",
       tech: "v",
-      description: htmlParagraphs("15 meter blast radius. Disintegrates all matter not protected by force fields or energy shields.")
+      description: htmlParagraphs("15 meter blast radius. Disintegrates all matter not protected by force fields or energy shields."),
+      area: { shape: "circle", radius: 15 }
     }),
     gearSource({
       name: "Small Damage Pack",
       tech: "iv",
-      description: htmlParagraphs("Plastic explosive pack with a 10 meter blast radius, dealing 6d6 damage.")
+      description: htmlParagraphs("Plastic explosive pack with a 10 meter blast radius, dealing 6d6 damage."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Concentrated Damage Pack",
       tech: "iv",
-      description: htmlParagraphs("Large shaped explosive charge. Small pattern: 30 meter blast radius for 10d6 damage.")
+      description: htmlParagraphs("Large shaped explosive charge. Small pattern: 30 meter blast radius for 10d6 damage."),
+      area: { shape: "circle", radius: 30, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Fission Bomb",
       tech: "vi",
-      description: htmlParagraphs("Tactical nuclear weapon. Clean-bomb statistics are automated; dirty-bomb fallout remains referee-directed.")
+      description: htmlParagraphs("Tactical nuclear weapon. Clean-bomb statistics are automated; dirty-bomb fallout remains referee-directed."),
+      area: { shape: "circle", radius: 100, halfDamageOnSave: true, saveType: "radiation" }
     }),
     gearSource({
       name: "Fusion Bomb",
       tech: "vi",
-      description: htmlParagraphs("50 meter blast radius. Deals 75 damage to every target in the area.")
+      description: htmlParagraphs("50 meter blast radius. Deals 75 damage to every target in the area."),
+      area: { shape: "circle", radius: 50, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Concussion Bomb",
       tech: "vi",
-      description: htmlParagraphs("Mounted tactical gas bomb. Fills a 50 meter radius with stunning gas for 2d6 minutes.", "Victims save vs poison intensity 15 each melee turn spent in the cloud or become stunned.")
+      description: htmlParagraphs("Mounted tactical gas bomb. Fills a 50 meter radius with stunning gas for 2d6 minutes.", "Victims save vs poison intensity 15 each melee turn spent in the cloud or become stunned."),
+      area: { shape: "circle", radius: 50, persistentRounds: 12, saveType: "poison", onFailStatus: "unconscious" }
     }),
     gearSource({
       name: "Matter Bomb",
       tech: "vi",
-      description: htmlParagraphs("10 meter blast radius. Deals 75 damage to every target in the area.")
+      description: htmlParagraphs("10 meter blast radius. Deals 75 damage to every target in the area."),
+      area: { shape: "circle", radius: 10, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Negation Bomb",
       tech: "vi",
-      description: htmlParagraphs("30 meter blast radius. Drains power sources and collapses energy protection.")
+      description: htmlParagraphs("30 meter blast radius. Drains power sources and collapses energy protection."),
+      area: { shape: "circle", radius: 30 }
     }),
     gearSource({
       name: "Neutron Bomb",
       tech: "vi",
-      description: htmlParagraphs("500 meter blast radius. Inflicts 100 damage to force fields and kills most unshielded living targets.")
+      description: htmlParagraphs("500 meter blast radius. Inflicts 100 damage to force fields and kills most unshielded living targets."),
+      area: { shape: "circle", radius: 500, halfDamageOnSave: true, saveType: "radiation" }
     }),
     gearSource({
       name: "Trek Bomb",
       tech: "vi",
-      description: htmlParagraphs("30 meter blast radius. Disintegrates unshielded matter and inflicts 30 damage to force fields.")
+      description: htmlParagraphs("30 meter blast radius. Disintegrates unshielded matter and inflicts 30 damage to force fields."),
+      area: { shape: "circle", radius: 30 }
     }),
     gearSource({
       name: "Surface Missile",
       tech: "vi",
-      description: htmlParagraphs("Computer-guided tactical missile. 100 meter blast radius, 150 damage to each target.")
+      description: htmlParagraphs("Computer-guided tactical missile. 100 meter blast radius, 150 damage to each target."),
+      area: { shape: "circle", radius: 100, halfDamageOnSave: true }
     }),
     gearSource({
       name: "Neutron Missile",

@@ -1,21 +1,3 @@
-2026/04/18-18:10:51.313260 172183000 Recovering log #20
-2026/04/18-18:10:51.313575 172183000 Delete type=3 #19
-2026/04/18-18:10:51.313632 172183000 Delete type=0 #20
-2026/04/18-18:10:51.314359 173a33000 Level-0 table #24: started
-2026/04/18-18:10:51.314371 173a33000 Level-0 table #24: 0 bytes OK
-2026/04/18-18:10:51.314442 173a33000 Delete type=0 #22
-2026/04/18-18:10:51.314476 173a33000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1
-2026/04/18-18:10:51.314480 173a33000 Compacting 1@0 + 0@1 files
-2026/04/18-18:10:51.314850 173a33000 Generated table #25@0: 51 keys, 32023 bytes
-2026/04/18-18:10:51.314860 173a33000 Compacted 1@0 + 0@1 files => 32023 bytes
-2026/04/18-18:10:51.314897 173a33000 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/04/18-18:10:51.314921 173a33000 Delete type=2 #15
-2026/04/18-18:10:51.315138 173a33000 Manual compaction at level-0 from '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
-2026/04/18-18:10:51.315152 173a33000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1
-2026/04/18-18:10:51.315157 173a33000 Compacting 1@1 + 1@2 files
-2026/04/18-18:10:51.315499 173a33000 Generated table #26@1: 51 keys, 32023 bytes
-2026/04/18-18:10:51.315504 173a33000 Compacted 1@1 + 1@2 files => 32023 bytes
-2026/04/18-18:10:51.315543 173a33000 compacted to: files[ 0 0 1 0 0 0 0 ]
-2026/04/18-18:10:51.315568 173a33000 Delete type=2 #5
-2026/04/18-18:10:51.315745 173a33000 Delete type=2 #25
-2026/04/18-18:10:51.315831 173a33000 Manual compaction at level-1 from '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-18:15:15.387940 174af3000 Recovering log #29
+2026/04/18-18:15:15.388203 174af3000 Delete type=0 #29
+2026/04/18-18:15:15.388227 174af3000 Delete type=3 #27
