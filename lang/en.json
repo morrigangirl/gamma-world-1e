@@ -559,6 +559,9 @@
       "PowerSource": "Artifact Power",
       "Charges": "Charges",
       "Malfunction": "Malfunction",
+      "ClearMalfunction": "Clear",
+      "ClearMalfunctionDone": "Malfunction cleared — the artifact can be used again.",
+      "ClearMalfunctionGmOnly": "Only the GM can clear an artifact malfunction.",
       "NotArtifact": "Not an artifact.",
       "Session": {
         "Title": "Artifact Identification",

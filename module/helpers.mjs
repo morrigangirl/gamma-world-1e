@@ -47,6 +47,9 @@ export function registerHelpers() {
   /** Boolean OR. */
   Handlebars.registerHelper("gwOr", (a, b) => !!(a || b));
 
+  /** Boolean AND — treats empty strings / 0 as falsy like the rest of JS. */
+  Handlebars.registerHelper("gwAnd", (a, b) => !!(a && b));
+
   /** Safe length with 0 default. */
   Handlebars.registerHelper("gwLen", (arr) => arr?.length ?? 0);
 

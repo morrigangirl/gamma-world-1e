@@ -560,7 +560,16 @@
       </div>
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Artifact.Malfunction"}}</label>
-        <input type="text" name="system.artifact.malfunction" value="{{system.artifact.malfunction}}" />
+        <span class="gw-artifact-malfunction-row">
+          <input type="text" name="system.artifact.malfunction" value="{{system.artifact.malfunction}}" />
+          {{#if (gwAnd isGM system.artifact.malfunction)}}
+            <button type="button" data-action="clearMalfunction"
+                    title="Clear the latched malfunction so the artifact can be used again (GM only).">
+              <i class="fa-solid fa-wrench"></i>
+              Clear
+            </button>
+          {{/if}}
+        </span>
       </div>
       {{#if artifactSession}}
         <div class="form-group">

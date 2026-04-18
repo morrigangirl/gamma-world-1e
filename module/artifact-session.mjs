@@ -705,6 +705,18 @@ async function reassignArtifactOperatorLocal(actor, item, { operatorUserId } = {
 
 async function resetArtifactSessionLocal(item) {
   await clearSessionFlag(item);
+  // Clear any latched short-circuit / explosion mishap text on reset.
+  // Without this, resolveArtifactOperation keeps refusing to use the
+  // item forever because it checks `artifact.malfunction` before any
+  // function roll — which is the RAW intent for a broken device, but
+  // makes the "Reset" action useless as a recovery path.
+  if (item?.system?.artifact?.malfunction) {
+    try {
+      await item.update({ "system.artifact.malfunction": "" }, { gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`gamma-world-1e | reset could not clear malfunction on ${item?.uuid}`, error);
+    }
+  }
   clearArtifactSessionSnapshot(item.uuid);
   broadcastArtifactClose(item.uuid);
   return true;

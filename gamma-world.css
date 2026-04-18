@@ -2162,3 +2162,19 @@ body.system-gamma-world-1e,
 .gw-item-form__panel.active {
   display: block;
 }
+
+.gw-artifact-malfunction-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.gw-artifact-malfunction-row input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gw-artifact-malfunction-row button {
+  flex: 0 0 auto;
+}

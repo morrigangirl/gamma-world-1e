@@ -23,7 +23,10 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     // is explicit so ApplicationV2's resize handle activates.
     position: { width: 720, height: 640 },
     window: { resizable: true },
-    form: { submitOnChange: true, closeOnSubmit: false }
+    form: { submitOnChange: true, closeOnSubmit: false },
+    actions: {
+      clearMalfunction: GammaWorldItemSheet.#onClearMalfunction
+    }
   };
 
   static PARTS = {
@@ -86,5 +89,34 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
   _onChangeForm(formConfig, event) {
     if (isRichEditorChange(event)) return;
     return super._onChangeForm?.(formConfig, event);
+  }
+
+  /**
+   * GM-only "Clear Malfunction" action — unlatches the `system.artifact
+   * .malfunction` field so a short-circuited / exploded artifact can be
+   * used again. resolveArtifactOperation refuses any artifact with a
+   * non-empty malfunction field before it even rolls, so a single
+   * mishap bricks the item forever without a way to recover. This button
+   * is the recovery path (for GM fiat / repair narrative beats).
+   */
+  static async #onClearMalfunction(event, button) {
+    event?.preventDefault?.();
+    if (!game.user?.isGM) {
+      ui.notifications?.warn(game.i18n?.localize?.("GAMMA_WORLD.Artifact.ClearMalfunctionGmOnly")
+        ?? "Only the GM can clear a malfunction.");
+      return;
+    }
+    const item = this.document;
+    if (!item) return;
+    const current = item.system?.artifact?.malfunction ?? "";
+    if (!current) return;
+    try {
+      await item.update({ "system.artifact.malfunction": "" }, { gammaWorldSync: true });
+      ui.notifications?.info(game.i18n?.localize?.("GAMMA_WORLD.Artifact.ClearMalfunctionDone")
+        ?? `Cleared malfunction on ${item.name}.`);
+    } catch (error) {
+      console.warn(`gamma-world-1e | clear malfunction failed for ${item?.uuid}`, error);
+      ui.notifications?.error(error?.message ?? String(error));
+    }
   }
 }
