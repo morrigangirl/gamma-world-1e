@@ -723,6 +723,53 @@
       {{/if}}
     </section>
 
+    <section class="gamma-world__panel gw-damage-traits">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.TraitsDamage.SectionLabel"}}</h3>
+      </header>
+      <div class="gw-damage-traits__grid">
+        <label class="gw-damage-traits__field">
+          <span class="gw-damage-traits__field-label">{{localize "GAMMA_WORLD.TraitsDamage.ImmunityLabel"}}</span>
+          <multi-select name="system.traits.damageImmunity">
+            {{#each damageTraitOptions.damageImmunity}}
+              <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </multi-select>
+        </label>
+        <label class="gw-damage-traits__field">
+          <span class="gw-damage-traits__field-label">{{localize "GAMMA_WORLD.TraitsDamage.ResistanceLabel"}}</span>
+          <multi-select name="system.traits.damageResistance">
+            {{#each damageTraitOptions.damageResistance}}
+              <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </multi-select>
+        </label>
+        <label class="gw-damage-traits__field">
+          <span class="gw-damage-traits__field-label">{{localize "GAMMA_WORLD.TraitsDamage.VulnerabilityLabel"}}</span>
+          <multi-select name="system.traits.damageVulnerability">
+            {{#each damageTraitOptions.damageVulnerability}}
+              <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </multi-select>
+        </label>
+      </div>
+      <p class="gw-damage-traits__hint">{{localize "GAMMA_WORLD.TraitsDamage.Hint"}}</p>
+      {{#if aggregatedDamageTraits.immunity.length}}
+        <p class="gw-damage-traits__effective">
+          <strong>Effective (with armor):</strong>
+          immune to {{gwJoin aggregatedDamageTraits.immunity ", "}}{{#if aggregatedDamageTraits.resistance.length}};
+          resistant to {{gwJoin aggregatedDamageTraits.resistance ", "}}{{/if}}{{#if aggregatedDamageTraits.vulnerability.length}};
+          vulnerable to {{gwJoin aggregatedDamageTraits.vulnerability ", "}}{{/if}}.
+        </p>
+      {{else if (gwOr aggregatedDamageTraits.resistance.length aggregatedDamageTraits.vulnerability.length)}}
+        <p class="gw-damage-traits__effective">
+          <strong>Effective (with armor):</strong>
+          {{#if aggregatedDamageTraits.resistance.length}}resistant to {{gwJoin aggregatedDamageTraits.resistance ", "}}{{/if}}{{#if aggregatedDamageTraits.vulnerability.length}}{{#if aggregatedDamageTraits.resistance.length}};
+          {{/if}}vulnerable to {{gwJoin aggregatedDamageTraits.vulnerability ", "}}{{/if}}.
+        </p>
+      {{/if}}
+    </section>
+
     <div class="gamma-world__bio-row">
       <label>{{localize "GAMMA_WORLD.Resource.AnimalForm"}}
         <input type="text" name="system.details.animalForm" value="{{system.details.animalForm}}" />

@@ -2,7 +2,7 @@
  * GammaWorldCharacterSheet — ApplicationV2 sheet for Actor.type === "character".
  */
 
-import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES } from "../config.mjs";
+import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from "../config.mjs";
 import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
 import { artifactNeedsPowerManagement, artifactPowerSummary } from "../artifact-power.mjs";
@@ -456,6 +456,34 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       level: fatigueLevel,
       label: fatigueLabel,
       title: `Fatigue round ${fatigueRound} — ${fatigueLabel}`
+    };
+
+    // Phase 5 — damage-trait multi-select options for the Bio tab. Built
+    // from the canonical DAMAGE_TYPES vocabulary; each entry carries a
+    // `selected` flag so the template's <option> tags render correctly.
+    const localizeDamageType = (key) => {
+      const i18n = game.i18n?.localize?.(DAMAGE_TYPE_LABELS[key] ?? "");
+      if (i18n && i18n !== DAMAGE_TYPE_LABELS[key]) return i18n;
+      return key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    };
+    const buildDamageTraitOptions = (selected) => {
+      const set = new Set(selected ?? []);
+      return DAMAGE_TYPES.map((value) => ({
+        value,
+        label: localizeDamageType(value),
+        selected: set.has(value)
+      }));
+    };
+    const traits = system?.traits ?? {};
+    context.damageTraitOptions = {
+      damageResistance:    buildDamageTraitOptions(traits.damageResistance),
+      damageImmunity:      buildDamageTraitOptions(traits.damageImmunity),
+      damageVulnerability: buildDamageTraitOptions(traits.damageVulnerability)
+    };
+    context.aggregatedDamageTraits = {
+      immunity:      [...(actor.gw?.damageImmunity      ?? [])],
+      resistance:    [...(actor.gw?.damageResistance    ?? [])],
+      vulnerability: [...(actor.gw?.damageVulnerability ?? [])]
     };
 
     // Group embedded items by type.
