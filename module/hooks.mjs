@@ -11,6 +11,7 @@ import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate }
 import { resetCombatFatigue, syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
 import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
 import { renderUndoButton, requestUndo } from "./undo.mjs";
+import { fillVariant, mutationHasVariant, mutationVariant } from "./mutation-rules.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
@@ -33,6 +34,7 @@ export function registerHooks() {
   Hooks.on("renderChatLog", onRenderChatLog);
   Hooks.on("renderSidebarTab", onRenderSidebarTab);
   Hooks.on("createActor", onActorCreate);
+  Hooks.on("preCreateItem", onPreCreateMutationRollVariant);
   Hooks.on("createItem", onMutationRelevantItemChange);
   Hooks.on("updateItem", onMutationRelevantItemChange);
   Hooks.on("deleteItem", onMutationRelevantItemDelete);
@@ -40,6 +42,46 @@ export function registerHooks() {
   Hooks.on("updateCombat", tickCombatMutationState);
   Hooks.on("updateCombat", tickCombatActorState);
   Hooks.on("deleteCombat", onCombatDelete);
+}
+
+/**
+ * Roll a random variant for mutations that have a d6-style pick-one at
+ * acquisition (Absorption, Body Structure Change, Complete Mental Block,
+ * Fear Impulse, Genius Capability, Physical Reflection, Skin Structure
+ * Change). Fires on every item create, but only acts when:
+ *   - the item is a mutation owned by an Actor,
+ *   - the variant slot is empty (so pre-rolled items keep their choice), and
+ *   - the mutation name is one we know how to roll for.
+ *
+ * updateSource() mutates the in-flight document before the DB write, so
+ * the rolled variant ships with the same create and there's no flash of
+ * an empty placeholder on the sheet.
+ */
+function onPreCreateMutationRollVariant(item, data, _options, _userId) {
+  if (!item || item.type !== "mutation") return;
+  if (!(item.parent instanceof Actor)) return;
+  const existingVariant = item.system?.reference?.variant ?? data?.system?.reference?.variant ?? "";
+  if (existingVariant) return;
+  const name = item.name ?? data?.name ?? "";
+  if (!mutationHasVariant(name)) return;
+
+  const rolled = mutationVariant(name);
+  if (!rolled) return;
+
+  const updates = { "system.reference.variant": rolled };
+  const currentSummary = item.system?.summary ?? data?.system?.summary ?? "";
+  if (typeof currentSummary === "string" && currentSummary.includes("_")) {
+    updates["system.summary"] = fillVariant(currentSummary, rolled);
+  }
+  try {
+    item.updateSource(updates);
+    // ui.notifications isn't available during pre-create on some paths;
+    // log instead so the GM can see which variant was drawn in the
+    // browser console and the roll is auditable.
+    console.info(`gamma-world-1e | rolled "${rolled}" for ${name} on ${item.parent?.name ?? "actor"}`);
+  } catch (error) {
+    console.warn(`gamma-world-1e | preCreateItem variant roll failed for ${name}`, error);
+  }
 }
 
 async function onCombatDelete(combat) {

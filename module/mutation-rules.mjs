@@ -43,28 +43,53 @@ function fillVariant(summary, variant) {
   return String(summary ?? "").replace(/_+/g, variant);
 }
 
+/**
+ * Map of mutation name → the list of random variant outcomes. A mutation
+ * in this table has one of its outcomes rolled once at the moment the
+ * mutation is added to an actor (chargen, hazard award, or compendium
+ * drag-drop). The roll happens against `rng()` using the same index-
+ * picking logic as `randomChoice`.
+ *
+ * Special-case mutations whose outcome isn't a flat uniform pick
+ * (Genius Capability: 2/6/2/6/2/6 weighted table) are handled inline
+ * below. Everything else goes through this table so the drop hook can
+ * decide whether to roll by simple membership lookup.
+ */
+const MUTATION_VARIANT_POOLS = Object.freeze({
+  "Absorption":              ["cold", "heat", "light", "paralysis rays", "radiation", "mental blasts"],
+  "Body Structure Change":   ["brittle bones", "hairless body", "single central eye"],
+  "Complete Mental Block":   ["robotic beings", "technology", "plants", "animals"],
+  "Fear Impulse":            ["fire", "darkness", "water", "robots", "heights"],
+  "Physical Reflection":     ["heat", "cold", "light", "electricity", "laser fire", "radiation"],
+  "Skin Structure Change":   ["+1 damage taken when hurt", "1 damage per turn in water", "1d3 damage per turn in bright light"]
+});
+
 function mutationVariant(name, rng = Math.random) {
-  switch (name) {
-    case "Absorption":
-      return randomChoice(["cold", "heat", "light", "paralysis rays", "radiation", "mental blasts"], rng);
-    case "Body Structure Change":
-      return randomChoice(["brittle bones", "hairless body", "single central eye"], rng);
-    case "Complete Mental Block":
-      return randomChoice(["robotic beings", "technology", "plants", "animals"], rng);
-    case "Fear Impulse":
-      return randomChoice(["fire", "darkness", "water", "robots", "heights"], rng);
-    case "Genius Capability": {
-      const roll = Math.floor(rng() * 6) + 1;
-      if (roll <= 2) return "military";
-      if (roll <= 4) return "scientific";
-      return "economic";
-    }
-    case "Physical Reflection":
-      return randomChoice(["heat", "cold", "light", "electricity", "laser fire", "radiation"], rng);
-    default:
-      return "";
+  const pool = MUTATION_VARIANT_POOLS[name];
+  if (pool) return randomChoice(pool, rng);
+  // Genius Capability — weighted d6 table per RAW p.12.
+  if (name === "Genius Capability") {
+    const roll = Math.floor(rng() * 6) + 1;
+    if (roll <= 2) return "military";
+    if (roll <= 4) return "scientific";
+    return "economic";
   }
+  return "";
 }
+
+/**
+ * Whether the named mutation has a random variant that should be rolled
+ * when the mutation is added to an actor. Used by the drop-hook so we
+ * only re-roll for mutations that genuinely have a variant slot — drag-
+ * dropping a Heightened Brain Talent (no variant) doesn't trigger.
+ */
+export function mutationHasVariant(name) {
+  return !!MUTATION_VARIANT_POOLS[name] || name === "Genius Capability";
+}
+
+/** Exposed for the drop-hook so it can write the rolled variant + patch
+ *  the summary placeholder in a single updateSource call. */
+export { mutationVariant, fillVariant, MUTATION_VARIANT_POOLS };
 
 export const MUTATION_RULES = {
   "Absorption": {
@@ -512,9 +537,15 @@ export function describeMutation(item) {
   return fillVariant(summary, item?.system?.reference?.variant);
 }
 
-export function buildMutationItemSource(definition, { rng = Math.random } = {}) {
+export function buildMutationItemSource(definition, { rng = Math.random, rollVariant = true } = {}) {
   const rule = getMutationRule(definition.name);
-  const variant = mutationVariant(definition.name, rng);
+  // rollVariant = false: leave the variant empty and keep the summary
+  // placeholder as-is. Used by compendium pack builds so that dragging
+  // e.g. Absorption onto a character triggers a fresh d6 roll rather
+  // than always defaulting to whatever happened to roll at pack build
+  // time. The drop-hook (see module/hooks.mjs mutation-variant wiring)
+  // is responsible for rolling the variant on add.
+  const variant = rollVariant ? mutationVariant(definition.name, rng) : "";
   const summary = fillVariant(definition.summary, variant);
   const notes = variant ? `Variant: ${variant}.` : "";
 

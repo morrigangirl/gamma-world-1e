@@ -1081,7 +1081,7 @@ export const MUTATION_DEFINITIONS = [
       humanoid: [75, 76],
       "mutated-animal": [72, 72]
     },
-    summary: "Suffer +1DMG when hurt, or 1DMG/turn in water, or 1d3DMG in bright light.",
+    summary: "Skin defect causes _______.",
     page: 10
   },
   {

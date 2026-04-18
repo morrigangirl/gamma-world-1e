@@ -399,9 +399,14 @@ function encounterResultDescription(entry) {
 }
 
 export function mutationPackSources() {
+  // rollVariant: false — keep variant slots empty in the compendium so
+  // that dragging a random-variant mutation (Absorption, Fear Impulse,
+  // Skin Structure Change, etc.) onto an actor triggers a fresh roll
+  // via the preCreateItem hook rather than always applying the value
+  // that happened to roll at pack-build time.
   return [...MUTATION_DEFINITIONS]
     .sort((a, b) => (a.subtype.localeCompare(b.subtype) || a.code - b.code || a.name.localeCompare(b.name)))
-    .map((entry) => buildMutationItemSource(entry));
+    .map((entry) => buildMutationItemSource(entry, { rollVariant: false }));
 }
 
 export function equipmentPackSources() {

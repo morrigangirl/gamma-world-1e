@@ -784,9 +784,14 @@ import {
 } from "../module/resource-consumption.mjs";
 import {
   baseCombatBonuses,
+  buildMutationItemSource,
   combatBonusFromDexterity,
   damageBonusFromStrength,
-  hitBonusFromStrength
+  fillVariant,
+  hitBonusFromStrength,
+  MUTATION_VARIANT_POOLS,
+  mutationHasVariant,
+  mutationVariant
 } from "../module/mutation-rules.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
@@ -1071,6 +1076,82 @@ test("buildUndoSnapshot wraps actor snapshots and is JSON-safe", () => {
   const withNulls = buildUndoSnapshot({ kind: "x", actors: [null, a1, undefined] });
   assert.equal(withNulls.actorStates.length, 1);
   assert.equal(withNulls.actorStates[0].uuid, "Actor.a");
+});
+
+test("Random-variant mutation table and helpers", () => {
+  // The table covers every mutation whose outcome is rolled once at
+  // acquisition (pick-one at drop). Adding a mutation here without
+  // adding a summary placeholder is fine — the notes line carries the
+  // variant string. Missing from the table = no roll on drop, so we
+  // keep the set tight and explicit.
+  assert.deepEqual(Object.keys(MUTATION_VARIANT_POOLS).sort(), [
+    "Absorption",
+    "Body Structure Change",
+    "Complete Mental Block",
+    "Fear Impulse",
+    "Physical Reflection",
+    "Skin Structure Change"
+  ]);
+
+  // Absorption RAW has six damage types.
+  assert.equal(MUTATION_VARIANT_POOLS.Absorption.length, 6);
+  assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes("paralysis rays"));
+
+  // Genius Capability is table-less (weighted d6), so it's NOT in the
+  // pools map — but mutationHasVariant should still return true so the
+  // drop hook rolls it.
+  assert.equal(MUTATION_VARIANT_POOLS["Genius Capability"], undefined);
+  assert.equal(mutationHasVariant("Genius Capability"), true);
+
+  // Plain mutations (no variant slot) must return false so the drop
+  // hook doesn't touch them.
+  assert.equal(mutationHasVariant("Heightened Brain Talent"), false);
+  assert.equal(mutationHasVariant("Cryokinesis"), false);
+  assert.equal(mutationHasVariant(""), false);
+
+  // Seeded rng — reproducible roll from each pool.
+  let i = 0;
+  const stubRng = () => [0.0, 0.2, 0.45, 0.7, 0.9, 0.99][(i++) % 6];
+  const rolled = mutationVariant("Absorption", stubRng);
+  assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes(rolled),
+    `Absorption roll "${rolled}" should be in the RAW pool`);
+
+  // Weighted Genius Capability — 0..1/3 = military, 1/3..2/3 = scientific,
+  // 2/3..1 = economic.
+  assert.equal(mutationVariant("Genius Capability", () => 0.01), "military");
+  assert.equal(mutationVariant("Genius Capability", () => 0.5),  "scientific");
+  assert.equal(mutationVariant("Genius Capability", () => 0.99), "economic");
+
+  // fillVariant replaces underscore runs with the variant string.
+  assert.equal(fillVariant("Unable to see or approach _______.", "robots"),
+               "Unable to see or approach robots.");
+  assert.equal(fillVariant("No placeholder here.", "ignored"), "No placeholder here.");
+  assert.equal(fillVariant("leading _____.", ""), "leading _____.");
+});
+
+test("buildMutationItemSource honors rollVariant=false (compendium build)", () => {
+  // Compendium builds pass rollVariant:false so the pack doesn't bake a
+  // pre-rolled outcome into every seeded mutation. Empty variant slots
+  // get re-rolled on drag-drop by the preCreateItem hook.
+  const def = {
+    code: 1,
+    name: "Absorption",
+    subtype: "mental",
+    category: "beneficial",
+    summary: "Withstand additional damage for _______ up to current HP.",
+    page: 11
+  };
+
+  const rolled = buildMutationItemSource(def, { rng: () => 0, rollVariant: true });
+  assert.ok(rolled.system.reference.variant, "rollVariant:true must produce a variant");
+  assert.ok(!rolled.system.summary.includes("_______"),
+    "summary placeholder should have been filled");
+
+  const baked = buildMutationItemSource(def, { rollVariant: false });
+  assert.equal(baked.system.reference.variant, "",
+    "rollVariant:false must leave the variant empty");
+  assert.ok(baked.system.summary.includes("_______"),
+    "rollVariant:false must preserve the summary placeholder");
 });
 
 test("Attribute-to-combat bonus bands match the existing 6-15 neutral range", () => {
