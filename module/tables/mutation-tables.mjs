@@ -14,11 +14,15 @@ import {
 const MAX_REROLLS = 100;
 
 function normalizeCharacterType(type) {
-  return type === "mutated-animal" ? "mutated-animal" : "humanoid";
+  if (type === "mutated-animal") return "mutated-animal";
+  if (type === "mutated-plant") return "mutated-plant";
+  return "humanoid";
 }
 
 function normalizeSubtype(subtype) {
-  return subtype === "mental" ? "mental" : "physical";
+  if (subtype === "mental") return "mental";
+  if (subtype === "plant") return "plant";
+  return "physical";
 }
 
 function normalizePercentile(percentile, rng = Math.random) {

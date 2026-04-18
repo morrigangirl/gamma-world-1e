@@ -1148,6 +1148,8 @@ const PROFILE_DEFINITIONS = {
   "Vibro Blade": weaponFamilies.vibroBlade,
   "Energy Mace": weaponFamilies.energyMace,
   "Stun Whip": weaponFamilies.stunWhip,
+  "Paralysis Rod": weaponFamilies.stunWhip,
+  "Force Field Generator": weaponFamilies.vibroDagger,
   "Powered Battle Fist": weaponFamilies.poweredFist,
   "Powered Attack Fist": weaponFamilies.poweredFist,
   "Powered Assault Fist": weaponFamilies.poweredFist,

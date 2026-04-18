@@ -18,6 +18,10 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       weaponClass: int({ initial: 1, min: 1, max: 16 }),
+      category: str({ initial: "primitive",
+        choices: ["primitive", "modern", "artifact", "natural"] }),
+      /** Ammo type key (see AMMO_TYPES in config.mjs). Empty = no ammo required. */
+      ammoType: str({ initial: "" }),
 
       damage: new SchemaField({
         formula: str({ initial: "1d6" }),
@@ -35,6 +39,12 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
       rof: int({ initial: 1, min: 0 }),
 
+      /**
+       * Legacy inline ammo counter. Preserved for one version cycle so existing
+       * content loads without validation errors. New content uses `ammoType`
+       * plus a matching gear item with `system.ammo.type` / `system.ammo.rounds`.
+       * A migration drains this into a gear item on each actor.
+       */
       ammo: new SchemaField({
         current:  int({ initial: 0, min: 0 }),
         max:      int({ initial: 0, min: 0 }),

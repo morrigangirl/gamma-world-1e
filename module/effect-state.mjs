@@ -1,6 +1,5 @@
 import { SYSTEM_ID } from "./config.mjs";
 import { syncBarrierEffectsForActor, syncTemporaryEffectsForActor } from "./animations.mjs";
-import { resolvePoison } from "./tables/resistance-tables.mjs";
 import { charismaReactionAdjustment } from "./tables/encounter-tables.mjs";
 import { runAsGM } from "./gm-executor.mjs";
 
@@ -253,6 +252,7 @@ export function applyTemporaryDerivedModifiers(actor, derived) {
     const psShift = Math.round(Number(attributeChanges.ps) || 0);
     const msShift = Math.round(Number(attributeChanges.ms) || 0);
     const chShift = Math.round(Number(attributeChanges.ch) || 0);
+    const cnShift = Math.round(Number(attributeChanges.cn) || 0);
 
     if (dxShift) {
       derived.toHitBonus += combatBonusFromDexterity(baseDx + dxShift) - combatBonusFromDexterity(baseDx);
@@ -266,6 +266,10 @@ export function applyTemporaryDerivedModifiers(actor, derived) {
     }
     if (chShift) {
       derived.reactionAdjustment += charismaReactionAdjustment(baseCh + chShift) - charismaReactionAdjustment(baseCh);
+    }
+    if (cnShift) {
+      derived.radiationResistance += cnShift;
+      derived.poisonResistance += cnShift;
     }
 
     if (changes.cannotBeSurprised) derived.cannotBeSurprised = true;
@@ -317,6 +321,7 @@ function hasArmorHazardProtection(actor, type) {
 
 export function actorHasHazardProtection(actor, type) {
   const state = getActorState(actor);
+  if (actor?.gw?.hazardProtection?.[type]) return true;
   if (hasArmorHazardProtection(actor, type)) return true;
   return Object.values(state.barriers).some((barrier) => {
     if (type === "black-ray") return !!barrier.blackRayImmune;
@@ -509,16 +514,20 @@ export async function applyIncomingDamage(actor, amount, {
 
 async function tickStunCloud(actor, effect) {
   const intensity = await new Roll(effect.tickFormula || "3d6").evaluate();
-  const result = resolvePoison(actor.system.resources.poisonResistance, intensity.total);
-  const lethal = result.outcome === "D";
-
-  await ChatMessage.create({
+  await intensity.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
-    content: `<div class="gw-chat-card"><h3>${effect.label}</h3><p>${actor.name} resists intensity ${intensity.total}: ${lethal ? "stunned" : "no incapacitation"}.</p></div>`,
-    rolls: [intensity]
+    flavor: `${effect.label} intensity`
   });
 
-  if (lethal) {
+  const { requestSaveResolution } = await import("./dice.mjs");
+  const save = await requestSaveResolution(actor, "poison", {
+    sourceName: effect.label,
+    intensity: intensity.total,
+    inputLocked: true
+  });
+  if (save?.status !== "resolved") return;
+
+  if (save.code === "D") {
     const rounds = Math.max(1, (20 - Number(actor.system.attributes.cn.value ?? 0)) * 10);
     await applyTemporaryEffect(actor, {
       id: `${effect.id}:stunned`,
@@ -528,17 +537,25 @@ async function tickStunCloud(actor, effect) {
       statusId: "unconscious",
       sourceName: effect.label
     });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="gw-chat-card"><h3>${effect.label}</h3><p>${actor.name} is stunned for ${Math.ceil(rounds / 10)} minute(s).</p></div>`
+    });
   }
 }
 
 async function tickPoisonCloud(actor, effect) {
-  const { resolveHazardCard } = await import("./dice.mjs");
+  const { requestSaveResolution } = await import("./dice.mjs");
   const intensity = await new Roll(effect.tickFormula || "3d6").evaluate();
   await intensity.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: `${effect.label} intensity`
   });
-  await resolveHazardCard(actor, "poison", intensity.total, { sourceName: effect.label });
+  await requestSaveResolution(actor, "poison", {
+    sourceName: effect.label,
+    intensity: intensity.total,
+    inputLocked: true
+  });
 }
 
 export async function tickActorStateForActor(actor) {

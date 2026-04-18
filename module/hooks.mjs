@@ -10,6 +10,7 @@ import {
 import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate } from "./equipment-rules.mjs";
 import { syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
+import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
 
 const actorMaintenanceJobs = new Map();
@@ -23,6 +24,8 @@ const GM_ONLY_CHAT_ACTIONS = new Set([
 
 export function registerHooks() {
   Hooks.on("renderChatMessageHTML", onRenderChatMessage);
+  Hooks.on("renderChatLog", onRenderChatLog);
+  Hooks.on("renderSidebarTab", onRenderSidebarTab);
   Hooks.on("createActor", onActorCreate);
   Hooks.on("createItem", onMutationRelevantItemChange);
   Hooks.on("updateItem", onMutationRelevantItemChange);
@@ -159,6 +162,39 @@ function onRenderChatMessage(message, html) {
       await resolveHazardMutation(flags.hazard);
     });
   });
+}
+
+function injectChatRequestToolbar(html) {
+  if (!game.user?.isGM) return;
+
+  const root = html instanceof HTMLElement ? html : html?.[0];
+  if (!root || root.querySelector(".gw-chat-request-toolbar")) return;
+
+  const form = root.querySelector("form");
+  const toolbar = document.createElement("div");
+  toolbar.className = "gw-chat-request-toolbar";
+  toolbar.innerHTML = `<button type="button" class="gw-chat-request-button">
+    <i class="fas fa-dice-d20" aria-hidden="true"></i>
+    <span>${game.i18n.localize("GAMMA_WORLD.Chat.RequestRoll")}</span>
+  </button>`;
+
+  toolbar.querySelector("button")?.addEventListener("click", async (event) => {
+    event.preventDefault();
+    await openChatRollRequestDialog();
+  });
+
+  if (form) form.prepend(toolbar);
+  else root.prepend(toolbar);
+}
+
+function onRenderChatLog(_app, html) {
+  injectChatRequestToolbar(html);
+}
+
+function onRenderSidebarTab(app, html) {
+  const id = app?.options?.id ?? app?.tabName ?? "";
+  if (id !== "chat") return;
+  injectChatRequestToolbar(html);
 }
 
 async function onMutationRelevantItemChange(item, changesOrOptions = {}, maybeOptions = {}) {

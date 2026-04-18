@@ -657,7 +657,7 @@
         {{/if}}
         <article class="gamma-world__summary-card">
           <h4>{{localize "GAMMA_WORLD.Resource.Alliance"}}</h4>
-          <p class="gamma-world__summary-note">{{#if system.details.alliance}}{{system.details.alliance}}{{else}}{{localize "GAMMA_WORLD.Sheet.NoAlliance"}}{{/if}}</p>
+          <p class="gamma-world__summary-note">{{#if allianceLabel}}{{allianceLabel}}{{else}}{{localize "GAMMA_WORLD.Sheet.NoAlliance"}}{{/if}}</p>
           <p class="gamma-world__summary-note">
             {{#if system.details.creatureClass}}
               {{system.details.creatureClass}}
@@ -668,7 +668,48 @@
             {{/if}}
           </p>
         </article>
+        {{#if isCharacterSheet}}
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Resource.NextLevel"}}</h4>
+            {{#if advancement.nextLevelXp}}
+              <p class="gamma-world__summary-value">{{advancement.nextLevelXp}}</p>
+              <p class="gamma-world__summary-note">{{advancement.xpToNextLevel}} XP to go</p>
+            {{else}}
+              <p class="gamma-world__summary-value">—</p>
+              <p class="gamma-world__summary-note">No further levels in RAW</p>
+            {{/if}}
+          </article>
+          {{#if advancement.pendingBonuses.length}}
+            <article class="gamma-world__summary-card">
+              <h4>{{localize "GAMMA_WORLD.Resource.PendingBonuses"}}</h4>
+              <p class="gamma-world__summary-value">{{advancement.pendingBonuses.length}}</p>
+              <p class="gamma-world__summary-note">{{advancement.pendingSummary}}</p>
+            </article>
+          {{/if}}
+          <article class="gamma-world__summary-card">
+            <h4>{{localize "GAMMA_WORLD.Resource.Encumbrance"}}</h4>
+            <p class="gamma-world__summary-value">{{encumbrance.carried}}/{{encumbrance.max}}</p>
+            <p class="gamma-world__summary-note">{{#if encumbrance.penalized}}{{localize "GAMMA_WORLD.Resource.Overloaded"}}{{else}}{{localize "GAMMA_WORLD.Resource.WithinLimit"}}{{/if}}</p>
+          </article>
+        {{/if}}
       </div>
+      {{#if isCharacterSheet}}
+        <div class="gamma-world__summary-actions">
+          <button type="button" data-action="rest" title="{{localize 'GAMMA_WORLD.Action.Rest.Hint'}}">
+            {{localize "GAMMA_WORLD.Action.Rest.Label"}}
+          </button>
+          {{#if isGM}}
+            <button type="button" data-action="awardXp" title="{{localize 'GAMMA_WORLD.Action.AwardXp.Hint'}}">
+              {{localize "GAMMA_WORLD.Action.AwardXp.Label"}}
+            </button>
+          {{/if}}
+          {{#if advancement.pendingBonuses.length}}
+            <button type="button" data-action="applyBonus" title="{{localize 'GAMMA_WORLD.Action.ApplyBonus.Hint'}}">
+              {{localize "GAMMA_WORLD.Action.ApplyBonus.Label"}}
+            </button>
+          {{/if}}
+        </div>
+      {{/if}}
     </section>
 
     <div class="gamma-world__bio-row">
@@ -676,7 +717,11 @@
         <input type="text" name="system.details.animalForm" value="{{system.details.animalForm}}" />
       </label>
       <label>{{localize "GAMMA_WORLD.Resource.Alliance"}}
-        <input type="text" name="system.details.alliance" value="{{system.details.alliance}}" />
+        <select name="system.details.alliance">
+          {{#each config.CRYPTIC_ALLIANCES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.details.alliance)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
       </label>
     </div>
 
@@ -763,19 +808,46 @@
       </section>
     {{/if}}
 
-    <fieldset>
-      <legend>{{localize "GAMMA_WORLD.Bio.Biography"}}</legend>
-      <prose-mirror name="system.biography.value" value="{{system.biography.value}}" toggled="false"></prose-mirror>
+    <fieldset class="gw-rich-editor" data-mode="view">
+      <legend>
+        <span class="gw-rich-editor__label">{{localize "GAMMA_WORLD.Bio.Biography"}}</span>
+        <button type="button" class="gw-rich-editor__toggle" data-editor-toggle="biography"
+                title="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}"
+                aria-label="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}">
+          <i class="fas fa-pencil-alt gw-rich-editor__icon gw-rich-editor__icon--edit" aria-hidden="true"></i>
+          <i class="fas fa-check gw-rich-editor__icon gw-rich-editor__icon--save" aria-hidden="true"></i>
+        </button>
+      </legend>
+      <div class="gw-rich-editor__view">{{{enrichedBiography}}}</div>
+      <prose-mirror class="gw-rich-editor__edit" name="system.biography.value" value="{{system.biography.value}}"></prose-mirror>
     </fieldset>
 
-    <fieldset>
-      <legend>{{localize "GAMMA_WORLD.Bio.Appearance"}}</legend>
-      <prose-mirror name="system.biography.appearance" value="{{system.biography.appearance}}" toggled="false"></prose-mirror>
+    <fieldset class="gw-rich-editor" data-mode="view">
+      <legend>
+        <span class="gw-rich-editor__label">{{localize "GAMMA_WORLD.Bio.Appearance"}}</span>
+        <button type="button" class="gw-rich-editor__toggle" data-editor-toggle="appearance"
+                title="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}"
+                aria-label="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}">
+          <i class="fas fa-pencil-alt gw-rich-editor__icon gw-rich-editor__icon--edit" aria-hidden="true"></i>
+          <i class="fas fa-check gw-rich-editor__icon gw-rich-editor__icon--save" aria-hidden="true"></i>
+        </button>
+      </legend>
+      <div class="gw-rich-editor__view">{{{enrichedAppearance}}}</div>
+      <prose-mirror class="gw-rich-editor__edit" name="system.biography.appearance" value="{{system.biography.appearance}}"></prose-mirror>
     </fieldset>
 
-    <fieldset>
-      <legend>{{localize "GAMMA_WORLD.Bio.Notes"}}</legend>
-      <prose-mirror name="system.biography.notes" value="{{system.biography.notes}}" toggled="false"></prose-mirror>
+    <fieldset class="gw-rich-editor" data-mode="view">
+      <legend>
+        <span class="gw-rich-editor__label">{{localize "GAMMA_WORLD.Bio.Notes"}}</span>
+        <button type="button" class="gw-rich-editor__toggle" data-editor-toggle="notes"
+                title="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}"
+                aria-label="{{localize 'GAMMA_WORLD.Editor.ToggleEdit'}}">
+          <i class="fas fa-pencil-alt gw-rich-editor__icon gw-rich-editor__icon--edit" aria-hidden="true"></i>
+          <i class="fas fa-check gw-rich-editor__icon gw-rich-editor__icon--save" aria-hidden="true"></i>
+        </button>
+      </legend>
+      <div class="gw-rich-editor__view">{{{enrichedNotes}}}</div>
+      <prose-mirror class="gw-rich-editor__edit" name="system.biography.notes" value="{{system.biography.notes}}"></prose-mirror>
     </fieldset>
   </div>
 

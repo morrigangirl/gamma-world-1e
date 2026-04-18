@@ -1383,6 +1383,43 @@ function collectNamedArtifactUpdates(current, defaults, update) {
   return update;
 }
 
+/**
+ * Infer a weapon category from the item's fields. Artifact items always
+ * classify as "artifact"; items flagged as natural weapons map to "natural";
+ * otherwise fall back to weapon class buckets.
+ */
+export function inferWeaponCategory(item) {
+  if (item?.system?.artifact?.isArtifact) return "artifact";
+  if (item?.flags?.["gamma-world-1e"]?.naturalWeapon) return "natural";
+  const wc = Math.round(Number(item?.system?.weaponClass) || 0);
+  if (wc >= 15) return "artifact";
+  if (wc >= 10) return "modern";
+  return "primitive";
+}
+
+const GEAR_SUBTYPE_PATTERNS = [
+  [/\barrow|crossbow bolt|sling stone|sling bullet|slug-?thrower round|needler dart|gyrojet|javelin \(bundle\)|stun rifle cell/i, "ammunition"],
+  [/\b(power|energy)\s+cell\b|\bpower pack\b|\bbattery\b|\benergy cell charger\b/i, "power-cell"],
+  [/\bbackpack|satchel|pouch|ruck ?sack|saddlebag|hamper|bandolier/i, "container"],
+  [/\bmedi-?kit|stim dose|pain reducer|mind booster|intera shot|sustenance dose|accelera dose|cur-?in dose|anti-?radiation serum|rejuv chamber|stasis chamber|life ray|bandage|splint|poultice|suggestion change/i, "medical"],
+  [/\bgrenade|bomb\b|damage pack|explosive|mine|detonator/i, "explosive"],
+  [/\brations|canteen|trail ration|iron ration|preserved food|water flask/i, "ration"],
+  [/\bradio|flare|signal flag|whistle|semaphore|communicator/i, "communication"],
+  [/\bcar\b|truck|bike|gyro|hover|chopper|copter|motorcycle|boat|skiff|flier|vehicle/i, "vehicle"],
+  [/\brope|flint|shovel|crowbar|wrench|pickaxe|grappling|lockpick|magnifying|torch|lantern|bedroll|blanket|tent|mirror|lamp oil/i, "tool"],
+  [/\bpre-?war|clockwork|book|bottle|domar|coin|trinket/i, "trade-good"]
+];
+
+export function inferGearSubtype(item) {
+  const existing = item?.system?.subtype;
+  if (existing && existing !== "misc") return existing;
+  const name = String(item?.name ?? "");
+  for (const [pattern, key] of GEAR_SUBTYPE_PATTERNS) {
+    if (pattern.test(name)) return key;
+  }
+  return existing || "misc";
+}
+
 export function enrichEquipmentSystemData(item) {
   if (!item?.system) return item?.system ?? null;
 
@@ -1414,6 +1451,10 @@ export function enrichEquipmentSystemData(item) {
     if (item.system.artifact?.isArtifact && !(Number(item.system.artifact?.functionChance) > 0)) {
       item.system.artifact.functionChance = artifactFunctionChance(item.system.artifact.condition);
     }
+    // Infer subtype if not already set by the generator or rule.
+    if (!item.system.subtype || item.system.subtype === "misc") {
+      item.system.subtype = inferGearSubtype(item);
+    }
   }
 
   if (item.type === "weapon") {
@@ -1426,6 +1467,12 @@ export function enrichEquipmentSystemData(item) {
     if (status) item.system.effect.status = status;
     if (item.system.artifact?.isArtifact && !(Number(item.system.artifact?.functionChance) > 0)) {
       item.system.artifact.functionChance = artifactFunctionChance(item.system.artifact.condition);
+    }
+    // Infer category if absent (the schema default of "primitive" is overwritten
+    // only when the inference disagrees with the stored value and the stored
+    // value was never explicitly chosen — here we simply always reconcile).
+    if (!item.system.category || item.system.category === "primitive") {
+      item.system.category = inferWeaponCategory(item);
     }
   }
 

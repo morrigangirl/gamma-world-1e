@@ -35,44 +35,44 @@
         <section class="gw-artifact-session__controls">
           <h3>{{localize "GAMMA_WORLD.Artifact.Session.Controls"}}</h3>
           <div class="gw-artifact-session__button-grid">
-            <button type="button" data-action="rollStep" {{#unless canRoll}}disabled{{/unless}}>
+            <button type="button" data-action="rollStep" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Roll'}}" {{#unless canRoll}}disabled{{/unless}}>
               {{#if isGM}}{{#unless isOperator}}{{localize "GAMMA_WORLD.Artifact.Session.ForceRoll"}}{{else}}{{localize "GAMMA_WORLD.Artifact.Session.Roll"}}{{/unless}}{{else}}{{localize "GAMMA_WORLD.Artifact.Session.Roll"}}{{/if}}
             </button>
-            <button type="button" data-action="interruptSession" {{#unless canInterrupt}}disabled{{/unless}}>
+            <button type="button" data-action="interruptSession" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Interrupt'}}" {{#unless canInterrupt}}disabled{{/unless}}>
               {{localize "GAMMA_WORLD.Artifact.Session.Interrupt"}}
             </button>
-            <button type="button" data-action="tryArtifact" {{#unless canTry}}disabled{{/unless}}>
+            <button type="button" data-action="tryArtifact" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.TryItOut'}}" {{#unless canTry}}disabled{{/unless}}>
               {{localize "GAMMA_WORLD.Artifact.Session.TryItOut"}}
             </button>
-            <button type="button" data-action="closeWindow">
+            <button type="button" data-action="closeWindow" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Close'}}">
               {{localize "GAMMA_WORLD.Artifact.Session.Close"}}
             </button>
           </div>
 
           <div class="gw-artifact-session__helper-controls">
-            <label>{{localize "GAMMA_WORLD.Artifact.Session.Helpers"}}</label>
+            <label title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Helpers'}}">{{localize "GAMMA_WORLD.Artifact.Session.Helpers"}}</label>
             <div class="gw-artifact-session__helper-row">
-              <button type="button" data-action="changeHelpers" data-delta="-1" {{#unless canAdjustHelpers}}disabled{{/unless}}>-</button>
+              <button type="button" data-action="changeHelpers" data-delta="-1" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.HelpersMinus'}}" {{#unless canAdjustHelpers}}disabled{{/unless}}>-</button>
               <span>{{helperCount}}</span>
-              <button type="button" data-action="changeHelpers" data-delta="1" {{#unless canAdjustHelpers}}disabled{{/unless}}>+</button>
+              <button type="button" data-action="changeHelpers" data-delta="1" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.HelpersPlus'}}" {{#unless canAdjustHelpers}}disabled{{/unless}}>+</button>
             </div>
           </div>
 
           {{#if isGM}}
             <div class="gw-artifact-session__button-stack">
-              <button type="button" data-action="reassignOperator" {{#unless canReassign}}disabled{{/unless}}>
+              <button type="button" data-action="reassignOperator" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Reassign'}}" {{#unless canReassign}}disabled{{/unless}}>
                 {{localize "GAMMA_WORLD.Artifact.Session.Reassign"}}
               </button>
-              <button type="button" data-action="revealFunction" {{#unless canRevealFunction}}disabled{{/unless}}>
+              <button type="button" data-action="revealFunction" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.RevealFunction'}}" {{#unless canRevealFunction}}disabled{{/unless}}>
                 {{localize "GAMMA_WORLD.Artifact.Session.RevealFunction"}}
               </button>
-              <button type="button" data-action="revealOutcome" {{#unless canReveal}}disabled{{/unless}}>
+              <button type="button" data-action="revealOutcome" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Reveal'}}" {{#unless canReveal}}disabled{{/unless}}>
                 {{localize "GAMMA_WORLD.Artifact.Session.Reveal"}}
               </button>
-              <button type="button" data-action="resetSession" {{#unless canReset}}disabled{{/unless}}>
+              <button type="button" data-action="resetSession" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Reset'}}" {{#unless canReset}}disabled{{/unless}}>
                 {{localize "GAMMA_WORLD.Artifact.Session.Reset"}}
               </button>
-              <button type="button" data-action="toggleDebug">
+              <button type="button" data-action="toggleDebug" title="{{localize 'GAMMA_WORLD.Artifact.Session.Hint.Debug'}}">
                 {{#if debugEnabled}}{{localize "GAMMA_WORLD.Artifact.Session.HideDebug"}}{{else}}{{localize "GAMMA_WORLD.Artifact.Session.ShowDebug"}}{{/if}}
               </button>
             </div>

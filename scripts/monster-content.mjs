@@ -1080,6 +1080,175 @@ const MONSTER_PACK = [
     biography: htmlParagraphs("A blade of purple grass whose tassels fire spiked seeds by mental teleportation into warm-blooded bodies.", "Embedded seeds deal 2d6 damage immediately and continue to rot the host until they die or are removed."),
     armor: armorSource({ name: "Purple Blade", acValue: 10, description: "A tough upright blade of mutant grass." }),
     abilities: [guided("Teleporting Seeds", "Each melee round, one quarter of the zeethh colony's seeds attack warm-blooded creatures within 20 meters as mental strength 12 attacks. Each embedded seed inflicts 2d6 damage immediately and 1 additional point per day for up to 7 days.")]
+  }),
+  monsterSource({
+    name: "Dragon",
+    creatureClass: "Mutated Reptile",
+    animalForm: "Dragon",
+    hitDice: 12,
+    hp: 72,
+    movement: move(18),
+    role: "apex flying predator",
+    stats: buildStats({ hitDice: 12, mentalStrength: 12, intelligence: 10, dexterity: 14, charisma: 14, constitution: 18, physicalStrength: 18 }),
+    biography: htmlParagraphs("A winged mutated reptile the size of a farm tractor. It hunts from the air and breathes a 40-meter cone of fire.", "Cryptic Alliance recruiters whisper that some dragons can be reasoned with if approached from beneath and flattered extensively."),
+    armor: armorSource({ name: "Scales", acValue: 3, description: "Overlapping fireproof scales." }),
+    weapons: [
+      naturalWeaponSource({ name: "Bite", damage: "3d6", description: "Massive fanged maw." }),
+      naturalWeaponSource({ name: "Claw", damage: "1d8", description: "Hooked foreclaws." })
+    ],
+    abilities: [area("Fire Breath", "8d6", 40, "Cone of flame, 40m range. Save vs radiation/fire for half damage.")]
+  }),
+  monsterSource({
+    name: "Gator",
+    creatureClass: "Mutated Crocodile",
+    animalForm: "Crocodile",
+    hitDice: 6,
+    hp: 32,
+    movement: move(6),
+    role: "ambush predator",
+    stats: buildStats({ hitDice: 6, mentalStrength: 8, intelligence: 4, dexterity: 10, charisma: 4, constitution: 16, physicalStrength: 16 }),
+    biography: htmlParagraphs("A 4-meter river-crocodile, often mutated with heightened vision and armored scutes."),
+    armor: armorSource({ name: "Scute Armor", acValue: 5, description: "Thick bony plates along back and flanks." }),
+    weapons: [
+      naturalWeaponSource({ name: "Bite", damage: "2d6", description: "Clamping jaws; once a bite hits, the gator rolls and drags the victim underwater." }),
+      naturalWeaponSource({ name: "Tail Swipe", damage: "1d8", description: "Heavy sweep that can knock prone targets up to 2m." })
+    ],
+    abilities: [guided("Death Roll", "If a gator's bite hits, on the next melee turn it can drag the victim into water for an automatic hit and possible drowning.")]
+  }),
+  monsterSource({
+    name: "Feral Dog",
+    creatureClass: "Mutated Canine",
+    animalForm: "Dog",
+    hitDice: 2,
+    hp: 10,
+    movement: move(15),
+    role: "pack hunter",
+    stats: buildStats({ hitDice: 2, mentalStrength: 6, intelligence: 5, dexterity: 14, charisma: 4, constitution: 10, physicalStrength: 10 }),
+    biography: htmlParagraphs("Roaming wasteland packs descended from the household dogs of the pre-war era. Ferocious and coordinated.", "Often harbor one random mutation; the rest of the pack learns to exploit it."),
+    armor: armorSource({ name: "Fur", acValue: 8, description: "Matted fur and tough hide." }),
+    weapons: [naturalWeaponSource({ name: "Bite", damage: "1d6", description: "Tearing jaws; +1 to hit when two or more pack members engage the same target." })],
+    abilities: [guided("Pack Tactics", "Each feral dog beyond the first attacking a single target grants +1 to hit.")]
+  }),
+  monsterSource({
+    name: "Howler",
+    creatureClass: "Mutated Ape",
+    animalForm: "Ape",
+    hitDice: 4,
+    hp: 22,
+    movement: move(12),
+    role: "terror screamer",
+    stats: buildStats({ hitDice: 4, mentalStrength: 14, intelligence: 8, dexterity: 11, charisma: 4, constitution: 12, physicalStrength: 14 }),
+    biography: htmlParagraphs("A tall, gaunt simian that paralyses prey with sonic screams. Travels in small family groups."),
+    armor: armorSource({ name: "Hide", acValue: 7, description: "Tough hide armor." }),
+    weapons: [naturalWeaponSource({ name: "Claw", damage: "1d6", description: "Long-fingered grasping claws." })],
+    abilities: [area("Terror Howl", "0", 20, "20m radius. Victims save vs mental attack or are frozen in fear for 1d6 melee turns.")]
+  }),
+  monsterSource({
+    name: "Giant Cockroach",
+    creatureClass: "Mutated Insect",
+    animalForm: "Cockroach",
+    hitDice: 3,
+    hp: 14,
+    movement: move(12),
+    role: "swarm scavenger",
+    stats: buildStats({ hitDice: 3, mentalStrength: 4, intelligence: 2, dexterity: 14, charisma: 2, constitution: 12, physicalStrength: 10 }),
+    biography: htmlParagraphs("Waist-high cockroaches scuttle through ruined buildings and eat anything organic, including the unwary."),
+    armor: armorSource({ name: "Chitin", acValue: 6, description: "Glossy chitinous shell." }),
+    weapons: [naturalWeaponSource({ name: "Mandible Bite", damage: "1d4", description: "Serrated mandibles." })],
+    abilities: [guided("Radiation Immunity", "Giant cockroaches are fully immune to radiation.")]
+  }),
+  monsterSource({
+    name: "Giant Termite",
+    creatureClass: "Mutated Insect",
+    animalForm: "Termite",
+    hitDice: 2,
+    hp: 9,
+    movement: move(6),
+    role: "wood-devouring soldier",
+    stats: buildStats({ hitDice: 2, mentalStrength: 3, intelligence: 2, dexterity: 10, charisma: 2, constitution: 14, physicalStrength: 12 }),
+    biography: htmlParagraphs("Man-sized termites devour wooden structures. Hive colonies number in the hundreds and surface from tunnel networks under ruined cities."),
+    armor: armorSource({ name: "Chitin", acValue: 5, description: "Pale segmented plating." }),
+    weapons: [naturalWeaponSource({ name: "Clamp Jaws", damage: "1d8", description: "Crushing jaws that splinter wood and bone." })],
+    abilities: [guided("Tunneling", "Termites can burrow through compacted soil, wood, and crumbling concrete at 3m per melee turn.")]
+  }),
+  monsterSource({
+    name: "Intelligent Tree",
+    creatureClass: "Mutated Plant",
+    animalForm: "Tree",
+    detailsType: "mutated-plant",
+    hitDice: 10,
+    hp: 55,
+    movement: move(1),
+    role: "ancient thinker",
+    stats: buildStats({ hitDice: 10, mentalStrength: 18, intelligence: 16, dexterity: 5, charisma: 12, constitution: 16, physicalStrength: 16 }),
+    biography: htmlParagraphs("An oak or redwood several centuries old, awakened by radiation to full sentience. Patient, eloquent, deeply suspicious of fire-wielders."),
+    armor: armorSource({ name: "Bark", acValue: 4, description: "Half-meter thick bark." }),
+    weapons: [naturalWeaponSource({ name: "Branch Slam", damage: "3d6", description: "Sweeping branch knocks and crushes." })],
+    abilities: [
+      guided("Mental Powers", "Intelligent trees possess 1d4 mental mutations. Common choices: Telepathy, Mental Blast, Life Leech."),
+      guided("Fire Vulnerability", "Takes double damage from fire of any kind.")
+    ]
+  }),
+  monsterSource({
+    name: "Piney",
+    creatureClass: "Mutated Plant",
+    animalForm: "Pine",
+    detailsType: "mutated-plant",
+    hitDice: 3,
+    hp: 16,
+    movement: move(3),
+    role: "ambulatory conifer",
+    stats: buildStats({ hitDice: 3, mentalStrength: 8, intelligence: 5, dexterity: 8, charisma: 6, constitution: 12, physicalStrength: 12 }),
+    biography: htmlParagraphs("A 2-meter conifer with prehensile roots. Travels in small groves; hostile to creatures that burn wood."),
+    armor: armorSource({ name: "Needles", acValue: 7, description: "Dense needle armor; anyone striking in melee takes 1d3 damage from pricks." }),
+    weapons: [naturalWeaponSource({ name: "Prehensile Root", damage: "1d6", description: "Whip-like root." })],
+    abilities: [guided("Needle Defense", "Any melee attacker striking the piney takes 1d3 points of damage from its needles.")]
+  }),
+  monsterSource({
+    name: "Manta",
+    creatureClass: "Mutated Jellyfish",
+    animalForm: "Manta",
+    hitDice: 5,
+    hp: 25,
+    movement: move(18),
+    role: "flying drifter",
+    stats: buildStats({ hitDice: 5, mentalStrength: 12, intelligence: 4, dexterity: 15, charisma: 4, constitution: 10, physicalStrength: 8 }),
+    biography: htmlParagraphs("A translucent airborne cnidarian the size of a fishing boat. Drifts on thermal currents and drapes paralyzing tendrils."),
+    armor: armorSource({ name: "Membrane", acValue: 8, description: "Slick translucent membrane." }),
+    weapons: [naturalWeaponSource({ name: "Stinging Tendril", damage: "1d4", effect: { mode: "paralysis", notes: "Save vs poison intensity 12 or paralysed for 1d6 melee turns." }, description: "Dozens of trailing poison tendrils." })],
+    abilities: [guided("Airborne Drift", "Mantas maneuver at up to 30m per melee turn on wind and internal gas bladders. They cannot land intact.")]
+  }),
+  monsterSource({
+    name: "Rogue Android",
+    detailsType: "robot",
+    creatureClass: "Android",
+    animalForm: "",
+    hitDice: 6,
+    hp: 45,
+    movement: move(12),
+    role: "sabotage infiltrator",
+    speech: "common, pre-war codes",
+    stats: buildStats({ hitDice: 6, mentalStrength: 14, intelligence: 16, dexterity: 14, charisma: 12, constitution: 12, physicalStrength: 14 }),
+    biography: htmlParagraphs("An android that has broken its pre-war programming. Some are simply damaged; others have joined The Created and actively work against humanity."),
+    armor: armorSource({ name: "Synthetic Shell", acValue: 5, description: "Disguised as human skin.", protection: { poisonImmune: true, radiationImmune: true, mentalImmune: true } }),
+    weapons: [
+      weaponSource({ name: "Laser Pistol", damage: "5d6", attackType: "energy", short: 100, long: 200, traits: { tag: "laser" }, description: "Concealed sidearm." }),
+      naturalWeaponSource({ name: "Servo Strike", damage: "1d6", description: "Hydraulic-boosted strike." })
+    ],
+    robotics: {
+      isRobot: true,
+      mode: "wild",
+      chassis: "Rogue Android",
+      identifier: "RA-∅",
+      controller: "",
+      powerSource: "nuclear",
+      powerCurrent: 50,
+      powerMax: 50,
+      broadcastCapable: false,
+      backupHours: 72,
+      repairDifficulty: 12,
+      malfunction: "Behavioral inhibitors lost; intent unpredictable."
+    }
   })
 ];
 

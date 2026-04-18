@@ -1,6 +1,6 @@
 /** GearData — Item.type === "gear". Generic equipment / mundane items. */
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -22,6 +22,23 @@ export class GearData extends foundry.abstract.TypeDataModel {
       /** Reserved for future artifact / tech-level support. */
       tech:     str({ initial: "none",
         choices: ["none", "i", "ii", "iii", "iv", "v", "vi"] }),
+      /** High-level subtype for browsing / mechanics. */
+      subtype:  str({ initial: "misc",
+        choices: ["ammunition", "power-cell", "container", "medical", "vehicle",
+                  "tool", "ration", "trade-good", "communication", "explosive", "misc"] }),
+      equipped: new BooleanField({ initial: false }),
+
+      /** Container capacity; only meaningful when subtype === "container". */
+      container: new SchemaField({
+        capacity: num({ initial: 0, min: 0 }),
+        stored:   new ArrayField(new StringField({ nullable: false }))
+      }),
+
+      /** Ammunition stack; only meaningful when subtype === "ammunition". */
+      ammo: new SchemaField({
+        type:   str({ initial: "" }),
+        rounds: int({ initial: 0, min: 0 })
+      }),
 
       action: new SchemaField({
         mode:            str({ initial: "none" }),

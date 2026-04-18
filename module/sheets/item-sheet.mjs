@@ -5,6 +5,7 @@
 
 import { SYSTEM_ID } from "../config.mjs";
 import { artifactPowerSummary } from "../artifact-power.mjs";
+import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -45,5 +46,15 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     context.enrichedDescription = await enrich(item.system.description?.value ?? "", { relativeTo: item });
 
     return context;
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    wireRichEditorToggles(this);
+  }
+
+  _onChangeForm(formConfig, event) {
+    if (isRichEditorChange(event)) return;
+    return super._onChangeForm?.(formConfig, event);
   }
 }

@@ -1,238 +1,208 @@
+/**
+ * Build all ten system compendium packs directly into `packs/<name>/` LevelDB
+ * using `@foundryvtt/foundryvtt-cli`. No running Foundry required.
+ *
+ * For each doc (and every embedded doc — actor items, actor effects, item
+ * effects, journal pages, table results) we assign:
+ *   - a stable 16-char `_id` (sha256 of pack + collection path + name/index),
+ *   - a `_key` in the `!<collection>!<path>` format the CLI needs,
+ *   - Foundry's core document fields (`_stats`, `ownership`, `flags`,
+ *     `folder`, `sort`) so v13's DataModel validator accepts them and the
+ *     compendium index populates in the UI.
+ *
+ * Safe to run any time. Foundry must be closed so LevelDB isn't re-reading
+ * packs mid-build.
+ */
+
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync, spawnSync } from "node:child_process";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { compilePack } from "@foundryvtt/foundryvtt-cli";
+
 import {
   actorPackSources,
+  crypticAlliancePackSources,
   encounterTableSources,
   equipmentPackSources,
   journalPackSources,
   monsterPackSources,
-  mutationPackSources
+  mutationPackSources,
+  robotChassisPackSources,
+  rollTablePackSources
 } from "./compendium-content.mjs";
+import { rulebookPackSources } from "./rulebook-content.mjs";
+
+const systemJson = JSON.parse(
+  fs.readFileSync(new URL("../system.json", import.meta.url), "utf8")
+);
+const SYSTEM_ID = systemJson.id;
+const SYSTEM_VERSION = systemJson.version;
+const CORE_VERSION = String(systemJson.compatibility?.verified ?? "13");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 const repoPacksDir = path.join(repoRoot, "packs");
-const worldPacksDir = "/Volumes/Creative/FoundryVTT/Data/worlds/gamma-world-test/packs";
-const baseUrl = "http://127.0.0.1:30000";
-const joinUrl = "http://127.0.0.1:30000/join";
-const adminPassword = "m0rriganHexWitch@!";
-const userId = "4XHrOK8LHN0LpKUD";
-const worldPackageId = "gamma-world-test";
-const foundryAppName = "Foundry Virtual Tabletop";
-const foundryProcessMatch = "/Applications/Foundry Virtual Tabletop.app/Contents/MacOS/Foundry Virtual Tabletop";
+const tempRoot = path.join(repoRoot, "tmp", "compendia-build");
+
+const FIXED_CREATED_TIME = Date.UTC(2024, 0, 1);
+const FIXED_MODIFIED_TIME = Date.UTC(2026, 0, 1);
+
+const TYPE_TO_COLLECTION = {
+  Item: "items",
+  Actor: "actors",
+  JournalEntry: "journal",
+  RollTable: "tables"
+};
+
+/**
+ * For each collection, the doc fields that hold embedded children and the
+ * leaf collection name used in keys. Mirrors Foundry's document hierarchy.
+ */
+const EMBEDDED_HIERARCHY = {
+  actors:  { items: "items",  effects: "effects" },
+  items:   { effects: "effects" },
+  journal: { pages: "pages" },
+  tables:  { results: "results" }
+};
+
+function stableId(seed) {
+  const hash = crypto.createHash("sha256").update(seed).digest("base64");
+  return hash.replace(/[^A-Za-z0-9]/g, "").slice(0, 16);
+}
+
+function baseStats() {
+  return {
+    coreVersion: CORE_VERSION,
+    systemId: SYSTEM_ID,
+    systemVersion: SYSTEM_VERSION,
+    createdTime: FIXED_CREATED_TIME,
+    modifiedTime: FIXED_MODIFIED_TIME,
+    lastModifiedBy: null,
+    compendiumSource: null,
+    duplicateSource: null
+  };
+}
+
+/**
+ * Inject Foundry's core document fields. Without these, v13 silently drops
+ * the doc from the pack index and the compendium appears empty.
+ */
+function ensureCoreDocFields(doc, { isPage = false, isResult = false } = {}) {
+  if (!doc.flags) doc.flags = {};
+  if (!("folder" in doc)) doc.folder = null;
+  if (!("sort" in doc)) doc.sort = 0;
+  if (!doc.ownership) {
+    // Pages/results inherit from their parent; OBSERVER baseline (-1) means
+    // "defer to parent". Top-level docs default to 0 (NONE — only the owner
+    // and GM see them unless promoted).
+    doc.ownership = (isPage || isResult) ? { default: -1 } : { default: 0 };
+  }
+  if (!doc._stats) doc._stats = baseStats();
+  return doc;
+}
+
+/**
+ * Recursively assign `_id`, `_key`, and core fields to a doc and every
+ * embedded doc. The seed threads through the whole tree so same-named
+ * siblings get distinct IDs via their index position.
+ *
+ * `seedIndex` distinguishes same-named top-level docs (e.g. a physical
+ * "Attraction Odor" mutation and a plant "Attraction Odor" mutation).
+ */
+function prepareDocument(doc, collection, packSeed, parentIdPath = [], seedIndex = null) {
+  if (!doc._id) {
+    // Include a secondary discriminator (subtype + index) to survive
+    // same-named siblings. Falls back to just the name if neither exists.
+    const subtype = doc.system?.subtype ?? doc.system?.reference?.table ?? "";
+    const indexPart = seedIndex == null ? "" : `:${seedIndex}`;
+    doc._id = stableId(`${packSeed}:${collection}:${doc.name ?? ""}:${subtype}${indexPart}`);
+  }
+  const idPath = [...parentIdPath, doc._id];
+  doc._key = `!${collection}!${idPath.join(".")}`;
+  const isTopLevel = parentIdPath.length === 0;
+  ensureCoreDocFields(doc, {
+    isPage: collection.endsWith(".pages"),
+    isResult: collection.endsWith(".results")
+  });
+  if (!isTopLevel) {
+    // Embedded docs don't carry folder/sort-under-pack semantics, but
+    // removing them would break Foundry's hydrate step for some types.
+    // Leaving the defaults from ensureCoreDocFields is correct.
+  }
+
+  const embedded = EMBEDDED_HIERARCHY[collection] ?? {};
+  for (const [field, leaf] of Object.entries(embedded)) {
+    const value = doc[field];
+    if (!Array.isArray(value)) continue;
+    const childCollection = `${collection}.${leaf}`;
+    value.forEach((child, index) => {
+      if (!child._id) {
+        child._id = stableId(
+          `${packSeed}:${childCollection}:${doc._id}:${index}:${child.name ?? ""}`
+        );
+      }
+      prepareDocument(child, childCollection, packSeed, idPath);
+    });
+  }
+  return doc;
+}
 
 const packSpecs = [
-  { name: "mutations", label: "Mutation Index", type: "Item", documents: mutationPackSources() },
-  { name: "equipment", label: "Armory and Gear", type: "Item", documents: equipmentPackSources() },
-  { name: "sample-actors", label: "Sample Actors", type: "Actor", documents: actorPackSources() },
-  { name: "monsters", label: "Monsters and Beasts", type: "Actor", documents: monsterPackSources() },
-  { name: "encounter-tables", label: "Encounter Tables", type: "RollTable", documents: encounterTableSources() },
-  { name: "system-docs", label: "System Documentation", type: "JournalEntry", documents: journalPackSources() }
+  { name: "mutations",         type: "Item",         documents: mutationPackSources() },
+  { name: "equipment",         type: "Item",         documents: equipmentPackSources() },
+  { name: "sample-actors",     type: "Actor",        documents: actorPackSources() },
+  { name: "monsters",          type: "Actor",        documents: monsterPackSources() },
+  { name: "encounter-tables",  type: "RollTable",    documents: encounterTableSources() },
+  { name: "roll-tables",       type: "RollTable",    documents: rollTablePackSources() },
+  { name: "cryptic-alliances", type: "JournalEntry", documents: crypticAlliancePackSources() },
+  { name: "robot-chassis",     type: "JournalEntry", documents: robotChassisPackSources() },
+  { name: "rulebook",          type: "JournalEntry", documents: rulebookPackSources() },
+  { name: "system-docs",       type: "JournalEntry", documents: journalPackSources() }
 ];
 
-async function login(page) {
-  await page.goto(baseUrl, { waitUntil: "networkidle" });
-  if (page.url().includes("/setup")) {
-    await page.evaluate(async (worldId) => {
-      await fetch("/setup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "launchWorld", world: worldId })
-      });
-    }, worldPackageId);
-    await page.waitForTimeout(1000);
-  }
-  if (!page.url().includes("/join") && !page.url().includes("/game")) {
-    await page.goto(joinUrl, { waitUntil: "networkidle" });
-  }
-  if (page.url().includes("/game")) return;
-  await page.goto(joinUrl, { waitUntil: "networkidle" });
-  const selectedUser = await page.evaluate((preferredId) => {
-    const select = document.querySelector('select[name="userid"]');
-    if (!(select instanceof HTMLSelectElement)) return "";
-    const preferred = [...select.options].find((option) => option.value === preferredId);
-    if (preferred?.value) {
-      preferred.disabled = false;
-      select.value = preferred.value;
-      return preferred.value;
-    }
-    const enabled = [...select.options].filter((option) => option.value && !option.disabled);
-    if (enabled[0]?.value) {
-      select.value = enabled[0].value;
-      return enabled[0].value;
-    }
-    return "";
-  }, userId);
-  if (!selectedUser) throw new Error("No enabled Foundry user is available on the join page.");
-  await page.fill('input[name="adminPassword"]', adminPassword);
-  await page.getByRole("button", { name: /Join Game Session/i }).click();
-  await page.waitForURL("**/game", { timeout: 15000 });
-  await page.waitForTimeout(3000);
+function cleanDir(dir) {
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(dir, { recursive: true });
 }
 
-async function withGamePage(callback) {
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
-  const page = await context.newPage();
-  try {
-    await login(page);
-    return await callback(page);
-  } finally {
-    await browser.close();
-  }
+async function buildPack(spec) {
+  const collection = TYPE_TO_COLLECTION[spec.type];
+  if (!collection) throw new Error(`Unknown pack type "${spec.type}" for "${spec.name}"`);
+
+  const workDir = path.join(tempRoot, spec.name);
+  const destDir = path.join(repoPacksDir, spec.name);
+  cleanDir(workDir);
+
+  spec.documents.forEach((doc, index) => {
+    prepareDocument(doc, collection, spec.name, [], index);
+    fs.writeFileSync(
+      path.join(workDir, `${doc._id}.json`),
+      JSON.stringify(doc, null, 2),
+      "utf8"
+    );
+  });
+
+  cleanDir(destDir);
+  await compilePack(workDir, destDir, { log: false });
 }
 
-async function buildWorldPacks(page) {
-  return page.evaluate(async (specs) => {
-    const CompendiumCollection = foundry.documents.collections.CompendiumCollection;
-    const documentClassFor = {
-      Item,
-      Actor,
-      RollTable,
-      JournalEntry
-    };
-
-    for (const spec of specs) {
-      const existing = game.packs.get(`world.${spec.name}`);
-      if (existing) await existing.deleteCompendium();
-    }
-
-    for (const spec of specs) {
-      const pack = await CompendiumCollection.createCompendium({
-        name: spec.name,
-        label: spec.label,
-        type: spec.type
-      });
-      const cls = documentClassFor[spec.type];
-      await cls.createDocuments(spec.documents, { pack: pack.collection });
-      await pack.getIndex();
-    }
-
-    return specs.map((spec) => ({ id: `world.${spec.name}`, name: spec.name, count: spec.documents.length }));
-  }, packSpecs);
-}
-
-async function deleteWorldPacks(page) {
-  return page.evaluate(async (names) => {
-    for (const name of names) {
-      const existing = game.packs.get(`world.${name}`);
-      if (existing) await existing.deleteCompendium();
-    }
-  }, packSpecs.map((spec) => spec.name));
-}
-
-function copyPacksToRepo() {
+async function main() {
   fs.mkdirSync(repoPacksDir, { recursive: true });
+  cleanDir(tempRoot);
 
   for (const spec of packSpecs) {
-    const sourceDir = path.join(worldPacksDir, spec.name);
-    const targetDir = path.join(repoPacksDir, spec.name);
-    if (!fs.existsSync(sourceDir)) {
-      throw new Error(`Expected world pack directory not found: ${sourceDir}`);
-    }
-    fs.rmSync(targetDir, { recursive: true, force: true });
-    fs.cpSync(sourceDir, targetDir, { recursive: true });
+    await buildPack(spec);
+    console.log(`  built ${spec.name.padEnd(20)} ${String(spec.documents.length).padStart(4)} top-level doc(s)`);
   }
+
+  fs.rmSync(tempRoot, { recursive: true, force: true });
+
+  console.log("");
+  console.log(`Compiled ${packSpecs.length} compendium packs into packs/. Foundry may be relaunched now.`);
 }
 
-function isFoundryAppRunning() {
-  return spawnSync("pgrep", ["-f", foundryProcessMatch], { stdio: "ignore" }).status === 0;
-}
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function waitFor(check, timeoutMs, label) {
-  const started = Date.now();
-  while ((Date.now() - started) < timeoutMs) {
-    if (await check()) return;
-    await delay(500);
-  }
-  throw new Error(`Timed out waiting for ${label}.`);
-}
-
-async function waitForServer(up) {
-  await waitFor(async () => {
-    try {
-      const response = await fetch(baseUrl, { redirect: "manual" });
-      return up ? response.status >= 200 : false;
-    } catch (_error) {
-      return up ? false : true;
-    }
-  }, 60000, up ? "Foundry server to start" : "Foundry server to stop");
-}
-
-async function restartFoundryApp() {
-  if (process.platform !== "darwin" || !isFoundryAppRunning()) return false;
-
-  execFileSync("osascript", ["-e", `tell application "${foundryAppName}" to quit`]);
-  await waitFor(() => !isFoundryAppRunning(), 60000, "Foundry application to quit");
-  await waitForServer(false);
-
-  execFileSync("open", ["-a", foundryAppName]);
-  await waitFor(() => isFoundryAppRunning(), 60000, "Foundry application to launch");
-  await waitForServer(true);
-  return true;
-}
-
-async function verifySystemPacks(page, specs) {
-  return page.evaluate(async (expectedSpecs) => {
-    const failures = [];
-    const verified = [];
-
-    for (const spec of expectedSpecs) {
-      const pack = game.packs.get(`gamma-world-1e.${spec.name}`);
-      if (!pack) {
-        failures.push(`Missing system pack gamma-world-1e.${spec.name}.`);
-        continue;
-      }
-
-      const documents = await pack.getDocuments();
-      if (documents.length !== spec.count) {
-        failures.push(`System pack gamma-world-1e.${spec.name} loaded ${documents.length} documents instead of ${spec.count}.`);
-        continue;
-      }
-
-      verified.push({ collection: pack.collection, count: documents.length });
-    }
-
-    if (failures.length) throw new Error(failures.join("\n"));
-    return verified;
-  }, specs);
-}
-
-const summary = await withGamePage(async (page) => {
-  const built = await buildWorldPacks(page);
-  await page.waitForTimeout(1500);
-  return built;
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
 });
-
-// Let Foundry close the compendium databases before copying the on-disk packs.
-copyPacksToRepo();
-
-await withGamePage(async (page) => {
-  await deleteWorldPacks(page);
-});
-
-const restarted = await restartFoundryApp();
-const verification = restarted
-  ? await withGamePage((page) => verifySystemPacks(page, summary))
-  : [];
-
-console.log("Built and copied compendia:");
-for (const pack of summary) {
-  console.log(`- ${pack.name}: ${pack.count} document(s)`);
-}
-
-if (verification.length) {
-  console.log("Verified system compendia after restart:");
-  for (const pack of verification) {
-    console.log(`- ${pack.collection}: ${pack.count} document(s)`);
-  }
-} else {
-  console.log("Skipped automatic Foundry restart and system-pack verification.");
-}

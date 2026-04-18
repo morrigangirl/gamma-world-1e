@@ -1180,51 +1180,89 @@ export const MUTATION_DEFINITIONS = [
     summary: "Fly 12m per turn, carry no more than 25% body weight.",
     page: 11
   },
+  ...plantMutationDefinitions()
 ];
+
+function plantMutationDefinitions() {
+  const entries = [
+    ["Adaptation",                 "beneficial", [1, 3],   "Adapt once per day to a hostile environment (heat, cold, radiation, vacuum) for up to 24 hours."],
+    ["Aromatic Powers",            "beneficial", [4, 6],   "Release a scent that attracts or repels specific creatures within 15m."],
+    ["Attraction Odor",            "defect",     [7, 8],   "Emit a scent that draws carnivores — attackers gain +2 to hit."],
+    ["Bacterial Symbiosis",        "beneficial", [9, 11],  "Internal bacteria grant +3 to radiation and poison saves."],
+    ["Barbed Leaves",              "beneficial", [12, 14], "Anyone striking in melee suffers 1d3 puncture damage per attack."],
+    ["Berries (effects)",          "beneficial", [15, 17], "Bears 2d6 berries per day; fruit causes a random beneficial or mild harmful effect if ingested."],
+    ["Boring Tendrils",            "beneficial", [18, 20], "Drill into soil, stone, or flesh at 1m/round; tendrils deal 1d6 damage to gripped victims."],
+    ["Carnivorous Jaws",           "beneficial", [21, 23], "Hinged snapping jaws inflict 2d6 bite damage within 2m."],
+    ["Color Sensitivity",          "beneficial", [24, 25], "Mimic colors of surroundings; +4 on stealth and observation rolls."],
+    ["Contact Poison Sap",         "beneficial", [26, 28], "Exudes intensity 12 contact poison; anyone touching bare plant must save."],
+    ["Daylight Stasis",            "defect",     [29, 30], "Becomes inert and inactive during daylight hours."],
+    ["Dissolving Juices",          "beneficial", [31, 33], "Digestive fluids dissolve gripped organic matter for 2d6 damage per round."],
+    ["Divisional Body Segments",   "beneficial", [34, 36], "Can detach a segment as a mobile duplicate with 1/4 HP for up to 1 hour."],
+    ["Electrical Generation",      "beneficial", [37, 39], "Discharge 3d6 electrical damage within 5m once per melee turn."],
+    ["Explosive Fruit",            "beneficial", [40, 42], "Fruit detonates for 2d6 damage in a 5m radius when disturbed or thrown."],
+    ["Heat Generation",            "beneficial", [43, 44], "Radiates heat; 1d6 damage per round within 3m to unprotected creatures."],
+    ["Increased Senses",           "beneficial", [45, 47], "Sense movement, heat, and vibration within 20m; +4 to detect intruders."],
+    ["Low Fertility",              "defect",     [48, 49], "Only 10% of seeds germinate; cannot propagate normally."],
+    ["Manipulation Vines",         "beneficial", [50, 52], "1d4 prehensile vines wield items and weapons as if with hands."],
+    ["Mobility",                   "beneficial", [53, 55], "Move on root-legs at 6m per turn."],
+    ["New Plant Parts",            "beneficial", [56, 58], "Gain an additional organ (extra jaw, vine cluster, fruit type) chosen by the referee."],
+    ["New Senses",                 "beneficial", [59, 61], "Gain a new sense such as infravision, sonar, or radiation sense."],
+    ["Parasitic Attachment",       "beneficial", [62, 63], "Attach to a host (1d4 damage/day); the plant gains nutrients and mobility."],
+    ["Physical Reflection",        "beneficial", [64, 66], "50% chance to reflect a physical attack back on the attacker."],
+    ["Poison Throwing Thorns",     "beneficial", [67, 69], "Launch 1d6 thorns up to 10m; each does 1d4 damage + intensity 10 poison save."],
+    ["Poison Vines",               "beneficial", [70, 72], "Vine contact causes intensity 12 poison save plus 1d6 damage."],
+    ["Radiating Plant Fiber",      "beneficial", [73, 74], "Fibers emit intensity 6 radiation in a 3m radius."],
+    ["Razor-edged Leaves",         "beneficial", [75, 77], "Leaves inflict 1d6 slashing damage on contact or brushing pass."],
+    ["Saw-edged Leaves",           "beneficial", [78, 80], "Leaves saw through ropes, vines, and soft material; 1d4 damage per turn of contact."],
+    ["Seed Mobility",              "beneficial", [81, 82], "Seeds travel up to 50m and plant themselves autonomously."],
+    ["Size Decrease",              "defect",     [83, 84], "Half normal plant size; all damage dice lowered by one step."],
+    ["Size Increase",              "beneficial", [85, 86], "Double normal plant size; HP and melee damage increased by +50%."],
+    ["Sonic Attack Ability",       "beneficial", [87, 88], "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round."],
+    ["Squeeze Vines",              "beneficial", [89, 90], "Constricting vines deal 2d6 damage per round to gripped targets."],
+    ["Spore Cloud",                "beneficial", [91, 92], "Releases a cloud of reproductive or poison spores in a 4m radius."],
+    ["Sucker Vines",               "beneficial", [93, 94], "Drain 1d4 HP per round from gripped victims; HP is transferred to the plant."],
+    ["Tangle Vines",               "beneficial", [95, 95], "Vines entangle victims within 3m; Strength save vs 18 to break free."],
+    ["Temperature Sensitivity",    "defect",     [96, 96], "Wilts at temperatures below 5°C or above 35°C; -50% movement."],
+    ["Throwing Thorns",            "beneficial", [97, 97], "Launch thorns up to 10m; 1d6 damage each, up to three per round."],
+    ["Winged Seeds",               "beneficial", [98, 98], "Seeds travel up to 200m on air currents; spread across wide areas."],
+    ["Pick Any Mutation (Plant)",  "beneficial", [99, 100], "Select any other plant mutation from the list."]
+  ];
+  return entries.map(([name, category, range, summary], index) => ({
+    code: 51 + index,
+    name,
+    subtype: "plant",
+    category,
+    ranges: { "mutated-plant": range },
+    summary,
+    page: 15
+  }));
+}
 
 export const MUTATION_TABLE_SPECIALS = {
   "physical": {
     "humanoid": {
-      "good": [
-        91,
-        94
-      ],
-      "pick": [
-        95,
-        100
-      ]
+      "good": [91, 94],
+      "pick": [95, 100]
     },
     "mutated-animal": {
-      "good": [
-        91,
-        94
-      ],
-      "pick": [
-        95,
-        100
-      ]
+      "good": [91, 94],
+      "pick": [95, 100]
     }
   },
   "mental": {
     "humanoid": {
-      "good": [
-        96,
-        99
-      ],
-      "pick": [
-        100,
-        100
-      ]
+      "good": [96, 99],
+      "pick": [100, 100]
     },
     "mutated-animal": {
-      "good": [
-        96,
-        99
-      ],
-      "pick": [
-        100,
-        100
-      ]
+      "good": [96, 99],
+      "pick": [100, 100]
+    }
+  },
+  "plant": {
+    "mutated-plant": {
+      "good": [],
+      "pick": [99, 100]
     }
   }
 };
@@ -1235,7 +1273,8 @@ export const MUTATIONS_BY_NAME = Object.fromEntries(
 
 export const MUTATIONS_BY_SUBTYPE = {
   physical: MUTATION_DEFINITIONS.filter((entry) => entry.subtype === "physical"),
-  mental: MUTATION_DEFINITIONS.filter((entry) => entry.subtype === "mental")
+  mental:   MUTATION_DEFINITIONS.filter((entry) => entry.subtype === "mental"),
+  plant:    MUTATION_DEFINITIONS.filter((entry) => entry.subtype === "plant")
 };
 
 export function entriesForSubtype(subtype) {

@@ -9,7 +9,7 @@ import {
   setActorState,
   setBarrier
 } from "./effect-state.mjs";
-import { promptNumber, resolveTargetActor, rollScaledDamageCard, resolveHazardCard, applyHealingToTargets } from "./dice.mjs";
+import { promptNumber, resolveTargetActor, rollScaledDamageCard, requestSaveResolution, applyHealingToTargets } from "./dice.mjs";
 import { runActorFlag, runActorUpdate } from "./gm-executor.mjs";
 import { actorIsRobot, rechargeRobot } from "./robots.mjs";
 import {
@@ -309,7 +309,11 @@ async function useMutationBomb(actor, item) {
       const { grantRandomMutation } = await import("./dice.mjs");
       await grantRandomMutation(target, { defectOnly: true });
     } else {
-      await resolveHazardCard(target, "radiation", Number(item.system.action.intensityFormula || 12), { sourceName: item.name });
+      await requestSaveResolution(target, "radiation", {
+        sourceName: item.name,
+        intensity: Number(item.system.action.intensityFormula || 12),
+        inputLocked: true
+      });
     }
   }
 

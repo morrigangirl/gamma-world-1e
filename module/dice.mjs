@@ -1,7 +1,10 @@
 import { SYSTEM_ID } from "./config.mjs";
 import { addDiceToFormula, addFlatBonusToFormula, addPerDieBonusToFormula, scaleFormula } from "./formulas.mjs";
-import { describePoisonOutcome, describeRadiationOutcome, resolvePoison, resolveRadiation } from "./tables/resistance-tables.mjs";
-import { mentalAttackTarget, naturalAttackTarget, weaponAttackTarget } from "./tables/combat-matrix.mjs";
+import { naturalAttackTarget, weaponAttackTarget } from "./tables/combat-matrix.mjs";
+import {
+  combinedFatigueFactor,
+  resolveWeaponFatigueFamily
+} from "./tables/fatigue-matrix.mjs";
 import {
   actorHasForceField,
   actorHasHazardProtection,
@@ -9,6 +12,13 @@ import {
   applyStunDamage,
   applyTemporaryEffect
 } from "./effect-state.mjs";
+import { runAsUser } from "./gm-executor.mjs";
+import {
+  clampSaveScore,
+  evaluateSaveForActor,
+  preferredSaveUserId,
+  saveContextForActor
+} from "./save-flow.mjs";
 
 const DialogV2 = foundry.applications.api.DialogV2;
 
@@ -142,6 +152,105 @@ export async function promptNumber({
     },
     rejectClose: false
   });
+}
+
+function saveTypeLabel(type) {
+  return game.i18n.localize(`GAMMA_WORLD.Save.${type.charAt(0).toUpperCase() + type.slice(1)}`);
+}
+
+function savePromptTitle(type) {
+  return `${type === "mental" ? "Roll" : "Resolve"} ${saveTypeLabel(type)} Save`;
+}
+
+function savePromptLabel(type) {
+  return type === "mental" ? "Attacker mental strength:" : `${saveTypeLabel(type)} intensity:`;
+}
+
+function abilityLabel(key) {
+  return game.i18n.localize(`GAMMA_WORLD.Attribute.${String(key ?? "").toUpperCase()}.full`);
+}
+
+function signedNumber(value) {
+  const numeric = Math.round(Number(value) || 0);
+  return numeric >= 0 ? `+${numeric}` : String(numeric);
+}
+
+function labeledModifierTerm(value, label) {
+  const numeric = Math.round(Number(value) || 0);
+  const absolute = Math.abs(numeric);
+  if (!absolute) return ` + 0[${label}]`;
+  return numeric >= 0 ? ` + ${absolute}[${label}]` : ` - ${absolute}[${label}]`;
+}
+
+async function promptAbilityRoll(actor, abilityKey, {
+  sourceName = "",
+  situationalModifier = 0,
+  dc = null
+} = {}) {
+  const ability = actor?.system?.attributes?.[abilityKey];
+  if (!ability) return null;
+
+  const sourceLine = sourceName
+    ? `<p>Reason: <strong>${foundry.utils.escapeHTML(sourceName)}</strong></p>`
+    : "";
+  const dcLine = Number.isFinite(Number(dc))
+    ? `<p>DC: <strong>${Math.round(Number(dc) || 0)}</strong></p>`
+    : "";
+
+  return DialogV2.prompt({
+    window: { title: `Roll ${abilityLabel(abilityKey)}` },
+    content: `<form>
+      <p><strong>${foundry.utils.escapeHTML(actor.name)}</strong> rolls ${foundry.utils.escapeHTML(abilityLabel(abilityKey))}.</p>
+      ${sourceLine}
+      ${dcLine}
+      <p>Ability modifier: <strong>${signedNumber(ability.mod ?? 0)}</strong></p>
+      <p>Situational modifier: <strong>${signedNumber(situationalModifier)}</strong></p>
+    </form>`,
+    ok: {
+      label: "Roll",
+      callback: () => true
+    },
+    rejectClose: false
+  });
+}
+
+async function promptSaveInput(actor, type, {
+  sourceName = "",
+  intensity = null,
+  inputLocked = false
+} = {}) {
+  const value = clampSaveScore(intensity ?? 10);
+  const readonly = inputLocked ? "readonly" : "";
+  const autofocus = inputLocked ? "" : "autofocus";
+  const sourceLine = sourceName
+    ? `<p>Source: <strong>${foundry.utils.escapeHTML(sourceName)}</strong></p>`
+    : "";
+  const actorLine = actor?.name
+    ? `<p>${foundry.utils.escapeHTML(actor.name)} resolves a ${foundry.utils.escapeHTML(saveTypeLabel(type).toLowerCase())} save.</p>`
+    : "";
+
+  return DialogV2.prompt({
+    window: { title: savePromptTitle(type) },
+    content: `<form>
+      ${actorLine}
+      ${sourceLine}
+      <label>${savePromptLabel(type)}
+        <input type="number" name="value" value="${value}" min="3" max="18" ${readonly} ${autofocus}>
+      </label>
+    </form>`,
+    ok: {
+      label: type === "mental" ? "Roll Save" : "Resolve Save",
+      callback: (_event, button) => {
+        const data = new foundry.applications.ux.FormDataExtended(button.form).object;
+        return clampSaveScore(data.value);
+      }
+    },
+    rejectClose: false
+  });
+}
+
+async function localSaveResolution(actor, type, options = {}) {
+  return promptAndResolveSave(actor, type, options);
 }
 
 async function resolveAttackTarget(actor, { allowManualAc = true } = {}) {
@@ -356,12 +465,32 @@ export async function applyHealingToTargets(amount, multiplier = 1, {
   }
 }
 
+function findAmmoGearItem(actor, ammoType) {
+  if (!ammoType || !actor?.items) return null;
+  return actor.items.find((item) =>
+    item?.type === "gear"
+    && item.system?.subtype === "ammunition"
+    && item.system?.ammo?.type === ammoType
+    && Number(item.system?.ammo?.rounds ?? 0) > 0
+  ) ?? null;
+}
+
 export async function rollAttack(actor, weapon) {
   const target = await resolveAttackTarget(actor);
   if (!target) return;
   const sourceToken = actor.getActiveTokens?.()[0] ?? null;
 
-  if (weapon.system.ammo.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
+  // Ammunition resolution: prefer a matching gear item; fall back to the
+  // weapon's legacy inline counter so older content still fires.
+  const ammoType = String(weapon.system.ammoType ?? "").trim();
+  let ammoItem = null;
+  if (ammoType) {
+    ammoItem = findAmmoGearItem(actor, ammoType);
+    if (!ammoItem && (!weapon.system.ammo?.consumes || Number(weapon.system.ammo?.current ?? 0) <= 0)) {
+      ui.notifications?.warn(`No ${ammoType.replace(/-/g, " ")} ammunition available.`);
+      return;
+    }
+  } else if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
     ui.notifications?.warn("No ammunition remaining.");
     return;
   }
@@ -376,7 +505,14 @@ export async function rollAttack(actor, weapon) {
     + (target.distance && target.distance <= 30 ? actor.gw?.closeRangeToHitBonus ?? 0 : 0)
     + range.penalty;
 
-  const targetNumber = weaponAttackTarget(weapon.system.weaponClass, target.armorClass);
+  const meleeTurn = Number(actor.system.combat?.fatigue?.round ?? 0);
+  const fatigueFactor = combinedFatigueFactor({
+    family: resolveWeaponFatigueFamily({ name: weapon.name, weaponClass: weapon.system.weaponClass }),
+    armorClass: actor.system.resources?.ac,
+    meleeTurn
+  });
+  const effectiveWeaponClass = Math.max(1, Number(weapon.system.weaponClass ?? 1) + fatigueFactor);
+  const targetNumber = weaponAttackTarget(effectiveWeaponClass, target.armorClass);
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
   const hit = roll.total >= targetNumber;
   const damageFormula = computeWeaponDamageFormula(actor, weapon);
@@ -401,7 +537,12 @@ export async function rollAttack(actor, weapon) {
     }
   );
 
-  if (weapon.system.ammo.consumes) {
+  // Consume the ammo gear item first; fall back to the weapon's inline
+  // counter if no gear ammo was found.
+  if (ammoItem) {
+    const remaining = Math.max(0, Number(ammoItem.system.ammo.rounds ?? 0) - 1);
+    await ammoItem.update({ "system.ammo.rounds": remaining });
+  } else if (weapon.system.ammo?.consumes) {
     await weapon.update({ "system.ammo.current": Math.max(0, Number(weapon.system.ammo.current ?? 0) - 1) });
   }
 
@@ -448,7 +589,9 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
   if (!target) return;
   const sourceToken = actor.getActiveTokens?.()[0] ?? null;
 
-  if (weapon.system.ammo.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
+  // Natural weapons (claws, bites, etc.) never consume ammo. Respect a
+  // defensive inline counter only if somebody deliberately set one.
+  if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
     ui.notifications?.warn("No ammunition remaining.");
     return;
   }
@@ -597,7 +740,11 @@ export async function rollDamageFromFlags(flags) {
         return;
       }
       const intensity = await evaluateEffectFormula(flags.effectFormula || "0", actor, target, 0);
-      await resolveHazardCard(target, flags.effectMode, intensity, { sourceName: flags.sourceName });
+      await requestSaveResolution(target, flags.effectMode, {
+        sourceName: flags.sourceName,
+        intensity,
+        inputLocked: true
+      });
       return;
     }
 
@@ -671,6 +818,200 @@ export async function rollDamageFromFlags(flags) {
   });
 }
 
+export async function promptAndResolveSave(actor, type, {
+  sourceName = "",
+  intensity = null,
+  inputLocked = false
+} = {}) {
+  const selectedIntensity = await promptSaveInput(actor, type, {
+    sourceName,
+    intensity,
+    inputLocked
+  });
+  if (selectedIntensity == null) {
+    return {
+      status: "canceled",
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      type,
+      sourceName
+    };
+  }
+  return resolveHazardCard(actor, type, selectedIntensity, { sourceName });
+}
+
+export async function requestSaveResolution(actor, type, {
+  sourceName = "",
+  intensity = null,
+  inputLocked = false
+} = {}) {
+  if (!actor) {
+    return { status: "canceled", actorUuid: null, actorName: "", type, sourceName };
+  }
+
+  const users = typeof game.users?.filter === "function"
+    ? game.users.filter(() => true)
+    : Array.from(game.users ?? []);
+  const targetUserId = preferredSaveUserId(actor, users);
+  if (!targetUserId) {
+    ui.notifications?.error("No active player owner or GM is available to resolve that save.");
+    return {
+      status: "canceled",
+      actorUuid: actor.uuid,
+      actorName: actor.name,
+      type,
+      sourceName
+    };
+  }
+
+  const options = {
+    sourceName,
+    intensity: intensity == null ? null : clampSaveScore(intensity),
+    inputLocked
+  };
+  if (targetUserId === game.user?.id) {
+    return localSaveResolution(actor, type, options);
+  }
+
+  try {
+    const result = await runAsUser(targetUserId, "resolve-save", {
+      actorUuid: actor.uuid,
+      type,
+      options
+    }, {
+      timeoutMs: 120000,
+      timeoutMessage: `Timed out waiting for ${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save.`
+    });
+    if (result?.status === "canceled") {
+      ui.notifications?.info(`${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save was canceled.`);
+    }
+    return result;
+  } catch (error) {
+    ui.notifications?.error(error?.message ?? String(error));
+    return {
+      status: "canceled",
+      actorUuid: actor.uuid,
+      actorName: actor.name,
+      type,
+      sourceName
+    };
+  }
+}
+
+export async function rollAbilityCheck(actor, abilityKey, {
+  sourceName = "",
+  situationalModifier = 0,
+  dc = null
+} = {}) {
+  const ability = actor?.system?.attributes?.[abilityKey];
+  if (!ability) {
+    ui.notifications?.warn("That ability roll is not available for this actor.");
+    return {
+      status: "canceled",
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      abilityKey
+    };
+  }
+
+  const formula = `1d20${labeledModifierTerm(ability.mod ?? 0, `${abilityLabel(abilityKey)} mod`)}${labeledModifierTerm(situationalModifier, "Situational")}`;
+  const roll = await new Roll(formula).evaluate();
+  const flavor = [
+    sourceName ? foundry.utils.escapeHTML(sourceName) : "",
+    `${abilityLabel(abilityKey)} check`,
+    Number.isFinite(Number(dc)) ? `DC ${Math.round(Number(dc) || 0)}` : ""
+  ].filter(Boolean).join(" &middot; ");
+
+  await roll.toMessage({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor
+  });
+
+  return {
+    status: "rolled",
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    abilityKey,
+    total: roll.total,
+    dc: Number.isFinite(Number(dc)) ? Math.round(Number(dc) || 0) : null
+  };
+}
+
+export async function promptAndRollAbility(actor, abilityKey, options = {}) {
+  if (!actor?.system?.attributes?.[abilityKey]) {
+    return {
+      status: "canceled",
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      abilityKey
+    };
+  }
+
+  const confirmed = await promptAbilityRoll(actor, abilityKey, options);
+  if (confirmed == null) {
+    return {
+      status: "canceled",
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      abilityKey
+    };
+  }
+
+  return rollAbilityCheck(actor, abilityKey, options);
+}
+
+export async function requestAbilityRollResolution(actor, abilityKey, options = {}) {
+  if (!actor) {
+    return {
+      status: "canceled",
+      actorUuid: null,
+      actorName: "",
+      abilityKey
+    };
+  }
+
+  const users = typeof game.users?.filter === "function"
+    ? game.users.filter(() => true)
+    : Array.from(game.users ?? []);
+  const targetUserId = preferredSaveUserId(actor, users);
+  if (!targetUserId) {
+    ui.notifications?.error("No active player owner or GM is available to resolve that roll.");
+    return {
+      status: "canceled",
+      actorUuid: actor.uuid,
+      actorName: actor.name,
+      abilityKey
+    };
+  }
+
+  if (targetUserId === game.user?.id) {
+    return promptAndRollAbility(actor, abilityKey, options);
+  }
+
+  try {
+    const result = await runAsUser(targetUserId, "roll-ability", {
+      actorUuid: actor.uuid,
+      abilityKey,
+      options
+    }, {
+      timeoutMs: 120000,
+      timeoutMessage: `Timed out waiting for ${actor.name}'s ${abilityLabel(abilityKey).toLowerCase()} roll.`
+    });
+    if (result?.status === "canceled") {
+      ui.notifications?.info(`${actor.name}'s ${abilityLabel(abilityKey).toLowerCase()} roll was canceled.`);
+    }
+    return result;
+  } catch (error) {
+    ui.notifications?.error(error?.message ?? String(error));
+    return {
+      status: "canceled",
+      actorUuid: actor.uuid,
+      actorName: actor.name,
+      abilityKey
+    };
+  }
+}
+
 export async function rollMentalAttackCard({
   actor,
   sourceName,
@@ -687,139 +1028,112 @@ export async function rollMentalAttackCard({
     return false;
   }
 
-  const targetMentalImmune = !!targetActor.gw?.mentalImmune;
-  const targetNumber = targetMentalImmune
-    ? "NE"
-    : mentalAttackTarget(actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value, targetActor.system.attributes.ms.value);
-  let hit = false;
-  let roll = null;
+  const save = await requestSaveResolution(targetActor, "mental", {
+    sourceName,
+    intensity: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
+    inputLocked: true
+  });
+  if (save?.status !== "resolved" || save.success) return false;
 
-  if (targetMentalImmune) {
-    hit = false;
-  } else if (targetNumber === "A") {
-    hit = true;
-  } else if (targetNumber === "NE") {
-    hit = false;
-  } else {
-    roll = await new Roll("1d20").evaluate();
-    hit = roll.total >= targetNumber;
+  if (showFollowUp) {
+    await createDamageCard({
+      actor,
+      sourceName,
+      formula: damageFormula,
+      damageType: "mental",
+      targetUuid: targetActor.uuid,
+      sourceUuid,
+      sourceKind: "mutation",
+      notes
+    });
   }
 
-  const content = await renderTemplate(
-    `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
-    {
-      actorName: actor.name,
-      weaponName: sourceName,
-      attackerLevel: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
-      targetAc: targetActor.system.attributes.ms.value,
-      hitTarget: targetNumber,
-      d20: roll?.total ?? "A",
-      total: roll?.total ?? "A",
-      hit,
-      targetName: targetActor.name,
-      attackBonus: 0,
-      rangeLabel: "mental",
-      distance: 0,
-      notes: targetMentalImmune ? "Target is immune to mental attack." : notes,
-      followUpLabel,
-      showFollowUp: showFollowUp && !targetMentalImmune
+  return true;
+}
+
+async function rollMentalSave(actor) {
+  const context = saveContextForActor(actor, "mental");
+  const rolls = [];
+  if (!context.mentalImmune) {
+    for (let index = 0; index < Math.max(1, context.attemptCount ?? 1); index += 1) {
+      rolls.push(await new Roll("1d20").evaluate());
     }
-  );
+  }
+
+  const content = `<div class="gw-chat-card gw-save-card">
+    <h3>${foundry.utils.escapeHTML(saveTypeLabel("mental"))} Save Roll</h3>
+    <div class="gw-card-meta">${foundry.utils.escapeHTML(actor.name)}</div>
+    <div class="gw-card-meta">Resistance: ${foundry.utils.escapeHTML(context.resistanceSummary)}</div>
+    ${context.attemptLabel ? `<div class="gw-card-meta">Attempts: ${foundry.utils.escapeHTML(context.attemptLabel)}</div>` : ""}
+    ${context.mentalImmune
+      ? `<div class="gw-card-meta">Protected by total mental immunity.</div>`
+      : `<div class="gw-card-meta">Rolls: ${rolls.map((roll) => roll.total).join(", ")}</div>`}
+  </div>`;
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
-    rolls: roll ? [roll] : [],
-    flags: {
-      [SYSTEM_ID]: {
-        card: "attack",
-        attack: {
-          actorUuid: actor.uuid,
-          weaponUuid: sourceUuid,
-          sourceUuid,
-          targetUuid: targetActor.uuid,
-          targetAc: targetActor.system.attributes.ms.value,
-          targetNumber,
-          hit,
-          damageFormula,
-          damageType: "mental",
-          sourceName,
-          sourceKind: "mutation"
-        }
-      }
-    }
+    rolls
   });
 
-  return hit;
+  return {
+    status: "rolled",
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    type: "mental",
+    resistance: context.resistance,
+    resistanceSummary: context.resistanceSummary,
+    rollTotal: rolls[0]?.total ?? null,
+    rollTotals: rolls.map((roll) => roll.total),
+    attemptCount: context.attemptCount ?? 1,
+    attemptSources: context.attemptSources ?? []
+  };
 }
 
 export async function resolveHazardCard(actor, type, intensity, { sourceName = "" } = {}) {
+  const normalizedIntensity = clampSaveScore(intensity ?? 10);
+  const context = saveContextForActor(actor, type);
+  let evaluation;
+  const saveRolls = [];
+
   if ((type !== "mental") && actorHasHazardProtection(actor, type)) {
-    const content = await renderTemplate(
-      `systems/${SYSTEM_ID}/templates/chat/save-card.hbs`,
-      {
-        actorName: actor.name,
-        type,
-        typeLabel: game.i18n.localize(`GAMMA_WORLD.Save.${type.charAt(0).toUpperCase() + type.slice(1)}`),
-        resistance: type === "poison" ? actor.system.resources.poisonResistance : actor.system.resources.radResistance,
-        intensity,
-        target: "*",
-        d20: "—",
-        success: true,
-        outcome: "Protected by shielding.",
-        damageFormula: "",
-        damageTotal: 0,
-        sourceName
-      }
-    );
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content,
-      flags: {
-        [SYSTEM_ID]: {
-          card: "hazard",
-          hazard: {
-            actorUuid: actor.uuid,
-            type,
-            result: { outcome: "*" },
-            damageFormula: "",
-            damageTotal: 0
-          }
-        }
-      }
-    });
-    return;
-  }
-
-  let result;
-  let summary = "";
-  let formula = "";
-  let total = 0;
-
-  if ((type === "mental") && actor.gw?.mentalImmune) {
-    result = { kind: "mental", attackerMentalStrength: Number(intensity || 0), targetNumber: "NE" };
-    summary = "Protected by total mental immunity.";
-  } else if (type === "poison") {
-    result = resolvePoison(actor.system.resources.poisonResistance, intensity);
-    summary = describePoisonOutcome(result);
-  } else if (type === "radiation") {
-    result = resolveRadiation(actor.system.resources.radResistance, intensity);
-    summary = describeRadiationOutcome(result);
+    evaluation = {
+      kind: type,
+      code: "*",
+      targetNumber: null,
+      resistance: context.resistance,
+      intensity: normalizedIntensity,
+      rollTotal: null,
+      rollTotals: [],
+      success: true,
+      damageDice: 0,
+      outcome: "Protected by shielding.",
+      resistanceSummary: context.resistanceSummary,
+      resistanceDetails: context.resistanceDetails,
+      attemptCount: context.attemptCount ?? 1,
+      attemptSources: context.attemptSources ?? [],
+      attemptLabel: context.attemptLabel ?? "",
+      result: { kind: type, outcome: "*" }
+    };
   } else {
-    const attackerMentalStrength = Number(intensity || actor.gw?.mentalAttackStrength || 10);
-    const targetNumber = mentalAttackTarget(attackerMentalStrength, actor.system.attributes.ms.value);
-    result = { kind: "mental", attackerMentalStrength, targetNumber };
-    summary = targetNumber === "NE"
-      ? "No effect."
-      : targetNumber === "A"
-        ? "Automatic success."
-        : `Mental attack succeeds on ${targetNumber}+ on 1d20.`;
+    evaluation = evaluateSaveForActor(actor, type, normalizedIntensity);
+    if ((type === "mental") && (typeof evaluation.targetNumber === "number")) {
+      for (let index = 0; index < Math.max(1, evaluation.attemptCount ?? 1); index += 1) {
+        saveRolls.push(await new Roll("1d20").evaluate());
+      }
+      evaluation = evaluateSaveForActor(actor, type, normalizedIntensity, {
+        rollTotals: saveRolls.map((roll) => roll.total)
+      });
+    }
   }
 
-  if (Number.isInteger(result.damageDice) && result.damageDice > 0) {
-    formula = `${result.damageDice}d6`;
-    const roll = await new Roll(formula).evaluate();
-    total = roll.total;
+  let damageFormula = "";
+  let damageTotal = 0;
+  let damageRoll = null;
+  if (Number.isInteger(evaluation.damageDice) && evaluation.damageDice > 0) {
+    damageFormula = `${evaluation.damageDice}d6`;
+    damageRoll = await new Roll(damageFormula).evaluate();
+    damageTotal = damageRoll.total;
   }
 
   const content = await renderTemplate(
@@ -827,60 +1141,81 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
     {
       actorName: actor.name,
       type,
-      typeLabel: game.i18n.localize(`GAMMA_WORLD.Save.${type.charAt(0).toUpperCase() + type.slice(1)}`),
-      resistance: type === "mental" ? actor.system.attributes.ms.value : type === "poison" ? actor.system.resources.poisonResistance : actor.system.resources.radResistance,
-      intensity,
-      target: result.targetNumber ?? result.outcome ?? "—",
-      d20: result.targetNumber ?? "—",
-      success: result.outcome === "*" || result.targetNumber === "NE",
-      outcome: summary,
-      damageFormula: formula,
-      damageTotal: total,
+      typeLabel: saveTypeLabel(type),
+      resistance: evaluation.resistance,
+      resistanceSummary: evaluation.resistanceSummary ?? "",
+      intensity: evaluation.intensity,
+      target: evaluation.code ?? "—",
+      targetLabel: typeof evaluation.targetNumber === "number" ? `${evaluation.targetNumber}+ on 1d20` : "",
+      rollLabel: evaluation.rollTotals?.length ? evaluation.rollTotals.join(", ") : "",
+      attemptLabel: evaluation.attemptLabel ?? "",
+      success: !!evaluation.success,
+      outcome: evaluation.outcome,
+      damageFormula,
+      damageTotal,
       sourceName
     }
   );
 
-  await ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [...saveRolls, damageRoll].filter(Boolean),
     flags: {
       [SYSTEM_ID]: {
         card: "hazard",
         hazard: {
           actorUuid: actor.uuid,
           type,
-          result,
-          damageFormula: formula,
-          damageTotal: total
+          result: evaluation.result,
+          targetNumber: evaluation.targetNumber ?? null,
+          rollTotal: evaluation.rollTotal ?? null,
+          rollTotals: evaluation.rollTotals ?? [],
+          success: !!evaluation.success,
+          outcome: evaluation.outcome,
+          intensity: evaluation.intensity,
+          resistance: evaluation.resistance,
+          resistanceSummary: evaluation.resistanceSummary ?? "",
+          attemptCount: evaluation.attemptCount ?? 1,
+          attemptSources: evaluation.attemptSources ?? [],
+          code: evaluation.code ?? null,
+          damageFormula,
+          damageTotal
         }
       }
     }
   });
+
+  return {
+    status: "resolved",
+    actorUuid: actor.uuid,
+    actorName: actor.name,
+    type,
+    sourceName,
+    resistance: evaluation.resistance,
+    resistanceSummary: evaluation.resistanceSummary ?? "",
+    intensity: evaluation.intensity,
+    targetNumber: evaluation.targetNumber ?? null,
+    rollTotal: evaluation.rollTotal ?? null,
+    rollTotals: evaluation.rollTotals ?? [],
+    success: !!evaluation.success,
+    outcome: evaluation.outcome,
+    code: evaluation.code ?? null,
+    attemptCount: evaluation.attemptCount ?? 1,
+    attemptSources: evaluation.attemptSources ?? [],
+    damageFormula,
+    damageTotal,
+    messageId: message?.id ?? null,
+    result: evaluation.result
+  };
 }
 
 export async function rollSave(actor, type) {
   if (type === "mental") {
-    const attackerMentalStrength = await promptNumber({
-      title: "Mental Attack",
-      label: "Attacker mental strength:",
-      value: 10,
-      min: 3,
-      max: 18
-    });
-    if (attackerMentalStrength == null) return;
-    await resolveHazardCard(actor, "mental", attackerMentalStrength);
-    return;
+    return rollMentalSave(actor);
   }
 
-  const intensity = await promptNumber({
-    title: type === "poison" ? "Poison Strength" : "Radiation Intensity",
-    label: type === "poison" ? "Poison strength:" : "Radiation intensity:",
-    value: 10,
-    min: 3,
-    max: 18
-  });
-  if (intensity == null) return;
-  await resolveHazardCard(actor, type, intensity);
+  return promptAndResolveSave(actor, type);
 }
 
 export async function resolveHazardDamage(flags) {

@@ -1,6 +1,8 @@
 import { SYSTEM_ID } from "../module/config.mjs";
 import { buildMutationItemSource } from "../module/mutation-rules.mjs";
 import { MUTATION_DEFINITIONS, findMutationByName } from "../module/tables/mutation-data.mjs";
+import { ALLIANCE_DATA } from "../module/alliances.mjs";
+import { ATTRIBUTE_BONUS_MATRIX, LEVEL_THRESHOLDS } from "../module/experience.mjs";
 import {
   ENCOUNTER_TERRAIN_KEYS,
   ENCOUNTER_TABLE_ICONS,
@@ -35,6 +37,8 @@ function weaponSource({
   effect = {},
   description = "",
   ammo = { current: 0, max: 0, consumes: false },
+  ammoType = "",
+  category,
   rof = 1,
   weight = 0
 }) {
@@ -44,6 +48,8 @@ function weaponSource({
     img: "icons/svg/sword.svg",
     system: {
       weaponClass,
+      category: category ?? "",
+      ammoType,
       damage: { formula: damage, type: attackType === "energy" ? "energy" : "physical" },
       range: { short, medium, long },
       attackType,
@@ -58,6 +64,42 @@ function weaponSource({
       quantity: 1,
       weight,
       equipped: false,
+      description: { value: description }
+    }
+  };
+  enrichEquipmentSystemData(source);
+  return source;
+}
+
+function ammoSource({ name, ammoType, rounds = 20, weight = 0.1, description = "" }) {
+  const source = {
+    name,
+    type: "gear",
+    img: "icons/weapons/ammunition/arrow-simple.webp",
+    system: {
+      quantity: 1,
+      weight,
+      subtype: "ammunition",
+      equipped: false,
+      ammo: { type: ammoType, rounds },
+      description: { value: description }
+    }
+  };
+  enrichEquipmentSystemData(source);
+  return source;
+}
+
+function containerSource({ name, capacity, weight = 1, description = "" }) {
+  const source = {
+    name,
+    type: "gear",
+    img: "icons/containers/bags/pack-leather-brown.webp",
+    system: {
+      quantity: 1,
+      weight,
+      subtype: "container",
+      equipped: false,
+      container: { capacity, stored: [] },
       description: { value: description }
     }
   };
@@ -442,6 +484,7 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 100,
       long: 200,
+      ammoType: "arrow",
       ammo: { current: 15, max: 15, consumes: true },
       description: htmlParagraphs("Primitive missile weapon.", "Effective range 100 meters, maximum range 200 meters.")
     }),
@@ -452,6 +495,7 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 120,
       long: 240,
+      ammoType: "crossbow-bolt",
       ammo: { current: 15, max: 15, consumes: true },
       description: htmlParagraphs("Heavy mechanical bow with slower but reliable shots.")
     }),
@@ -480,6 +524,7 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 20,
       long: 40,
+      ammoType: "slug",
       ammo: { current: 15, max: 15, consumes: true },
       description: htmlParagraphs("Police riot-control sidearm firing stunning slugs.", "Track unconsciousness when stun damage reaches half the target's original hit points.", "Powered by a hydrogen energy cell good for about five clips.")
     }),
@@ -490,6 +535,7 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 50,
       long: 100,
+      ammoType: "needler-poison",
       ammo: { current: 10, max: 10, consumes: true },
       effect: { mode: "poison", formula: "17", notes: "Resolve as poison intensity 17." },
       description: htmlParagraphs("Soundless dart weapon loaded with poison capsules.")
@@ -501,6 +547,7 @@ export function equipmentPackSources() {
       attackType: "ranged",
       short: 50,
       long: 100,
+      ammoType: "needler-paralysis",
       ammo: { current: 10, max: 10, consumes: true },
       effect: { mode: "paralysis", formula: "20", status: "paralysis", notes: "Victim is paralyzed for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Needler loaded with paralysis darts.")
@@ -512,6 +559,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 25,
       long: 50,
+      ammoType: "stun-cell",
       ammo: { current: 10, max: 10, consumes: true },
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Short-ranged solar-cell stun weapon.", "One solar cell powers about ten shots.")
@@ -523,6 +571,7 @@ export function equipmentPackSources() {
       attackType: "energy",
       short: 100,
       long: 200,
+      ammoType: "stun-cell",
       ammo: { current: 5, max: 5, consumes: true },
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Long-ranged stunning rifle.")
@@ -617,6 +666,22 @@ export function equipmentPackSources() {
       attackType: "energy",
       effect: { mode: "stun", formula: "20", status: "unconscious", notes: "Victim is stunned for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Three-meter energized whip that inflicts stun.")
+    }),
+    weaponSource({
+      name: "Paralysis Rod",
+      weaponClass: 7,
+      damage: "0",
+      attackType: "melee",
+      effect: { mode: "paralysis", formula: "20", status: "paralysed", notes: "Touch attack. Victim saves vs poison intensity 16 or is paralysed for 1d6 melee turns." },
+      description: htmlParagraphs("A short Ancient rod tipped with a discharge node. Drains two charges per use; 20 charges per nuclear cell.")
+    }),
+    weaponSource({
+      name: "Force Field Generator",
+      weaponClass: 1,
+      damage: "0",
+      attackType: "melee",
+      effect: { mode: "note", notes: "Activates a personal force field providing AC 2, immunity to slugs, arrows, and melee. Drains 1 charge per hour; 24 charges per hydrogen cell, 96 per nuclear cell." },
+      description: htmlParagraphs("Belt-mounted Ancient shield projector. Generates a full-body force field for the wearer only. Force fields block incoming fire but not outgoing attacks.")
     }),
     armorSource({
       name: "Shield",
@@ -979,11 +1044,8 @@ export function equipmentPackSources() {
       tech: "vi",
       description: htmlParagraphs("Triangular one-meter sheet of impossibly strong Ancient engineering metal.", "Lightweight, clamp-drilled, and effectively immune to ordinary tools.")
     }),
-    gearSource({
-      name: "Broadcast Power Station",
-      tech: "vi",
-      description: htmlParagraphs("Ancient installation that transmits power through the air rather than wires.", "A surviving station can energize robots and compatible equipment for hundreds of kilometers, entirely at the DM's discretion.")
-    }),
+    // Broadcast Power Station removed — ambient infrastructure, not an item.
+    // See the "Broadcast Power" journal in the rulebook pack for the rules.
     gearSource({
       name: "Civilian Internal Combustion Vehicle",
       tech: "iv",
@@ -1018,7 +1080,58 @@ export function equipmentPackSources() {
       name: "Bubble Car",
       tech: "vi",
       description: htmlParagraphs("Ultimate solar-powered luxury vehicle for deep sea and deep space travel.", "Rechargeable solar cells handle the main drive, while an atomic backup cell powers the shield and emergency systems for about 24 hours.")
-    })
+    }),
+    // -- Ammunition items ----------------------------------------------------
+    ammoSource({ name: "Arrows (bundle of 20)",      ammoType: "arrow",             rounds: 20, description: "Flight arrows for a bow. Stackable bundle." }),
+    ammoSource({ name: "Crossbow Bolts (bundle of 20)", ammoType: "crossbow-bolt",  rounds: 20, description: "Iron-headed crossbow bolts." }),
+    ammoSource({ name: "Sling Stones (pouch of 30)", ammoType: "sling-stone",       rounds: 30, weight: 3, description: "A pouch of river-smoothed stones for sling use." }),
+    ammoSource({ name: "Sling Bullets (pouch of 30)",ammoType: "sling-bullet",      rounds: 30, weight: 4, description: "Cast-lead shaped bullets for superior sling damage." }),
+    ammoSource({ name: "Slug-Thrower Rounds (clip of 15)", ammoType: "slug",        rounds: 15, description: "Pre-war .38 caliber rounds." }),
+    ammoSource({ name: "Needler Darts, Paralysis (10)", ammoType: "needler-paralysis", rounds: 10, description: "Capsule darts loaded with intensity 17 paralytic." }),
+    ammoSource({ name: "Needler Darts, Poison (10)", ammoType: "needler-poison",    rounds: 10, description: "Capsule darts loaded with intensity 17 poison." }),
+    ammoSource({ name: "Stun Rifle Cell (10 shots)", ammoType: "stun-cell",         rounds: 10, description: "Replacement energy cell for stun ray pistols and stun rifles." }),
+    ammoSource({ name: "Javelin (single)",           ammoType: "javelin",           rounds: 1,  weight: 2, description: "A thrown javelin. Retrievable after use unless broken." }),
+    ammoSource({ name: "Gyrojet Slugs (clip of 10)", ammoType: "gyrojet",           rounds: 10, description: "Micro-rocket slugs for the pre-war gyrojet pistol." }),
+    // -- Containers ----------------------------------------------------------
+    containerSource({ name: "Belt Pouch",     capacity: 10,  weight: 0.5, description: "A small leather pouch that hangs from a belt." }),
+    containerSource({ name: "Satchel",        capacity: 25,  weight: 1,   description: "A shoulder bag for light loads." }),
+    containerSource({ name: "Small Backpack", capacity: 50,  weight: 2,   description: "A traveller's pack with shoulder straps." }),
+    containerSource({ name: "Ruck Sack",      capacity: 60,  weight: 2.5, description: "A sturdy expedition pack with reinforced straps." }),
+    containerSource({ name: "Saddlebag",      capacity: 75,  weight: 3,   description: "A paired container for a riding animal or mechanical mount." }),
+    containerSource({ name: "Large Backpack", capacity: 100, weight: 3.5, description: "An oversized expedition pack with an internal frame." }),
+    containerSource({ name: "Cargo Hamper",   capacity: 150, weight: 6,   description: "A vehicle-mounted cargo basket. Not meant to be carried by foot." }),
+    // -- Tools, rations, trade goods, communication, survival ---------------
+    gearSource({ name: "Flint & Steel",      weight: 0.1, description: htmlParagraphs("A small tinder kit. Reliably starts a campfire in fair weather.") }),
+    gearSource({ name: "Rope (10m coil)",    weight: 2,   description: htmlParagraphs("Ten meters of braided hemp rope.") }),
+    gearSource({ name: "Grappling Hook",     weight: 2,   description: htmlParagraphs("Iron three-prong grapple, pairs with rope for climbing.") }),
+    gearSource({ name: "Shovel",             weight: 3,   description: htmlParagraphs("A short-handled digging spade suitable for trench work.") }),
+    gearSource({ name: "Crowbar",            weight: 2,   description: htmlParagraphs("Iron leverage bar for prying and light demolition.") }),
+    gearSource({ name: "Wrench",             weight: 1,   description: htmlParagraphs("Adjustable spanner for turning nuts and bolts on pre-war machinery.") }),
+    gearSource({ name: "Pickaxe",            weight: 4,   description: htmlParagraphs("Miner's pick, useful against earth, stone, or light concrete.") }),
+    gearSource({ name: "Lockpicks",          weight: 0.3, description: htmlParagraphs("Slim picks and tension wrenches for mechanical locks.") }),
+    gearSource({ name: "Magnifying Glass",   weight: 0.2, description: htmlParagraphs("Brass-framed glass lens. Useful for fine inspection and fire-starting in sun.") }),
+    gearSource({ name: "Torch",              weight: 0.5, description: htmlParagraphs("Resin-soaked hardwood torch. Burns for one hour with good flame.") }),
+    gearSource({ name: "Lantern",            weight: 2,   description: htmlParagraphs("Shielded oil lantern. Six-hour burn per fill.") }),
+    gearSource({ name: "Lamp Oil (flask)",   weight: 0.5, description: htmlParagraphs("Small flask of lamp oil. Refills a lantern twice.") }),
+    gearSource({ name: "Signal Mirror",      weight: 0.2, description: htmlParagraphs("Polished steel signalling mirror. Line-of-sight flash visible 10+ km.") }),
+    gearSource({ name: "Bedroll",            weight: 4,   description: htmlParagraphs("Rolled blankets and tarp for camping.") }),
+    gearSource({ name: "Blanket",            weight: 2,   description: htmlParagraphs("Heavy wool blanket.") }),
+    gearSource({ name: "Tent (2-person)",    weight: 8,   description: htmlParagraphs("Canvas two-person tent with poles and pegs.") }),
+    gearSource({ name: "Trail Rations (3 days)", weight: 3, description: htmlParagraphs("Dried meat, grain biscuit, and dried fruit. Three-day supply.") }),
+    gearSource({ name: "Iron Rations (1 week)",  weight: 7, description: htmlParagraphs("Pre-war processed food bars preserved in foil. One-week supply.") }),
+    gearSource({ name: "Canteen (full)",     weight: 1,   description: htmlParagraphs("One-liter steel canteen. Holds a day's water for one person.") }),
+    gearSource({ name: "Hand Radio (Ancient)", weight: 1, description: htmlParagraphs("Palm-sized Ancient transceiver. Line-of-sight range; 40 hours on one hydrogen cell.") }),
+    gearSource({ name: "Signal Flare",       weight: 0.3, description: htmlParagraphs("Hand-launched chemical flare visible 20 km at night.") }),
+    gearSource({ name: "Whistle",            weight: 0.1, description: htmlParagraphs("Loud shrill brass whistle.") }),
+    gearSource({ name: "Semaphore Flags",    weight: 0.5, description: htmlParagraphs("Pair of signalling flags in red and white.") }),
+    gearSource({ name: "Pre-war Bottle",     weight: 0.5, description: htmlParagraphs("Glass bottle with intact cap. Valuable to traders.") }),
+    gearSource({ name: "Clockwork Toy",      weight: 0.5, description: htmlParagraphs("Wind-up tin toy from before the Shadow Years. Valuable curio.") }),
+    gearSource({ name: "Pre-war Book",       weight: 1,   description: htmlParagraphs("Hardbound pre-war book. Archivists will pay well.") }),
+    gearSource({ name: "Spent Power Cell",   weight: 0.2, description: htmlParagraphs("An empty power cell. Worthless as a power source, but valuable as trade goods to Ancients scholars.") }),
+    gearSource({ name: "Domar Coin",         weight: 0.01, description: htmlParagraphs("A silver coin minted in a pre-war state. Standard currency in many trading posts.") }),
+    gearSource({ name: "Bandages",           weight: 0.2, description: htmlParagraphs("A roll of clean linen bandages. Stops bleeding and speeds natural healing.") }),
+    gearSource({ name: "Splint",             weight: 0.3, description: htmlParagraphs("Flat wooden splint with cloth ties. Stabilises broken limbs until a medi-kit or medic is available.") }),
+    gearSource({ name: "Herbal Poultice",    weight: 0.2, description: htmlParagraphs("Mashed local herbs in a cloth bundle. Modest healing over several hours.") })
   ];
 }
 
@@ -1160,8 +1273,143 @@ export function actorPackSources() {
         clone(laserRifle),
         clone(controlBaton)
       ]
-    }
+    },
+    // ---------------------------------------------------------------------
+    // v0.5.0 pregens — Mutated Plant + five Cryptic Alliance members
+    // ---------------------------------------------------------------------
+    alliancePregen({
+      name: "Ambulatory Oak",
+      type: "mutated-plant",
+      alliance: "",
+      level: 4,
+      movement: 60,
+      baseAc: 5,
+      naturalAttackName: "Branch Slam",
+      naturalAttackDamage: "2d6",
+      stats: { ms: 13, in: 9, dx: 6, ch: 10, cn: 16, ps: 17 },
+      hp: 38,
+      animalForm: "Oak",
+      role: "sentient sapling",
+      biography: "An awakened oak sapling rooted in a ruined orchard. Moves slowly but communicates through subtle rustling and root-vibration.",
+      mutations: ["New Plant Parts", "Manipulation Vines", "Increased Senses"],
+      items: ["Satchel"]
+    }),
+    alliancePregen({
+      name: "Restorationist Tech",
+      type: "psh",
+      alliance: "restorationists",
+      level: 3,
+      movement: 120,
+      baseAc: 7,
+      naturalAttackName: "Wrench",
+      naturalAttackDamage: "1d4",
+      stats: { ms: 13, in: 16, dx: 14, ch: 12, cn: 11, ps: 10 },
+      hp: 26,
+      role: "ancient tech restorer",
+      biography: "A pre-war engineering specialist sworn to rebuild humanity's civilization. Carries a kit of tools and a working slug-thrower.",
+      items: ["Slug Thrower (.38)", "Slug-Thrower Rounds (clip of 15)", "Wrench", "Small Backpack", "Chemical Energy Cell"]
+    }),
+    alliancePregen({
+      name: "Healer Medic",
+      type: "humanoid",
+      alliance: "healers",
+      level: 3,
+      movement: 120,
+      baseAc: 8,
+      naturalAttackName: "Staff",
+      naturalAttackDamage: "1d6",
+      stats: { ms: 15, in: 14, dx: 12, ch: 15, cn: 12, ps: 10 },
+      hp: 30,
+      role: "wandering medic",
+      biography: "A healer who goes wherever the wounded lie. Affiliated with the Healers but answers to no-one.",
+      mutations: ["Total Healing"],
+      items: ["Small Backpack", "Bandages", "Splint", "Herbal Poultice", "Trail Rations (3 days)", "Canteen (full)"]
+    }),
+    alliancePregen({
+      name: "Ranks-of-the-Fit Militant",
+      type: "psh",
+      alliance: "ranks-of-the-fit",
+      level: 4,
+      movement: 120,
+      baseAc: 5,
+      naturalAttackName: "Rifle Butt",
+      naturalAttackDamage: "1d4",
+      stats: { ms: 11, in: 10, dx: 14, ch: 10, cn: 14, ps: 15 },
+      hp: 38,
+      role: "purity militant",
+      biography: "A militant of the Ranks who hunts mutants. Armed with a stun rifle and inertia armor.",
+      items: ["Stun Rifle", "Stun Rifle Cell (10 shots)", "Large Backpack", "Iron Rations (1 week)"]
+    }),
+    alliancePregen({
+      name: "Seeker Scavenger",
+      type: "humanoid",
+      alliance: "seekers",
+      level: 3,
+      movement: 120,
+      baseAc: 8,
+      naturalAttackName: "Knife",
+      naturalAttackDamage: "1d4",
+      stats: { ms: 12, in: 14, dx: 15, ch: 11, cn: 12, ps: 11 },
+      hp: 28,
+      role: "artifact scavenger",
+      biography: "Seekers send their scavengers deep into ruined cities to recover pre-war relics.",
+      mutations: ["Heightened Sense Vision"],
+      items: ["Dagger", "Small Backpack", "Torch", "Rope (10m coil)", "Grappling Hook", "Magnifying Glass"]
+    }),
+    alliancePregen({
+      name: "Brotherhood Scholar",
+      type: "humanoid",
+      alliance: "brotherhood",
+      level: 2,
+      movement: 120,
+      baseAc: 9,
+      naturalAttackName: "Staff",
+      naturalAttackDamage: "1d4",
+      stats: { ms: 16, in: 17, dx: 11, ch: 13, cn: 10, ps: 9 },
+      hp: 18,
+      role: "brotherhood of thought scholar",
+      biography: "A scholar devoted to preserving pre-war knowledge and extending its benefits to all sentient life.",
+      mutations: ["Mental Defense Shield", "Intuition"],
+      items: ["Pre-war Book", "Satchel", "Canteen (full)", "Trail Rations (3 days)"]
+    })
   ];
+}
+
+function alliancePregen({ name, type, alliance, level, movement, baseAc, naturalAttackName, naturalAttackDamage, stats, hp, animalForm = "", role, biography = "", mutations = [], items = [] }) {
+  const systemCore = actorSystem({
+    type, animalForm, level, movement, alliance, baseAc,
+    naturalAttackName, naturalAttackDamage, stats, hp
+  });
+  const equipment = equipmentPackSources();
+  const resolvedItems = [];
+  for (const itemName of items) {
+    const source = equipment.find((entry) => entry.name === itemName);
+    if (source) resolvedItems.push(clone(source));
+  }
+  for (const mutName of mutations) {
+    const def = findMutationByName(mutName);
+    if (def) resolvedItems.push(buildMutationItemSource(def));
+  }
+  return {
+    name,
+    type: "character",
+    img: "icons/svg/mystery-man.svg",
+    prototypeToken: createPrototypeTokenSource(defaultPrototypeTokenOptions({
+      name, type: "character", img: "icons/svg/mystery-man.svg"
+    })),
+    system: {
+      ...systemCore,
+      details: {
+        ...systemCore.details,
+        role: role ?? systemCore.details.role
+      },
+      biography: {
+        ...systemCore.biography,
+        value: biography ? `<p>${biography}</p>` : ""
+      }
+    },
+    items: resolvedItems
+  };
 }
 
 export { monsterPackSources };
@@ -1356,6 +1604,346 @@ export function journalPackSources() {
           }
         }
       ]
+    },
+    {
+      name: "House Rules",
+      pages: [
+        {
+          name: "PSH Technology Reliability (Homebrew)",
+          type: "text",
+          text: {
+            format: 1,
+            content: htmlParagraphs(
+              "Homebrew rule (enabled by default): once a Pure Strain Human has figured out an Ancient artifact (operation known), further uses by that PSH actor bypass the condition and malfunction rolls. The artifact simply works.",
+              "Non-PSH actors, and PSH actors using an unanalysed artifact, still follow the RAW function-chance and malfunction workflow.",
+              "Toggle this via the world setting <em>PSH technology always works once figured out</em>. A chat line is posted whenever the rule fires so the referee can see it trigger."
+            )
+          }
+        },
+        {
+          name: "Initiative (departure from RAW)",
+          type: "text",
+          text: {
+            format: 1,
+            content: htmlParagraphs(
+              "This system uses 5e-style individual initiative (1d20 + DX mod) per combatant, not the 1e side-based procedure. The choice is intentional for Foundry's Combat Tracker to work cleanly. Referees who want RAW 1e initiative can simply roll it manually and set each combatant's initiative with the tracker's input field."
+            )
+          }
+        }
+      ]
     }
+  ];
+}
+
+/* ------------------------------------------------------------------ */
+/* Cryptic Alliances                                                  */
+/* ------------------------------------------------------------------ */
+
+const ALLIANCE_ORDER = [
+  "brotherhood", "seekers", "zoopremisists", "healers",
+  "restorationists", "followers", "ranks-of-the-fit",
+  "archivists", "radiationists", "created"
+];
+
+function allianceJournalEntry(key) {
+  const record = ALLIANCE_DATA[key];
+  if (!record) return null;
+  const allies = record.allies?.length
+    ? record.allies.map((a) => ALLIANCE_DATA[a]?.label ?? a).join(", ")
+    : "—";
+  const enemies = record.enemies?.length
+    ? record.enemies.map((a) => ALLIANCE_DATA[a]?.label ?? a).join(", ")
+    : "—";
+  const welcomes = record.accepts?.length
+    ? record.accepts.join(", ")
+    : "—";
+  return {
+    name: record.label,
+    pages: [
+      {
+        name: "Overview",
+        type: "text",
+        text: {
+          format: 1,
+          content: htmlParagraphs(
+            `<strong>Purpose:</strong> ${record.purpose}`,
+            `<strong>Welcomes:</strong> ${welcomes}.`,
+            `<strong>Allies:</strong> ${allies}.`,
+            `<strong>Enemies:</strong> ${enemies}.`,
+            `<strong>Default reaction bonus to recognised kin:</strong> ${record.reactionBonus >= 0 ? "+" : ""}${record.reactionBonus}.`
+          )
+        }
+      }
+    ]
+  };
+}
+
+export function crypticAlliancePackSources() {
+  return ALLIANCE_ORDER
+    .map(allianceJournalEntry)
+    .filter(Boolean);
+}
+
+/* ------------------------------------------------------------------ */
+/* Robot chassis                                                      */
+/* ------------------------------------------------------------------ */
+
+const ROBOT_CHASSIS_CATALOG = [
+  { name: "Light Cargo Lifter", power: "chemical", ac: 8, hp: 25, armament: "None", sensors: "Vision, touch", controls: "Voice + remote",
+    notes: "Warehouse utility robotoid; moves crates up to 500kg. Often intact in ruined factories." },
+  { name: "Heavy Cargo Lifter", power: "nuclear", ac: 6, hp: 60, armament: "None", sensors: "Vision, sonar",  controls: "Voice + remote",
+    notes: "Moves up to 5 tonnes; treads for rough terrain. Slow (6m/turn) but heavily armored." },
+  { name: "Small Cargo Transport", power: "chemical", ac: 7, hp: 40, armament: "None", sensors: "Vision, radar", controls: "Driver seat + autopilot",
+    notes: "Wheeled autonomous vehicle. Typical payload ~1 tonne." },
+  { name: "Large Cargo Transport", power: "nuclear", ac: 5, hp: 90, armament: "Defensive minigun (2d6, 40m)", sensors: "Radar, vision, sonar", controls: "Autopilot + remote",
+    notes: "Convoy-class autonomous truck. Armed against wasteland raiders." },
+  { name: "Ecology Bot — Agricultural", power: "solar", ac: 9, hp: 30, armament: "Soil probe (1d3)", sensors: "Vision, chem, soil", controls: "Voice",
+    notes: "Tends fields and orchards. Friendly to cultivators; will fight pests to the death." },
+  { name: "Ecology Bot — Wilderness", power: "solar", ac: 8, hp: 35, armament: "Tranquilizer darts (stun, 20m)", sensors: "Vision, sonar, chem", controls: "Voice + remote",
+    notes: "Patrols wilderness preserves. Often hostile to mutated animals it cannot catalogue." },
+  { name: "Engineering Bot — Standard", power: "chemical", ac: 7, hp: 35, armament: "Welder (1d6 fire)", sensors: "Vision, IR, ultrasonic", controls: "Voice + remote",
+    notes: "Repairs and constructs. Tools concealed in chassis compartments." },
+  { name: "Engineering Bot — Light Duty", power: "solar", ac: 8, hp: 25, armament: "None", sensors: "Vision, IR", controls: "Voice",
+    notes: "Domestic repair / plumbing / electronics." },
+  { name: "Engineering Bot — Heavy Duty", power: "nuclear", ac: 5, hp: 65, armament: "Cutting laser (2d6, 10m)", sensors: "Vision, IR, sonar", controls: "Voice + remote + autopilot",
+    notes: "Demolition and heavy construction; often mistaken for a warbot." },
+  { name: "Medical Robotoid", power: "nuclear", ac: 7, hp: 40, armament: "Stun field (mental save or paralysed 1d4 rounds)", sensors: "Vision, IR, chem, bio", controls: "Voice + medical link",
+    notes: "Surgery, triage, pharmacology. Carries a medi-kit, two stim doses, and cur-in dose." },
+  { name: "Security Robotoid", power: "nuclear", ac: 4, hp: 55, armament: "Laser pistol (3d6, 30/60/120m)", sensors: "Vision, IR, sonar, radar", controls: "Command circuit + autopilot",
+    notes: "Guards facility entrances; challenges intruders with voice prompts before engaging." },
+  { name: "General Household Robotoid", power: "solar", ac: 9, hp: 22, armament: "None", sensors: "Vision, chem", controls: "Voice",
+    notes: "Cleaning, cooking, nursing, basic child-minding. Often the friendliest robot a party meets." },
+  { name: "Supervisor Borg", power: "nuclear", ac: 3, hp: 80, armament: "Laser rifle (4d6, 60/120/240m)", sensors: "Full suite incl. psionic", controls: "Independent + command net",
+    notes: "Commands other robots of a facility. Retains pre-war authority protocols." },
+  { name: "Defense Borg", power: "nuclear", ac: 2, hp: 95, armament: "Mk V blaster (5d6), missile launcher (3 micro-missiles)", sensors: "Full suite", controls: "Independent",
+    notes: "Fixed-position defence platform. Will pursue briefly but does not leave its patrol zone." },
+  { name: "Attack Borg", power: "nuclear", ac: 2, hp: 110, armament: "Mk VII blaster (6d6), stun grenade dispenser", sensors: "Full suite", controls: "Independent",
+    notes: "Active mobile combatant; hunts targets across a region." },
+  { name: "Warbot", power: "nuclear", ac: 1, hp: 150, armament: "Fusion rifle (8d6), fragmentation grenades (4d6 radius 10m)", sensors: "Full suite + radar + tactical AI", controls: "Independent",
+    notes: "Pre-war battlefield unit. Treat as a dungeon-level encounter on its own." },
+  { name: "Death Machine", power: "nuclear", ac: 1, hp: 180, armament: "Black ray gun (save vs death), twin fusion cannons (10d6)", sensors: "Full military suite", controls: "Independent + override codes",
+    notes: "The worst thing in the wasteland. Virtually unkillable without a fusion bomb or coordinated high-tech assault." },
+  { name: "Think Tank", power: "nuclear", ac: 8, hp: 40, armament: "None (psionic defence only)", sensors: "Psionic, full data net", controls: "Independent",
+    notes: "Immobile cognitive engine. Answers questions, solves puzzles, occasionally asks for something in trade." }
+];
+
+function robotChassisJournalEntry(entry) {
+  return {
+    name: entry.name,
+    pages: [
+      {
+        name: "Profile",
+        type: "text",
+        text: {
+          format: 1,
+          content: htmlParagraphs(
+            `<strong>Power Source:</strong> ${entry.power}.`,
+            `<strong>Armor Class:</strong> ${entry.ac}. <strong>Hit Points:</strong> ${entry.hp}.`,
+            `<strong>Armament:</strong> ${entry.armament}.`,
+            `<strong>Sensors:</strong> ${entry.sensors}.`,
+            `<strong>Controls:</strong> ${entry.controls}.`,
+            entry.notes
+          )
+        }
+      }
+    ]
+  };
+}
+
+export function robotChassisPackSources() {
+  return ROBOT_CHASSIS_CATALOG.map(robotChassisJournalEntry);
+}
+
+/* ------------------------------------------------------------------ */
+/* Roll tables                                                        */
+/* ------------------------------------------------------------------ */
+
+function rollTableSource({ name, description, formula, results }) {
+  return {
+    name,
+    img: "icons/svg/d20-grey.svg",
+    description,
+    formula,
+    replacement: true,
+    displayRoll: true,
+    results: results.map((result) => ({
+      type: "text",
+      name: result.label,
+      img: result.img ?? "icons/svg/d20-grey.svg",
+      description: result.description ?? "",
+      weight: 1,
+      range: Array.isArray(result.range) ? result.range : [result.range, result.range],
+      drawn: false
+    }))
+  };
+}
+
+function reactionTableResults() {
+  return [
+    { range: [2, 2],   label: "Immediate Attack", description: "The encountered group attacks immediately with surprise if possible." },
+    { range: [3, 5],   label: "Hostile",          description: "The group is actively hostile and will fight if threatened or given opportunity." },
+    { range: [6, 8],   label: "Uncertain",        description: "The group is wary and will talk, flee, or fight depending on approach." },
+    { range: [9, 11],  label: "Indifferent",      description: "The group ignores the party unless provoked or offered something of value." },
+    { range: [12, 12], label: "Friendly",         description: "The group is openly friendly and may assist, trade, or share information." }
+  ];
+}
+
+function moraleTableResults() {
+  return [
+    { range: [1, 3],   label: "Break",            description: "The creature flees combat outright." },
+    { range: [4, 6],   label: "Waver",            description: "The creature hesitates; cannot take an offensive action this round." },
+    { range: [7, 10],  label: "Hold",             description: "The creature steadies itself and continues fighting." }
+  ];
+}
+
+function surpriseTableResults() {
+  return [
+    { range: [1, 2],   label: "Surprised",        description: "The side rolling 1–2 is surprised and loses the first melee turn." },
+    { range: [3, 6],   label: "Not Surprised",    description: "The side rolling 3–6 is ready to act normally." }
+  ];
+}
+
+function artifactConditionTableResults() {
+  return [
+    { range: [2, 5],   label: "Broken",           description: "Cannot function until repaired." },
+    { range: [6, 7],   label: "Poor",             description: "Function chance ≈ 30%. Malfunctions common." },
+    { range: [8, 9],   label: "Fair",             description: "Function chance ≈ 50%. Occasional malfunctions." },
+    { range: [10, 10], label: "Good",             description: "Function chance ≈ 70%." },
+    { range: [11, 11], label: "Excellent",        description: "Function chance ≈ 85%." },
+    { range: [12, 12], label: "Perfect",          description: "Function chance ≈ 95%. Factory-new." }
+  ];
+}
+
+function artifactCategoryTableResults() {
+  return [
+    { range: [1, 10],   label: "Pistol",         description: "Slug thrower, needler, stun ray, laser, Mark V, black ray." },
+    { range: [11, 20],  label: "Rifle",          description: "Stun rifle, laser rifle, Mark VII, fusion rifle." },
+    { range: [21, 30],  label: "Energy Weapon",  description: "Vibro blade, energy mace, stun whip, force pike." },
+    { range: [31, 40],  label: "Grenade",        description: "Gas, chemical explosive, fragmentation, energy, photon, torc." },
+    { range: [41, 50],  label: "Bomb / Missile", description: "Micro missile, fission bomb, concussion, negation, neutron, trek, mutation." },
+    { range: [51, 55],  label: "Armor",          description: "Powered plate, inertia, energised, powered scout/battle/attack/assault." },
+    { range: [56, 65],  label: "Vehicle",        description: "Turbine car, hover car, flit car, bubble car, cargo hauler, helicopter." },
+    { range: [66, 80],  label: "Energy Device",  description: "Force field generator, portent, energy cloak, accelera-dose, medi-kit, life ray." },
+    { range: [81, 90],  label: "Robotic Unit",   description: "Household, medical, security, borg, warbot — see the Robotic Units pack." },
+    { range: [91, 100], label: "Medical",        description: "Stim dose, cur-in dose, anti-radiation serum, pain reducer, rejuv chamber, life ray." }
+  ];
+}
+
+function mutationDrawTableResults(subtype, characterType) {
+  return MUTATION_DEFINITIONS
+    .filter((entry) => entry.subtype === subtype)
+    .map((entry) => {
+      const range = entry.ranges?.[characterType];
+      if (!range) return null;
+      return {
+        range,
+        label: entry.name,
+        description: entry.summary ?? ""
+      };
+    })
+    .filter(Boolean);
+}
+
+function experienceBonusTableResults() {
+  return Object.entries(ATTRIBUTE_BONUS_MATRIX).map(([roll, attr]) => ({
+    range: [Number(roll), Number(roll)],
+    label: `+1 ${attr.toUpperCase()}`,
+    description: `Gain +1 to ${attr.toUpperCase()}.`
+  }));
+}
+
+function tradeValueTableResults() {
+  return [
+    { range: [1, 10],   label: "Potable water (1 liter)", description: "Trade value: 1 domar or 1 day's rations." },
+    { range: [11, 20],  label: "Preserved rations",       description: "Trade value: 1 domar per day's rations." },
+    { range: [21, 30],  label: "Flint and steel",         description: "Trade value: 5 domars or a simple blade." },
+    { range: [31, 40],  label: "Pre-war glass bottle",    description: "Trade value: 2 domars; 10 if intact with cap." },
+    { range: [41, 50],  label: "Functional flashlight",   description: "Trade value: 25 domars or an Ancient power cell." },
+    { range: [51, 60],  label: "Working clockwork",       description: "Trade value: 40 domars." },
+    { range: [61, 70],  label: "Pre-war ammunition",      description: "Trade value: 1 domar per slug." },
+    { range: [71, 80],  label: "Power cell (spent)",      description: "Trade value: 5 domars (hydrogen), 15 (solar), 50 (nuclear)." },
+    { range: [81, 90],  label: "Power cell (fresh)",      description: "Trade value: 50 (chemical) to 500 (nuclear) domars." },
+    { range: [91, 98],  label: "Pre-war book",            description: "Trade value: 10 domars; 100+ to an Archivist." },
+    { range: [99, 100], label: "Unknown Ancient artifact",description: "Trade value: 100+ domars, subject to Archivist/Seeker appraisal." }
+  ];
+}
+
+export function rollTablePackSources() {
+  return [
+    rollTableSource({
+      name: "Reaction (2d6)",
+      description: htmlParagraphs("Modified reaction roll for NPC and creature initial attitude."),
+      formula: "2d6",
+      results: reactionTableResults()
+    }),
+    rollTableSource({
+      name: "Morale (1d10)",
+      description: htmlParagraphs("Roll when casualties mount or an obvious routing condition triggers."),
+      formula: "1d10",
+      results: moraleTableResults()
+    }),
+    rollTableSource({
+      name: "Surprise (1d6)",
+      description: htmlParagraphs("Each side rolls. 1-2 means that side is surprised."),
+      formula: "1d6",
+      results: surpriseTableResults()
+    }),
+    rollTableSource({
+      name: "Artifact Condition (2d6)",
+      description: htmlParagraphs("Determine how well a newly-recovered Ancient artifact functions."),
+      formula: "2d6",
+      results: artifactConditionTableResults()
+    }),
+    rollTableSource({
+      name: "Artifact Category (d100)",
+      description: htmlParagraphs("When a random Ancient artifact is recovered, roll to determine its category."),
+      formula: "1d100",
+      results: artifactCategoryTableResults()
+    }),
+    rollTableSource({
+      name: "Physical Mutation Draw (Humanoid, d100)",
+      description: htmlParagraphs("Roll on the humanoid physical mutation chart."),
+      formula: "1d100",
+      results: mutationDrawTableResults("physical", "humanoid")
+    }),
+    rollTableSource({
+      name: "Mental Mutation Draw (Humanoid, d100)",
+      description: htmlParagraphs("Roll on the humanoid mental mutation chart."),
+      formula: "1d100",
+      results: mutationDrawTableResults("mental", "humanoid")
+    }),
+    rollTableSource({
+      name: "Physical Mutation Draw (Mutated Animal, d100)",
+      description: htmlParagraphs("Roll on the mutated animal physical mutation chart."),
+      formula: "1d100",
+      results: mutationDrawTableResults("physical", "mutated-animal")
+    }),
+    rollTableSource({
+      name: "Mental Mutation Draw (Mutated Animal, d100)",
+      description: htmlParagraphs("Roll on the mutated animal mental mutation chart."),
+      formula: "1d100",
+      results: mutationDrawTableResults("mental", "mutated-animal")
+    }),
+    rollTableSource({
+      name: "Plant Mutation Draw (d100)",
+      description: htmlParagraphs("Roll on the mutated plant chart."),
+      formula: "1d100",
+      results: mutationDrawTableResults("plant", "mutated-plant")
+    }),
+    rollTableSource({
+      name: "Experience Attribute Bonus (d10)",
+      description: htmlParagraphs(
+        "Rolled on level-up for PSH and humanoid characters. The resulting attribute receives +1 up to the natural cap of 21.",
+        `Level thresholds: ${LEVEL_THRESHOLDS.join(", ")} XP.`
+      ),
+      formula: "1d10",
+      results: experienceBonusTableResults()
+    }),
+    rollTableSource({
+      name: "Trade Value / Barter (d100)",
+      description: htmlParagraphs("Common scavenger goods and their trade value in domars (pre-war coinage)."),
+      formula: "1d100",
+      results: tradeValueTableResults()
+    })
   ];
 }

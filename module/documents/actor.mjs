@@ -10,6 +10,7 @@ import { applyRobotDerived, actorIsRobot } from "../robots.mjs";
 import { charismaReactionAdjustment, resolveEncounterIntelligence } from "../tables/encounter-tables.mjs";
 import { runAsGM } from "../gm-executor.mjs";
 import { artifactUseProfile } from "../artifact-rules.mjs";
+import { shouldRouteHpReduction } from "../save-flow.mjs";
 
 function clampArmorClass(value) {
   return Math.max(1, Math.min(10, Math.round(Number(value) || 10)));
@@ -145,6 +146,9 @@ export function buildActorDerived(actor) {
   derived.attacksPerRound = Math.max(1, 1 + derived.extraAttacks);
   derived.charisma = clampResistance((system.attributes.ch.value ?? 0) + derived.charismaBonus);
   applyTemporaryDerivedModifiers(actor, derived);
+  derived.mentalResistance = clampResistance(derived.mentalResistance);
+  derived.radiationResistance = clampResistance(derived.radiationResistance);
+  derived.poisonResistance = clampResistance(derived.poisonResistance);
   derived.ac = clampArmorClass(derived.ac);
   derived.movement = roundMovement(derived.movementBase * derived.movementMultiplier);
   const profile = artifactUseProfile(actor);
@@ -161,6 +165,25 @@ export function buildActorDerived(actor) {
 }
 
 export class GammaWorldActor extends Actor {
+  async _preUpdate(changed, options, user) {
+    const result = await super._preUpdate(changed, options, user);
+    if (result === false || options?.gammaWorldSync || game.user?.isGM || !supportsGammaWorldActorData(this)) return result;
+
+    const nextHp = foundry.utils.getProperty(changed, "system.resources.hp.value");
+    if (nextHp == null) return result;
+
+    const currentHp = Number(this.system.resources.hp.value ?? 0);
+    const normalizedHp = Math.max(0, Math.floor(Number(nextHp) || 0));
+    foundry.utils.setProperty(changed, "system.resources.hp.value", normalizedHp);
+
+    if (shouldRouteHpReduction({ currentHp, nextHp: normalizedHp, isGM: false })) {
+      await runAsGM("actor-set-hp", { actorUuid: this.uuid, value: normalizedHp });
+      return false;
+    }
+
+    return result;
+  }
+
   prepareDerivedData() {
     super.prepareDerivedData();
     if (!supportsGammaWorldActorData(this)) return;
@@ -175,6 +198,59 @@ export class GammaWorldActor extends Actor {
     this.system.resources.mentalResistance = this.gw.mentalResistance;
     this.system.resources.radResistance = this.gw.radiationResistance;
     this.system.resources.poisonResistance = this.gw.poisonResistance;
+
+    this.#prepareEncumbrance();
+  }
+
+  /**
+   * Compute carried weight, carry cap, and strict encumbrance state.
+   * Strict mode (per world design):
+   *   - encumbered (carried > cap): halve movement, -1 to-hit on physical attacks, DX-AC bonus zeroed.
+   *   - overloaded (carried > cap*2): movement = 0, attacks refused, mutations cannot be activated.
+   */
+  #prepareEncumbrance() {
+    const system = this.system;
+    const physStrength = Number(system.attributes?.ps?.value ?? 10);
+    const baseCarry = physStrength * 10;
+
+    let containerCap = 0;
+    let carried = 0;
+    for (const item of this.items) {
+      const qty = Math.max(0, Number(item.system?.quantity ?? 1));
+      const weight = Math.max(0, Number(item.system?.weight ?? 0));
+      carried += qty * weight;
+      if (item.type === "gear"
+          && item.system?.subtype === "container"
+          && item.system?.equipped) {
+        containerCap += Math.max(0, Number(item.system?.container?.capacity ?? 0));
+      }
+    }
+
+    const carryMax = baseCarry + containerCap;
+    const encumbered = carried > carryMax;
+    const overloaded = carried > (carryMax * 2);
+
+    system.encumbrance = {
+      carried: Math.round(carried * 100) / 100,
+      max: carryMax,
+      penalized: encumbered || overloaded
+    };
+
+    this.gw = this.gw ?? {};
+    this.gw.encumbrance = {
+      carried: system.encumbrance.carried,
+      max: carryMax,
+      encumbered,
+      overloaded
+    };
+
+    if (encumbered || overloaded) {
+      const moveFactor = overloaded ? 0 : 0.5;
+      this.gw.movement = Math.round((this.gw.movement ?? system.details.movement ?? 120) * moveFactor);
+      this.gw.movementMultiplier = (this.gw.movementMultiplier ?? 1) * moveFactor;
+      this.gw.toHitBonus = (this.gw.toHitBonus ?? 0) - 1;
+      if (this.gw.dxAcBonus) this.gw.dxAcBonus = 0;
+    }
   }
 
   async refreshDerivedResources({ adjustCurrent = false } = {}) {
@@ -214,7 +290,7 @@ export class GammaWorldActor extends Actor {
 
   async applyDamage(amount) {
     const damage = Math.max(0, Math.floor(Number(amount) || 0));
-    if (!game.user?.isGM && !this.isOwner) {
+    if (!game.user?.isGM) {
       return runAsGM("actor-apply-damage", { actorUuid: this.uuid, amount: damage });
     }
     const current = Number(this.system.resources.hp.value ?? 0);
@@ -243,7 +319,8 @@ export class GammaWorldActor extends Actor {
 
   async setHitPoints(value) {
     const target = Math.max(0, Math.floor(Number(value) || 0));
-    if (!game.user?.isGM && !this.isOwner) {
+    const current = Number(this.system.resources.hp.value ?? 0);
+    if (!game.user?.isGM && (shouldRouteHpReduction({ currentHp: current, nextHp: target, isGM: false }) || !this.isOwner)) {
       return runAsGM("actor-set-hp", { actorUuid: this.uuid, value: target });
     }
     const result = await this.update({ "system.resources.hp.value": target });

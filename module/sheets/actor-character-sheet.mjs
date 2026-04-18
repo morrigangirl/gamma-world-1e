@@ -2,11 +2,13 @@
  * GammaWorldCharacterSheet — ApplicationV2 sheet for Actor.type === "character".
  */
 
-import { SYSTEM_ID, ATTRIBUTE_KEYS } from "../config.mjs";
+import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES } from "../config.mjs";
 import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
 import { artifactNeedsPowerManagement, artifactPowerSummary } from "../artifact-power.mjs";
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
+import { applyRest } from "../healing.mjs";
+import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -58,6 +60,55 @@ function currentTargetActors() {
   return [...(game.user?.targets ?? new Set())]
     .map((token) => token.actor)
     .filter(Boolean);
+}
+
+export function isRichEditorChange(event) {
+  const target = event?.target;
+  if (!target?.closest) return false;
+  return !!target.closest(".gw-rich-editor__edit");
+}
+
+export function wireRichEditorToggles(app) {
+  const root = app?.element;
+  if (!root) return;
+  const containers = root.querySelectorAll(".gw-rich-editor");
+  for (const container of containers) {
+    const button = container.querySelector(".gw-rich-editor__toggle");
+    const editor = container.querySelector(".gw-rich-editor__edit");
+    if (!button || !editor || button.dataset.gwToggleBound === "1") continue;
+    button.dataset.gwToggleBound = "1";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const turningOn = container.dataset.mode !== "edit";
+      container.dataset.mode = turningOn ? "edit" : "view";
+      if (turningOn) {
+        window.requestAnimationFrame(() => {
+          const area = editor.querySelector?.(".editor-content, .ProseMirror") ?? editor;
+          area?.focus?.();
+        });
+        return;
+      }
+      commitRichEditorValue(editor, app);
+    });
+  }
+}
+
+function commitRichEditorValue(editor, app) {
+  const name = editor?.getAttribute?.("name");
+  if (!name) return;
+  let value = null;
+  if (typeof editor.value === "string") value = editor.value;
+  else if (editor.hasAttribute?.("value")) value = editor.getAttribute("value");
+  else {
+    const content = editor.querySelector?.(".ProseMirror, .editor-content");
+    if (content) value = content.innerHTML;
+  }
+  if (value == null) return;
+  const document = app?.document;
+  if (!document?.update) return;
+  document.update({ [name]: value }).catch((error) => {
+    console.error(`${app?.constructor?.name ?? "Sheet"} | rich editor commit failed`, error);
+  });
 }
 
 function controlledTokenActors() {
@@ -299,7 +350,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
 
   static DEFAULT_OPTIONS = {
     classes: ["gamma-world", "sheet", "actor", "character"],
-    position: { width: 740, height: 820 },
+    position: { width: 680, height: 820 },
     window: { resizable: true, contentClasses: ["gamma-world-sheet"] },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
@@ -329,7 +380,10 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       robotRepair:    GammaWorldCharacterSheet.#onRobotRepair,
       itemCreate:     GammaWorldCharacterSheet.#onItemCreate,
       itemEdit:       GammaWorldCharacterSheet.#onItemEdit,
-      itemDelete:     GammaWorldCharacterSheet.#onItemDelete
+      itemDelete:     GammaWorldCharacterSheet.#onItemDelete,
+      rest:           GammaWorldCharacterSheet.#onRest,
+      awardXp:        GammaWorldCharacterSheet.#onAwardXp,
+      applyBonus:     GammaWorldCharacterSheet.#onApplyBonus
     }
   };
 
@@ -455,6 +509,26 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     context.enrichedAppearance = await enrich(system.biography.appearance ?? "", relOpt);
     context.enrichedNotes      = await enrich(system.biography.notes ?? "",      relOpt);
 
+    // Advancement & encumbrance summaries
+    const level = Number(system.details?.level ?? 1);
+    const nextLevelXp = xpForNextLevel(level + 1);
+    const pendingBonuses = Array.from(system.advancement?.availableBonuses ?? []);
+    context.advancement = {
+      nextLevelXp: nextLevelXp && Number.isFinite(nextLevelXp) ? nextLevelXp : 0,
+      xpToNextLevel: nextLevelXp ? Math.max(0, nextLevelXp - Number(system.details?.xp ?? 0)) : 0,
+      pendingBonuses,
+      pendingSummary: pendingBonuses.map((k) => k.toUpperCase()).join(", ") || "—"
+    };
+    context.encumbrance = {
+      carried: Number(system.encumbrance?.carried ?? 0),
+      max: Number(system.encumbrance?.max ?? 0),
+      penalized: !!system.encumbrance?.penalized
+    };
+    context.allianceLabel = CRYPTIC_ALLIANCES?.[system.details?.alliance]
+      ? game.i18n.localize(CRYPTIC_ALLIANCES[system.details.alliance])
+      : system.details?.alliance ?? "";
+    context.isGM = !!game.user?.isGM;
+
     return context;
   }
 
@@ -495,13 +569,8 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
   static async #onRollAttribute(event, target) {
     event.preventDefault();
     const key = target.dataset.attribute;
-    const attr = this.document.system.attributes[key];
-    if (!attr) return;
-    const roll = await new Roll("1d20 + @mod", { mod: attr.mod }).evaluate();
-    await roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      flavor:  `${game.i18n.localize(`GAMMA_WORLD.Attribute.${key.toUpperCase()}.full`)} check`
-    });
+    const { rollAbilityCheck } = await import("../dice.mjs");
+    await rollAbilityCheck(this.document, key);
   }
 
   static async #onRollSave(event, target) {
@@ -906,6 +975,66 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     } finally {
       release();
     }
+  }
+
+  static async #onRest(event, _target) {
+    event.preventDefault();
+    const hours = 24;
+    await applyRest(this.document, { hours });
+  }
+
+  static async #onAwardXp(event, _target) {
+    event.preventDefault();
+    if (!game.user?.isGM) {
+      ui.notifications?.warn("Only the GM can award XP.");
+      return;
+    }
+    const DialogV2 = foundry.applications.api.DialogV2;
+    const amount = await DialogV2.prompt({
+      window: { title: "Award XP" },
+      content: `<p>Amount of XP to award to <strong>${this.document.name}</strong>:</p>
+                <input type="number" name="amount" value="100" min="1" step="1" autofocus />
+                <p><label>Source: <input type="text" name="source" value="referee" /></label></p>`,
+      ok: {
+        label: "Award",
+        callback: (_ev, button) => {
+          const form = button.form ?? button.closest("form") ?? button.closest(".window-content");
+          const amountInput = form?.querySelector?.("input[name='amount']");
+          const sourceInput = form?.querySelector?.("input[name='source']");
+          return {
+            amount: Number(amountInput?.value ?? 0),
+            source: String(sourceInput?.value ?? "referee")
+          };
+        }
+      }
+    });
+    if (!amount || !amount.amount) return;
+    await awardXp(this.document, amount.amount, { source: amount.source });
+  }
+
+  static async #onApplyBonus(event, _target) {
+    event.preventDefault();
+    const pending = Array.from(this.document.system.advancement?.availableBonuses ?? []);
+    if (!pending.length) {
+      ui.notifications?.info("No pending attribute bonuses.");
+      return;
+    }
+    const next = pending[0];
+    await applyAttributeBonus(this.document, next);
+  }
+
+  /* -------------------------------------------- */
+  /*  Render-time wiring                          */
+  /* -------------------------------------------- */
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    wireRichEditorToggles(this);
+  }
+
+  _onChangeForm(formConfig, event) {
+    if (isRichEditorChange(event)) return;
+    return super._onChangeForm?.(formConfig, event);
   }
 }
 

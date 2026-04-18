@@ -100,6 +100,27 @@ async function dispatchOperation(operation, payload = {}) {
   }
 }
 
+async function dispatchPromptOperation(operation, payload = {}) {
+  switch (operation) {
+    case "resolve-save": {
+      const actor = await resolveActorDocument(payload.actorUuid);
+      if (!actor) throw new Error("Actor not found for save resolution.");
+      const { promptAndResolveSave } = await import("./dice.mjs");
+      return promptAndResolveSave(actor, payload.type, payload.options ?? {});
+    }
+
+    case "roll-ability": {
+      const actor = await resolveActorDocument(payload.actorUuid);
+      if (!actor) throw new Error("Actor not found for requested roll.");
+      const { promptAndRollAbility } = await import("./dice.mjs");
+      return promptAndRollAbility(actor, payload.abilityKey, payload.options ?? {});
+    }
+
+    default:
+      throw new Error(`Unknown prompt operation: ${operation}`);
+  }
+}
+
 export function registerGmExecutor() {
   if (game.gammaWorld?.gmExecutorRegistered) return;
   game.gammaWorld ??= {};
@@ -131,7 +152,29 @@ export function registerGmExecutor() {
       return;
     }
 
-    if ((message.kind !== "response") || (message.requesterId !== game.user?.id)) return;
+    if (message.kind === "prompt-request") {
+      if (!message.targetUserId || (message.targetUserId !== game.user?.id)) return;
+
+      try {
+        const result = await dispatchPromptOperation(message.operation, message.payload);
+        game.socket.emit(SOCKET_NAME, {
+          kind: "prompt-response",
+          requestId: message.requestId,
+          requesterId: message.requesterId,
+          result
+        });
+      } catch (error) {
+        game.socket.emit(SOCKET_NAME, {
+          kind: "prompt-response",
+          requestId: message.requestId,
+          requesterId: message.requesterId,
+          error: error?.message ?? String(error)
+        });
+      }
+      return;
+    }
+
+    if (!["response", "prompt-response"].includes(message.kind) || (message.requesterId !== game.user?.id)) return;
     const pending = pendingRequests.get(message.requestId);
     if (!pending) return;
     pendingRequests.delete(message.requestId);
@@ -184,5 +227,31 @@ export async function runActorFlag(actor, key, value, { scope = SYSTEM_ID } = {}
     scope,
     key,
     value
+  });
+}
+
+export async function runAsUser(targetUserId, operation, payload = {}, {
+  timeoutMs = 60000,
+  timeoutMessage = "Timed out waiting for the requested user action."
+} = {}) {
+  if (!targetUserId) throw new Error("No active user is available for that prompt.");
+  if (targetUserId === game.user?.id) return dispatchPromptOperation(operation, payload);
+
+  const requestId = foundry.utils.randomID();
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      pendingRequests.delete(requestId);
+      reject(new Error(timeoutMessage));
+    }, timeoutMs);
+
+    pendingRequests.set(requestId, { resolve, reject, timeout });
+    game.socket.emit(SOCKET_NAME, {
+      kind: "prompt-request",
+      requestId,
+      requesterId: game.user.id,
+      targetUserId,
+      operation,
+      payload
+    });
   });
 }

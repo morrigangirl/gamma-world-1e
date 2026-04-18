@@ -9,7 +9,8 @@ import {
   artifactHarmMetadata,
   artifactUseProfileForChart,
   formatArtifactElapsedMinutes,
-  itemIsArtifact
+  itemIsArtifact,
+  pshReliableTechApplies
 } from "./artifact-rules.mjs";
 import {
   artifactChartConfig,
@@ -438,11 +439,20 @@ function outcomeSummary(item, actor, cause, functionRoll, secondaryRoll = null) 
 }
 
 async function resolveHiddenOutcome(actor, item, session, { cause = "use" } = {}) {
-  const functionRoll = await new Roll("1d100").evaluate();
+  const pshReliable = pshReliableTechApplies(actor, item);
+  const functionRoll = pshReliable
+    ? { total: 1, formula: "Reliable PSH operation" }
+    : await new Roll("1d100").evaluate();
   const metadata = artifactHarmMetadata(item);
-  const needsSecondary = !((Number(functionRoll.total) <= artifactFunctionPercent(item)) || (!metadata.canExplode && !metadata.canShortOut));
+  const needsSecondary = !pshReliable
+    && !((Number(functionRoll.total) <= artifactFunctionPercent(item)) || (!metadata.canExplode && !metadata.canShortOut));
   const secondary = needsSecondary ? await new Roll("1d100").evaluate() : null;
   const outcome = outcomeSummary(item, actor, cause, functionRoll.total, secondary?.total ?? null);
+  if (pshReliable) {
+    outcome.pshReliable = true;
+    outcome.publicMessage = game.i18n?.localize?.("GAMMA_WORLD.Artifact.Session.Public.PshReliable")
+      ?? "PSH reliability: the artifact operates flawlessly.";
+  }
 
   const update = {};
   if (session) {

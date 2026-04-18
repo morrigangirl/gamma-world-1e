@@ -1,8 +1,8 @@
 {
   "id": "gamma-world-1e",
   "title": "Gamma World 1st Edition",
-  "description": "A Foundry VTT v13 game system for Gamma World 1st Edition with chargen, combat, mutations, artifacts, robots, encounter automation, and bundled compendia for gear, sample actors, monsters, and system docs.",
-  "version": "0.4.0",
+  "description": "A Foundry VTT v13 game system for Gamma World 1st Edition with chargen, combat, mutations, artifacts, robots, encounter automation, and bundled compendia for gear, sample actors, monsters, cryptic alliances, robot chassis, roll tables, and system docs.",
+  "version": "0.5.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -54,6 +54,34 @@
       "label": "Encounter Tables",
       "path": "packs/encounter-tables",
       "type": "RollTable",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "roll-tables",
+      "label": "Roll Tables",
+      "path": "packs/roll-tables",
+      "type": "RollTable",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "cryptic-alliances",
+      "label": "Cryptic Alliances",
+      "path": "packs/cryptic-alliances",
+      "type": "JournalEntry",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "robot-chassis",
+      "label": "Robotic Units",
+      "path": "packs/robot-chassis",
+      "type": "JournalEntry",
+      "system": "gamma-world-1e"
+    },
+    {
+      "name": "rulebook",
+      "label": "Rulebook Reference",
+      "path": "packs/rulebook",
+      "type": "JournalEntry",
       "system": "gamma-world-1e"
     },
     {

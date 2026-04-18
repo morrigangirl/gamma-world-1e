@@ -546,9 +546,17 @@
     </fieldset>
   {{/if}}
 
-  <fieldset>
-    <legend>Description</legend>
-    <prose-mirror name="system.description.value" value="{{system.description.value}}" toggled="false"></prose-mirror>
+  <fieldset class="gw-rich-editor" data-mode="view">
+    <legend>
+      <span class="gw-rich-editor__label">Description</span>
+      <button type="button" class="gw-rich-editor__toggle" data-editor-toggle="description"
+              title="Toggle edit" aria-label="Toggle edit">
+        <i class="fas fa-pencil-alt gw-rich-editor__icon gw-rich-editor__icon--edit" aria-hidden="true"></i>
+        <i class="fas fa-check gw-rich-editor__icon gw-rich-editor__icon--save" aria-hidden="true"></i>
+      </button>
+    </legend>
+    <div class="gw-rich-editor__view">{{{enrichedDescription}}}</div>
+    <prose-mirror class="gw-rich-editor__edit" name="system.description.value" value="{{system.description.value}}"></prose-mirror>
   </fieldset>
 
 </form>

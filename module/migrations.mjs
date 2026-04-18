@@ -1,8 +1,35 @@
-import { SYSTEM_ID } from "./config.mjs";
+import { SYSTEM_ID, CRYPTIC_ALLIANCES } from "./config.mjs";
 import { findMutationByName } from "./tables/mutation-data.mjs";
 import { getMutationRule } from "./mutation-rules.mjs";
-import { equipmentMigrationUpdate } from "./equipment-rules.mjs";
+import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
+
+const ALLIANCE_ALIASES = {
+  "brotherhood of thought":    "brotherhood",
+  "thought":                   "brotherhood",
+  "the seekers":               "seekers",
+  "seekers":                   "seekers",
+  "zoopremisists":             "zoopremisists",
+  "zoo":                       "zoopremisists",
+  "the healers":               "healers",
+  "healers":                   "healers",
+  "restorationists":           "restorationists",
+  "followers of the voice":    "followers",
+  "followers":                 "followers",
+  "ranks of the fit":          "ranks-of-the-fit",
+  "the archivists":            "archivists",
+  "archivists":                "archivists",
+  "radiationists":             "radiationists",
+  "the created":               "created",
+  "created":                   "created"
+};
+
+function normalizeAlliance(current) {
+  if (!current) return "";
+  if (Object.prototype.hasOwnProperty.call(CRYPTIC_ALLIANCES, current)) return current;
+  const hit = ALLIANCE_ALIASES[String(current).trim().toLowerCase()];
+  return hit ?? current; // preserve unknown homebrew strings
+}
 
 export function registerMigrationSettings() {
   game.settings.register(SYSTEM_ID, "schemaVersion", {
@@ -11,6 +38,15 @@ export function registerMigrationSettings() {
     config: false,
     type: String,
     default: "0.0.0"
+  });
+
+  game.settings.register(SYSTEM_ID, "pshTechReliable", {
+    name: "GAMMA_WORLD.Settings.PshTechReliable.Name",
+    hint: "GAMMA_WORLD.Settings.PshTechReliable.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 }
 
@@ -62,6 +98,21 @@ async function migrateItem(item) {
     if (!item.system.effect?.mode) {
       update["system.effect.mode"] = "damage";
     }
+    // 0.5.0: tag weapon category if missing.
+    const currentCategory = String(item.system.category ?? "");
+    if (!currentCategory || currentCategory === "primitive") {
+      const inferred = inferWeaponCategory(item);
+      if (inferred !== currentCategory) update["system.category"] = inferred;
+    }
+  }
+
+  if (item.type === "gear") {
+    // 0.5.0: tag gear subtype if missing.
+    const currentSubtype = String(item.system.subtype ?? "");
+    if (!currentSubtype || currentSubtype === "misc") {
+      const inferred = inferGearSubtype(item);
+      if (inferred && inferred !== currentSubtype) update["system.subtype"] = inferred;
+    }
   }
 
   if (item.type === "mutation") {
@@ -70,6 +121,85 @@ async function migrateItem(item) {
 
   if (Object.keys(update).length) {
     await item.update(update, { gammaWorldSync: true });
+  }
+}
+
+/**
+ * Map ammoType keys to the canonical ammo gear item names that the generator
+ * produces. Used by the inline-ammo migration to figure out which gear item
+ * to grant on the actor.
+ */
+const AMMO_GEAR_BY_TYPE = {
+  "arrow":             "Arrows (bundle of 20)",
+  "crossbow-bolt":     "Crossbow Bolts (bundle of 20)",
+  "sling-stone":       "Sling Stones (pouch of 30)",
+  "sling-bullet":      "Sling Bullets (pouch of 30)",
+  "slug":              "Slug-Thrower Rounds (clip of 15)",
+  "needler-paralysis": "Needler Darts, Paralysis (10)",
+  "needler-poison":    "Needler Darts, Poison (10)",
+  "stun-cell":         "Stun Rifle Cell (10 shots)",
+  "javelin":           "Javelin (single)",
+  "gyrojet":           "Gyrojet Slugs (clip of 10)"
+};
+
+/**
+ * For ranged weapons on an actor with an inline ammo counter, create a gear
+ * ammo item alongside the weapon and zero the inline counter. Called once per
+ * actor during migration.
+ */
+async function migrateInlineAmmoToGear(actor) {
+  const weapons = actor.items.filter((i) => i.type === "weapon"
+    && i.system?.ammoType
+    && Number(i.system?.ammo?.current ?? 0) > 0);
+  if (!weapons.length) return;
+
+  const equipmentPack = game.packs?.get(`${SYSTEM_ID}.equipment`);
+  for (const weapon of weapons) {
+    const ammoType = String(weapon.system.ammoType);
+    const gearName = AMMO_GEAR_BY_TYPE[ammoType];
+    if (!gearName) continue;
+
+    // Skip if the actor already has ammo of this type.
+    const existing = actor.items.find((i) => i.type === "gear"
+      && i.system?.subtype === "ammunition"
+      && i.system?.ammo?.type === ammoType);
+    if (existing) {
+      const combined = Math.max(0, Number(existing.system.ammo?.rounds ?? 0))
+        + Math.max(0, Number(weapon.system.ammo?.current ?? 0));
+      await existing.update({ "system.ammo.rounds": combined }, { gammaWorldSync: true });
+    } else if (equipmentPack) {
+      const packIndex = await equipmentPack.getIndex();
+      const entry = packIndex.find((e) => e.name === gearName);
+      if (entry) {
+        const source = await equipmentPack.getDocument(entry._id);
+        const data = source.toObject();
+        data.system.ammo.rounds = Math.max(0, Number(weapon.system.ammo?.current ?? 0));
+        await Item.create(data, { parent: actor, gammaWorldSync: true });
+      }
+    }
+
+    await weapon.update({
+      "system.ammo.current": 0,
+      "system.ammo.max": 0,
+      "system.ammo.consumes": false
+    }, { gammaWorldSync: true });
+  }
+}
+
+/**
+ * Delete the legacy "Broadcast Power Station" world item if it exists
+ * (it was removed in 0.5.0 — broadcast power is ambient infrastructure,
+ * not a portable item).
+ */
+async function removeLegacyBroadcastPowerItems() {
+  const offenders = game.items?.contents?.filter((item) => item.name === "Broadcast Power Station") ?? [];
+  for (const item of offenders) {
+    await item.delete();
+  }
+  // Also scrub it from any actor inventory.
+  for (const actor of game.actors?.contents ?? []) {
+    const onActor = actor.items.filter((i) => i.name === "Broadcast Power Station");
+    for (const i of onActor) await i.delete();
   }
 }
 
@@ -112,6 +242,20 @@ async function migrateActor(actor) {
   if (actor.system.robotics?.repairDifficulty == null) update["system.robotics.repairDifficulty"] = 0;
   if (actor.system.robotics?.malfunction == null) update["system.robotics.malfunction"] = "";
   if (actor.system.chargen?.mutationMethod == null) update["system.chargen.mutationMethod"] = "random";
+  // 0.5.0 schema additions
+  const normalizedAlliance = normalizeAlliance(actor.system.details?.alliance ?? "");
+  if (normalizedAlliance !== (actor.system.details?.alliance ?? "")) {
+    update["system.details.alliance"] = normalizedAlliance;
+  }
+  if (actor.system.advancement?.availableBonuses == null) update["system.advancement.availableBonuses"] = [];
+  if (actor.system.advancement?.appliedBonuses == null) update["system.advancement.appliedBonuses"] = [];
+  if (actor.system.combat?.fatigue?.round == null) update["system.combat.fatigue.round"] = 0;
+  if (actor.system.combat?.fatigue?.modifier == null) update["system.combat.fatigue.modifier"] = 0;
+  if (actor.system.encumbrance?.carried == null) update["system.encumbrance.carried"] = 0;
+  if (actor.system.encumbrance?.max == null) update["system.encumbrance.max"] = 0;
+  if (actor.system.encumbrance?.penalized == null) update["system.encumbrance.penalized"] = false;
+  if (actor.system.resources?.hp?.restDaily == null) update["system.resources.hp.restDaily"] = 1;
+  if (actor.system.resources?.hp?.medical == null) update["system.resources.hp.medical"] = 0;
   Object.assign(update, prototypeTokenMigrationUpdate(actor));
 
   if (Object.keys(update).length) {
@@ -121,6 +265,9 @@ async function migrateActor(actor) {
   for (const item of actor.items) {
     await migrateItem(item);
   }
+
+  // 0.5.0: convert inline ammo counters into ammo gear items.
+  await migrateInlineAmmoToGear(actor);
 
   await actor.refreshDerivedResources({ adjustCurrent: false });
 }
@@ -139,6 +286,9 @@ export async function migrateWorld() {
   for (const actor of game.actors.contents) {
     await migrateActor(actor);
   }
+
+  // 0.5.0: remove the deprecated Broadcast Power Station item.
+  await removeLegacyBroadcastPowerItems();
 
   await game.settings.set(SYSTEM_ID, "schemaVersion", currentVersion);
 }

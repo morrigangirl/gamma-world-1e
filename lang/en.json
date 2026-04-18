@@ -19,6 +19,10 @@
       "PilotAnimations": {
         "Name": "Enable Pilot Animations",
         "Hint": "Play the system's Sequencer + JB2A combat and support effects for energy weapons, explosives, shields, and high-value Ancient gear when those modules are active."
+      },
+      "PshTechReliable": {
+        "Name": "PSH technology always works once figured out",
+        "Hint": "Homebrew: once a Pure Strain Human has analysed an Ancient artifact (operation known), further uses by that PSH actor bypass the condition and malfunction rolls. Non-PSH actors and unanalysed artifacts still follow RAW."
       }
     },
     "Sheet": {
@@ -47,7 +51,22 @@
       "PSH": "Pure Strain Human",
       "Humanoid": "Humanoid",
       "MutatedAnimal": "Mutated Animal",
+      "MutatedPlant": "Mutated Plant",
       "Robot": "Robot"
+    },
+    "Alliance": {
+      "None": "\u2014 none \u2014",
+      "Brotherhood": "Brotherhood of Thought",
+      "Seekers": "The Seekers",
+      "Zoopremisists": "Zoopremisists",
+      "Healers": "The Healers",
+      "Restorationists": "Restorationists",
+      "Followers": "Followers of the Voice",
+      "RanksOfTheFit": "Ranks of the Fit",
+      "Archivists": "The Archivists",
+      "Radiationists": "Radiationists",
+      "Created": "The Created",
+      "Other": "Other / Homebrew"
     },
     "Attribute": {
       "MS": { "label": "Mental Strength", "abbr": "MS", "full": "Mental Strength" },
@@ -70,6 +89,11 @@
       "PRShort": "PR",
       "Level": "Level",
       "XP": "XP",
+      "NextLevel": "Next Level",
+      "PendingBonuses": "Pending Bonuses",
+      "Encumbrance": "Encumbrance",
+      "Overloaded": "Overloaded",
+      "WithinLimit": "Within limit",
       "Type": "Type",
       "Movement": "Movement",
       "BaseAC": "Base AC",
@@ -96,6 +120,28 @@
       "RollPoison": "Roll Poison Save",
       "RollMental": "Roll Mental Save"
     },
+    "Chat": {
+      "RequestRoll": "Request Roll"
+    },
+    "RollRequest": {
+      "Title": "Request Roll",
+      "Type": "Request Type",
+      "Mental": "Mental Save",
+      "Radiation": "Radiation Save",
+      "Ability": "Ability Roll",
+      "Reason": "Source / Reason",
+      "Targets": "Targets",
+      "SaveFields": "Save Details",
+      "AbilityFields": "Ability Details",
+      "MentalStrength": "Attacker Mental Strength",
+      "RadiationIntensity": "Radiation Intensity",
+      "AbilityKey": "Ability",
+      "Modifier": "Situational Modifier",
+      "DC": "DC",
+      "Send": "Send Request",
+      "NoActors": "No requestable actors are available.",
+      "NoTargets": "Select at least one actor for the request."
+    },
     "Combat": {
       "NaturalAttack": "Natural Attack",
       "NaturalAttackName": "Natural Attack Name",
@@ -116,11 +162,13 @@
       "Subtype": {
         "Physical": "Physical Mutation",
         "Mental": "Mental Mutation",
+        "Plant": "Plant Mutation",
         "Defect": "Defect"
       },
       "SubtypePlural": {
         "Physical": "Physical Mutations",
         "Mental": "Mental Mutations",
+        "Plant": "Plant Mutations",
         "Defect": "Defects"
       },
       "Category": {
@@ -161,6 +209,12 @@
     },
     "Weapon": {
       "Class": "Weapon Class",
+      "Category": {
+        "Primitive": "Primitive",
+        "Modern": "Modern",
+        "Artifact": "Artifact",
+        "Natural": "Natural"
+      },
       "Damage": "Damage",
       "DamageType": "Damage Type",
       "Range": "Range",
@@ -171,6 +225,8 @@
       "Ammo": "Ammo",
       "AmmoCurrent": "Current",
       "AmmoMax": "Max",
+      "AmmoType": "Ammo Type",
+      "NoAmmo": "No {ammoType} ammunition available.",
       "ConsumesAmmo": "Consumes ammo on use",
       "Equipped": "Equipped",
       "Quantity": "Qty",
@@ -236,7 +292,38 @@
       "Quantity": "Qty",
       "Weight": "Weight",
       "Tech": "Tech Level",
-      "Empty": "No gear."
+      "Empty": "No gear.",
+      "Subtype": {
+        "Ammunition": "Ammunition",
+        "PowerCell": "Power Cell",
+        "Container": "Container",
+        "Medical": "Medical",
+        "Vehicle": "Vehicle",
+        "Tool": "Tool",
+        "Ration": "Ration",
+        "TradeGood": "Trade Good",
+        "Communication": "Communication",
+        "Explosive": "Explosive",
+        "Misc": "Misc"
+      },
+      "Container": {
+        "Capacity": "Capacity",
+        "Carried": "Carried",
+        "OverCapacity": "Over capacity"
+      }
+    },
+    "Ammo": {
+      "None": "—",
+      "Arrow": "Arrow",
+      "CrossbowBolt": "Crossbow Bolt",
+      "SlingStone": "Sling Stone",
+      "SlingBullet": "Sling Bullet",
+      "Slug": "Slug-thrower Round",
+      "NeedlerParalysis": "Needler Dart (Paralysis)",
+      "NeedlerPoison": "Needler Dart (Poison)",
+      "StunCell": "Stun Rifle Cell",
+      "Javelin": "Javelin (bundle)",
+      "Gyrojet": "Gyrojet Slug"
     },
     "Tech": {
       "None": "—",
@@ -372,6 +459,20 @@
         "WaitingHint": "This client is waiting for the current artifact session state from the GM.",
         "LatestRoll": "Latest Roll",
         "NoRollsYet": "No public rolls have been made yet.",
+        "Hint": {
+          "Roll": "Advance the analysis by one roll. The operator (or GM, if forcing) draws d10 + intelligence + speed modifiers on the current chart node.",
+          "Interrupt": "Abandon the current uninterrupted attempt and reset the visible path to Start. Prior time and rolls are preserved in the history.",
+          "TryItOut": "Test the artifact's operation once it's been understood. Triggers the function / malfunction check.",
+          "Close": "Close this window. The session continues running in the background and remains accessible from the inventory.",
+          "Helpers": "Additional actors assisting the analysis. Each helper grants extra rolls per hour.",
+          "HelpersMinus": "Remove one helper from the pool.",
+          "HelpersPlus": "Add one helper to the pool.",
+          "Reassign": "Transfer operator status to another actor. Only the operator can roll the flowchart.",
+          "RevealFunction": "Mark this artifact's operation as understood without further analysis. Flags it known and reveals its name publicly.",
+          "Reveal": "Reveal the hidden function / malfunction outcome to everyone. Only fires after the outcome has been rolled.",
+          "Reset": "Clear this session entirely and start over. Use to recover from stuck state or replay for testing.",
+          "Debug": "Toggle display of internal node identifiers on the flowchart, useful for rule adjudication and reporting."
+        },
         "History": "Step History",
         "GmDiagnostics": "GM Diagnostics",
         "Condition": "Condition",
@@ -392,7 +493,8 @@
         "Public": {
           "Hum": "It hums to life.",
           "Nothing": "Nothing happens.",
-          "Burst": "A sharp crack and burst of energy lash out!"
+          "Burst": "A sharp crack and burst of energy lash out!",
+          "PshReliable": "PSH reliability: the artifact responds without hesitation, performing flawlessly."
         },
         "Note": {
           "Advance": "Advance",
@@ -475,6 +577,10 @@
       "Appearance": "Appearance",
       "Notes": "Notes"
     },
+    "Editor": {
+      "Edit": "Edit",
+      "ToggleEdit": "Toggle edit mode"
+    },
     "Chargen": {
       "Button": "Roll Character (Auto)",
       "Rerolled": "Chargen Complete",
@@ -519,6 +625,20 @@
       "Analyze": "Analyze",
       "Use": "Use",
       "Reset": "Reset"
+    },
+    "Action": {
+      "Rest": {
+        "Label": "Rest",
+        "Hint": "Rest for 24 hours. Heals per the natural healing rate."
+      },
+      "AwardXp": {
+        "Label": "Award XP",
+        "Hint": "Award experience points to this character. Levels up automatically when thresholds are crossed."
+      },
+      "ApplyBonus": {
+        "Label": "Apply Bonus",
+        "Hint": "Spend the next pending attribute bonus (from level-up)."
+      }
     },
     "Error": {
       "NoTarget": "No target selected.",

@@ -16,7 +16,7 @@ export class MutationData extends foundry.abstract.TypeDataModel {
     return {
       code: int({ initial: 0, min: 0, max: 100 }),
       subtype:  str({ initial: "physical",
-        choices: ["physical", "mental", "defect"] }),
+        choices: ["physical", "mental", "plant", "defect"] }),
       category: str({ initial: "beneficial",
         choices: ["beneficial", "defect"] }),
 

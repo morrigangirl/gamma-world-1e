@@ -264,6 +264,73 @@ body.system-gamma-world-1e,
   cursor: progress;
 }
 
+.gw-chat-request-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 0.45rem;
+}
+
+.gw-chat-request-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2rem;
+  padding: 0.28rem 0.8rem;
+  border: 1px solid rgba(81, 88, 91, 0.9);
+  border-radius: 2px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.04)),
+    var(--gw-machine-alt);
+  color: var(--gw-paper);
+  box-shadow: var(--gw-inset);
+  cursor: pointer;
+  font-family: var(--gw-font-header);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gw-chat-request-button:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.02)),
+    var(--gw-machine-lite);
+  border-color: rgba(199, 166, 0, 0.72);
+  color: #fff8d6;
+}
+
+.gw-roll-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gw-roll-request-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.gw-roll-request__targets,
+.gw-roll-request__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gw-roll-request__target-list {
+  display: grid;
+  gap: 0.35rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.gw-roll-request__target {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .application.gamma-world h1,
 .application.gamma-world h2,
 .application.gamma-world h3,
@@ -548,19 +615,26 @@ body.system-gamma-world-1e,
 .gamma-world__inv-group {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.4rem;
 }
 
 .gamma-world__summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.45rem;
+}
+
+.gamma-world__summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.7rem;
 }
 
 .gamma-world__summary-card {
   position: relative;
-  padding: 0.85rem 0.75rem 0.65rem;
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  padding: 0.55rem 0.55rem 0.45rem;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
     rgba(228, 221, 190, 0.94);
@@ -573,24 +647,25 @@ body.system-gamma-world-1e,
   position: absolute;
   top: 0;
   right: 0;
-  width: 3.1rem;
-  height: 0.42rem;
+  width: 2.4rem;
+  height: 0.34rem;
   background: var(--gw-stripe);
   border-left: 1px solid rgba(81, 88, 91, 0.55);
   border-bottom: 1px solid rgba(81, 88, 91, 0.55);
 }
 
 .gamma-world__summary-card h4 {
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.15rem;
   color: var(--gw-machine);
-  font-size: 1.05rem;
+  font-size: 0.9rem;
+  line-height: 1.15;
 }
 
 .gamma-world__summary-value {
   margin: 0;
   color: var(--gw-machine);
   font-family: var(--gw-font-header);
-  font-size: 2rem;
+  font-size: 1.55rem;
   line-height: 0.95;
   letter-spacing: 0.05em;
 }
@@ -605,20 +680,21 @@ body.system-gamma-world-1e,
 }
 
 .gamma-world__summary-note {
-  margin: 0.18rem 0 0;
+  margin: 0.1rem 0 0;
   color: var(--gw-muted);
-  font-size: 0.88rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
 }
 
 .gamma-world__attributes {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.6rem;
+  gap: 0.35rem;
 }
 
 .gamma-world__attribute {
   position: relative;
-  padding: 0.5rem 0.35rem 0.45rem;
+  padding: 0.35rem 0.25rem 0.3rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0)),
     linear-gradient(180deg, rgba(74, 107, 106, 0.18), rgba(74, 107, 106, 0)),
@@ -644,16 +720,16 @@ body.system-gamma-world-1e,
 .gamma-world__attribute-label {
   color: var(--gw-accent-soft);
   font-family: var(--gw-font-header);
-  font-size: 1rem;
-  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
 }
 
 .gamma-world__attribute-value {
-  width: 3.2rem;
-  min-height: 2.3rem;
+  width: 2.2rem;
+  min-height: 1.9rem;
   text-align: center;
   font-family: var(--gw-font-header);
-  font-size: 1.55rem;
+  font-size: 1.3rem;
   letter-spacing: 0.04em;
   color: #f8f2d6;
   background: rgba(216, 210, 176, 0.08);
@@ -661,32 +737,32 @@ body.system-gamma-world-1e,
 
 .gamma-world__attribute-mod {
   color: rgba(216, 210, 176, 0.8);
-  font-size: 0.84rem;
+  font-size: 0.74rem;
 }
 
 .gamma-world__attribute-roll {
-  min-height: 1.7rem;
-  padding: 0.1rem 0.55rem;
-  font-size: 0.9rem;
+  min-height: 1.45rem;
+  padding: 0.08rem 0.45rem;
+  font-size: 0.78rem;
 }
 
 .gamma-world__resources {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.4rem;
 }
 
 .gamma-world__resource label,
 .gamma-world__bio-row label {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.15rem;
   color: var(--gw-ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .gamma-world__resource label {
-  padding: 0.55rem 0.6rem;
+  padding: 0.35rem 0.45rem;
   background: rgba(228, 221, 190, 0.72);
   border: 1px solid rgba(81, 88, 91, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -758,14 +834,15 @@ body.system-gamma-world-1e,
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 0.6rem;
-  padding: 0.5rem 0.6rem;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.5rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
     rgba(236, 231, 205, 0.92);
   border: 1px solid rgba(81, 88, 91, 0.55);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  font-size: 0.9rem;
 }
 
 .gamma-world__item::before {
@@ -789,7 +866,7 @@ body.system-gamma-world-1e,
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.18rem;
+  gap: 0.1rem;
 }
 
 .gamma-world__item-body[data-action="showMutationChat"] {
@@ -878,22 +955,24 @@ body.system-gamma-world-1e,
 
 .gamma-world__bio-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .gamma-world__bio-row label {
-  padding: 0.55rem 0.6rem;
+  padding: 0.35rem 0.5rem;
   background: rgba(228, 221, 190, 0.72);
   border: 1px solid rgba(81, 88, 91, 0.42);
+  font-size: 0.88rem;
 }
 
 .application.gamma-world fieldset {
   position: relative;
   border: 1px solid rgba(81, 88, 91, 0.58);
   border-radius: 0;
-  padding: 0.8rem 0.7rem 0.65rem;
-  margin: 0;
+  padding: 0.55rem 0.55rem 0.5rem;
+  margin: 0 0 0.4rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)),
     rgba(231, 224, 194, 0.86);
@@ -927,6 +1006,92 @@ body.system-gamma-world-1e,
   background: rgba(236, 231, 205, 0.88);
   border: 1px solid rgba(81, 88, 91, 0.35);
   padding: 0.55rem;
+}
+
+.application.gamma-world .gw-rich-editor {
+  position: relative;
+}
+
+.application.gamma-world .gw-rich-editor > legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.18rem 0.45rem;
+}
+
+.application.gamma-world .gw-rich-editor__label {
+  display: inline-block;
+}
+
+.application.gamma-world .gw-rich-editor__toggle {
+  /* Reset the base application button styling so this reads as an icon. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid rgba(199, 166, 0, 0.55);
+  border-radius: 999px;
+  background: rgba(236, 231, 205, 0.85);
+  color: var(--gw-ink);
+  box-shadow: none;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.72rem;
+  line-height: 1;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.application.gamma-world .gw-rich-editor__toggle:hover {
+  background: rgba(199, 166, 0, 0.3);
+  border-color: rgba(199, 166, 0, 0.9);
+}
+
+.application.gamma-world .gw-rich-editor__toggle:focus-visible {
+  outline: 2px solid rgba(199, 166, 0, 0.7);
+  outline-offset: 2px;
+}
+
+.application.gamma-world .gw-rich-editor__icon {
+  pointer-events: none;
+}
+
+.application.gamma-world .gw-rich-editor[data-mode="view"] .gw-rich-editor__icon--save,
+.application.gamma-world .gw-rich-editor[data-mode="edit"] .gw-rich-editor__icon--edit {
+  display: none;
+}
+
+.application.gamma-world .gw-rich-editor[data-mode="edit"] .gw-rich-editor__toggle {
+  background: rgba(199, 166, 0, 0.85);
+  border-color: rgba(199, 166, 0, 1);
+  color: var(--gw-paper);
+}
+
+.application.gamma-world .gw-rich-editor__view {
+  min-height: 6rem;
+  padding: 0.55rem;
+  background: rgba(236, 231, 205, 0.88);
+  border: 1px solid rgba(81, 88, 91, 0.35);
+  font-family: var(--gw-font-body);
+  color: var(--gw-ink);
+  white-space: normal;
+}
+
+.application.gamma-world .gw-rich-editor__view:empty::before {
+  content: "\2014";
+  color: var(--gw-ink-soft);
+}
+
+.application.gamma-world .gw-rich-editor[data-mode="view"] .gw-rich-editor__edit {
+  display: none;
+}
+
+.application.gamma-world .gw-rich-editor[data-mode="edit"] .gw-rich-editor__view {
+  display: none;
 }
 
 .application.gamma-world table {

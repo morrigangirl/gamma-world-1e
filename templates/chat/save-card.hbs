@@ -3,9 +3,20 @@
   <div class="gw-card-meta">
     {{actorName}}
     {{#if sourceName}} &middot; Source: {{sourceName}}{{/if}}
-    &middot; resistance {{resistance}}
-    &middot; intensity {{intensity}}
   </div>
+  <div class="gw-card-meta">
+    Resistance: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{resistance}}{{/if}}
+    &middot; Intensity: {{intensity}}
+  </div>
+  {{#if attemptLabel}}
+    <div class="gw-card-meta">Attempts: {{attemptLabel}}</div>
+  {{/if}}
+  {{#if targetLabel}}
+    <div class="gw-card-meta">Target: {{targetLabel}}</div>
+  {{/if}}
+  {{#if rollLabel}}
+    <div class="gw-card-meta">Rolls: {{rollLabel}}</div>
+  {{/if}}
   <div class="gw-card-result {{#if success}}is-hit{{else}}is-miss{{/if}}">
     Result: {{target}}
   </div>

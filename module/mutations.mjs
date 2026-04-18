@@ -16,9 +16,8 @@ import {
   applyDamageToTargets,
   applyHealingToTargets,
   primaryTarget,
+  requestSaveResolution,
   resolveTargetActor,
-  resolveHazardCard,
-  rollMentalAttackCard,
   rollScaledDamageCard
 } from "./dice.mjs";
 
@@ -387,12 +386,20 @@ async function handleMentalDamage(actor, item) {
   }
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
-  await rollMentalAttackCard({
+  const save = await requestSaveResolution(target.actor, "mental", {
+    sourceName: item.name,
+    intensity: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
+    inputLocked: true
+  });
+  if (save?.status !== "resolved") return false;
+  if (save.success) return true;
+
+  await rollScaledDamageCard({
     actor,
     sourceName: item.name,
-    sourceUuid: item.uuid,
+    baseFormula: item.system.effect.formula || "3d6",
     targetUuid: target.actor.uuid,
-    damageFormula: item.system.effect.formula || "3d6",
+    damageType: "mental",
     notes: item.system.effect.notes
   });
   return true;
@@ -411,8 +418,12 @@ async function handleRadiationEyes(actor, item) {
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: `${item.name} intensity`
   });
-  await resolveHazardCard(target.actor, "radiation", intensityRoll.total, { sourceName: item.name });
-  return true;
+  const save = await requestSaveResolution(target.actor, "radiation", {
+    sourceName: item.name,
+    intensity: intensityRoll.total,
+    inputLocked: true
+  });
+  return save?.status === "resolved";
 }
 
 async function handleLightGeneration(actor, item) {
@@ -462,16 +473,13 @@ async function handleDensityControlOthers(actor, item) {
   if (!configuration?.choice) return false;
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
-  const hit = await rollMentalAttackCard({
-    actor,
+  const save = await requestSaveResolution(target.actor, "mental", {
     sourceName: item.name,
-    sourceUuid: item.uuid,
-    targetUuid: target.actor.uuid,
-    damageFormula: "0",
-    notes: item.system.effect.notes,
-    showFollowUp: false
+    intensity: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
+    inputLocked: true
   });
-  if (!hit) return true;
+  if (save?.status !== "resolved") return false;
+  if (save.success) return true;
 
   const effect = densityEffectData(configuration.choice);
   await applyTemporaryEffect(target.actor, {
@@ -499,12 +507,23 @@ async function handleLifeLeech(actor, item) {
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
   const amount = 6;
-  await applyDamageToTargets(amount);
+  // Emit a GM-gated damage card for each target. Damage is not auto-applied.
+  for (const target of targets) {
+    await rollScaledDamageCard({
+      actor,
+      sourceName: `${item.name} (vs ${target.name})`,
+      baseFormula: String(amount),
+      targetUuid: target.uuid,
+      damageType: "life-leech",
+      notes: "Life Leech drains HP; on Apply, the user heals by the same amount."
+    });
+  }
+  // Self-heal is a personal-action outcome of activating the mutation and remains direct.
   await actor.heal(amount * targets.length);
   await postMutationMessage(
     actor,
     item,
-    `<p>${actor.name} drains ${amount} hit points from each targeted creature and heals ${amount * targets.length} HP.</p>`
+    `<p>${actor.name} drains ${amount} hit points from each targeted creature and heals ${amount * targets.length} HP (referee applies the target damage via the chat cards).</p>`
   );
   return true;
 }
@@ -517,8 +536,20 @@ async function handleDeathField(actor, item) {
   }
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true, enabled: true });
+  // Emit a GM-gated damage card per target. The formula drains HP down to 1;
+  // referee applies each card manually.
   for (const target of targets) {
-    await target.update({ "system.resources.hp.value": Math.min(1, Number(target.system.resources.hp.value ?? 1)) });
+    const currentHp = Math.max(0, Number(target.system.resources.hp.value ?? 0));
+    const drain = Math.max(0, currentHp - 1);
+    if (drain <= 0) continue;
+    await rollScaledDamageCard({
+      actor,
+      sourceName: `${item.name} — ${target.name} (drain to 1 HP)`,
+      baseFormula: String(drain),
+      targetUuid: target.uuid,
+      damageType: "death-field",
+      notes: "Death Field drains the victim to 1 HP. Apply to commit."
+    });
   }
 
   const recoveryRoll = await new Roll("1d20").evaluate();
@@ -526,7 +557,7 @@ async function handleDeathField(actor, item) {
   await postMutationMessage(
     actor,
     item,
-    `<p>${actor.name} drains all but 1 HP from each targeted creature.</p>
+    `<p>${actor.name} unleashes a Death Field across ${targets.length} target(s). Referee applies each drain via the chat cards.</p>
      <p>The user is nearly unconscious for ${recoveryRoll.total} round(s).</p>`
   );
   return true;
@@ -535,7 +566,7 @@ async function handleDeathField(actor, item) {
 async function handleFullHeal(actor, item) {
   await commitMutationUse(item, { consumeUse: true, setCooldown: false });
   const max = Number(actor.system.resources.hp.max ?? 0);
-  await actor.update({ "system.resources.hp.value": max });
+  await actor.setHitPoints(max);
   await postMutationMessage(actor, item, `<p>${actor.name} recovers to full hit points.</p>`);
   return true;
 }
@@ -551,16 +582,13 @@ async function handleMentalControl(actor, item) {
   if (!rounds) return false;
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
-  const hit = await rollMentalAttackCard({
-    actor,
+  const save = await requestSaveResolution(target.actor, "mental", {
     sourceName: item.name,
-    sourceUuid: item.uuid,
-    targetUuid: target.actor.uuid,
-    damageFormula: "0",
-    notes: item.system.effect.notes,
-    showFollowUp: false
+    intensity: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
+    inputLocked: true
   });
-  if (!hit) return true;
+  if (save?.status !== "resolved") return false;
+  if (save.success) return true;
 
   await applyTemporaryEffect(target.actor, {
     id: `${item.id}:mental-control:${target.actor.id}`,

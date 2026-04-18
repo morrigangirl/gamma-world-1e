@@ -20,6 +20,12 @@ import {
   resolveRadiation
 } from "../module/tables/resistance-tables.mjs";
 import {
+  evaluateSaveForActor,
+  saveContextForActor,
+  preferredSaveUserId,
+  shouldRouteHpReduction
+} from "../module/save-flow.mjs";
+import {
   findMutationByPercentile,
   mutationEntriesFor,
   pickMutation,
@@ -92,6 +98,76 @@ test("hazard matrices resolve real Gamma World outcomes", () => {
   const radiation = resolveRadiation(18, 16);
   assert.equal(radiation.outcome, "M");
   assert.equal(describeRadiationOutcome(radiation), "Gain one new mutation.");
+});
+
+test("save helpers prefer active owners, use derived mental resistance, and guard HP loss", () => {
+  const actor = {
+    ownership: {
+      alpha: 3,
+      zeta: 3,
+      default: 0
+    }
+  };
+  const users = [
+    { id: "gm-b", active: true, isGM: true },
+    { id: "zeta", active: true, isGM: false },
+    { id: "alpha", active: true, isGM: false }
+  ];
+  assert.equal(preferredSaveUserId(actor, users), "alpha");
+  assert.equal(preferredSaveUserId(actor, [
+    { id: "gm-b", active: true, isGM: true },
+    { id: "alpha", active: false, isGM: false }
+  ]), "gm-b");
+
+  const defender = {
+    gw: { mentalResistance: 14 },
+    system: {
+      resources: { mentalResistance: 8 },
+      attributes: { ms: { value: 6 } }
+    }
+  };
+  const resisted = evaluateSaveForActor(defender, "mental", 10, { rollTotal: 9 });
+  assert.equal(resisted.targetNumber, mentalAttackTarget(10, 14));
+  assert.equal(resisted.success, true);
+
+  const failed = evaluateSaveForActor(defender, "mental", 10, { rollTotal: resisted.targetNumber });
+  assert.equal(failed.success, false);
+
+  assert.equal(shouldRouteHpReduction({ currentHp: 10, nextHp: 7, isGM: false }), true);
+  assert.equal(shouldRouteHpReduction({ currentHp: 10, nextHp: 12, isGM: false }), false);
+  assert.equal(shouldRouteHpReduction({ currentHp: 10, nextHp: 7, isGM: true }), false);
+});
+
+test("save helpers apply extra mental saves and derived radiation modifiers", () => {
+  const actor = {
+    system: {
+      attributes: {
+        ms: { value: 10 },
+        cn: { value: 12 }
+      }
+    },
+    items: [
+      { type: "mutation", name: "Dual Brain", system: { activation: { enabled: true }, reference: {} } },
+      { type: "mutation", name: "Heightened Brain Talent", system: { activation: { enabled: true }, reference: {} } },
+      { type: "mutation", name: "Mental Defense Shield", system: { activation: { enabled: true }, reference: {} } },
+      { type: "mutation", name: "Heightened Constitution", system: { activation: { enabled: true }, reference: {} } },
+      { type: "mutation", name: "Will Force", system: { activation: { enabled: true }, reference: { variant: "cn" } } }
+    ]
+  };
+
+  const mentalContext = saveContextForActor(actor, "mental");
+  assert.equal(mentalContext.resistance, 14);
+  assert.equal(mentalContext.attemptCount, 4);
+
+  const radiationContext = saveContextForActor(actor, "radiation");
+  assert.equal(radiationContext.resistance, 18);
+
+  const targetNumber = mentalAttackTarget(10, mentalContext.resistance);
+  const evaluation = evaluateSaveForActor(actor, "mental", 10, {
+    rollTotals: [targetNumber, targetNumber - 1]
+  });
+  assert.equal(evaluation.success, true);
+  assert.deepEqual(evaluation.rollTotals, [targetNumber, targetNumber - 1]);
 });
 
 test("mutation tables expose complete, typed entries", () => {
@@ -452,7 +528,9 @@ test("expanded compendium sources include artifacts, robots, and docs", () => {
 
   const actors = actorPackSources();
   assert.ok(actors.some((entry) => entry.name === "Security Robotoid"));
-  assert.equal(actors.length, 4);
+  assert.ok(actors.some((entry) => entry.name === "Ambulatory Oak"));
+  assert.ok(actors.some((entry) => entry.name === "Brotherhood Scholar"));
+  assert.ok(actors.length >= 10, `expected at least 10 sample actors, got ${actors.length}`);
   assert.equal(actors.every((entry) => entry.prototypeToken?.actorLink === true), true);
   assert.equal(actors.every((entry) => entry.prototypeToken?.displayBars === TOKEN_DISPLAY_MODES.OWNER_HOVER), true);
 
@@ -518,3 +596,174 @@ test("prototype token migration only polishes untouched actors", () => {
   assert.equal(touchedUpdate["prototypeToken.displayBars"], undefined);
   assert.equal(touchedUpdate["prototypeToken.sight.range"], undefined);
 });
+
+// ---------------------------------------------------------------------------
+// v0.5.0 additions: fatigue matrix, XP thresholds, plant mutations,
+// alliances, PSH reliability helper.
+// ---------------------------------------------------------------------------
+
+import {
+  combinedFatigueFactor,
+  resolveWeaponFatigueFamily,
+  weaponFatigueModifier
+} from "../module/tables/fatigue-matrix.mjs";
+import {
+  ATTRIBUTE_BONUS_MATRIX,
+  LEVEL_THRESHOLDS,
+  levelForXp,
+  levelsByType,
+  xpForNextLevel
+} from "../module/experience.mjs";
+import {
+  allianceAccepts,
+  allianceReactionModifier,
+  allianceRecord
+} from "../module/alliances.mjs";
+import { MUTATIONS_BY_SUBTYPE } from "../module/tables/mutation-data.mjs";
+import { CHARACTER_TYPES, CRYPTIC_ALLIANCES } from "../module/config.mjs";
+
+test("fatigue matrix resolves weapon families and layered penalties", () => {
+  assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
+  assert.equal(resolveWeaponFatigueFamily({ name: "Two-Handed Sword", weaponClass: 3 }), "sword-two");
+  // Energy weapons: weapon class 10-16 returns null (no fatigue).
+  assert.equal(resolveWeaponFatigueFamily({ name: "Laser Pistol", weaponClass: 13 }), null);
+  assert.equal(resolveWeaponFatigueFamily({ name: "Pole Arm", weaponClass: 3 }), "pole-arm");
+
+  // Rounds 1-10 never fatigue.
+  assert.equal(weaponFatigueModifier("sword-one", 1), 0);
+  assert.equal(weaponFatigueModifier("sword-one", 10), 0);
+  // Sword one-handed begins at turn 14.
+  assert.equal(weaponFatigueModifier("sword-one", 13), 0);
+  assert.equal(weaponFatigueModifier("sword-one", 14), -1);
+  assert.equal(weaponFatigueModifier("sword-one", 19), -6);
+  // Pole arm / flail / two-hand start at turn 11.
+  assert.equal(weaponFatigueModifier("pole-arm", 11), -1);
+  assert.equal(weaponFatigueModifier("sword-two", 19), -9);
+});
+
+test("combined fatigue factor stacks weapon and armor penalties", () => {
+  // Sword at turn 14 (-1) + AC 3 powered plate at turn 14 (never) should be -1.
+  assert.equal(
+    combinedFatigueFactor({ family: "sword-one", armorClass: 3, meleeTurn: 14 }),
+    -1
+  );
+  // Sword at turn 17 (-4) + AC 3 at turn 17 (-3) = -7.
+  assert.equal(
+    combinedFatigueFactor({ family: "sword-one", armorClass: 3, meleeTurn: 17 }),
+    -7
+  );
+  // No weapon family (e.g. laser) + AC 10 = 0.
+  assert.equal(
+    combinedFatigueFactor({ family: null, armorClass: 10, meleeTurn: 19 }),
+    0
+  );
+});
+
+test("experience thresholds and bonus matrix match RAW 1e", () => {
+  assert.deepEqual(LEVEL_THRESHOLDS, [0, 3000, 6000, 12000, 24000, 48000, 96000, 200000, 400000, 1000000]);
+  assert.equal(levelForXp(0), 1);
+  assert.equal(levelForXp(2999), 1);
+  assert.equal(levelForXp(3000), 2);
+  assert.equal(levelForXp(5999), 2);
+  assert.equal(levelForXp(6000), 3);
+  assert.equal(levelForXp(11999), 3);
+  assert.equal(levelForXp(12000), 4);
+  assert.equal(levelForXp(1_500_000), 10);
+
+  assert.equal(xpForNextLevel(2), 3000);
+  assert.equal(xpForNextLevel(10), 1_000_000);
+  assert.equal(xpForNextLevel(11), null); // no 11th level on the chart
+
+  assert.equal(levelsByType("psh"), true);
+  assert.equal(levelsByType("humanoid"), true);
+  assert.equal(levelsByType("mutated-animal"), false);
+  assert.equal(levelsByType("mutated-plant"), false);
+  assert.equal(levelsByType("robot"), false);
+
+  const attrs = new Set(Object.values(ATTRIBUTE_BONUS_MATRIX));
+  for (const attr of ["ms", "in", "dx", "ch", "cn", "ps"]) {
+    assert.ok(attrs.has(attr), `Attribute ${attr} must appear on the d10 bonus matrix`);
+  }
+});
+
+test("plant mutations and mutated-plant character type resolve", () => {
+  assert.ok(CHARACTER_TYPES["mutated-plant"], "mutated-plant must be a valid character type");
+  const plants = MUTATIONS_BY_SUBTYPE.plant;
+  assert.ok(plants.length >= 40, `expected at least 40 plant mutations, got ${plants.length}`);
+  const adaptation = plants.find((entry) => entry.name === "Adaptation");
+  assert.ok(adaptation, "Adaptation must be in the plant table");
+  assert.deepEqual(adaptation.ranges["mutated-plant"], [1, 3]);
+});
+
+test("weapon category and gear subtype inference cover canonical items", async () => {
+  const { inferWeaponCategory, inferGearSubtype } = await import("../module/equipment-rules.mjs");
+
+  assert.equal(inferWeaponCategory({ system: { weaponClass: 3 } }), "primitive");
+  assert.equal(inferWeaponCategory({ system: { weaponClass: 10 } }), "modern");
+  assert.equal(inferWeaponCategory({ system: { weaponClass: 16 } }), "artifact");
+  assert.equal(inferWeaponCategory({ system: { weaponClass: 1, artifact: { isArtifact: true } } }), "artifact");
+  assert.equal(inferWeaponCategory({ system: { weaponClass: 1 }, flags: { "gamma-world-1e": { naturalWeapon: true } } }), "natural");
+
+  assert.equal(inferGearSubtype({ name: "Arrows (bundle of 20)", system: {} }), "ammunition");
+  assert.equal(inferGearSubtype({ name: "Small Backpack", system: {} }), "container");
+  assert.equal(inferGearSubtype({ name: "Hydrogen Energy Cell", system: {} }), "power-cell");
+  assert.equal(inferGearSubtype({ name: "Trail Rations (3 days)", system: {} }), "ration");
+  assert.equal(inferGearSubtype({ name: "Hand Radio (Ancient)", system: {} }), "communication");
+  assert.equal(inferGearSubtype({ name: "Pre-war Book", system: {} }), "trade-good");
+  assert.equal(inferGearSubtype({ name: "Rope (10m coil)", system: {} }), "tool");
+  assert.equal(inferGearSubtype({ name: "Fragmentation Grenade", system: {} }), "explosive");
+  assert.equal(inferGearSubtype({ name: "Medi-kit", system: {} }), "medical");
+  assert.equal(inferGearSubtype({ name: "Bubble Car", system: {} }), "vehicle");
+  // Unknown objects fall back to misc.
+  assert.equal(inferGearSubtype({ name: "Mystery Lump", system: {} }), "misc");
+});
+
+test("compendium generators include ammo items and every pregen type", async () => {
+  const { equipmentPackSources, actorPackSources } = await import("../scripts/compendium-content.mjs");
+
+  const equipment = equipmentPackSources();
+  const ammo = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "ammunition");
+  const containers = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "container");
+  assert.ok(ammo.length >= 10, `expected at least 10 ammo items, got ${ammo.length}`);
+  assert.ok(containers.length >= 7, `expected at least 7 container items, got ${containers.length}`);
+  // Every ammo item must have a type key and non-zero rounds.
+  for (const a of ammo) {
+    assert.ok(a.system.ammo?.type, `ammo item ${a.name} missing ammo.type`);
+    assert.ok((a.system.ammo?.rounds ?? 0) > 0, `ammo item ${a.name} has zero rounds`);
+  }
+  // Broadcast Power Station must be gone.
+  assert.ok(!equipment.some((i) => i.name === "Broadcast Power Station"),
+    "Broadcast Power Station should be removed from the equipment pack");
+
+  const pregens = actorPackSources();
+  const types = new Set(pregens.map((p) => p.system?.details?.type));
+  for (const t of ["psh", "humanoid", "mutated-animal", "mutated-plant", "robot"]) {
+    assert.ok(types.has(t), `missing pregen for character type ${t}`);
+  }
+});
+
+test("cryptic alliance reaction modifier reflects ally / enemy / self", () => {
+  assert.ok(CRYPTIC_ALLIANCES.brotherhood);
+  const sameAlliance = allianceReactionModifier(
+    { system: { details: { alliance: "brotherhood" } } },
+    { system: { details: { alliance: "brotherhood" } } }
+  );
+  assert.ok(sameAlliance > 0, "same-alliance NPCs should be friendly");
+
+  const enemy = allianceReactionModifier(
+    { system: { details: { alliance: "ranks-of-the-fit" } } },
+    { system: { details: { alliance: "zoopremisists" } } }
+  );
+  assert.ok(enemy < 0, "declared enemies should be hostile");
+
+  const unknownBoth = allianceReactionModifier(
+    { system: { details: { alliance: "" } } },
+    { system: { details: { alliance: "" } } }
+  );
+  assert.equal(unknownBoth, 0, "empty alliances produce no modifier");
+
+  assert.ok(allianceAccepts("brotherhood", "humanoid"));
+  assert.equal(allianceAccepts("created", "humanoid"), false, "The Created only accepts robots");
+  assert.ok(allianceRecord("brotherhood"));
+});
+

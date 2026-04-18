@@ -3,9 +3,9 @@
  * Registered at init via CONFIG.Actor.dataModels.character.
  */
 
-import { ATTRIBUTE_KEYS } from "../config.mjs";
+import { ATTRIBUTE_KEYS, CHARACTER_TYPE_KEYS } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -34,7 +34,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     return {
       details: new SchemaField({
-        type:       str({ initial: "psh", choices: ["psh", "humanoid", "mutated-animal", "robot"] }),
+        type:       str({ initial: "psh", choices: CHARACTER_TYPE_KEYS }),
         animalForm: str({ initial: "" }),
         level:      int({ initial: 1, min: 1 }),
         xp:         int({ initial: 0, min: 0 }),
@@ -47,20 +47,41 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
       attributes: new SchemaField(attrFields),
 
+      advancement: new SchemaField({
+        /** d10 attribute bonus rolls granted at level-up, still to be spent. */
+        availableBonuses: new ArrayField(new StringField({ nullable: false })),
+        /** History of applied bonus rolls (attribute key per level). */
+        appliedBonuses:   new ArrayField(new StringField({ nullable: false }))
+      }),
+
       combat: new SchemaField({
         baseAc: int({ initial: 10, min: 1, max: 10 }),
         naturalAttack: new SchemaField({
           name:   str({ initial: "Natural Attack" }),
           damage: str({ initial: "1d3" })
+        }),
+        fatigue: new SchemaField({
+          /** Current melee-turn index (0 = first round, no fatigue yet). */
+          round:    int({ initial: 0, min: 0 }),
+          /** Derived cumulative to-hit penalty from the Fatigue Factors matrix. */
+          modifier: int({ initial: 0 })
         })
+      }),
+
+      encumbrance: new SchemaField({
+        carried:   new NumberField({ required: true, nullable: false, initial: 0, min: 0 }),
+        max:       new NumberField({ required: true, nullable: false, initial: 0, min: 0 }),
+        penalized: new BooleanField({ initial: false })
       }),
 
       resources: new SchemaField({
         hp: new SchemaField({
-          base:    int({ initial: 10, min: 0 }),
-          value:   int({ initial: 10, min: -99 }),
-          max:     int({ initial: 10, min: 0 }),
-          formula: str({ initial: "@attributes.cn.value d6" })
+          base:      int({ initial: 10, min: 0 }),
+          value:     int({ initial: 10, min: -99 }),
+          max:       int({ initial: 10, min: 0 }),
+          formula:   str({ initial: "@attributes.cn.value d6" }),
+          restDaily: int({ initial: 1, min: 0 }),
+          medical:   int({ initial: 0 })
         }),
         ac:               int({ initial: 10 }),   // descending AC
         mentalResistance: int({ initial: 0 }),

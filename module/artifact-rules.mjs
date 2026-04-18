@@ -1,5 +1,30 @@
 import { artifactFunctionChance } from "./tables/artifact-tables.mjs";
 import { normalizeArtifactChartId } from "./tables/artifact-flowcharts.mjs";
+import { SYSTEM_ID } from "./config.mjs";
+
+export const PSH_RELIABLE_TECH_SETTING = "pshTechReliable";
+
+/**
+ * Homebrew: once a Pure Strain Human has figured out an Ancient artifact
+ * (operation known), further uses of that artifact by that actor bypass the
+ * condition / malfunction roll and succeed. Gated by the world setting
+ * `pshTechReliable` (default true).
+ */
+export function pshReliableTechActive() {
+  try {
+    const game = globalThis.game;
+    if (!game?.settings?.get) return true;
+    return !!game.settings.get(SYSTEM_ID, PSH_RELIABLE_TECH_SETTING);
+  } catch (_error) {
+    return true;
+  }
+}
+
+export function pshReliableTechApplies(actor, item) {
+  if (!pshReliableTechActive()) return false;
+  if (actor?.system?.details?.type !== "psh") return false;
+  return artifactOperationKnown(item);
+}
 
 function mutationEntries(actor) {
   const items = actor?.items;

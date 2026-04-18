@@ -9,7 +9,29 @@ export const CHARACTER_TYPES = {
   "psh":             "GAMMA_WORLD.CharacterType.PSH",
   "humanoid":        "GAMMA_WORLD.CharacterType.Humanoid",
   "mutated-animal":  "GAMMA_WORLD.CharacterType.MutatedAnimal",
+  "mutated-plant":   "GAMMA_WORLD.CharacterType.MutatedPlant",
   "robot":           "GAMMA_WORLD.CharacterType.Robot"
+};
+
+export const CHARACTER_TYPE_KEYS = Object.keys(CHARACTER_TYPES);
+
+/**
+ * Nine canonical 1e cryptic alliances. The keys are stable enum values; the
+ * values are i18n labels. A tenth "other" slot preserves free-text homebrew.
+ */
+export const CRYPTIC_ALLIANCES = {
+  "":                  "GAMMA_WORLD.Alliance.None",
+  "brotherhood":       "GAMMA_WORLD.Alliance.Brotherhood",
+  "seekers":           "GAMMA_WORLD.Alliance.Seekers",
+  "zoopremisists":     "GAMMA_WORLD.Alliance.Zoopremisists",
+  "healers":           "GAMMA_WORLD.Alliance.Healers",
+  "restorationists":   "GAMMA_WORLD.Alliance.Restorationists",
+  "followers":         "GAMMA_WORLD.Alliance.Followers",
+  "ranks-of-the-fit":  "GAMMA_WORLD.Alliance.RanksOfTheFit",
+  "archivists":        "GAMMA_WORLD.Alliance.Archivists",
+  "radiationists":     "GAMMA_WORLD.Alliance.Radiationists",
+  "created":           "GAMMA_WORLD.Alliance.Created",
+  "other":             "GAMMA_WORLD.Alliance.Other"
 };
 
 /**
@@ -37,6 +59,7 @@ export const SAVE_TYPES = {
 export const MUTATION_SUBTYPES = {
   physical: "GAMMA_WORLD.Mutation.Subtype.Physical",
   mental:   "GAMMA_WORLD.Mutation.Subtype.Mental",
+  plant:    "GAMMA_WORLD.Mutation.Subtype.Plant",
   defect:   "GAMMA_WORLD.Mutation.Subtype.Defect"
 };
 
@@ -72,6 +95,48 @@ export const ARMOR_TYPES = {
   heavy:  "GAMMA_WORLD.Armor.Type.Heavy",
   shield: "GAMMA_WORLD.Armor.Type.Shield"
 };
+
+export const WEAPON_CATEGORIES = {
+  primitive: "GAMMA_WORLD.Weapon.Category.Primitive",
+  modern:    "GAMMA_WORLD.Weapon.Category.Modern",
+  artifact:  "GAMMA_WORLD.Weapon.Category.Artifact",
+  natural:   "GAMMA_WORLD.Weapon.Category.Natural"
+};
+
+export const WEAPON_CATEGORY_KEYS = Object.keys(WEAPON_CATEGORIES);
+
+export const GEAR_SUBTYPES = {
+  ammunition:    "GAMMA_WORLD.Gear.Subtype.Ammunition",
+  "power-cell":  "GAMMA_WORLD.Gear.Subtype.PowerCell",
+  container:     "GAMMA_WORLD.Gear.Subtype.Container",
+  medical:       "GAMMA_WORLD.Gear.Subtype.Medical",
+  vehicle:       "GAMMA_WORLD.Gear.Subtype.Vehicle",
+  tool:          "GAMMA_WORLD.Gear.Subtype.Tool",
+  ration:        "GAMMA_WORLD.Gear.Subtype.Ration",
+  "trade-good":  "GAMMA_WORLD.Gear.Subtype.TradeGood",
+  communication: "GAMMA_WORLD.Gear.Subtype.Communication",
+  explosive:     "GAMMA_WORLD.Gear.Subtype.Explosive",
+  misc:          "GAMMA_WORLD.Gear.Subtype.Misc"
+};
+
+export const GEAR_SUBTYPE_KEYS = Object.keys(GEAR_SUBTYPES);
+
+/** Canonical ammunition type keys referenced by weapons (`system.ammoType`). */
+export const AMMO_TYPES = {
+  "":                   "GAMMA_WORLD.Ammo.None",
+  "arrow":              "GAMMA_WORLD.Ammo.Arrow",
+  "crossbow-bolt":      "GAMMA_WORLD.Ammo.CrossbowBolt",
+  "sling-stone":        "GAMMA_WORLD.Ammo.SlingStone",
+  "sling-bullet":       "GAMMA_WORLD.Ammo.SlingBullet",
+  "slug":               "GAMMA_WORLD.Ammo.Slug",
+  "needler-paralysis":  "GAMMA_WORLD.Ammo.NeedlerParalysis",
+  "needler-poison":     "GAMMA_WORLD.Ammo.NeedlerPoison",
+  "stun-cell":          "GAMMA_WORLD.Ammo.StunCell",
+  "javelin":            "GAMMA_WORLD.Ammo.Javelin",
+  "gyrojet":            "GAMMA_WORLD.Ammo.Gyrojet"
+};
+
+export const AMMO_TYPE_KEYS = Object.keys(AMMO_TYPES).filter((key) => key !== "");
 
 export const STAT_METHODS = {
   "raw":            "GAMMA_WORLD.Chargen.Method.Raw",
@@ -202,6 +267,8 @@ export const ARTIFACT_CHARTS = {
 export const GAMMA_WORLD = {
   SYSTEM_ID,
   CHARACTER_TYPES,
+  CHARACTER_TYPE_KEYS,
+  CRYPTIC_ALLIANCES,
   ATTRIBUTES,
   ATTRIBUTE_KEYS,
   SAVE_TYPES,
@@ -211,6 +278,12 @@ export const GAMMA_WORLD = {
   ATTACK_TYPES,
   WEAPON_CLASSES,
   ARMOR_TYPES,
+  WEAPON_CATEGORIES,
+  WEAPON_CATEGORY_KEYS,
+  GEAR_SUBTYPES,
+  GEAR_SUBTYPE_KEYS,
+  AMMO_TYPES,
+  AMMO_TYPE_KEYS,
   STAT_METHODS,
   MUTATION_SELECTION_METHODS,
   STANDARD_ARRAY,
