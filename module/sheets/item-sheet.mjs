@@ -3,7 +3,7 @@
  * One class, one template, branches on this.document.type.
  */
 
-import { SYSTEM_ID } from "../config.mjs";
+import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from "../config.mjs";
 import { artifactPowerSummary } from "../artifact-power.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
@@ -55,6 +55,24 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     // and other types hide the tab button entirely.
     context.hasArtifactTab = ["weapon", "armor", "gear"].includes(item.type);
     context.activeTab = context.hasArtifactTab ? this.#activeTab : "item";
+
+    // Phase 5: armor trait multi-select options. Exposed to every sheet
+    // context for uniformity; only the armor template reads them.
+    const localize = (key) => game.i18n?.localize?.(key) ?? key;
+    const traitsGranted = item.system?.traits ?? {};
+    const buildTraitOptions = (selected) => {
+      const set = new Set(selected ?? []);
+      return DAMAGE_TYPES.map((value) => ({
+        value,
+        label: localize(DAMAGE_TYPE_LABELS[value] ?? value),
+        selected: set.has(value)
+      }));
+    };
+    context.damageTraitOptions = {
+      grantsResistance:    buildTraitOptions(traitsGranted.grantsResistance),
+      grantsImmunity:      buildTraitOptions(traitsGranted.grantsImmunity),
+      grantsVulnerability: buildTraitOptions(traitsGranted.grantsVulnerability)
+    };
 
     const enrich = foundry.applications.ux.TextEditor.implementation.enrichHTML.bind(
       foundry.applications.ux.TextEditor.implementation

@@ -782,6 +782,11 @@ import {
   RESOURCE_KIND_LABELS,
   RESOURCE_KIND_PATHS
 } from "../module/resource-consumption.mjs";
+import { DAMAGE_TYPES } from "../module/config.mjs";
+import {
+  damageTraitMultiplier,
+  resolveDamageType
+} from "../module/effect-state.mjs";
 import {
   baseCombatBonuses,
   buildMutationItemSource,
@@ -1076,6 +1081,92 @@ test("buildUndoSnapshot wraps actor snapshots and is JSON-safe", () => {
   const withNulls = buildUndoSnapshot({ kind: "x", actors: [null, a1, undefined] });
   assert.equal(withNulls.actorStates.length, 1);
   assert.equal(withNulls.actorStates[0].uuid, "Actor.a");
+});
+
+test("Phase 5 — resolveDamageType canonicalizes tag + type inputs", () => {
+  // Weapon-tag overrides win over damage.type.
+  assert.equal(resolveDamageType("physical", "laser"),     "laser");
+  assert.equal(resolveDamageType("energy",   "fusion"),    "fusion");
+  assert.equal(resolveDamageType("energy",   "black-ray"), "black-ray");
+  assert.equal(resolveDamageType("physical", "needler"),   "poison");
+  assert.equal(resolveDamageType("energy",   "stun"),      "electrical");
+
+  // Canonical types pass through unchanged.
+  for (const t of DAMAGE_TYPES) {
+    assert.equal(resolveDamageType(t, ""), t, `canonical ${t}`);
+  }
+
+  // Common aliases map to canonical.
+  assert.equal(resolveDamageType("kinetic",  ""), "physical");
+  assert.equal(resolveDamageType("slashing", ""), "physical");
+  assert.equal(resolveDamageType("heat",     ""), "fire");
+  assert.equal(resolveDamageType("ice",      ""), "cold");
+  assert.equal(resolveDamageType("shock",    ""), "electrical");
+  assert.equal(resolveDamageType("psionic",  ""), "mental");
+
+  // Unknowns fall back to physical so damage never silently vanishes.
+  assert.equal(resolveDamageType("", ""),         "physical");
+  assert.equal(resolveDamageType("unobtanium",""),"physical");
+
+  // Case-insensitive.
+  assert.equal(resolveDamageType("ENERGY", "LASER"), "laser");
+  assert.equal(resolveDamageType("Radiation", ""),   "radiation");
+});
+
+test("Phase 5 — damageTraitMultiplier honors the priority order", () => {
+  // Immune > vulnerable > resistant > neutral (1).
+  const mkActor = (sets = {}) => ({
+    gw: {
+      damageImmunity:      new Set(sets.immune     ?? []),
+      damageVulnerability: new Set(sets.vulnerable ?? []),
+      damageResistance:    new Set(sets.resistant  ?? [])
+    }
+  });
+
+  // Neutral: no trait match → 1.
+  assert.equal(damageTraitMultiplier(mkActor(), "fire"), 1);
+
+  // Resistance only → 0.5.
+  assert.equal(damageTraitMultiplier(mkActor({ resistant: ["fire"] }), "fire"), 0.5);
+
+  // Vulnerability only → 2.
+  assert.equal(damageTraitMultiplier(mkActor({ vulnerable: ["cold"] }), "cold"), 2);
+
+  // Immunity only → 0.
+  assert.equal(damageTraitMultiplier(mkActor({ immune: ["radiation"] }), "radiation"), 0);
+
+  // Stacking: immunity wins over vulnerability + resistance.
+  const conflicted = mkActor({
+    immune:     ["fire"],
+    vulnerable: ["fire"],
+    resistant:  ["fire"]
+  });
+  assert.equal(damageTraitMultiplier(conflicted, "fire"), 0);
+
+  // Stacking: vulnerability wins over resistance (when immunity absent).
+  const vulnAndResist = mkActor({
+    vulnerable: ["cold"],
+    resistant:  ["cold"]
+  });
+  assert.equal(damageTraitMultiplier(vulnAndResist, "cold"), 2);
+
+  // Plain arrays on the derived data (not Sets) still work — the helper
+  // rebuilds Sets defensively so worlds mid-migration don't crash.
+  const arrayShaped = {
+    gw: {
+      damageImmunity:      ["radiation"],
+      damageVulnerability: [],
+      damageResistance:    ["fire"]
+    }
+  };
+  assert.equal(damageTraitMultiplier(arrayShaped, "radiation"), 0);
+  assert.equal(damageTraitMultiplier(arrayShaped, "fire"),      0.5);
+  assert.equal(damageTraitMultiplier(arrayShaped, "cold"),      1);
+
+  // Null/undefined actor = neutral (never crash).
+  assert.equal(damageTraitMultiplier(null, "fire"),       1);
+  assert.equal(damageTraitMultiplier(undefined, "cold"),  1);
+  assert.equal(damageTraitMultiplier({},  "physical"),    1);
 });
 
 test("Random-variant mutation table and helpers", () => {

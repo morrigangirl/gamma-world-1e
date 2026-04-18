@@ -16,6 +16,47 @@ export const CHARACTER_TYPES = {
 export const CHARACTER_TYPE_KEYS = Object.keys(CHARACTER_TYPES);
 
 /**
+ * Canonical damage type vocabulary for the Phase 5 DR/DI/DV trait model.
+ * Weapons, hazards, and effects that deal damage tag themselves with one
+ * of these strings; actor traits (damageResistance / damageImmunity /
+ * damageVulnerability) match against them. The `resolveDamageType()`
+ * helper in `effect-state.mjs` canonicalizes raw inputs (e.g. a weaponTag
+ * of "laser" or a damage.type of "ENERGY") into one of these keys.
+ *
+ * Adding a new type is a one-line change here; the schemas use
+ * `() => DAMAGE_TYPES` so they pick up additions automatically.
+ */
+export const DAMAGE_TYPES = Object.freeze([
+  "physical",   // melee, kinetic, slugs, thrown
+  "energy",     // generic energy (fallback for non-specific energy weapons)
+  "laser",      // laser weapons; pairs with armor-class-2 deflect counters
+  "fusion",     // fusion weapons
+  "radiation",  // radiation damage (rarely direct; most rad goes through saves)
+  "poison",     // poison damage (rarely direct; most poison goes through saves)
+  "mental",     // psionic / mental damage channel
+  "fire",       // heat / flame
+  "cold",       // ice / cold
+  "sonic",      // sonic / vibration
+  "electrical", // lightning / electricity
+  "black-ray"   // the instant-death beam; own type so force-field math is clean
+]);
+
+export const DAMAGE_TYPE_LABELS = Object.freeze({
+  physical:   "GAMMA_WORLD.DamageType.Physical",
+  energy:     "GAMMA_WORLD.DamageType.Energy",
+  laser:      "GAMMA_WORLD.DamageType.Laser",
+  fusion:     "GAMMA_WORLD.DamageType.Fusion",
+  radiation:  "GAMMA_WORLD.DamageType.Radiation",
+  poison:     "GAMMA_WORLD.DamageType.Poison",
+  mental:     "GAMMA_WORLD.DamageType.Mental",
+  fire:       "GAMMA_WORLD.DamageType.Fire",
+  cold:       "GAMMA_WORLD.DamageType.Cold",
+  sonic:      "GAMMA_WORLD.DamageType.Sonic",
+  electrical: "GAMMA_WORLD.DamageType.Electrical",
+  "black-ray": "GAMMA_WORLD.DamageType.BlackRay"
+});
+
+/**
  * Nine canonical 1e cryptic alliances. The keys are stable enum values; the
  * values are i18n labels. A tenth "other" slot preserves free-text homebrew.
  */

@@ -1,8 +1,53 @@
-import { SYSTEM_ID } from "./config.mjs";
+import { SYSTEM_ID, DAMAGE_TYPES } from "./config.mjs";
 import { syncBarrierEffectsForActor, syncTemporaryEffectsForActor } from "./animations.mjs";
 import { charismaReactionAdjustment } from "./tables/encounter-tables.mjs";
 import { runAsGM } from "./gm-executor.mjs";
 import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
+
+/**
+ * Canonicalize incoming damage into one of the DAMAGE_TYPES. `weaponTag`
+ * carries the finer-grained channel when a weapon explicitly declares
+ * one (laser / fusion / black-ray), so it wins over the broad
+ * damage.type field. Unknown inputs fall back to "physical".
+ */
+const DAMAGE_TAG_OVERRIDES = Object.freeze({
+  "black-ray": "black-ray",
+  "laser":     "laser",
+  "fusion":    "fusion",
+  "needler":   "poison",
+  "stun":      "electrical"
+});
+
+export function resolveDamageType(damageType = "", weaponTag = "") {
+  const tag = String(weaponTag ?? "").trim().toLowerCase();
+  if (tag && DAMAGE_TAG_OVERRIDES[tag]) return DAMAGE_TAG_OVERRIDES[tag];
+  const raw = String(damageType ?? "").trim().toLowerCase();
+  if (!raw) return "physical";
+  if (DAMAGE_TYPES.includes(raw)) return raw;
+  // Accept common aliases so content authored before Phase 5 keeps working.
+  if (raw === "kinetic" || raw === "slashing" || raw === "piercing" || raw === "bludgeoning") return "physical";
+  if (raw === "heat" || raw === "flame") return "fire";
+  if (raw === "ice" || raw === "frost") return "cold";
+  if (raw === "shock" || raw === "lightning") return "electrical";
+  if (raw === "psionic" || raw === "psychic") return "mental";
+  return "physical";
+}
+
+/**
+ * Given an actor and a canonical damage type, return the multiplier the
+ * trait model applies. Priority: immunity (0) > vulnerability (×2) >
+ * resistance (×0.5). If none match, returns 1 (neutral).
+ */
+export function damageTraitMultiplier(actor, type) {
+  const derived = actor?.gw ?? {};
+  const immune     = derived.damageImmunity      instanceof Set ? derived.damageImmunity      : new Set(derived.damageImmunity      ?? []);
+  const vulnerable = derived.damageVulnerability instanceof Set ? derived.damageVulnerability : new Set(derived.damageVulnerability ?? []);
+  const resistant  = derived.damageResistance    instanceof Set ? derived.damageResistance    : new Set(derived.damageResistance    ?? []);
+  if (immune.has(type))     return 0;
+  if (vulnerable.has(type)) return 2;
+  if (resistant.has(type))  return 0.5;
+  return 1;
+}
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -483,6 +528,27 @@ export async function applyIncomingDamage(actor, amount, {
   const notes = [];
   const original = pending;
 
+  // Phase 5: declarative DR/DI/DV trait pass. Resolve the incoming damage
+  // into one of DAMAGE_TYPES and apply the actor's trait multiplier.
+  // Immunity (×0) short-circuits entirely; resistance (×0.5) halves,
+  // vulnerability (×2) doubles. Rollup of equipped-armor grants happens
+  // in buildActorDerived so equipped armor contributes automatically.
+  const resolvedType = resolveDamageType(damageType, weaponTag);
+  const traitMult = damageTraitMultiplier(actor, resolvedType);
+  if (traitMult === 0) {
+    return { applied: 0, prevented: original, notes: [`Immune to ${resolvedType} damage.`] };
+  }
+  if (traitMult !== 1) {
+    const scaled = Math.max(0, Math.floor(pending * traitMult));
+    notes.push(traitMult > 1
+      ? `Vulnerable to ${resolvedType}: ${pending} → ${scaled}.`
+      : `Resistant to ${resolvedType}: ${pending} → ${scaled}.`);
+    pending = scaled;
+    if (!pending) {
+      return { applied: 0, prevented: original, notes };
+    }
+  }
+
   if ((weaponTag === "black-ray") || (sourceName === "Black Ray Gun")) {
     if (actorHasHazardProtection(actor, "black-ray") || actorHasForceField(actor)) {
       await setActorState(actor, state, { refresh: false });
@@ -491,13 +557,10 @@ export async function applyIncomingDamage(actor, amount, {
   }
 
   if (["laser", "fusion"].includes(weaponTag)) {
-    if (weaponTag === "laser" && actor.gw?.laserImmune) {
-      return {
-        applied: 0,
-        prevented: original,
-        notes: ["Laser-resistant protection absorbs the beam."]
-      };
-    }
+    // Laser immunity now flows through the trait pass above; this branch
+    // only handles the armor-class-2 deflection counter (finite hits the
+    // armor absorbs per session) which is a state-ful, not trait-based
+    // mechanism.
     const armor = await consumeLaserDeflection(actor, state);
     if (armor) {
       return {

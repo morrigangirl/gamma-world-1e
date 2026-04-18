@@ -21,7 +21,19 @@ function stableGrantedItemId(ownerId = "", name = "", type = "item") {
 
 function mergeDefaults(target, defaults) {
   for (const [key, value] of Object.entries(defaults)) {
-    if (value && (typeof value === "object") && !Array.isArray(value)) {
+    if (Array.isArray(value)) {
+      // Set-like arrays (damage-trait grants, etc.): copy the default
+      // when the target is missing or still at its own empty-initial
+      // state, so named-item rules can override the generic initial.
+      // For non-empty target arrays we trust the caller's authoring.
+      const current = target[key];
+      if (!Array.isArray(current) || current.length === 0) {
+        target[key] = [...value];
+      }
+      continue;
+    }
+
+    if (value && (typeof value === "object")) {
       target[key] ??= {};
       mergeDefaults(target[key], value);
       continue;
@@ -255,10 +267,11 @@ const ARMOR_RULES = {
   },
   "Inertia Armor": {
     field: { mode: "partial", capacity: 25 },
-    protection: {
-      blackRayImmune: true,
-      radiationImmune: true,
-      poisonImmune: true
+    // Phase 5 trait model. The equivalent legacy protection.* booleans
+    // are kept in sync by the armor migration in migrations.mjs so
+    // worlds built before 0.7.0 get the same coverage.
+    traits: {
+      grantsImmunity: ["black-ray", "radiation", "poison"]
     }
   },
   "Powered Scout Armor": {
@@ -888,6 +901,14 @@ const ARMOR_DEFAULTS = {
     poisonImmune: false,
     laserImmune: false,
     mentalImmune: false
+  },
+  // Phase 5 — declarative damage-trait sets replace the protection
+  // booleans. Initial empty arrays so new armor docs always have the
+  // keys present.
+  traits: {
+    grantsResistance: [],
+    grantsImmunity: [],
+    grantsVulnerability: []
   },
   artifact: clone(ARTIFACT_DEFAULTS.artifact)
 };

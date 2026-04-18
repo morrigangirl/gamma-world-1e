@@ -1,7 +1,21 @@
 /** ArmorData — Item.type === "armor". */
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField } =
+import { DAMAGE_TYPES } from "../config.mjs";
+
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
   foundry.data.fields;
+
+/**
+ * Phase 5: armor can grant damage traits to its wearer (resistance /
+ * immunity / vulnerability) via these sets. At derived-data time on the
+ * actor, every equipped armor piece's grant sets roll up into the
+ * actor's `derived.damage{Resistance,Immunity,Vulnerability}` sets.
+ */
+const damageTraitField = () => new SetField(new StringField({
+  required: false,
+  blank: false,
+  choices: () => [...DAMAGE_TYPES]
+}));
 
 const int = (opts = {}) => new NumberField({
   required: true, nullable: false, integer: true, ...opts
@@ -39,12 +53,24 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
         punchDamage: str({ initial: "" })
       }),
 
+      /**
+       * Phase 5 replaces `protection.*Immune` booleans with declarative
+       * trait-grant sets. The booleans stay in the schema for a one-
+       * version deprecation cycle so a migration can read them and
+       * write to `traits.grants*` — new content should not set them.
+       */
       protection: new SchemaField({
         blackRayImmune: new BooleanField({ initial: false }),
         radiationImmune: new BooleanField({ initial: false }),
         poisonImmune: new BooleanField({ initial: false }),
         laserImmune: new BooleanField({ initial: false }),
         mentalImmune: new BooleanField({ initial: false })
+      }),
+
+      traits: new SchemaField({
+        grantsResistance:    damageTraitField(),
+        grantsImmunity:      damageTraitField(),
+        grantsVulnerability: damageTraitField()
       }),
 
       equipped: new BooleanField({ initial: false }),

@@ -3,10 +3,22 @@
  * Registered at init via CONFIG.Actor.dataModels.character.
  */
 
-import { ATTRIBUTE_KEYS, CHARACTER_TYPE_KEYS } from "../config.mjs";
+import { ATTRIBUTE_KEYS, CHARACTER_TYPE_KEYS, DAMAGE_TYPES } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField, SetField } =
   foundry.data.fields;
+
+/**
+ * Phase 5 — declarative damage-trait schema. Each of the three trait
+ * sets is a Set<DAMAGE_TYPES> that contributes a multiplier in
+ * `applyIncomingDamage` (immune=0, resist=0.5, vulnerable=2). The three
+ * sets stack with priority: immunity > vulnerability > resistance.
+ */
+const damageTraitField = () => new SetField(new StringField({
+  required: false,
+  blank: false,
+  choices: () => [...DAMAGE_TYPES]
+}));
 
 const int = (opts = {}) => new NumberField({
   required: true, nullable: false, integer: true, ...opts
@@ -66,6 +78,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           /** Derived cumulative to-hit penalty from the Fatigue Factors matrix. */
           modifier: int({ initial: 0 })
         })
+      }),
+
+      traits: new SchemaField({
+        damageResistance:    damageTraitField(),
+        damageImmunity:      damageTraitField(),
+        damageVulnerability: damageTraitField()
       }),
 
       encumbrance: new SchemaField({

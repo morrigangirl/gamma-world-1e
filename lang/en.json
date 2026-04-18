@@ -248,6 +248,30 @@
       "NoActors": "No requestable actors are available.",
       "NoTargets": "Select at least one actor for the request."
     },
+    "DamageType": {
+      "Physical":   "Physical",
+      "Energy":     "Energy",
+      "Laser":      "Laser",
+      "Fusion":     "Fusion",
+      "Radiation":  "Radiation",
+      "Poison":     "Poison",
+      "Mental":     "Mental",
+      "Fire":       "Fire / Heat",
+      "Cold":       "Cold / Ice",
+      "Sonic":      "Sonic",
+      "Electrical": "Electrical",
+      "BlackRay":   "Black Ray"
+    },
+    "TraitsDamage": {
+      "SectionLabel":       "Damage Traits",
+      "ResistanceLabel":    "Resistance (half damage)",
+      "ImmunityLabel":      "Immunity (no damage)",
+      "VulnerabilityLabel": "Vulnerability (double damage)",
+      "GrantsResistance":   "Grants Resistance",
+      "GrantsImmunity":     "Grants Immunity",
+      "GrantsVulnerability": "Grants Vulnerability",
+      "Hint":               "Hold Ctrl/Cmd to select multiple. Stacking order: immunity > vulnerability > resistance."
+    },
     "Combat": {
       "NaturalAttack": "Natural Attack",
       "NaturalAttackName": "Natural Attack Name",

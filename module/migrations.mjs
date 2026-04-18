@@ -303,6 +303,27 @@ async function migrateItem(item) {
     }
   }
 
+  if (item.type === "armor") {
+    // 0.7.0 (Phase 5): lift the deprecated protection.*Immune booleans
+    // into the declarative traits.grantsImmunity set. Leaves the old
+    // booleans in place for one version cycle so any outside reader
+    // that hasn't migrated still sees the legacy shape; they'll be
+    // removed from the schema in 0.8.0.
+    const p = item.system?.protection ?? {};
+    const existing = new Set([...(item.system?.traits?.grantsImmunity ?? [])]);
+    const want = new Set(existing);
+    if (p.blackRayImmune)  want.add("black-ray");
+    if (p.radiationImmune) want.add("radiation");
+    if (p.poisonImmune)    want.add("poison");
+    if (p.laserImmune)     want.add("laser");
+    if (p.mentalImmune)    want.add("mental");
+    // Only write if the set actually changed so untouched armor doesn't
+    // get pinned with an empty `traits.grantsImmunity: []` entry.
+    if (want.size !== existing.size) {
+      update["system.traits.grantsImmunity"] = [...want];
+    }
+  }
+
   if (item.type === "mutation") {
     Object.assign(update, mutationUpdateData(item));
   }

@@ -123,6 +123,12 @@ export function buildActorDerived(actor) {
     },
     laserImmune: false,
     mentalImmune: false,
+    // Phase 5: aggregated damage-trait sets. Start from the actor's
+    // own declared traits, then fold in every equipped armor's grants
+    // below via applyEquipmentModifiers / explicit rollup.
+    damageResistance:    new Set(system.traits?.damageResistance    ?? []),
+    damageImmunity:      new Set(system.traits?.damageImmunity      ?? []),
+    damageVulnerability: new Set(system.traits?.damageVulnerability ?? []),
     activeEffects: []
   };
 
@@ -133,6 +139,31 @@ export function buildActorDerived(actor) {
   applyMutationModifiers(actor, derived);
   applyEquipmentModifiers(actor, derived);
   applyRobotDerived(actor, derived);
+
+  // Armor trait rollup — every equipped armor piece contributes its
+  // grants to the aggregated sets. Runs after applyEquipmentModifiers
+  // so any legacy protection booleans the equipment layer already
+  // translated are included too.
+  for (const armor of actor.items.filter((i) => i.type === "armor" && i.system?.equipped)) {
+    const t = armor.system?.traits ?? {};
+    for (const v of t.grantsResistance    ?? []) if (v) derived.damageResistance.add(v);
+    for (const v of t.grantsImmunity      ?? []) if (v) derived.damageImmunity.add(v);
+    for (const v of t.grantsVulnerability ?? []) if (v) derived.damageVulnerability.add(v);
+    // Legacy booleans: keep reading them during the deprecation window
+    // so worlds that haven't migrated still get the expected immunities.
+    const p = armor.system?.protection ?? {};
+    if (p.blackRayImmune)  derived.damageImmunity.add("black-ray");
+    if (p.radiationImmune) derived.damageImmunity.add("radiation");
+    if (p.poisonImmune)    derived.damageImmunity.add("poison");
+    if (p.laserImmune)     derived.damageImmunity.add("laser");
+    if (p.mentalImmune)    derived.damageImmunity.add("mental");
+  }
+
+  // Keep the legacy convenience flags in sync with the aggregated set
+  // so the 60+ call sites that read `actor.gw.laserImmune` /
+  // `actor.gw.mentalImmune` keep working without change.
+  derived.laserImmune  = derived.laserImmune  || derived.damageImmunity.has("laser");
+  derived.mentalImmune = derived.mentalImmune || derived.damageImmunity.has("mental");
 
   let armorClass = Math.min(derived.baseAc, derived.armorAc);
   armorClass -= derived.shieldCount;

@@ -180,30 +180,30 @@
         <label>Punch Damage</label>
         <input type="text" name="system.offense.punchDamage" value="{{system.offense.punchDamage}}" />
       </div>
-      <div class="form-group">
-        <label>Protection</label>
-        <span>
-          <label style="margin-right:1rem;">
-            <input type="checkbox" name="system.protection.blackRayImmune" {{#if system.protection.blackRayImmune}}checked{{/if}} />
-            Black ray
-          </label>
-          <label style="margin-right:1rem;">
-            <input type="checkbox" name="system.protection.radiationImmune" {{#if system.protection.radiationImmune}}checked{{/if}} />
-            Radiation
-          </label>
-          <label>
-            <input type="checkbox" name="system.protection.poisonImmune" {{#if system.protection.poisonImmune}}checked{{/if}} />
-            Poison
-          </label>
-          <label style="margin-left:1rem;">
-            <input type="checkbox" name="system.protection.laserImmune" {{#if system.protection.laserImmune}}checked{{/if}} />
-            Laser
-          </label>
-          <label style="margin-left:1rem;">
-            <input type="checkbox" name="system.protection.mentalImmune" {{#if system.protection.mentalImmune}}checked{{/if}} />
-            Mental
-          </label>
-        </span>
+      <div class="form-group gw-trait-select">
+        <label>{{localize "GAMMA_WORLD.TraitsDamage.GrantsImmunity"}}</label>
+        <multi-select name="system.traits.grantsImmunity">
+          {{#each damageTraitOptions.grantsImmunity}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </multi-select>
+      </div>
+      <div class="form-group gw-trait-select">
+        <label>{{localize "GAMMA_WORLD.TraitsDamage.GrantsResistance"}}</label>
+        <multi-select name="system.traits.grantsResistance">
+          {{#each damageTraitOptions.grantsResistance}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </multi-select>
+      </div>
+      <div class="form-group gw-trait-select">
+        <label>{{localize "GAMMA_WORLD.TraitsDamage.GrantsVulnerability"}}</label>
+        <multi-select name="system.traits.grantsVulnerability">
+          {{#each damageTraitOptions.grantsVulnerability}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </multi-select>
+        <p class="hint">{{localize "GAMMA_WORLD.TraitsDamage.Hint"}}</p>
       </div>
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Armor.Quantity"}} / {{localize "GAMMA_WORLD.Armor.Weight"}}</label>
