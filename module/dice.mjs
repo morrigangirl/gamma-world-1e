@@ -376,6 +376,31 @@ async function createDamageCard({
   // handler in hooks.mjs, this gives the card a D&D-5e-style reveal.
   const rollTooltip = await roll.getTooltip();
 
+  // Per-target apply picker: each damage card can list one or many
+  // targets, and the GM wants per-target adjustment (forcefield on
+  // target A, vulnerability on target B, etc.). Resolve names + UUIDs
+  // upfront so the template renders one row of multiplier pills per
+  // target; click handlers in hooks.mjs manage the selection state and
+  // commit the chosen multiplier individually.
+  const combinedUuids = Array.from(new Set([
+    ...(targetUuid ? [targetUuid] : []),
+    ...(Array.isArray(targetUuids) ? targetUuids : [])
+  ].filter(Boolean)));
+  const templateTargets = [];
+  for (const uuid of combinedUuids) {
+    let name = "Target";
+    try {
+      const doc = await fromUuid(uuid);
+      if (doc) {
+        name = doc.name ?? doc?.actor?.name ?? name;
+        // Token documents expose their actor at `.actor`; use that name
+        // when available so unlinked tokens show the bespoke name.
+        if (doc?.documentName === "Token") name = doc?.name ?? doc?.actor?.name ?? name;
+      }
+    } catch (_error) { /* leave fallback name */ }
+    templateTargets.push({ uuid, name });
+  }
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/damage-card.hbs`,
     {
@@ -389,7 +414,9 @@ async function createDamageCard({
         : notes,
       isCritical,
       rollTooltip,
-      rollFormula: roll.formula
+      rollFormula: roll.formula,
+      targets: templateTargets,
+      hasTargets: templateTargets.length > 0
     }
   );
 

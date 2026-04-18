@@ -20,9 +20,71 @@
   {{#if notes}}
     <div class="gw-card-meta">{{notes}}</div>
   {{/if}}
-  <div class="gw-card-actions">
-    <button type="button" data-action="gw-apply-damage" data-multiplier="1">Apply</button>
-    <button type="button" data-action="gw-apply-damage" data-multiplier="0.5">Apply Half</button>
-    <button type="button" data-action="gw-apply-damage" data-multiplier="0.25">Apply Quarter</button>
-  </div>
+
+  {{#if hasTargets}}
+    {{#each targets}}
+      <div class="gw-damage-target" data-target-uuid="{{this.uuid}}">
+        <div class="gw-damage-target__header">
+          <span class="gw-damage-target__name">{{this.name}}</span>
+          <span class="gw-damage-target__preview"
+                data-role="gw-damage-preview"
+                data-base-total="{{../total}}">&times;1</span>
+        </div>
+        <div class="gw-damage-target__multipliers">
+          <button type="button"
+                  class="gw-damage-mult"
+                  data-action="gw-damage-skip"
+                  data-target-uuid="{{this.uuid}}"
+                  title="Skip this target (no damage applied, row dismissed)">&times;</button>
+          <button type="button"
+                  class="gw-damage-mult"
+                  data-action="gw-damage-mult"
+                  data-target-uuid="{{this.uuid}}"
+                  data-multiplier="0"
+                  title="Immune — no damage">0</button>
+          <button type="button"
+                  class="gw-damage-mult"
+                  data-action="gw-damage-mult"
+                  data-target-uuid="{{this.uuid}}"
+                  data-multiplier="0.25"
+                  title="Quarter damage">&frac14;</button>
+          <button type="button"
+                  class="gw-damage-mult"
+                  data-action="gw-damage-mult"
+                  data-target-uuid="{{this.uuid}}"
+                  data-multiplier="0.5"
+                  title="Half damage (resistance)">&frac12;</button>
+          <button type="button"
+                  class="gw-damage-mult is-active"
+                  data-action="gw-damage-mult"
+                  data-target-uuid="{{this.uuid}}"
+                  data-multiplier="1"
+                  title="Full damage">1</button>
+          <button type="button"
+                  class="gw-damage-mult"
+                  data-action="gw-damage-mult"
+                  data-target-uuid="{{this.uuid}}"
+                  data-multiplier="2"
+                  title="Double damage (vulnerability)">2</button>
+        </div>
+        <button type="button"
+                class="gw-damage-apply-button"
+                data-action="gw-apply-damage"
+                data-target-uuid="{{this.uuid}}"
+                data-multiplier="1">
+          <i class="fa-solid fa-check"></i>
+          Apply to {{this.name}}
+        </button>
+      </div>
+    {{/each}}
+  {{else}}
+    {{! Fallback: no resolvable targets — fall back to the classic
+        three-button multi-target flow the card used before targets were
+        resolved. The handler applies to every listed target in the flags. }}
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-apply-damage" data-multiplier="1">Apply</button>
+      <button type="button" data-action="gw-apply-damage" data-multiplier="0.5">Apply Half</button>
+      <button type="button" data-action="gw-apply-damage" data-multiplier="0.25">Apply Quarter</button>
+    </div>
+  {{/if}}
 </div>

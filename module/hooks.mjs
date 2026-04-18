@@ -19,6 +19,8 @@ const actorMaintenanceJobs = new Map();
 const GM_ONLY_CHAT_ACTIONS = new Set([
   "gw-apply-damage",
   "gw-apply-healing",
+  "gw-damage-mult",
+  "gw-damage-skip",
   "gw-hazard-damage",
   "gw-hazard-lethal",
   "gw-hazard-mutation",
@@ -158,20 +160,65 @@ function onRenderChatMessage(message, html) {
     });
   });
 
+  // Per-target multiplier pill selector: flips the active pill and
+  // updates the sibling Apply button's data-multiplier so the GM can
+  // pick and commit per target.
+  html.querySelectorAll('[data-action="gw-damage-mult"]').forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const targetUuid = button.dataset.targetUuid;
+      const multiplier = button.dataset.multiplier ?? "1";
+      const row = button.closest(".gw-damage-target");
+      if (!row) return;
+      row.querySelectorAll('[data-action="gw-damage-mult"]').forEach((btn) => {
+        btn.classList.toggle("is-active", btn === button);
+      });
+      const applyBtn = row.querySelector('[data-action="gw-apply-damage"]');
+      if (applyBtn) applyBtn.dataset.multiplier = multiplier;
+      // Live preview: update the per-target "× N" pill so the GM sees
+      // the effective damage before committing.
+      const preview = row.querySelector('[data-role="gw-damage-preview"]');
+      if (preview) {
+        const baseTotal = Number(preview.dataset.baseTotal ?? "0") || 0;
+        const mult = Number(multiplier) || 0;
+        const effective = Math.max(0, Math.floor(baseTotal * mult));
+        preview.textContent = mult === 1 ? "×1" : `×${multiplier} = ${effective}`;
+      }
+    });
+  });
+
+  // "Skip this target" button — dismisses the row from the card DOM.
+  // Does not mutate world data (no damage is applied). If every row is
+  // dismissed, the card becomes a record-only entry.
+  html.querySelectorAll('[data-action="gw-damage-skip"]').forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const row = button.closest(".gw-damage-target");
+      if (row) row.remove();
+    });
+  });
+
   html.querySelectorAll('[data-action="gw-apply-damage"]').forEach((button) => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       const multiplier = Number(button.dataset.multiplier ?? "1") || 1;
       if (!flags.damage) return;
+      // Per-target Apply: the picker row ships its own target UUID.
+      // Legacy fallback (no data-target-uuid) still applies to every
+      // target listed in the damage flags with a single multiplier.
+      const pickerTargetUuid = button.dataset.targetUuid ?? "";
+      const targetUuid = pickerTargetUuid || flags.damage.targetUuid;
+      const targetUuids = pickerTargetUuid ? [] : (flags.damage.targetUuids ?? []);
+      const idempotencySuffix = pickerTargetUuid ? `:${pickerTargetUuid}` : "";
       await applyDamageToTargets(flags.damage.total, multiplier, {
-        targetUuid: flags.damage.targetUuid,
-        targetUuids: flags.damage.targetUuids ?? [],
+        targetUuid,
+        targetUuids,
         damageType: flags.damage.damageType ?? "",
         sourceName: flags.damage.sourceName ?? "",
         weaponTag: flags.damage.weaponTag ?? "",
         nonlethal: !!flags.damage.nonlethal,
         sourceMessageId: message.id,
-        idempotencyKey: `damage:${multiplier}`
+        idempotencyKey: `damage:${multiplier}${idempotencySuffix}`
       });
     });
   });

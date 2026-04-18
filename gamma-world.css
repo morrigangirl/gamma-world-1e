@@ -2323,3 +2323,97 @@ body.system-gamma-world-1e,
   opacity: 0.45;
   text-decoration: line-through;
 }
+
+/* ----- Per-target damage multiplier pills ---------------------------- */
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-target {
+  margin-top: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid rgba(31, 36, 40, 0.22);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-target__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-target__name {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-target__preview {
+  font-family: var(--gw-font-accent, inherit);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.7));
+}
+
+/* The pill row: a single-line, equally-weighted button group. */
+.system-gamma-world-1e .gw-chat-card .gw-damage-target__multipliers {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+  margin-bottom: 0.45rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-mult {
+  flex: 1 1 auto;
+  min-height: 1.75rem;
+  min-width: 0;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid rgba(31, 36, 40, 0.35);
+  border-radius: 2px;
+  background: var(--gw-paper, #d8d2b0);
+  color: var(--gw-ink, #1f2428);
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease,
+              color 120ms ease, box-shadow 120ms ease;
+  box-shadow: none;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-mult:hover {
+  background: rgba(199, 166, 0, 0.22);
+  border-color: rgba(199, 166, 0, 0.8);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-mult.is-active {
+  background: var(--gw-machine, #2b2f33);
+  color: var(--gw-paper, #d8d2b0);
+  border-color: rgba(199, 166, 0, 0.9);
+  box-shadow: 0 0 0 1px rgba(199, 166, 0, 0.45) inset;
+}
+
+/* The "skip" × button reads destructively (GM-dismiss action). */
+.system-gamma-world-1e .gw-chat-card .gw-damage-mult[data-action="gw-damage-skip"] {
+  color: rgba(176, 63, 63, 0.92);
+  font-weight: 800;
+  max-width: 2.2rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-mult[data-action="gw-damage-skip"]:hover {
+  background: rgba(176, 63, 63, 0.18);
+  border-color: rgba(176, 63, 63, 0.75);
+}
+
+/* The commit button sits below the pills, full-width within the row. */
+.system-gamma-world-1e .gw-chat-card .gw-damage-apply-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 1.95rem;
+  padding: 0.3rem 0.6rem;
+}
