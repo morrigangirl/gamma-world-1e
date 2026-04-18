@@ -1,3 +1,23 @@
-2026/04/17-23:25:00.279730 17448b000 Recovering log #4
-2026/04/17-23:25:00.280048 17448b000 Delete type=0 #4
-2026/04/17-23:25:00.280072 17448b000 Delete type=3 #2
+2026/04/18-01:58:08.330494 171163000 Recovering log #9
+2026/04/18-01:58:08.330542 171163000 Level-0 table #11: started
+2026/04/18-01:58:08.330769 171163000 Level-0 table #11: 14285 bytes OK
+2026/04/18-01:58:08.331023 171163000 Delete type=3 #8
+2026/04/18-01:58:08.331057 171163000 Delete type=0 #9
+2026/04/18-01:58:08.331479 172207000 Level-0 table #14: started
+2026/04/18-01:58:08.331490 172207000 Level-0 table #14: 0 bytes OK
+2026/04/18-01:58:08.331556 172207000 Delete type=0 #12
+2026/04/18-01:58:08.331591 172207000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!journal.pages!vPg8sJMfIhZerLlb.fqE6mDMWzOaDrVcs' @ 43 : 1
+2026/04/18-01:58:08.331595 172207000 Compacting 1@0 + 0@1 files
+2026/04/18-01:58:08.331834 172207000 Generated table #15@0: 22 keys, 14285 bytes
+2026/04/18-01:58:08.331838 172207000 Compacted 1@0 + 0@1 files => 14285 bytes
+2026/04/18-01:58:08.331873 172207000 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/04/18-01:58:08.331891 172207000 Delete type=2 #11
+2026/04/18-01:58:08.331927 172207000 Manual compaction at level-0 from '!journal.pages!vPg8sJMfIhZerLlb.fqE6mDMWzOaDrVcs' @ 43 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-01:58:08.331940 172207000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!journal.pages!vPg8sJMfIhZerLlb.fqE6mDMWzOaDrVcs' @ 43 : 1
+2026/04/18-01:58:08.331945 172207000 Compacting 1@1 + 1@2 files
+2026/04/18-01:58:08.332184 172207000 Generated table #16@1: 22 keys, 14285 bytes
+2026/04/18-01:58:08.332187 172207000 Compacted 1@1 + 1@2 files => 14285 bytes
+2026/04/18-01:58:08.332225 172207000 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/04/18-01:58:08.332244 172207000 Delete type=2 #15
+2026/04/18-01:58:08.332273 172207000 Delete type=2 #5
+2026/04/18-01:58:08.332333 172207000 Manual compaction at level-1 from '!journal.pages!vPg8sJMfIhZerLlb.fqE6mDMWzOaDrVcs' @ 43 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)

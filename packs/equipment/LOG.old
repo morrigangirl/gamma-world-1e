@@ -1,3 +1,23 @@
-2026/04/17-23:25:00.266648 172c67000 Recovering log #4
-2026/04/17-23:25:00.266993 172c67000 Delete type=0 #4
-2026/04/17-23:25:00.267022 172c67000 Delete type=3 #2
+2026/04/18-01:58:08.282216 17196f000 Recovering log #9
+2026/04/18-01:58:08.282657 17196f000 Level-0 table #11: started
+2026/04/18-01:58:08.283916 17196f000 Level-0 table #11: 73165 bytes OK
+2026/04/18-01:58:08.284924 17196f000 Delete type=3 #8
+2026/04/18-01:58:08.284993 17196f000 Delete type=0 #9
+2026/04/18-01:58:08.289824 172207000 Level-0 table #14: started
+2026/04/18-01:58:08.289869 172207000 Level-0 table #14: 0 bytes OK
+2026/04/18-01:58:08.290078 172207000 Delete type=0 #12
+2026/04/18-01:58:08.290153 172207000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!items!zpO1WI0TXOlzxg3A' @ 310 : 1
+2026/04/18-01:58:08.290172 172207000 Compacting 1@0 + 0@1 files
+2026/04/18-01:58:08.291366 172207000 Generated table #15@0: 155 keys, 73165 bytes
+2026/04/18-01:58:08.291375 172207000 Compacted 1@0 + 0@1 files => 73165 bytes
+2026/04/18-01:58:08.291429 172207000 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/04/18-01:58:08.291465 172207000 Delete type=2 #11
+2026/04/18-01:58:08.291535 172207000 Manual compaction at level-0 from '!items!zpO1WI0TXOlzxg3A' @ 310 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-01:58:08.291548 172207000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!items!zpO1WI0TXOlzxg3A' @ 310 : 1
+2026/04/18-01:58:08.291551 172207000 Compacting 1@1 + 1@2 files
+2026/04/18-01:58:08.292703 172207000 Generated table #16@1: 155 keys, 73165 bytes
+2026/04/18-01:58:08.292710 172207000 Compacted 1@1 + 1@2 files => 73165 bytes
+2026/04/18-01:58:08.292755 172207000 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/04/18-01:58:08.292783 172207000 Delete type=2 #15
+2026/04/18-01:58:08.292831 172207000 Delete type=2 #5
+2026/04/18-01:58:08.293046 172207000 Manual compaction at level-1 from '!items!zpO1WI0TXOlzxg3A' @ 310 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)

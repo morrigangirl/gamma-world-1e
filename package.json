@@ -9,6 +9,7 @@
     "extract:rulebook-prose": "node scripts/extract-rulebook-prose.mjs",
     "import:rulebook-prose": "node scripts/import-rulebook-prose.mjs",
     "prose:refresh": "npm run extract:rulebook-prose && npm run import:rulebook-prose && npm run build:compendia",
+    "seal:packs": "node scripts/seal-packs.mjs",
     "test": "node --test",
     "test:foundry": "node scripts/foundry-smoke.mjs",
     "test:foundry:phase2": "node scripts/foundry-phase2.mjs",

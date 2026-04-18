@@ -1,3 +1,23 @@
-2026/04/17-23:25:00.268932 173473000 Recovering log #4
-2026/04/17-23:25:00.269254 173473000 Delete type=0 #4
-2026/04/17-23:25:00.269295 173473000 Delete type=3 #2
+2026/04/18-01:58:08.293554 171163000 Recovering log #9
+2026/04/18-01:58:08.293662 171163000 Level-0 table #11: started
+2026/04/18-01:58:08.294497 171163000 Level-0 table #11: 32023 bytes OK
+2026/04/18-01:58:08.294893 171163000 Delete type=3 #8
+2026/04/18-01:58:08.294927 171163000 Delete type=0 #9
+2026/04/18-01:58:08.296519 172207000 Level-0 table #14: started
+2026/04/18-01:58:08.296584 172207000 Level-0 table #14: 0 bytes OK
+2026/04/18-01:58:08.296739 172207000 Delete type=0 #12
+2026/04/18-01:58:08.296797 172207000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1
+2026/04/18-01:58:08.296808 172207000 Compacting 1@0 + 0@1 files
+2026/04/18-01:58:08.297240 172207000 Generated table #15@0: 51 keys, 32023 bytes
+2026/04/18-01:58:08.297245 172207000 Compacted 1@0 + 0@1 files => 32023 bytes
+2026/04/18-01:58:08.297301 172207000 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/04/18-01:58:08.297334 172207000 Delete type=2 #11
+2026/04/18-01:58:08.297388 172207000 Manual compaction at level-0 from '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/18-01:58:08.297404 172207000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1
+2026/04/18-01:58:08.297407 172207000 Compacting 1@1 + 1@2 files
+2026/04/18-01:58:08.297776 172207000 Generated table #16@1: 51 keys, 32023 bytes
+2026/04/18-01:58:08.297780 172207000 Compacted 1@1 + 1@2 files => 32023 bytes
+2026/04/18-01:58:08.297823 172207000 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/04/18-01:58:08.297848 172207000 Delete type=2 #15
+2026/04/18-01:58:08.297882 172207000 Delete type=2 #5
+2026/04/18-01:58:08.297943 172207000 Manual compaction at level-1 from '!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U' @ 97 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)

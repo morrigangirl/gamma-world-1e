@@ -41,6 +41,7 @@ npm run extract:rulebook-prose
 npm run import:rulebook-prose
 npm run prose:refresh
 npm run build:compendia
+npm run seal:packs
 ```
 
 - `npm test` runs the lightweight rules tests.
@@ -53,6 +54,7 @@ npm run build:compendia
 - `npm run import:rulebook-prose` reads `ref/rulebook-prose/*.md` and writes `scripts/rulebook-prose.generated.mjs` — the overlay module consumed by the Imported Rulebook pack generator.
 - `npm run build:compendia` wipes and rebuilds only `packs/imported-rulebook/` from the prose overlay via `@foundryvtt/foundryvtt-cli`'s `compilePack`. No other compendium pack on disk is read, modified, or deleted. Running Foundry is fine as long as the Imported Rulebook compendium window is closed.
 - `npm run prose:refresh` is the one-liner that chains `extract:rulebook-prose && import:rulebook-prose && build:compendia` — use it after polishing transcriptions or after re-extracting from the PDF.
+- `npm run seal:packs` opens every declared compendium pack with `classic-level` and forces a LevelDB compaction so all entries live in sealed SSTables (`.ldb`) rather than the write-ahead log. Run this any time a pack has been regenerated or edited via Foundry before committing — Foundry v13 reliably reads sealed SSTables, but its bundled LevelDB has silently produced empty packs from populated WALs written by older compile pipelines.
 - Named Ancient devices and weapons are normalized as artifacts on import and migration, so older worlds pick up the correct Analyze / Use workflows without hand-editing item data.
 - Bundled actors and monsters ship with configured prototype tokens, and newly created world actors inherit the same linked/friendly or hostile defaults automatically.
 
