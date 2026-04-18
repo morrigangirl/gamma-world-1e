@@ -43,6 +43,74 @@
       "GrenadePersistentRounds": {
         "Name": "Default persistent grenade duration (rounds)",
         "Hint": "Number of rounds that gas or smoke grenade templates stay visible after detonation when the item itself does not specify a duration. Instantaneous grenades ignore this."
+      },
+      "NpcDamageMode": {
+        "Name": "NPC damage auto-roll mode",
+        "Hint": "Controls when NPC (non-player-owned) attackers auto-roll damage after an attack card posts. None = never, On Hit = only on confirmed hits, Always = regardless of outcome (for save-based attacks without a to-hit roll). HP never mutates until the GM clicks Apply Damage.",
+        "Choice": {
+          "None": "None (GM always clicks)",
+          "OnHit": "On Hit (default)",
+          "Always": "Always"
+        }
+      },
+      "PromptBeforeApplyDamage": {
+        "Name": "Confirm before applying damage to PCs",
+        "Hint": "When enabled, clicking Apply Damage against a player-owned target pops a confirmation dialog with the amount. NPC auto-damage paths skip the prompt to avoid a modal per swing."
+      },
+      "NpcSaveMode": {
+        "Name": "NPC save resolution mode",
+        "Hint": "Auto: NPC saves resolve immediately via the GM. Button: saves post a chat card with per-NPC Roll buttons the GM clicks manually (matches the AOE save card pattern).",
+        "Choice": {
+          "Auto": "Auto-resolve",
+          "Button": "Button per NPC"
+        }
+      },
+      "PlayerSaveTimeout": {
+        "Name": "Player save dialog timeout (seconds)",
+        "Hint": "Auto-resolve a stalled player save dialog after this many seconds. 0 = wait forever (default). Useful for play-by-post or when a player is AFK mid-combat."
+      },
+      "AttackRollMode": {
+        "Name": "Default roll mode — attack rolls",
+        "Hint": "Foundry chat visibility for attack rolls posted by the system. GM Roll hides from players; Blind hides from everyone including the GM's own chat log until revealed; Self Roll whispers only to the roller."
+      },
+      "DamageRollMode": {
+        "Name": "Default roll mode — damage rolls",
+        "Hint": "Foundry chat visibility for damage rolls posted by the system."
+      },
+      "SaveRollMode": {
+        "Name": "Default roll mode — save rolls",
+        "Hint": "Foundry chat visibility for save rolls posted by the system."
+      },
+      "RollMode": {
+        "Choice": {
+          "Public": "Public",
+          "GM": "GM Roll (hidden from players)",
+          "Blind": "Blind (hidden from everyone)",
+          "Self": "Self Roll (whisper to roller)"
+        }
+      },
+      "HideGmRollDetails": {
+        "Name": "Hide GM roll dice breakdowns",
+        "Hint": "Strip the individual dice tooltips from GM-sourced roll messages so players see only the total. Use this to preserve mystery on monster rolls.",
+        "Choice": {
+          "None": "Show everything (default)",
+          "Attack": "Hide attack dice breakdown",
+          "Damage": "Hide damage dice breakdown",
+          "Save": "Hide save dice breakdown",
+          "All": "Hide all GM dice breakdowns"
+        }
+      },
+      "SuppressGmDiceAnimation": {
+        "Name": "Suppress GM dice animation",
+        "Hint": "Hide the 3D dice animation (Dice So Nice or Foundry native) on GM-sourced rolls. Useful when pairing with GM Roll / Blind Roll visibility so players don't see the dice bounce for a hidden roll."
+      },
+      "AutoRemoveInstantTemplate": {
+        "Name": "Auto-remove instantaneous AOE templates",
+        "Hint": "Delete a grenade or AOE template from the canvas immediately after its save card posts, as long as the item has no persistent-cloud duration. Disable if you want templates to linger until manually removed."
+      },
+      "AutoConsumeCharges": {
+        "Name": "Auto-consume weapon ammo and artifact charges on use",
+        "Hint": "When enabled, firing a weapon with consumable ammo decrements its count and using an Ancient artifact with charges debits them. Disable to track resources manually (sandbox play, pretend-infinite arsenal)."
       }
     },
     "Sheet": {

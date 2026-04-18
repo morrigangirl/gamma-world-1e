@@ -49,13 +49,141 @@ export function registerMigrationSettings() {
     default: true
   });
 
+  // Retained (hidden) for one deprecation cycle so the 0.6.0 → 0.7.0 migration
+  // can read the old value and translate it into `npcDamageMode`. Remove in 0.8.0.
   game.settings.register(SYSTEM_ID, "autoRollNpcDamage", {
     name: "GAMMA_WORLD.Settings.AutoRollNpcDamage.Name",
     hint: "GAMMA_WORLD.Settings.AutoRollNpcDamage.Hint",
     scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register(SYSTEM_ID, "npcDamageMode", {
+    name: "GAMMA_WORLD.Settings.NpcDamageMode.Name",
+    hint: "GAMMA_WORLD.Settings.NpcDamageMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      none: "GAMMA_WORLD.Settings.NpcDamageMode.Choice.None",
+      onHit: "GAMMA_WORLD.Settings.NpcDamageMode.Choice.OnHit",
+      always: "GAMMA_WORLD.Settings.NpcDamageMode.Choice.Always"
+    },
+    default: "onHit"
+  });
+
+  game.settings.register(SYSTEM_ID, "promptBeforeApplyDamage", {
+    name: "GAMMA_WORLD.Settings.PromptBeforeApplyDamage.Name",
+    hint: "GAMMA_WORLD.Settings.PromptBeforeApplyDamage.Hint",
+    scope: "world",
     config: true,
     type: Boolean,
     default: false
+  });
+
+  game.settings.register(SYSTEM_ID, "npcSaveMode", {
+    name: "GAMMA_WORLD.Settings.NpcSaveMode.Name",
+    hint: "GAMMA_WORLD.Settings.NpcSaveMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      auto: "GAMMA_WORLD.Settings.NpcSaveMode.Choice.Auto",
+      button: "GAMMA_WORLD.Settings.NpcSaveMode.Choice.Button"
+    },
+    default: "auto"
+  });
+
+  game.settings.register(SYSTEM_ID, "playerSaveTimeout", {
+    name: "GAMMA_WORLD.Settings.PlayerSaveTimeout.Name",
+    hint: "GAMMA_WORLD.Settings.PlayerSaveTimeout.Hint",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 0,
+    range: { min: 0, max: 300, step: 5 }
+  });
+
+  const ROLL_MODE_CHOICES = {
+    publicroll: "GAMMA_WORLD.Settings.RollMode.Choice.Public",
+    gmroll:     "GAMMA_WORLD.Settings.RollMode.Choice.GM",
+    blindroll:  "GAMMA_WORLD.Settings.RollMode.Choice.Blind",
+    selfroll:   "GAMMA_WORLD.Settings.RollMode.Choice.Self"
+  };
+
+  game.settings.register(SYSTEM_ID, "attackRollMode", {
+    name: "GAMMA_WORLD.Settings.AttackRollMode.Name",
+    hint: "GAMMA_WORLD.Settings.AttackRollMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: ROLL_MODE_CHOICES,
+    default: "publicroll"
+  });
+
+  game.settings.register(SYSTEM_ID, "damageRollMode", {
+    name: "GAMMA_WORLD.Settings.DamageRollMode.Name",
+    hint: "GAMMA_WORLD.Settings.DamageRollMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: ROLL_MODE_CHOICES,
+    default: "publicroll"
+  });
+
+  game.settings.register(SYSTEM_ID, "saveRollMode", {
+    name: "GAMMA_WORLD.Settings.SaveRollMode.Name",
+    hint: "GAMMA_WORLD.Settings.SaveRollMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: ROLL_MODE_CHOICES,
+    default: "publicroll"
+  });
+
+  game.settings.register(SYSTEM_ID, "hideGmRollDetails", {
+    name: "GAMMA_WORLD.Settings.HideGmRollDetails.Name",
+    hint: "GAMMA_WORLD.Settings.HideGmRollDetails.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      none:   "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.None",
+      attack: "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.Attack",
+      damage: "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.Damage",
+      save:   "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.Save",
+      all:    "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.All"
+    },
+    default: "none"
+  });
+
+  game.settings.register(SYSTEM_ID, "suppressGmDiceAnimation", {
+    name: "GAMMA_WORLD.Settings.SuppressGmDiceAnimation.Name",
+    hint: "GAMMA_WORLD.Settings.SuppressGmDiceAnimation.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register(SYSTEM_ID, "autoRemoveInstantTemplate", {
+    name: "GAMMA_WORLD.Settings.AutoRemoveInstantTemplate.Name",
+    hint: "GAMMA_WORLD.Settings.AutoRemoveInstantTemplate.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(SYSTEM_ID, "autoConsumeCharges", {
+    name: "GAMMA_WORLD.Settings.AutoConsumeCharges.Name",
+    hint: "GAMMA_WORLD.Settings.AutoConsumeCharges.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   game.settings.register(SYSTEM_ID, "autoTickFatigue", {
@@ -336,5 +464,34 @@ export async function migrateWorld() {
   // 0.5.0: remove the deprecated Broadcast Power Station item.
   await removeLegacyBroadcastPowerItems();
 
+  // 0.7.0: translate autoRollNpcDamage (bool) → npcDamageMode (enum).
+  //   old true  → "always" (preserve: auto-roll regardless of hit)
+  //   old false → "none"   (preserve: never auto-roll)
+  // Only applied on worlds upgrading from <0.7.0; fresh worlds keep the new
+  // default of "onHit". We detect "never set" from "set false" indirectly by
+  // only migrating when npcDamageMode is still at its own default.
+  if (compareSemver(storedVersion, "0.7.0") < 0) {
+    const legacyAutoRollNpc = game.settings.get(SYSTEM_ID, "autoRollNpcDamage");
+    const currentNpcMode = game.settings.get(SYSTEM_ID, "npcDamageMode");
+    if (currentNpcMode === "onHit") {
+      const nextMode = legacyAutoRollNpc ? "always" : "none";
+      await game.settings.set(SYSTEM_ID, "npcDamageMode", nextMode);
+    }
+  }
+
   await game.settings.set(SYSTEM_ID, "schemaVersion", currentVersion);
+}
+
+/**
+ * Minimal semver comparison: returns -1 / 0 / +1.
+ * Treats missing segments as 0 (e.g. "0.6" vs "0.6.0" → 0).
+ */
+function compareSemver(a, b) {
+  const segs = (v) => String(v ?? "").split(".").map((n) => Number(n) || 0);
+  const [aMajor = 0, aMinor = 0, aPatch = 0] = segs(a);
+  const [bMajor = 0, bMinor = 0, bPatch = 0] = segs(b);
+  if (aMajor !== bMajor) return aMajor < bMajor ? -1 : 1;
+  if (aMinor !== bMinor) return aMinor < bMinor ? -1 : 1;
+  if (aPatch !== bPatch) return aPatch < bPatch ? -1 : 1;
+  return 0;
 }

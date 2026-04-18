@@ -32,12 +32,22 @@ async function renderTemplate(path, data) {
  * World-setting gate for auto-rolling NPC damage after an attack card posts.
  * Returns false for any player-owned attacker (so PCs always click their own
  * damage button) and for any case where the setting is off or unreadable.
+ *
+ * Modes (`npcDamageMode` setting, migrated from legacy `autoRollNpcDamage`):
+ *   - "none"   — never auto-roll; GM clicks
+ *   - "onHit"  — auto-roll only if the outer caller reports a hit (default)
+ *   - "always" — auto-roll regardless of hit outcome
+ *
+ * Callers still gate on `hit &&` at the use site for weapon attacks, so
+ * "onHit" and "always" behave identically there; the distinction matters for
+ * save-based attacks (mental/grenade) that don't have a to-hit roll.
  */
 function shouldAutoRollNpcDamage(actor) {
   if (!actor) return false;
   if (actor.hasPlayerOwner) return false;
   try {
-    return !!game.settings?.get(SYSTEM_ID, "autoRollNpcDamage");
+    const mode = game.settings?.get(SYSTEM_ID, "npcDamageMode");
+    return mode === "always" || mode === "onHit";
   } catch (_error) {
     return false;
   }

@@ -452,9 +452,11 @@ export async function useAoeOrdnance(actor, item) {
     damageRoll
   });
 
-  // Auto-resolve NPC rows when the setting is on.
+  // Auto-resolve NPC rows when the setting is on ("onHit" or "always";
+  // AOE has no to-hit roll so the two are equivalent here).
   try {
-    const autoNpc = !!game.settings?.get(SYSTEM_ID, "autoRollNpcDamage");
+    const mode = game.settings?.get(SYSTEM_ID, "npcDamageMode");
+    const autoNpc = mode === "always" || mode === "onHit";
     if (autoNpc && message?.id) {
       await resolveAllPendingAoe(message.id);
     }
