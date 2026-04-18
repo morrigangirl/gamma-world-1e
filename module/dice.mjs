@@ -15,6 +15,7 @@ import {
 import { runAsUser } from "./gm-executor.mjs";
 import { autoApplyOnHitEffect, shouldHideManualFollowUp } from "./on-hit-effects.mjs";
 import { determineRangeBand } from "./range.mjs";
+import { buildAttackContext, serializeAttackContext } from "./attack-context.mjs";
 import {
   clampSaveScore,
   evaluateSaveForActor,
@@ -601,6 +602,21 @@ export async function rollAttack(actor, weapon) {
     nonlethal: !!weapon.system.traits?.nonlethal
   };
 
+  // AttackContext (Phase 2a) — additive: the legacy `attack` flags above
+  // stay unchanged for back-compat; the new `context` shape is what
+  // downstream phases (hooks, undo, resource tracking) will read.
+  const context = buildAttackContext({
+    actor, token: sourceToken, weapon, target, roll, range,
+    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
+    damageFormula, damageType: weapon.system.damage?.type ?? "",
+    effectMode, effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "",
+    nonlethal: !!weapon.system.traits?.nonlethal,
+    sourceKind: "weapon", sourceName: weapon.name
+  });
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -608,7 +624,8 @@ export async function rollAttack(actor, weapon) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: attackFlags
+        attack: attackFlags,
+        context: serializeAttackContext(context)
       }
     }
   });
@@ -711,6 +728,19 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     nonlethal: !!weapon.system.traits?.nonlethal
   };
 
+  // AttackContext (Phase 2a) — see comment in rollAttack.
+  const context = buildAttackContext({
+    actor, token: sourceToken, weapon, target, roll, range,
+    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
+    damageFormula, damageType: weapon.system.damage?.type ?? "physical",
+    effectMode, effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "natural",
+    nonlethal: !!weapon.system.traits?.nonlethal,
+    sourceKind: "natural", sourceName: weapon.name
+  });
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -718,7 +748,8 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: attackFlags
+        attack: attackFlags,
+        context: serializeAttackContext(context)
       }
     }
   });
@@ -795,6 +826,16 @@ export async function rollNaturalAttack(actor) {
     sourceKind: "natural"
   };
 
+  // AttackContext (Phase 2a) — no weapon doc on this path (generic
+  // natural attack).
+  const context = buildAttackContext({
+    actor, token: sourceToken, weapon: null, target, roll,
+    range: { label: "melee", penalty: 0 },
+    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
+    damageFormula, damageType: "physical",
+    sourceKind: "natural", sourceName: attackName
+  });
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -802,7 +843,8 @@ export async function rollNaturalAttack(actor) {
     flags: {
       [SYSTEM_ID]: {
         card: "attack",
-        attack: attackFlags
+        attack: attackFlags,
+        context: serializeAttackContext(context)
       }
     }
   });

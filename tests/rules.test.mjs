@@ -761,6 +761,12 @@ import {
 } from "../module/alliances.mjs";
 import { MUTATIONS_BY_SUBTYPE } from "../module/tables/mutation-data.mjs";
 import { CHARACTER_TYPES, CRYPTIC_ALLIANCES } from "../module/config.mjs";
+import {
+  ATTACK_CONTEXT_VERSION,
+  attackContextFromFlags,
+  buildAttackContext,
+  serializeAttackContext
+} from "../module/attack-context.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -905,5 +911,103 @@ test("cryptic alliance reaction modifier reflects ally / enemy / self", () => {
   assert.ok(allianceAccepts("brotherhood", "humanoid"));
   assert.equal(allianceAccepts("created", "humanoid"), false, "The Created only accepts robots");
   assert.ok(allianceRecord("brotherhood"));
+});
+
+test("AttackContext round-trips through serialize + rehydrate", () => {
+  // Fixture that mimics what rollAttack builds on a real attack.
+  const mockActor = { uuid: "Actor.abc", name: "Raider" };
+  const mockToken = { uuid: "Scene.s1.Token.t1" };
+  const mockWeapon = { uuid: "Actor.abc.Item.w1", name: "Laser Pistol" };
+  const mockRoll = { total: 17, formula: "1d20 + 2" };
+  const target = {
+    actor: { uuid: "Actor.xyz", name: "Dabber" },
+    targetToken: { uuid: "Scene.s1.Token.t2" },
+    targetUuid: "Actor.xyz",
+    targetTokenUuid: "Scene.s1.Token.t2",
+    targetName: "Dabber",
+    armorClass: 6,
+    distance: 25
+  };
+
+  const context = buildAttackContext({
+    actor: mockActor, token: mockToken, weapon: mockWeapon,
+    target, roll: mockRoll,
+    range: { label: "short", penalty: 0 },
+    attackBonus: 2, hitTarget: 12,
+    hit: true, isCritical: false, isFumble: false,
+    damageFormula: "5d6", damageType: "energy",
+    effectMode: "damage", sourceKind: "weapon", sourceName: "Laser Pistol"
+  });
+
+  assert.equal(context.version, ATTACK_CONTEXT_VERSION);
+  assert.equal(context.actor, mockActor, "runtime context keeps live doc refs");
+  assert.equal(context.weapon, mockWeapon);
+  assert.equal(context.damageFormula, "5d6");
+  assert.equal(context.hit, true);
+  assert.equal(context.range.label, "short");
+  assert.equal(context.effect.mode, "damage");
+
+  const serialized = serializeAttackContext(context);
+  // Serialized form: no live doc refs, only primitive + UUIDs.
+  assert.equal(serialized.actorUuid, "Actor.abc");
+  assert.equal(serialized.weaponUuid, "Actor.abc.Item.w1");
+  assert.equal(serialized.tokenUuid, "Scene.s1.Token.t1");
+  assert.equal(serialized.target.actorUuid, "Actor.xyz");
+  assert.equal(serialized.target.tokenUuid, "Scene.s1.Token.t2");
+  assert.equal(serialized.target.armorClass, 6);
+  assert.equal(serialized.target.distance, 25);
+  assert.equal(serialized.rollTotal, 17);
+  assert.equal(serialized.rollFormula, "1d20 + 2");
+  assert.equal(serialized.hit, true);
+  assert.equal(serialized.damageFormula, "5d6");
+
+  // Confirm no Foundry documents snuck into the serialized JSON.
+  assert.equal("actor" in serialized, false);
+  assert.equal("weapon" in serialized, false);
+  assert.equal("roll" in serialized, false);
+
+  // Rehydrate from a chat-message-like flags shape. Should produce
+  // a plain object with UUIDs preserved and primitives intact.
+  const rehydrated = attackContextFromFlags({ context: serialized });
+  assert.equal(rehydrated.version, ATTACK_CONTEXT_VERSION);
+  assert.equal(rehydrated.actorUuid, "Actor.abc");
+  assert.equal(rehydrated.target.actorUuid, "Actor.xyz");
+  assert.equal(rehydrated.damageFormula, "5d6");
+  assert.equal(rehydrated.hit, true);
+  assert.equal(rehydrated.range.label, "short");
+  assert.equal(rehydrated.effect.mode, "damage");
+
+  // Legacy pre-Phase-2a flags (no `context` key) → null.
+  assert.equal(attackContextFromFlags({ attack: { something: true } }), null);
+  assert.equal(attackContextFromFlags(null), null);
+  assert.equal(attackContextFromFlags(undefined), null);
+});
+
+test("AttackContext handles the no-weapon generic natural attack path", () => {
+  const context = buildAttackContext({
+    actor: { uuid: "Actor.mon", name: "Feral Hound" },
+    token: { uuid: "Scene.s.Token.mon" },
+    weapon: null,
+    target: {
+      targetUuid: "Actor.pc",
+      targetTokenUuid: "Scene.s.Token.pc",
+      targetName: "Armek",
+      armorClass: 7,
+      distance: 5
+    },
+    roll: { total: 14, formula: "1d20 + 0" },
+    range: { label: "melee", penalty: 0 },
+    attackBonus: 0, hitTarget: 14,
+    hit: true, isCritical: false, isFumble: false,
+    damageFormula: "1d3", damageType: "physical",
+    sourceKind: "natural", sourceName: "Bite"
+  });
+
+  const serialized = serializeAttackContext(context);
+  assert.equal(serialized.weaponUuid, null, "natural attack has no weapon");
+  assert.equal(serialized.sourceKind, "natural");
+  assert.equal(serialized.sourceName, "Bite");
+  assert.equal(serialized.effect.mode, "damage");
+  assert.equal(serialized.range.label, "melee");
 });
 
