@@ -14,19 +14,9 @@
             {{/each}}
           </select>
         </label>
-        <label class="gw-level-with-klaxon">
+        <label>
           {{localize "GAMMA_WORLD.Resource.Level"}}
-          <span class="gw-level-with-klaxon__row">
-            <input type="number" name="system.details.level" value="{{system.details.level}}" min="1" />
-            <span class="gw-fatigue-klaxon gw-fatigue-klaxon--{{fatigueState.level}}"
-                  role="img"
-                  aria-label="{{fatigueState.title}}"
-                  title="{{fatigueState.title}}"
-                  data-fatigue-round="{{fatigueState.round}}">
-              <span class="gw-fatigue-klaxon__bulb"></span>
-              <span class="gw-fatigue-klaxon__ring"></span>
-            </span>
-          </span>
+          <input type="number" name="system.details.level" value="{{system.details.level}}" min="1" />
         </label>
         {{#if isMonsterSheet}}
           <label>{{localize "GAMMA_WORLD.Resource.CreatureClass"}}
@@ -39,6 +29,16 @@
           <label>{{localize "GAMMA_WORLD.Resource.XP"}}
             <input type="number" name="system.details.xp" value="{{system.details.xp}}" min="0" />
           </label>
+          <span class="gw-fatigue-klaxon-slot">
+            <span class="gw-fatigue-klaxon gw-fatigue-klaxon--{{fatigueState.level}}"
+                  role="img"
+                  aria-label="{{fatigueState.title}}"
+                  title="{{fatigueState.title}}"
+                  data-fatigue-round="{{fatigueState.round}}">
+              <span class="gw-fatigue-klaxon__bulb"></span>
+              <span class="gw-fatigue-klaxon__ring"></span>
+            </span>
+          </span>
         {{/if}}
       </div>
     </div>

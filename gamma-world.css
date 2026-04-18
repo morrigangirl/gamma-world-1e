@@ -2459,23 +2459,14 @@ body.system-gamma-world-1e,
   padding: 0.3rem 0.5rem;
 }
 
-/* ----- Fatigue klaxon (80s alert-bulb, next to the Level input) ------ */
+/* ----- Fatigue klaxon (80s alert-bulb, pinned to the right gutter of   */
+/*       the identity strip so Level / XP / Type stay on one baseline). */
 
-.application.gamma-world .gw-level-with-klaxon {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.application.gamma-world .gw-level-with-klaxon__row {
+.application.gamma-world .gw-fatigue-klaxon-slot {
+  margin-left: auto;
+  align-self: center;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-}
-
-.application.gamma-world .gw-level-with-klaxon__row > input {
-  flex: 1 1 auto;
-  min-width: 0;
 }
 
 .application.gamma-world .gw-fatigue-klaxon {
