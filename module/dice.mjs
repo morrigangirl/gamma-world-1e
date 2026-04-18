@@ -16,6 +16,7 @@ import { runAsUser } from "./gm-executor.mjs";
 import { autoApplyOnHitEffect, shouldHideManualFollowUp } from "./on-hit-effects.mjs";
 import { determineRangeBand } from "./range.mjs";
 import { buildAttackContext, serializeAttackContext } from "./attack-context.mjs";
+import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
 import {
   clampSaveScore,
   evaluateSaveForActor,
@@ -346,8 +347,29 @@ async function createDamageCard({
   notes = "",
   isCritical = false
 }) {
+  // Phase 2b: preRollDamage — veto-capable. Payload is a minimal
+  // damage-intent snapshot keyed from the args (callers don't thread
+  // AttackContext through this helper yet).
+  const preRollPayload = {
+    actorUuid: actor?.uuid ?? null,
+    sourceUuid, sourceKind, sourceName,
+    targetUuid, targetUuids,
+    formula, damageType, weaponTag, nonlethal,
+    isCritical
+  };
+  if (!fireVetoHook(HOOK.preRollDamage, { intent: preRollPayload })) return;
+
   const effectiveFormula = isCritical ? doubleDiceInFormula(formula) : formula;
   const roll = await new Roll(effectiveFormula).evaluate();
+
+  // Phase 2b: damageRollComplete — announce after evaluation.
+  fireAnnounceHook(HOOK.damageRollComplete, {
+    intent: preRollPayload,
+    roll,
+    total: roll.total,
+    effectiveFormula
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/damage-card.hbs`,
     {
@@ -532,6 +554,16 @@ export async function rollAttack(actor, weapon) {
   });
   const effectiveWeaponClass = Math.max(1, Number(weapon.system.weaponClass ?? 1) + fatigueFactor);
   const targetNumber = weaponAttackTarget(effectiveWeaponClass, target.armorClass);
+
+  // Phase 2b: preAttackRoll — veto-capable. Intent payload (no roll yet).
+  const preRollContext = buildAttackContext({
+    actor, token: sourceToken, weapon, target, range,
+    attackBonus, hitTarget: targetNumber,
+    effectMode: weapon.system.effect?.mode || "damage",
+    sourceKind: "weapon", sourceName: weapon.name
+  });
+  if (!fireVetoHook(HOOK.preAttackRoll, { context: preRollContext })) return;
+
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
   const d20Value = roll.terms?.[0]?.total ?? roll.total;
   const isCritical = d20Value === 20;
@@ -617,6 +649,10 @@ export async function rollAttack(actor, weapon) {
     sourceKind: "weapon", sourceName: weapon.name
   });
 
+  // Phase 2b: attackRollComplete — announce-only, fires after the roll
+  // resolves and before the card posts.
+  fireAnnounceHook(HOOK.attackRollComplete, { context, roll });
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -669,6 +705,18 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     + range.penalty;
 
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
+
+  // Phase 2b: preAttackRoll — veto-capable.
+  {
+    const preRollContext = buildAttackContext({
+      actor, token: sourceToken, weapon, target, range,
+      attackBonus, hitTarget: targetNumber,
+      effectMode: weapon.system.effect?.mode || "damage",
+      sourceKind: "natural", sourceName: weapon.name
+    });
+    if (!fireVetoHook(HOOK.preAttackRoll, { context: preRollContext })) return;
+  }
+
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
   const d20Value = roll.terms?.[0]?.total ?? roll.total;
   const isCritical = d20Value === 20;
@@ -741,6 +789,8 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     sourceKind: "natural", sourceName: weapon.name
   });
 
+  fireAnnounceHook(HOOK.attackRollComplete, { context, roll });
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
@@ -777,6 +827,20 @@ export async function rollNaturalAttack(actor) {
 
   const attackBonus = actor.gw?.toHitBonus ?? 0;
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
+
+  // Phase 2b: preAttackRoll — veto-capable. Generic natural attack has
+  // no weapon document.
+  {
+    const preRollContext = buildAttackContext({
+      actor, token: sourceToken, weapon: null, target,
+      range: { label: "melee", penalty: 0 },
+      attackBonus, hitTarget: targetNumber,
+      sourceKind: "natural",
+      sourceName: actor.system.combat?.naturalAttack?.name || "Natural Attack"
+    });
+    if (!fireVetoHook(HOOK.preAttackRoll, { context: preRollContext })) return;
+  }
+
   const roll = await new Roll("1d20 + @bonus", { bonus: attackBonus }).evaluate();
   const d20Value = roll.terms?.[0]?.total ?? roll.total;
   const isCritical = d20Value === 20;
@@ -835,6 +899,8 @@ export async function rollNaturalAttack(actor) {
     damageFormula, damageType: "physical",
     sourceKind: "natural", sourceName: attackName
   });
+
+  fireAnnounceHook(HOOK.attackRollComplete, { context, roll });
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -982,6 +1048,15 @@ export async function requestSaveResolution(actor, type, {
     return { status: "canceled", actorUuid: null, actorName: "", type, sourceName };
   }
 
+  // Phase 2b: preSaveRoll — veto-capable. Macros may veto to substitute
+  // an alternative save flow entirely.
+  if (!fireVetoHook(HOOK.preSaveRoll, {
+    actorUuid: actor.uuid, actorName: actor.name,
+    type, sourceName, intensity, inputLocked
+  })) {
+    return { status: "canceled", actorUuid: actor.uuid, actorName: actor.name, type, sourceName };
+  }
+
   const users = typeof game.users?.filter === "function"
     ? game.users.filter(() => true)
     : Array.from(game.users ?? []);
@@ -1002,33 +1077,41 @@ export async function requestSaveResolution(actor, type, {
     intensity: intensity == null ? null : clampSaveScore(intensity),
     inputLocked
   };
+
+  let result;
   if (targetUserId === game.user?.id) {
-    return localSaveResolution(actor, type, options);
+    result = await localSaveResolution(actor, type, options);
+  } else {
+    try {
+      result = await runAsUser(targetUserId, "resolve-save", {
+        actorUuid: actor.uuid,
+        type,
+        options
+      }, {
+        timeoutMs: 120000,
+        timeoutMessage: `Timed out waiting for ${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save.`
+      });
+      if (result?.status === "canceled") {
+        ui.notifications?.info(`${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save was canceled.`);
+      }
+    } catch (error) {
+      ui.notifications?.error(error?.message ?? String(error));
+      result = {
+        status: "canceled",
+        actorUuid: actor.uuid,
+        actorName: actor.name,
+        type,
+        sourceName
+      };
+    }
   }
 
-  try {
-    const result = await runAsUser(targetUserId, "resolve-save", {
-      actorUuid: actor.uuid,
-      type,
-      options
-    }, {
-      timeoutMs: 120000,
-      timeoutMessage: `Timed out waiting for ${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save.`
-    });
-    if (result?.status === "canceled") {
-      ui.notifications?.info(`${actor.name}'s ${saveTypeLabel(type).toLowerCase()} save was canceled.`);
-    }
-    return result;
-  } catch (error) {
-    ui.notifications?.error(error?.message ?? String(error));
-    return {
-      status: "canceled",
-      actorUuid: actor.uuid,
-      actorName: actor.name,
-      type,
-      sourceName
-    };
-  }
+  // Phase 2b: saveResolved — announce with the outcome.
+  fireAnnounceHook(HOOK.saveResolved, {
+    actorUuid: actor.uuid, actorName: actor.name,
+    type, sourceName, intensity, result
+  });
+  return result;
 }
 
 export async function rollAbilityCheck(actor, abilityKey, {

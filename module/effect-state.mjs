@@ -2,6 +2,7 @@ import { SYSTEM_ID } from "./config.mjs";
 import { syncBarrierEffectsForActor, syncTemporaryEffectsForActor } from "./animations.mjs";
 import { charismaReactionAdjustment } from "./tables/encounter-tables.mjs";
 import { runAsGM } from "./gm-executor.mjs";
+import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -135,6 +136,15 @@ export async function applyTemporaryEffect(actor, effect) {
   });
 
   if (normalized.statusId) await setActorStatus(actor, normalized.statusId, true);
+
+  // Phase 2b: conditionApplied — announce after the effect is live on
+  // the actor. Lets macros react to new status conditions.
+  fireAnnounceHook(HOOK.conditionApplied, {
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    effect: normalized
+  });
+
   return state;
 }
 
@@ -455,6 +465,19 @@ export async function applyIncomingDamage(actor, amount, {
   let pending = Math.max(0, Math.floor(Number(amount) || 0));
   if (!pending) return { applied: 0, prevented: 0, notes: [] };
 
+  // Phase 2b: preApplyDamage — veto-capable. Macros can cancel the
+  // damage application entirely (e.g. a cover rule that absorbs the hit).
+  // They cannot modify `amount` via the veto — for that, register the
+  // `applyIncomingDamage` path upstream or adjust it in
+  // `preRollDamage`.
+  if (!fireVetoHook(HOOK.preApplyDamage, {
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    amount: pending, damageType, weaponTag, sourceName
+  })) {
+    return { applied: 0, prevented: pending, notes: ["Damage prevented by subscriber veto."] };
+  }
+
   let state = getActorState(actor);
   syncActorProtectionStateData(actor, state);
   const notes = [];
@@ -505,11 +528,24 @@ export async function applyIncomingDamage(actor, amount, {
     await actor.applyDamage(pending);
   }
 
-  return {
+  const result = {
     applied: pending,
     prevented: Math.max(0, original - pending),
     notes
   };
+
+  // Phase 2b: damageApplied — announce after HP mutation completes.
+  fireAnnounceHook(HOOK.damageApplied, {
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    damageType, weaponTag, sourceName,
+    requested: original,
+    applied: result.applied,
+    prevented: result.prevented,
+    notes: result.notes
+  });
+
+  return result;
 }
 
 async function tickStunCloud(actor, effect) {

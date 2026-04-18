@@ -767,6 +767,12 @@ import {
   buildAttackContext,
   serializeAttackContext
 } from "../module/attack-context.mjs";
+import {
+  HOOK,
+  HOOK_SURFACE_VERSION,
+  fireAnnounceHook,
+  fireVetoHook
+} from "../module/hook-surface.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -981,6 +987,39 @@ test("AttackContext round-trips through serialize + rehydrate", () => {
   assert.equal(attackContextFromFlags({ attack: { something: true } }), null);
   assert.equal(attackContextFromFlags(null), null);
   assert.equal(attackContextFromFlags(undefined), null);
+});
+
+test("Hook surface exports the expected constants and is test-safe", () => {
+  assert.equal(HOOK_SURFACE_VERSION, 1);
+  assert.equal(Object.isFrozen(HOOK), true, "HOOK table must be frozen so macro authors can trust the names");
+
+  // The nine pipeline hooks + the Phase 4 resourceConsumed reservation.
+  const expected = {
+    preAttackRoll:      "gammaWorld.v1.preAttackRoll",
+    attackRollComplete: "gammaWorld.v1.attackRollComplete",
+    preRollDamage:      "gammaWorld.v1.preRollDamage",
+    damageRollComplete: "gammaWorld.v1.damageRollComplete",
+    preApplyDamage:     "gammaWorld.v1.preApplyDamage",
+    damageApplied:      "gammaWorld.v1.damageApplied",
+    preSaveRoll:        "gammaWorld.v1.preSaveRoll",
+    saveResolved:       "gammaWorld.v1.saveResolved",
+    conditionApplied:   "gammaWorld.v1.conditionApplied",
+    resourceConsumed:   "gammaWorld.v1.resourceConsumed"
+  };
+  for (const [key, value] of Object.entries(expected)) {
+    assert.equal(HOOK[key], value, `HOOK.${key} should equal "${value}"`);
+  }
+
+  // Every name must start with "gammaWorld.v1." so the namespace is honored.
+  for (const name of Object.values(HOOK)) {
+    assert.ok(name.startsWith("gammaWorld.v1."), `hook "${name}" must live under gammaWorld.v1.*`);
+  }
+
+  // Graceful no-op when Hooks is undefined (the node test env). Veto
+  // helper returns true (proceed) so behavior is never blocked by missing
+  // infra; announce helper returns silently.
+  assert.equal(fireVetoHook(HOOK.preAttackRoll, { actor: null }), true);
+  assert.equal(fireAnnounceHook(HOOK.damageApplied, { applied: 5 }), undefined);
 });
 
 test("AttackContext handles the no-weapon generic natural attack path", () => {
