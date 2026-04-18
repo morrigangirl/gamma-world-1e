@@ -399,6 +399,51 @@
     {{/each}}
   </div>
 
+  <div class="gamma-world__tab tab {{tabs.skills.cssClass}}" data-group="primary" data-tab="skills">
+    <section class="gamma-world__panel gw-skills-tab">
+      <header class="gamma-world__list-header gw-skills-tab__header">
+        <h3>{{localize "GAMMA_WORLD.SkillSheet.Title"}}</h3>
+        <span class="gw-skills-tab__count" title="{{localize 'GAMMA_WORLD.SkillSheet.ProficientCount'}}">
+          {{proficientCount}}/{{maxProficientSkills}}
+        </span>
+      </header>
+      <p class="gamma-world__hint gw-skills-tab__hint">{{localize "GAMMA_WORLD.SkillSheet.Hint"}}</p>
+
+      {{#each skillGroups}}
+        <div class="gw-skills-tab__group">
+          <h4 class="gw-skills-tab__group-heading">{{this.label}}</h4>
+          <div class="gw-skills-tab__grid">
+            {{#each this.rows}}
+              <div class="gw-skill-row{{#if this.proficient}} is-proficient{{/if}}" data-skill-key="{{this.key}}">
+                <span class="gw-skill-row__name">{{this.label}}</span>
+                <select class="gw-skill-row__ability" name="system.skills.{{this.key}}.ability"
+                        aria-label="{{localize 'GAMMA_WORLD.SkillSheet.AbilityColumn'}}">
+                  {{#each this.abilityOptions}}
+                    <option value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.abbr}}</option>
+                  {{/each}}
+                </select>
+                <span class="gw-skill-row__total">{{gwSigned this.total}}</span>
+                <label class="gw-skill-row__prof"
+                       title="{{localize 'GAMMA_WORLD.SkillSheet.ProficientToggle'}}">
+                  <input type="checkbox"
+                         name="system.skills.{{this.key}}.proficient"
+                         {{#if this.proficient}}checked{{/if}}>
+                  <span>{{localize "GAMMA_WORLD.SkillSheet.Proficient"}}</span>
+                </label>
+                <button type="button"
+                        class="gw-skill-row__roll"
+                        data-action="rollSkill"
+                        data-skill-key="{{this.key}}">
+                  {{localize "GAMMA_WORLD.SkillSheet.Roll"}}
+                </button>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/each}}
+    </section>
+  </div>
+
   <div class="gamma-world__tab tab {{tabs.inventory.cssClass}}" data-group="primary" data-tab="inventory">
     <section class="gamma-world__panel">
       <header class="gamma-world__list-header">

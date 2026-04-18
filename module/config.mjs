@@ -91,6 +91,66 @@ export const ATTRIBUTES = {
 
 export const ATTRIBUTE_KEYS = Object.keys(ATTRIBUTES);
 
+/**
+ * Canonical skill list for the 0.8.0 lightweight skill layer. Each skill
+ * has a fixed ability mapping and a visual group; the on-sheet layout
+ * preserves the group ordering below. A character can override the
+ * ability for any individual skill (stored per-actor in
+ * `system.skills.<key>.ability`), but the canonical pick is the starting
+ * value and the one the migration backfills with.
+ *
+ * Hard RAW: maximum of 3 proficient skills per character; proficiency is
+ * a flat +2 on the d20 roll. No scaling, no levels, no expertise. Adding
+ * a skill here = one new localization entry and the migration picks it
+ * up automatically on the next world load.
+ */
+export const SKILLS = Object.freeze({
+  // Field
+  survival:          { ability: "cn", label: "GAMMA_WORLD.Skill.Survival",          group: "field"   },
+  tracking:          { ability: "in", label: "GAMMA_WORLD.Skill.Tracking",          group: "field"   },
+  navigation:        { ability: "in", label: "GAMMA_WORLD.Skill.Navigation",        group: "field"   },
+  stealth:           { ability: "dx", label: "GAMMA_WORLD.Skill.Stealth",           group: "field"   },
+  climbingTraversal: { ability: "ps", label: "GAMMA_WORLD.Skill.ClimbingTraversal", group: "field"   },
+  // Tech
+  ancientTech:       { ability: "in", label: "GAMMA_WORLD.Skill.AncientTech",       group: "tech"    },
+  computers:         { ability: "in", label: "GAMMA_WORLD.Skill.Computers",         group: "tech"    },
+  juryRigging:       { ability: "in", label: "GAMMA_WORLD.Skill.JuryRigging",       group: "tech"    },
+  salvage:           { ability: "in", label: "GAMMA_WORLD.Skill.Salvage",           group: "tech"    },
+  robotics:          { ability: "in", label: "GAMMA_WORLD.Skill.Robotics",          group: "tech"    },
+  // Combat
+  ballistics:        { ability: "dx", label: "GAMMA_WORLD.Skill.Ballistics",        group: "combat"  },
+  meleeTechnique:    { ability: "ps", label: "GAMMA_WORLD.Skill.MeleeTechnique",    group: "combat"  },
+  tactics:           { ability: "in", label: "GAMMA_WORLD.Skill.Tactics",           group: "combat"  },
+  threatAssessment:  { ability: "ms", label: "GAMMA_WORLD.Skill.ThreatAssessment",  group: "combat"  },
+  // Lore
+  abnormalBiology:   { ability: "in", label: "GAMMA_WORLD.Skill.AbnormalBiology",   group: "lore"    },
+  radiationLore:     { ability: "in", label: "GAMMA_WORLD.Skill.RadiationLore",     group: "lore"    },
+  toxicology:        { ability: "in", label: "GAMMA_WORLD.Skill.Toxicology",        group: "lore"    },
+  preFallLore:       { ability: "in", label: "GAMMA_WORLD.Skill.PreFallLore",       group: "lore"    },
+  factionLore:       { ability: "in", label: "GAMMA_WORLD.Skill.FactionLore",       group: "lore"    },
+  // Social
+  barter:            { ability: "ch", label: "GAMMA_WORLD.Skill.Barter",            group: "social"  },
+  intimidation:      { ability: "ch", label: "GAMMA_WORLD.Skill.Intimidation",      group: "social"  },
+  diplomacy:         { ability: "ch", label: "GAMMA_WORLD.Skill.Diplomacy",         group: "social"  },
+  deception:         { ability: "ch", label: "GAMMA_WORLD.Skill.Deception",         group: "social"  },
+  // Medical
+  fieldMedicine:     { ability: "in", label: "GAMMA_WORLD.Skill.FieldMedicine",     group: "medical" },
+  biotechHandling:   { ability: "in", label: "GAMMA_WORLD.Skill.BiotechHandling",   group: "medical" }
+});
+
+export const SKILL_KEYS   = Object.freeze(Object.keys(SKILLS));
+export const SKILL_GROUPS = Object.freeze(["field", "tech", "combat", "lore", "social", "medical"]);
+export const MAX_PROFICIENT_SKILLS = 3;
+
+export const SKILL_GROUP_LABELS = Object.freeze({
+  field:   "GAMMA_WORLD.SkillSheet.Group.Field",
+  tech:    "GAMMA_WORLD.SkillSheet.Group.Tech",
+  combat:  "GAMMA_WORLD.SkillSheet.Group.Combat",
+  lore:    "GAMMA_WORLD.SkillSheet.Group.Lore",
+  social:  "GAMMA_WORLD.SkillSheet.Group.Social",
+  medical: "GAMMA_WORLD.SkillSheet.Group.Medical"
+});
+
 export const SAVE_TYPES = {
   radiation: "GAMMA_WORLD.Save.Radiation",
   poison:    "GAMMA_WORLD.Save.Poison",

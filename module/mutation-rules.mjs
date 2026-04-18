@@ -38,6 +38,21 @@ function hitBonusFromStrength(score) {
   return 0;
 }
 
+/**
+ * Generic ability-score → d20 modifier for the 0.8.0 skill system.
+ * Identical curve to combatBonusFromDexterity / damageBonusFromStrength /
+ * hitBonusFromStrength so attack rolls, save rolls, and skill rolls all
+ * use the same 6–15 neutral band. Pulling them together under one
+ * helper lets the skill layer roll d20s that scale with any of the six
+ * abilities without importing the three ability-specific helpers.
+ */
+export function abilityModifierFromScore(score) {
+  const value = Math.round(Number(score) || 0);
+  if (value > 15) return value - 15;
+  if (value < 6) return value - 6;
+  return 0;
+}
+
 function fillVariant(summary, variant) {
   if (!variant) return summary ?? "";
   return String(summary ?? "").replace(/_+/g, variant);

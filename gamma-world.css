@@ -2622,3 +2622,136 @@ body.system-gamma-world-1e,
     grid-template-columns: 1fr;
   }
 }
+
+/* ----- Skills tab (0.8.0 lightweight skill layer) -------------------- */
+
+.application.gamma-world .gw-skills-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.application.gamma-world .gw-skills-tab__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.application.gamma-world .gw-skills-tab__count {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(199, 166, 0, 0.2);
+  border: 1px solid rgba(199, 166, 0, 0.55);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--gw-ink, #1f2428);
+}
+
+.application.gamma-world .gw-skills-tab__hint {
+  margin: 0;
+  font-size: var(--font-size-12, 12px);
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.75));
+}
+
+.application.gamma-world .gw-skills-tab__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.application.gamma-world .gw-skills-tab__group-heading {
+  margin: 0.25rem 0 0;
+  padding: 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.65));
+  border-bottom: 1px solid rgba(31, 36, 40, 0.18);
+  padding-bottom: 0.15rem;
+}
+
+.application.gamma-world .gw-skills-tab__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.application.gamma-world .gw-skill-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.25rem 2.5rem auto 4rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 3px;
+  transition: background 120ms ease;
+}
+
+.application.gamma-world .gw-skill-row:hover {
+  background: rgba(199, 166, 0, 0.08);
+}
+
+.application.gamma-world .gw-skill-row.is-proficient {
+  background: rgba(199, 166, 0, 0.12);
+}
+
+.application.gamma-world .gw-skill-row__name {
+  font-weight: 500;
+}
+
+.application.gamma-world .gw-skill-row__ability {
+  min-height: 1.6rem;
+  padding: 0 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.application.gamma-world .gw-skill-row__total {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.application.gamma-world .gw-skill-row__prof {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.application.gamma-world .gw-skill-row__prof input[type="checkbox"] {
+  margin: 0;
+}
+
+.application.gamma-world .gw-skill-row__roll {
+  min-height: 1.6rem;
+  padding: 0.1rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+  .application.gamma-world .gw-skill-row {
+    grid-template-columns: minmax(0, 1fr) 3rem 2.5rem;
+    grid-template-areas:
+      "name    ability total"
+      "prof    prof    roll";
+    row-gap: 0.2rem;
+  }
+  .application.gamma-world .gw-skill-row__name    { grid-area: name; }
+  .application.gamma-world .gw-skill-row__ability { grid-area: ability; }
+  .application.gamma-world .gw-skill-row__total   { grid-area: total; }
+  .application.gamma-world .gw-skill-row__prof    { grid-area: prof; justify-self: start; }
+  .application.gamma-world .gw-skill-row__roll    { grid-area: roll; justify-self: end; }
+}

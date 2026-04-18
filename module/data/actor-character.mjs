@@ -3,10 +3,32 @@
  * Registered at init via CONFIG.Actor.dataModels.character.
  */
 
-import { ATTRIBUTE_KEYS, CHARACTER_TYPE_KEYS, DAMAGE_TYPES } from "../config.mjs";
+import { ATTRIBUTE_KEYS, CHARACTER_TYPE_KEYS, DAMAGE_TYPES, SKILLS } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField, SetField } =
   foundry.data.fields;
+
+/**
+ * 0.8.0 — per-character skill proficiency. Each entry stores the ability
+ * key used to roll the skill (defaults to the canonical mapping but is
+ * writable so mutants / unusual builds can remap) and a flat boolean
+ * proficiency flag. The system only counts up to three proficient skills
+ * per actor, but the cap is enforced in the sheet UI rather than the
+ * schema so macros / homebrew overrides retain flexibility.
+ */
+function skillSchemaFields() {
+  return Object.fromEntries(
+    Object.entries(SKILLS).map(([key, def]) => [key, new SchemaField({
+      ability:    new StringField({
+        required: true,
+        nullable: false,
+        initial: def.ability,
+        choices: [...ATTRIBUTE_KEYS]
+      }),
+      proficient: new BooleanField({ initial: false })
+    })])
+  );
+}
 
 /**
  * Phase 5 — declarative damage-trait schema. Each of the three trait
@@ -85,6 +107,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         damageImmunity:      damageTraitField(),
         damageVulnerability: damageTraitField()
       }),
+
+      skills: new SchemaField(skillSchemaFields()),
 
       encumbrance: new SchemaField({
         carried:   new NumberField({ required: true, nullable: false, initial: 0, min: 0 }),

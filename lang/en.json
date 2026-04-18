@@ -323,8 +323,54 @@
     "Tab": {
       "Main": "Main",
       "Mutations": "Mutations",
+      "Skills": "Skills",
       "Inventory": "Inventory",
       "Bio": "Bio"
+    },
+    "Skill": {
+      "Survival": "Survival",
+      "Tracking": "Tracking",
+      "Navigation": "Navigation",
+      "Stealth": "Stealth",
+      "ClimbingTraversal": "Climbing / Traversal",
+      "AncientTech": "Ancient Tech",
+      "Computers": "Computers",
+      "JuryRigging": "Jury-Rigging",
+      "Salvage": "Salvage",
+      "Robotics": "Robotics",
+      "Ballistics": "Ballistics",
+      "MeleeTechnique": "Melee Technique",
+      "Tactics": "Tactics",
+      "ThreatAssessment": "Threat Assessment",
+      "AbnormalBiology": "Abnormal Biology",
+      "RadiationLore": "Radiation Lore",
+      "Toxicology": "Toxicology",
+      "PreFallLore": "Pre-Fall Lore",
+      "FactionLore": "Faction Lore",
+      "Barter": "Barter",
+      "Intimidation": "Intimidation",
+      "Diplomacy": "Diplomacy",
+      "Deception": "Deception",
+      "FieldMedicine": "Field Medicine",
+      "BiotechHandling": "Biotech Handling"
+    },
+    "SkillSheet": {
+      "Title": "Skills & Proficiencies",
+      "Hint": "Each PC may mark up to 3 skills as proficient. Proficient rolls add a flat +2. Override a skill's ability if your character's mutation or build justifies a remap.",
+      "ProficientCount": "Proficient skills / maximum",
+      "Proficient": "Prof",
+      "ProficientToggle": "Toggle proficiency (max 3)",
+      "AbilityColumn": "Ability used for this skill",
+      "Roll": "Roll",
+      "MaxProficientWarn": "Max of 3 proficient skills. Uncheck another first.",
+      "Group": {
+        "Field": "Field",
+        "Tech": "Tech",
+        "Combat": "Combat",
+        "Lore": "Lore",
+        "Social": "Social",
+        "Medical": "Medical"
+      }
     },
     "Mutation": {
       "Subtype": {

@@ -1,4 +1,4 @@
-import { SYSTEM_ID, CRYPTIC_ALLIANCES } from "./config.mjs";
+import { SYSTEM_ID, CRYPTIC_ALLIANCES, SKILLS } from "./config.mjs";
 import { findMutationByName } from "./tables/mutation-data.mjs";
 import { getMutationRule } from "./mutation-rules.mjs";
 import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
@@ -515,6 +515,22 @@ async function migrateActor(actor) {
   if (actor.system.resources?.hp?.restDaily == null) update["system.resources.hp.restDaily"] = 1;
   if (actor.system.resources?.hp?.medical == null) update["system.resources.hp.medical"] = 0;
   Object.assign(update, prototypeTokenMigrationUpdate(actor));
+
+  // 0.8.0 — backfill the skills map. Fills in any skill key that's
+  // missing on this actor with the canonical ability + proficient:false.
+  // Preserves existing entries (so a player who already flipped
+  // proficient: true keeps it). Runs for character AND monster actors
+  // since they share the data model; monsters just don't render the
+  // Skills tab.
+  const existingSkills = actor.system?.skills ?? {};
+  for (const [key, def] of Object.entries(SKILLS)) {
+    if (existingSkills[key] == null) {
+      update[`system.skills.${key}`] = { ability: def.ability, proficient: false };
+    } else {
+      if (existingSkills[key].ability == null) update[`system.skills.${key}.ability`] = def.ability;
+      if (existingSkills[key].proficient == null) update[`system.skills.${key}.proficient`] = false;
+    }
+  }
 
   if (Object.keys(update).length) {
     await actor.update(update, { gammaWorldSync: true });

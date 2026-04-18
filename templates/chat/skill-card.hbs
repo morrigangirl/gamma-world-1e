@@ -1,0 +1,21 @@
+<div class="gw-chat-card gw-skill-card">
+  <h3>{{skillLabel}} ({{abilityAbbr}})</h3>
+  <div class="gw-card-meta">{{actorName}}{{#if proficient}} &middot; <span class="gw-skill-card__prof">Proficient</span>{{/if}}</div>
+  <div class="gw-card-meta">
+    Roll: {{d20}} &middot; {{abilityAbbr}}: {{gwSigned abilityMod}}{{#if profBonus}} &middot; Proficiency: +{{profBonus}}{{/if}}
+  </div>
+  <div class="gw-card-result">
+    Total:
+    <button type="button"
+            class="gw-roll-total"
+            data-action="gw-toggle-roll"
+            title="Click to expand the dice breakdown"
+            aria-expanded="false">{{total}}</button>
+  </div>
+  {{#if rollTooltip}}
+    <div class="gw-roll-breakdown" hidden>
+      {{#if rollFormula}}<div class="gw-roll-breakdown__formula">{{rollFormula}}</div>{{/if}}
+      {{{rollTooltip}}}
+    </div>
+  {{/if}}
+</div>

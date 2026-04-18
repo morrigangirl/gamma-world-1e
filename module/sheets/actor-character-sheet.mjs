@@ -2,7 +2,8 @@
  * GammaWorldCharacterSheet — ApplicationV2 sheet for Actor.type === "character".
  */
 
-import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from "../config.mjs";
+import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, SKILLS, SKILL_GROUPS, SKILL_GROUP_LABELS, MAX_PROFICIENT_SKILLS, ATTRIBUTES } from "../config.mjs";
+import { computeSkillModifier, countProficientSkills, rollSkill } from "../skills.mjs";
 import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
 import { artifactNeedsPowerManagement, artifactPowerSummary } from "../artifact-power.mjs";
@@ -382,7 +383,8 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       itemDelete:     GammaWorldCharacterSheet.#onItemDelete,
       rest:           GammaWorldCharacterSheet.#onRest,
       awardXp:        GammaWorldCharacterSheet.#onAwardXp,
-      applyBonus:     GammaWorldCharacterSheet.#onApplyBonus
+      applyBonus:     GammaWorldCharacterSheet.#onApplyBonus,
+      rollSkill:      GammaWorldCharacterSheet.#onRollSkill
     }
   };
 
@@ -398,6 +400,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       tabs: [
         { id: "main",      label: "GAMMA_WORLD.Tab.Main" },
         { id: "mutations", label: "GAMMA_WORLD.Tab.Mutations" },
+        { id: "skills",    label: "GAMMA_WORLD.Tab.Skills" },
         { id: "inventory", label: "GAMMA_WORLD.Tab.Inventory" },
         { id: "bio",       label: "GAMMA_WORLD.Tab.Bio" }
       ],
@@ -485,6 +488,47 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       resistance:    [...(actor.gw?.damageResistance    ?? [])],
       vulnerability: [...(actor.gw?.damageVulnerability ?? [])]
     };
+
+    // 0.8.0 — Skills tab context. Build rows per skill key in the
+    // canonical order, then group them by SKILL_GROUPS for the template.
+    // Each row computes its live total from computeSkillModifier so
+    // edits to ability scores or proficient flags flow through on the
+    // next render. Abilities for the per-row dropdown come from the
+    // canonical ATTRIBUTE_KEYS list with localized abbrs.
+    const localize = (key, fallback = key) => {
+      if (!key) return fallback;
+      const out = game.i18n?.localize?.(key);
+      return (out && out !== key) ? out : fallback;
+    };
+    const abilityOption = (key) => {
+      const abbrKey = ATTRIBUTES[key]?.abbr;
+      return { key, abbr: localize(abbrKey, key.toUpperCase()) };
+    };
+    const abilityOptions = ATTRIBUTE_KEYS.map(abilityOption);
+    const skillRowsByGroup = Object.fromEntries(SKILL_GROUPS.map((g) => [g, []]));
+    for (const [key, def] of Object.entries(SKILLS)) {
+      const mod = computeSkillModifier(actor, key);
+      const abilityKey = mod.ok ? mod.abilityKey : def.ability;
+      skillRowsByGroup[def.group].push({
+        key,
+        label: localize(def.label, key),
+        group: def.group,
+        abilityKey,
+        abilityAbbr: localize(ATTRIBUTES[abilityKey]?.abbr, abilityKey.toUpperCase()),
+        abilityMod: mod.abilityMod ?? 0,
+        profBonus: mod.profBonus ?? 0,
+        total: mod.total ?? 0,
+        proficient: !!mod.proficient,
+        abilityOptions: abilityOptions.map((opt) => ({ ...opt, selected: opt.key === abilityKey }))
+      });
+    }
+    context.skillGroups = SKILL_GROUPS.map((groupKey) => ({
+      key: groupKey,
+      label: localize(SKILL_GROUP_LABELS[groupKey], groupKey),
+      rows: skillRowsByGroup[groupKey]
+    })).filter((g) => g.rows.length);
+    context.proficientCount = countProficientSkills(actor);
+    context.maxProficientSkills = MAX_PROFICIENT_SKILLS;
 
     // Group embedded items by type.
     const grouped = { weapon: [], armor: [], gear: [], mutation: [] };
@@ -1068,6 +1112,14 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     await applyAttributeBonus(this.document, next);
   }
 
+  /** Roll one skill from the Skills tab "Roll" button. */
+  static async #onRollSkill(event, target) {
+    event.preventDefault();
+    const skillKey = target?.dataset?.skillKey;
+    if (!skillKey) return;
+    await rollSkill(this.document, skillKey);
+  }
+
   /* -------------------------------------------- */
   /*  Render-time wiring                          */
   /* -------------------------------------------- */
@@ -1079,6 +1131,28 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
 
   _onChangeForm(formConfig, event) {
     if (isRichEditorChange(event)) return;
+
+    // Max-3 proficient-skills guardrail. Intercepts the change on a
+    // proficient checkbox when ticking it on would exceed the cap;
+    // un-ticks the checkbox and notifies the GM. Leaves the existing
+    // data untouched since the flip never reaches the submit handler.
+    const target = event?.target;
+    if (target?.type === "checkbox" && target.checked
+        && typeof target.name === "string"
+        && target.name.startsWith("system.skills.")
+        && target.name.endsWith(".proficient")) {
+      const currentCount = countProficientSkills(this.document);
+      if (currentCount >= MAX_PROFICIENT_SKILLS) {
+        target.checked = false;
+        const cap = MAX_PROFICIENT_SKILLS;
+        ui.notifications?.warn(
+          game.i18n?.localize?.("GAMMA_WORLD.SkillSheet.MaxProficientWarn")
+          ?? `Max of ${cap} proficient skills.`
+        );
+        return;
+      }
+    }
+
     return super._onChangeForm?.(formConfig, event);
   }
 }

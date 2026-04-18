@@ -788,6 +788,7 @@ import {
   resolveDamageType
 } from "../module/effect-state.mjs";
 import {
+  abilityModifierFromScore,
   baseCombatBonuses,
   buildMutationItemSource,
   combatBonusFromDexterity,
@@ -798,6 +799,17 @@ import {
   mutationHasVariant,
   mutationVariant
 } from "../module/mutation-rules.mjs";
+import {
+  ATTRIBUTE_KEYS,
+  MAX_PROFICIENT_SKILLS,
+  SKILL_GROUPS,
+  SKILL_KEYS,
+  SKILLS
+} from "../module/config.mjs";
+import {
+  computeSkillModifier,
+  countProficientSkills
+} from "../module/skills.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -1360,5 +1372,131 @@ test("AttackContext handles the no-weapon generic natural attack path", () => {
   assert.equal(serialized.sourceName, "Bite");
   assert.equal(serialized.effect.mode, "damage");
   assert.equal(serialized.range.label, "melee");
+});
+
+test("Phase 0.8 — abilityModifierFromScore uses the same 6-15 neutral band", () => {
+  // Mirrors the combatBonusFromDexterity / damageBonusFromStrength cases.
+  assert.equal(abilityModifierFromScore(3),  -3, "PS/DX/etc. 3 → -3");
+  assert.equal(abilityModifierFromScore(5),  -1, "score 5 → -1");
+  assert.equal(abilityModifierFromScore(6),   0, "score 6 is the bottom of the neutral band");
+  assert.equal(abilityModifierFromScore(8),   0, "score 8 is mid-neutral (Sara)");
+  assert.equal(abilityModifierFromScore(15),  0, "score 15 is the top of the neutral band");
+  assert.equal(abilityModifierFromScore(16), +1, "score 16 → +1");
+  assert.equal(abilityModifierFromScore(18), +3, "score 18 → +3");
+  // Robustness.
+  assert.equal(abilityModifierFromScore(null),      -6, "null coerces to 0 → 0-6 = -6");
+  assert.equal(abilityModifierFromScore(undefined), -6);
+  assert.equal(abilityModifierFromScore(10.4),      0, "non-integer rounds to 10 → 0");
+});
+
+test("Phase 0.8 — SKILLS canonical table is well-formed", () => {
+  assert.equal(SKILL_KEYS.length, 25, "exactly 25 skills");
+  // Every entry carries a valid ability + a group that's in SKILL_GROUPS.
+  for (const [key, def] of Object.entries(SKILLS)) {
+    assert.ok(ATTRIBUTE_KEYS.includes(def.ability),
+      `${key}.ability "${def.ability}" is not in ATTRIBUTE_KEYS`);
+    assert.ok(SKILL_GROUPS.includes(def.group),
+      `${key}.group "${def.group}" is not in SKILL_GROUPS`);
+    assert.equal(typeof def.label, "string", `${key} must carry a label i18n key`);
+    assert.ok(def.label.startsWith("GAMMA_WORLD.Skill."),
+      `${key}.label should follow the GAMMA_WORLD.Skill.* convention`);
+  }
+  // Spec-specified ability mappings hold. Spot-check a few so a bad
+  // future edit to the canonical table is loud.
+  assert.equal(SKILLS.survival.ability,          "cn");
+  assert.equal(SKILLS.stealth.ability,           "dx");
+  assert.equal(SKILLS.climbingTraversal.ability, "ps");
+  assert.equal(SKILLS.threatAssessment.ability,  "ms");
+  assert.equal(SKILLS.barter.ability,            "ch");
+  assert.equal(SKILLS.ancientTech.ability,       "in",
+    "Intelligence key is 'in', not 'int' — this mapping catches the translation bug.");
+
+  // Groups distribute correctly per the spec.
+  const counts = Object.fromEntries(SKILL_GROUPS.map((g) => [g, 0]));
+  for (const def of Object.values(SKILLS)) counts[def.group] += 1;
+  assert.deepEqual(counts, {
+    field: 5, tech: 5, combat: 4, lore: 5, social: 4, medical: 2
+  });
+
+  assert.equal(MAX_PROFICIENT_SKILLS, 3);
+});
+
+test("Phase 0.8 — computeSkillModifier applies ability mod + proficiency", () => {
+  const mkActor = (abilities, skills = {}) => ({
+    system: {
+      attributes: Object.fromEntries(Object.entries(abilities).map(([k, v]) => [k, { value: v }])),
+      skills
+    }
+  });
+
+  // Non-proficient DX 14 Stealth → 0 + 0 = 0.
+  const a1 = mkActor({ dx: 14 });
+  const m1 = computeSkillModifier(a1, "stealth");
+  assert.equal(m1.ok, true);
+  assert.equal(m1.abilityKey, "dx");
+  assert.equal(m1.abilityMod, 0);
+  assert.equal(m1.proficient, false);
+  assert.equal(m1.profBonus, 0);
+  assert.equal(m1.total, 0);
+
+  // Proficient DX 14 Stealth → 0 + 2.
+  const a2 = mkActor({ dx: 14 }, { stealth: { ability: "dx", proficient: true } });
+  const m2 = computeSkillModifier(a2, "stealth");
+  assert.equal(m2.proficient, true);
+  assert.equal(m2.profBonus, 2);
+  assert.equal(m2.total, 2);
+
+  // Non-proficient PS 18 Climbing/Traversal → +3 + 0 = 3.
+  const a3 = mkActor({ ps: 18 });
+  const m3 = computeSkillModifier(a3, "climbingTraversal");
+  assert.equal(m3.abilityKey, "ps");
+  assert.equal(m3.abilityMod, 3);
+  assert.equal(m3.total, 3);
+
+  // Proficient PS 4 Climbing/Traversal → -2 + 2 = 0.
+  const a4 = mkActor({ ps: 4 }, { climbingTraversal: { ability: "ps", proficient: true } });
+  const m4 = computeSkillModifier(a4, "climbingTraversal");
+  assert.equal(m4.abilityMod, -2);
+  assert.equal(m4.profBonus, 2);
+  assert.equal(m4.total, 0);
+
+  // Per-character ability override — use MS for Stealth if the GM says so.
+  const a5 = mkActor({ dx: 14, ms: 18 }, { stealth: { ability: "ms", proficient: false } });
+  const m5 = computeSkillModifier(a5, "stealth");
+  assert.equal(m5.abilityKey, "ms", "stored override should win over the canonical table");
+  assert.equal(m5.abilityMod, 3);
+
+  // Unknown skill key bails gracefully.
+  assert.equal(computeSkillModifier(a1, "thought-laser").ok, false);
+
+  // Missing ability score defaults to 10 → mod 0.
+  const a6 = mkActor({});
+  const m6 = computeSkillModifier(a6, "stealth");
+  assert.equal(m6.abilityMod, 0);
+  assert.equal(m6.total, 0);
+});
+
+test("Phase 0.8 — countProficientSkills iterates the canonical table", () => {
+  const actor = {
+    system: {
+      skills: {
+        survival:  { ability: "cn", proficient: true },
+        stealth:   { ability: "dx", proficient: true },
+        barter:    { ability: "ch", proficient: false },
+        ancientTech: { ability: "in", proficient: true }
+      }
+    }
+  };
+  assert.equal(countProficientSkills(actor), 3);
+
+  // A proficient flag on a key NOT in the canonical table is ignored —
+  // prevents random actor flags from polluting the count.
+  const withBogus = { system: { skills: { stealth: { proficient: true }, bogus: { proficient: true } } } };
+  assert.equal(countProficientSkills(withBogus), 1);
+
+  // Empty / missing cases.
+  assert.equal(countProficientSkills({}),             0);
+  assert.equal(countProficientSkills({ system: {} }), 0);
+  assert.equal(countProficientSkills(null),           0);
 });
 

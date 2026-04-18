@@ -48,6 +48,7 @@ import {
 import { syncGrantedItems } from "./equipment-rules.mjs";
 import { actorIsRobot, cycleRobotMode, rechargeRobot, repairRobot, spendRobotPower, syncRobotImpairments } from "./robots.mjs";
 import { beneficialMutationChoices, pickMutation } from "./tables/mutation-tables.mjs";
+import { computeSkillModifier, countProficientSkills, rollSkill } from "./skills.mjs";
 
 export function createSystemApi() {
   const animations = createAnimationApi();
@@ -106,6 +107,9 @@ export function createSystemApi() {
     spendRobotPower,
     syncRobotImpairments,
     beneficialMutationChoices,
-    pickMutation
+    pickMutation,
+    rollSkill,
+    computeSkillModifier,
+    countProficientSkills
   };
 }
