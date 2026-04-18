@@ -1001,11 +1001,34 @@ body.system-gamma-world-1e,
 }
 
 .application.gamma-world prose-mirror {
-  min-height: 8rem;
-  display: block;
+  /* Give the editor a tall enough baseline that the two-row toolbar
+     doesn't consume the entire box. 16rem keeps ~10rem of editable
+     surface after the toolbar; user can still resize the sheet to
+     grow it further since the body scrolls. */
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
   background: rgba(236, 231, 205, 0.88);
   border: 1px solid rgba(81, 88, 91, 0.35);
   padding: 0.55rem;
+  gap: 0.4rem;
+  resize: vertical;
+  overflow: auto;
+}
+
+/* The inner content region is the actual editable surface. Flex-grow
+   so it fills the remaining space below the toolbar; ensure it has a
+   readable minimum height on its own so even an empty prose-mirror
+   shows a clickable canvas. */
+.application.gamma-world prose-mirror .editor-content,
+.application.gamma-world prose-mirror .ProseMirror {
+  flex: 1 1 auto;
+  min-height: 9rem;
+  /* Foundry's default ProseMirror doesn't include padding, which makes
+     the text hug the left/right borders. A modest inset reads better
+     against our paper palette. */
+  padding: 0.35rem 0.45rem;
+  overflow-y: auto;
 }
 
 .application.gamma-world .gw-rich-editor {
