@@ -463,6 +463,17 @@ export async function applyDamageToTargets(amount, multiplier = 1, {
     }
   }
 
+  // Phase 3: capture the pre-mutation snapshot now, stash on the
+  // "Damage Applied" summary card at the end so a GM can undo the
+  // whole click with one button.
+  const { buildUndoSnapshot } = await import("./undo.mjs");
+  const undoSnapshot = buildUndoSnapshot({
+    kind: "damageApplied",
+    actors,
+    chatMessageIds: [],
+    userId: game.user?.id ?? null
+  });
+
   const summaries = [];
   for (const actor of actors) {
     const multiplierAdjusted = actor.gw?.damageTakenMultiplier ?? 1;
@@ -485,7 +496,10 @@ export async function applyDamageToTargets(amount, multiplier = 1, {
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actors[0] }),
-    content: `<div class="gw-chat-card"><h3>${sourceName || "Damage Applied"}</h3><p>${summaries.join("<br>")}</p></div>`
+    content: `<div class="gw-chat-card"><h3>${sourceName || "Damage Applied"}</h3><p>${summaries.join("<br>")}</p></div>`,
+    flags: {
+      [SYSTEM_ID]: { undo: undoSnapshot }
+    }
   });
 }
 

@@ -10,6 +10,7 @@ import {
 import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate } from "./equipment-rules.mjs";
 import { resetCombatFatigue, syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
 import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
+import { renderUndoButton, requestUndo } from "./undo.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
@@ -21,7 +22,8 @@ const GM_ONLY_CHAT_ACTIONS = new Set([
   "gw-hazard-damage",
   "gw-hazard-lethal",
   "gw-hazard-mutation",
-  "gw-aoe-resolve-all"
+  "gw-aoe-resolve-all",
+  "gw-undo"
 ]);
 
 export function registerHooks() {
@@ -109,6 +111,10 @@ function onRenderChatMessage(message, html) {
   const flags = message.flags?.[SYSTEM_ID];
   if (!flags) return;
 
+  // Phase 3: GM-only Undo button for any message carrying an undo snapshot.
+  // Button DOM is injected here; the click handler below routes the undo.
+  if (flags.undo) renderUndoButton(message, html);
+
   if (!game.user?.isGM) {
     for (const action of GM_ONLY_CHAT_ACTIONS) {
       html.querySelectorAll(`[data-action="${action}"]`).forEach((button) => button.remove());
@@ -117,6 +123,13 @@ function onRenderChatMessage(message, html) {
       if (!wrapper.querySelector("button")) wrapper.remove();
     });
   }
+
+  html.querySelectorAll('[data-action="gw-undo"]').forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await requestUndo(message.id);
+    });
+  });
 
   html.querySelectorAll('[data-action="gw-roll-damage"]').forEach((button) => {
     button.addEventListener("click", async (event) => {

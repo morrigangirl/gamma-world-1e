@@ -95,6 +95,11 @@ async function dispatchOperation(operation, payload = {}) {
       return executeArtifactSessionAction(payload.action, payload);
     }
 
+    case "undo-apply": {
+      const { executeUndoRestore } = await import("./undo.mjs");
+      return executeUndoRestore(payload);
+    }
+
     default:
       throw new Error(`Unknown GM operation: ${operation}`);
   }

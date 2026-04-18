@@ -773,6 +773,11 @@ import {
   fireAnnounceHook,
   fireVetoHook
 } from "../module/hook-surface.mjs";
+import {
+  UNDO_VERSION,
+  buildUndoSnapshot,
+  captureActorSnapshot
+} from "../module/undo.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -987,6 +992,75 @@ test("AttackContext round-trips through serialize + rehydrate", () => {
   assert.equal(attackContextFromFlags({ attack: { something: true } }), null);
   assert.equal(attackContextFromFlags(null), null);
   assert.equal(attackContextFromFlags(undefined), null);
+});
+
+test("Undo snapshot captures HP/fatigue/state and survives JSON round-trip", () => {
+  const mockActor = {
+    uuid: "Actor.abc",
+    name: "Raider",
+    system: {
+      resources: { hp: { value: 18, max: 30 } },
+      combat: { fatigue: { round: 3 } }
+    },
+    flags: {
+      "gamma-world-1e": {
+        state: {
+          temporaryEffects: [{ id: "t1", remainingRounds: 4, statusId: "paralysis" }],
+          barriers: { b1: { id: "b1", remaining: 10, label: "Forcefield" } },
+          nonlethal: { stunDamage: 3, unconsciousRounds: 0 }
+        }
+      }
+    }
+  };
+
+  const snapshot = captureActorSnapshot(mockActor);
+  assert.equal(snapshot.uuid, "Actor.abc");
+  assert.equal(snapshot.name, "Raider");
+  assert.equal(snapshot.hp.value, 18);
+  assert.equal(snapshot.hp.max, 30);
+  assert.equal(snapshot.fatigue.round, 3);
+  assert.equal(snapshot.state.temporaryEffects[0].id, "t1");
+  assert.equal(snapshot.state.barriers.b1.remaining, 10);
+  assert.equal(snapshot.state.nonlethal.stunDamage, 3);
+
+  // Full round-trip: no Foundry doc refs should leak.
+  const roundTrip = JSON.parse(JSON.stringify(snapshot));
+  assert.deepEqual(roundTrip, snapshot);
+
+  // Mutating the returned state must not mutate the source actor's state.
+  snapshot.state.barriers.b1.remaining = 0;
+  assert.equal(mockActor.flags["gamma-world-1e"].state.barriers.b1.remaining, 10,
+    "captureActorSnapshot must deep-clone, not alias");
+});
+
+test("buildUndoSnapshot wraps actor snapshots and is JSON-safe", () => {
+  const a1 = { uuid: "Actor.a", name: "A", system: { resources: { hp: { value: 5, max: 10 } }, combat: { fatigue: { round: 0 } } }, flags: {} };
+  const a2 = { uuid: "Actor.b", name: "B", system: { resources: { hp: { value: 8, max: 8 } }, combat: { fatigue: { round: 2 } } }, flags: {} };
+  const snap = buildUndoSnapshot({
+    kind: "damageApplied",
+    actors: [a1, a2],
+    chatMessageIds: ["msg.1", "msg.2"],
+    userId: "user.x"
+  });
+
+  assert.equal(snap.version, UNDO_VERSION);
+  assert.equal(snap.kind, "damageApplied");
+  assert.equal(snap.userId, "user.x");
+  assert.equal(snap.actorStates.length, 2);
+  assert.equal(snap.actorStates[0].uuid, "Actor.a");
+  assert.equal(snap.actorStates[0].hp.value, 5);
+  assert.equal(snap.actorStates[1].fatigue.round, 2);
+  assert.deepEqual(snap.chatMessageIds, ["msg.1", "msg.2"]);
+  assert.ok(snap.timestamp > 0);
+
+  // No live doc refs allowed — full JSON round-trip must succeed.
+  const roundTrip = JSON.parse(JSON.stringify(snap));
+  assert.deepEqual(roundTrip, snap);
+
+  // Null / undefined actor entries are filtered out.
+  const withNulls = buildUndoSnapshot({ kind: "x", actors: [null, a1, undefined] });
+  assert.equal(withNulls.actorStates.length, 1);
+  assert.equal(withNulls.actorStates[0].uuid, "Actor.a");
 });
 
 test("Hook surface exports the expected constants and is test-safe", () => {
