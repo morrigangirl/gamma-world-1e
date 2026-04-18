@@ -2178,3 +2178,125 @@ body.system-gamma-world-1e,
 .gw-artifact-malfunction-row button {
   flex: 0 0 auto;
 }
+
+/* ----- Click-to-expand dice breakdown on chat cards ------------------- */
+
+/* The clickable total reads as an underlined accent so it's obvious it
+   responds to a click, but keeps the hit/miss color inherited from the
+   parent .gw-card-result. No button chrome — just a bold inline link. */
+.system-gamma-world-1e .gw-chat-card .gw-roll-total {
+  display: inline;
+  padding: 0 0.15rem;
+  margin: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline dotted currentColor;
+  text-underline-offset: 3px;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-total:hover,
+.system-gamma-world-1e .gw-chat-card .gw-roll-total:focus-visible {
+  text-decoration-style: solid;
+  outline: none;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-total[aria-expanded="true"] {
+  text-decoration-style: solid;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  background: rgba(31, 36, 40, 0.08);
+  border-left: 3px solid rgba(31, 36, 40, 0.35);
+  font-family: var(--gw-font-accent, inherit);
+  font-size: 0.82rem;
+  color: var(--gw-ink, inherit);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown[hidden] {
+  display: none !important;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown__formula {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-bottom: 0.35rem;
+}
+
+/* Foundry emits its own tooltip markup inside getTooltip() — restyle it
+   to match the paper/ink palette so the rolled dice sit in the same
+   visual language as the rest of the card. */
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .tooltip-part {
+  margin-bottom: 0.35rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .tooltip-part:last-child {
+  margin-bottom: 0;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .part-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.1rem 0;
+  border-bottom: 1px dotted rgba(31, 36, 40, 0.25);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .part-formula {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .part-total {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .dice-rolls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.35rem 0 0.1rem;
+  margin: 0;
+  list-style: none;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .dice-rolls .roll {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  padding: 0.12rem 0.35rem;
+  background: var(--gw-paper, #d8d2b0);
+  border: 1px solid rgba(31, 36, 40, 0.45);
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+/* A natural-20 or max-face die pops; a natural-1 shows as struck-through
+   so the crit/fumble context is obvious even in the expanded breakdown. */
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .dice-rolls .roll.max {
+  background: rgba(199, 166, 0, 0.28);
+  border-color: rgba(199, 166, 0, 0.75);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .dice-rolls .roll.min {
+  background: rgba(176, 63, 63, 0.22);
+  border-color: rgba(176, 63, 63, 0.75);
+  text-decoration: line-through;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-roll-breakdown .dice-rolls .roll.discarded {
+  opacity: 0.45;
+  text-decoration: line-through;
+}

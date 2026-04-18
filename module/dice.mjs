@@ -371,6 +371,11 @@ async function createDamageCard({
     effectiveFormula
   });
 
+  // Expandable breakdown: Foundry's built-in getTooltip() renders every
+  // die term as its own section. Paired with the gw-toggle-roll click
+  // handler in hooks.mjs, this gives the card a D&D-5e-style reveal.
+  const rollTooltip = await roll.getTooltip();
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/damage-card.hbs`,
     {
@@ -382,7 +387,9 @@ async function createDamageCard({
       notes: isCritical
         ? [notes, game.i18n.localize("GAMMA_WORLD.Combat.CriticalHit")].filter(Boolean).join(" · ")
         : notes,
-      isCritical
+      isCritical,
+      rollTooltip,
+      rollFormula: roll.formula
     }
   );
 
@@ -604,6 +611,8 @@ export async function rollAttack(actor, weapon) {
     sourceKind: "weapon", sourceName: weapon.name
   });
 
+  const rollTooltip = await roll.getTooltip();
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -623,7 +632,9 @@ export async function rollAttack(actor, weapon) {
       rangePenalty: range.penalty,
       distance: target.distance ?? 0,
       followUpLabel: followUpLabelForWeapon(weapon),
-      showFollowUp: !hideFollowUp
+      showFollowUp: !hideFollowUp,
+      rollTooltip,
+      rollFormula: roll.formula
     }
   );
 
@@ -763,6 +774,8 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     sourceKind: "natural", sourceName: weapon.name
   });
 
+  const rollTooltip = await roll.getTooltip();
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -782,7 +795,9 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
       rangePenalty: range.penalty,
       distance: target.distance ?? 0,
       followUpLabel: followUpLabelForWeapon(weapon),
-      showFollowUp: !hideFollowUp
+      showFollowUp: !hideFollowUp,
+      rollTooltip,
+      rollFormula: roll.formula
     }
   );
 
@@ -874,6 +889,8 @@ export async function rollNaturalAttack(actor) {
   const baseFormula = actor.system.combat?.naturalAttack?.damage || "1d3";
   const damageFormula = addFlatBonusToFormula(baseFormula, actor.gw?.damageFlat ?? 0);
 
+  const rollTooltip = await roll.getTooltip();
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -893,7 +910,9 @@ export async function rollNaturalAttack(actor) {
       rangePenalty: 0,
       distance: target.distance ?? 0,
       followUpLabel: "Roll Damage",
-      showFollowUp: true
+      showFollowUp: true,
+      rollTooltip,
+      rollFormula: roll.formula
     }
   );
 
@@ -1376,6 +1395,19 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
     damageTotal = damageRoll.total;
   }
 
+  // Combine per-save-attempt tooltips + damage tooltip (if any) for the
+  // click-to-expand breakdown on the card.
+  const rollTooltipParts = [];
+  for (const roll of saveRolls) {
+    rollTooltipParts.push(await roll.getTooltip());
+  }
+  if (damageRoll) rollTooltipParts.push(await damageRoll.getTooltip());
+  const rollTooltip = rollTooltipParts.join("");
+  const rollFormula = [
+    ...saveRolls.map((r) => r.formula),
+    damageRoll ? `${damageFormula} = ${damageTotal}` : null
+  ].filter(Boolean).join(" | ");
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/save-card.hbs`,
     {
@@ -1393,7 +1425,9 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
       outcome: evaluation.outcome,
       damageFormula,
       damageTotal,
-      sourceName
+      sourceName,
+      rollTooltip,
+      rollFormula
     }
   );
 

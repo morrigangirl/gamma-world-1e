@@ -10,13 +10,26 @@
     {{#if targetAc}}&middot; defense {{targetAc}}{{/if}}
   </div>
   <div class="gw-card-result {{#if hit}}is-hit{{else}}is-miss{{/if}}">
-    Roll: {{d20}}{{#if total}} (total {{total}}){{/if}} &mdash;
+    Roll: {{d20}}{{#if total}}
+      (total
+      <button type="button"
+              class="gw-roll-total"
+              data-action="gw-toggle-roll"
+              title="Click to expand the dice breakdown"
+              aria-expanded="false">{{total}}</button>)
+    {{/if}} &mdash;
     {{#if isCritical}}{{localize "GAMMA_WORLD.Combat.CriticalHit"}}
     {{else if isFumble}}{{localize "GAMMA_WORLD.Combat.CriticalMiss"}}
     {{else if hit}}HIT
     {{else}}MISS
     {{/if}}
   </div>
+  {{#if rollTooltip}}
+    <div class="gw-roll-breakdown" hidden>
+      {{#if rollFormula}}<div class="gw-roll-breakdown__formula">{{rollFormula}}</div>{{/if}}
+      {{{rollTooltip}}}
+    </div>
+  {{/if}}
   {{#if notes}}
     <div class="gw-card-meta">{{notes}}</div>
   {{/if}}

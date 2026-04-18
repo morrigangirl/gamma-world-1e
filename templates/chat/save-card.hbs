@@ -15,11 +15,28 @@
     <div class="gw-card-meta">Target: {{targetLabel}}</div>
   {{/if}}
   {{#if rollLabel}}
-    <div class="gw-card-meta">Rolls: {{rollLabel}}</div>
+    <div class="gw-card-meta">
+      Rolls:
+      {{#if rollTooltip}}
+        <button type="button"
+                class="gw-roll-total"
+                data-action="gw-toggle-roll"
+                title="Click to expand the dice breakdown"
+                aria-expanded="false">{{rollLabel}}</button>
+      {{else}}
+        {{rollLabel}}
+      {{/if}}
+    </div>
   {{/if}}
   <div class="gw-card-result {{#if success}}is-hit{{else}}is-miss{{/if}}">
     Result: {{target}}
   </div>
+  {{#if rollTooltip}}
+    <div class="gw-roll-breakdown" hidden>
+      {{#if rollFormula}}<div class="gw-roll-breakdown__formula">{{rollFormula}}</div>{{/if}}
+      {{{rollTooltip}}}
+    </div>
+  {{/if}}
   <div class="gw-card-meta">{{outcome}}</div>
   {{#if damageFormula}}
     <div class="gw-card-meta">Damage: {{damageFormula}} = {{damageTotal}}</div>

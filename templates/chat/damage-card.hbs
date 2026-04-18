@@ -3,7 +3,20 @@
   <div class="gw-card-meta">
     {{actorName}} &middot; {{formula}}{{#if dmgType}} ({{dmgType}}){{/if}}
   </div>
-  <div class="gw-card-result">Damage: {{total}}</div>
+  <div class="gw-card-result">
+    Damage:
+    <button type="button"
+            class="gw-roll-total"
+            data-action="gw-toggle-roll"
+            title="Click to expand the dice breakdown"
+            aria-expanded="false">{{total}}</button>
+  </div>
+  {{#if rollTooltip}}
+    <div class="gw-roll-breakdown" hidden>
+      {{#if rollFormula}}<div class="gw-roll-breakdown__formula">{{rollFormula}}</div>{{/if}}
+      {{{rollTooltip}}}
+    </div>
+  {{/if}}
   {{#if notes}}
     <div class="gw-card-meta">{{notes}}</div>
   {{/if}}

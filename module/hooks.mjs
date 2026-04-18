@@ -131,6 +131,25 @@ function onRenderChatMessage(message, html) {
     });
   });
 
+  // Click-to-expand dice breakdown: toggles the sibling
+  // .gw-roll-breakdown that the renderer emitted next to the total.
+  html.querySelectorAll('[data-action="gw-toggle-roll"]').forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const card = button.closest(".gw-chat-card") ?? html;
+      const breakdown = card?.querySelector(".gw-roll-breakdown");
+      if (!breakdown) return;
+      const nowHidden = !breakdown.hasAttribute("hidden");
+      if (nowHidden) breakdown.setAttribute("hidden", "");
+      else breakdown.removeAttribute("hidden");
+      // Update every gw-roll-total button on this card so aria state
+      // stays in sync even if multiple totals share the breakdown.
+      card.querySelectorAll('[data-action="gw-toggle-roll"]').forEach((btn) => {
+        btn.setAttribute("aria-expanded", String(!nowHidden));
+      });
+    });
+  });
+
   html.querySelectorAll('[data-action="gw-roll-damage"]').forEach((button) => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
