@@ -329,7 +329,12 @@ function formatMutationItem(item) {
 }
 
 function buildTabNav(tabs, { mutations = 0, inventory = 0 } = {}) {
-  const ordered = ["main", "mutations", "inventory", "bio"];
+  // Keep this in sync with TABS.primary.tabs above. The filter drops any
+  // tab ID that isn't in this list, so a new tab added to TABS without a
+  // matching entry here will register correctly but never render a nav
+  // button. (That's how the 0.8.0 Skills tab went missing in the first
+  // pass.)
+  const ordered = ["main", "mutations", "skills", "inventory", "bio"];
   return ordered
     .map((id) => tabs[id])
     .filter(Boolean)
