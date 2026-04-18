@@ -1,21 +1,38 @@
 /**
- * Build the `imported-rulebook` compendium pack into `packs/imported-rulebook/`
- * LevelDB using `@foundryvtt/foundryvtt-cli`. No running Foundry required.
+ * Build all declared system packs into `packs/<name>/` LevelDB using
+ * `@foundryvtt/foundryvtt-cli`. No running Foundry required.
  *
- * Scope: **this script only builds the `imported-rulebook` pack.** It does
- * not read, modify, or delete any other pack directory under `packs/`.
- * The other nine packs ship as committed LevelDB and are left untouched.
+ * Covers every pack listed in `system.json`:
+ *   mutations, equipment, sample-actors, monsters, encounter-tables,
+ *   roll-tables, cryptic-alliances, robot-chassis, rulebook, system-docs.
  *
- * For each doc (and every embedded doc — journal pages) we assign:
- *   - a stable 16-char `_id` (sha256 of pack + collection path + name/index),
+ * Each pack's document source lives in `scripts/<...>-content.mjs`:
+ *   - `compendium-content.mjs` — the bulk: mutations, equipment, actors,
+ *     encounter tables, roll tables, cryptic alliances, robot chassis,
+ *     system docs.
+ *   - `monster-content.mjs` — the monsters pack.
+ *   - `rulebook-content.mjs` — the rulebook pack (reads prose from
+ *     `rulebook-prose.generated.mjs`, refreshed via `npm run prose:refresh`).
+ *
+ * For each doc (and every embedded doc — journal pages, rolltable results,
+ * actor-embedded items, item-effects) we assign:
+ *   - a stable 16-char `_id` (sha256 of `pack:collection:name:subtype:index`
+ *     for top-level docs; `pack:collection:parentId:index:name` for
+ *     embedded), truncated and A-Za-z0-9 filtered to 16 chars,
  *   - a `_key` in the `!<collection>!<path>` format the CLI needs,
  *   - Foundry's core document fields (`_stats`, `ownership`, `flags`,
  *     `folder`, `sort`) so v13's DataModel validator accepts them and the
  *     compendium index populates in the UI.
  *
- * Safe to run any time Foundry is not actively holding a lock on
- * `packs/imported-rulebook/` (Foundry can stay running for the other packs;
- * just close the Imported Rulebook compendium window before re-running).
+ * The stableId seed is deterministic: renaming a doc or reordering
+ * same-named siblings changes an `_id`, but editing any non-name field
+ * does not. A diagnostic probe (`scripts/id-stability-probe.mjs`)
+ * verifies every committed `_id` is reproduced by this builder before
+ * any rebuild — run it if you suspect drift.
+ *
+ * Safe to run any time Foundry is not actively holding a lock on any
+ * `packs/<name>/LOCK`. Foundry can stay closed during the build; on
+ * next launch Foundry will pick up the rebuilt LevelDBs.
  */
 
 import fs from "node:fs";
@@ -24,7 +41,18 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { compilePack } from "@foundryvtt/foundryvtt-cli";
 
-import { importedRulebookPackSources } from "./imported-rulebook-content.mjs";
+import {
+  mutationPackSources,
+  equipmentPackSources,
+  actorPackSources,
+  encounterTableSources,
+  rollTablePackSources,
+  crypticAlliancePackSources,
+  robotChassisPackSources,
+  journalPackSources
+} from "./compendium-content.mjs";
+import { monsterPackSources } from "./monster-content.mjs";
+import { rulebookPackSources } from "./rulebook-content.mjs";
 
 const systemJson = JSON.parse(
   fs.readFileSync(new URL("../system.json", import.meta.url), "utf8")
@@ -141,8 +169,22 @@ function prepareDocument(doc, collection, packSeed, parentIdPath = [], seedIndex
   return doc;
 }
 
-const packSpecs = [
-  { name: "imported-rulebook", type: "JournalEntry", documents: importedRulebookPackSources() }
+/**
+ * Full pack lineup. Order here is also the order in which packs are
+ * built; each is independent. Filter on CLI args to build a subset:
+ *   `node scripts/build-compendia.mjs equipment monsters`
+ */
+const ALL_PACK_SPECS = [
+  { name: "mutations",         type: "Item",         load: () => mutationPackSources() },
+  { name: "equipment",         type: "Item",         load: () => equipmentPackSources() },
+  { name: "sample-actors",     type: "Actor",        load: () => actorPackSources() },
+  { name: "monsters",          type: "Actor",        load: () => monsterPackSources() },
+  { name: "encounter-tables",  type: "RollTable",    load: () => encounterTableSources() },
+  { name: "roll-tables",       type: "RollTable",    load: () => rollTablePackSources() },
+  { name: "cryptic-alliances", type: "JournalEntry", load: () => crypticAlliancePackSources() },
+  { name: "robot-chassis",     type: "JournalEntry", load: () => robotChassisPackSources() },
+  { name: "rulebook",          type: "JournalEntry", load: () => rulebookPackSources() },
+  { name: "system-docs",       type: "JournalEntry", load: () => journalPackSources() }
 ];
 
 function cleanDir(dir) {
@@ -154,11 +196,13 @@ async function buildPack(spec) {
   const collection = TYPE_TO_COLLECTION[spec.type];
   if (!collection) throw new Error(`Unknown pack type "${spec.type}" for "${spec.name}"`);
 
+  const documents = spec.load();
+
   const workDir = path.join(tempRoot, spec.name);
   const destDir = path.join(repoPacksDir, spec.name);
   cleanDir(workDir);
 
-  spec.documents.forEach((doc, index) => {
+  documents.forEach((doc, index) => {
     prepareDocument(doc, collection, spec.name, [], index);
     fs.writeFileSync(
       path.join(workDir, `${doc._id}.json`),
@@ -169,23 +213,36 @@ async function buildPack(spec) {
 
   cleanDir(destDir);
   await compilePack(workDir, destDir, { log: false });
+  return documents.length;
 }
 
 async function main() {
+  const requested = process.argv.slice(2);
+  const specs = requested.length > 0
+    ? ALL_PACK_SPECS.filter((s) => requested.includes(s.name))
+    : ALL_PACK_SPECS;
+
+  if (requested.length > 0 && specs.length !== requested.length) {
+    const known = new Set(ALL_PACK_SPECS.map((s) => s.name));
+    const missing = requested.filter((r) => !known.has(r));
+    throw new Error(`Unknown pack name(s): ${missing.join(", ")}. Known: ${[...known].join(", ")}.`);
+  }
+
   fs.mkdirSync(repoPacksDir, { recursive: true });
   cleanDir(tempRoot);
 
-  for (const spec of packSpecs) {
-    await buildPack(spec);
-    console.log(`  built ${spec.name.padEnd(20)} ${String(spec.documents.length).padStart(4)} top-level doc(s)`);
+  for (const spec of specs) {
+    const count = await buildPack(spec);
+    console.log(`  built ${spec.name.padEnd(20)} ${String(count).padStart(4)} top-level doc(s)`);
   }
 
   fs.rmSync(tempRoot, { recursive: true, force: true });
 
   console.log("");
   console.log(
-    `Compiled ${packSpecs.length} pack${packSpecs.length === 1 ? "" : "s"} into packs/. ` +
-    `Other pack directories were not touched. Reload the world (or the compendium) to see changes.`
+    `Compiled ${specs.length} pack${specs.length === 1 ? "" : "s"} into packs/. ` +
+    `Reload the world (or the compendium) to see changes. ` +
+    `Run \`npm run seal:packs\` to seal the LevelDB WAL.`
   );
 }
 
