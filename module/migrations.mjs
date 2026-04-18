@@ -3,6 +3,7 @@ import { findMutationByName } from "./tables/mutation-data.mjs";
 import { getMutationRule } from "./mutation-rules.mjs";
 import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
+import { GammaWorldConfig } from "./apps/gm-automation-config.mjs";
 
 const ALLIANCE_ALIASES = {
   "brotherhood of thought":    "brotherhood",
@@ -40,11 +41,24 @@ export function registerMigrationSettings() {
     default: "0.0.0"
   });
 
+  // A single menu button in the default Settings panel opens the dedicated
+  // Gamma World Configuration window. Every world-scoped toggle below is
+  // `config: false` and lives only inside that window, so the default panel
+  // doesn't balloon as new automation knobs land.
+  game.settings.registerMenu(SYSTEM_ID, "gwConfigWindow", {
+    name: "GAMMA_WORLD.Settings.Config.MenuName",
+    label: "GAMMA_WORLD.Settings.Config.MenuLabel",
+    hint: "GAMMA_WORLD.Settings.Config.MenuHint",
+    icon: "fa-solid fa-sliders",
+    type: GammaWorldConfig,
+    restricted: true
+  });
+
   game.settings.register(SYSTEM_ID, "pshTechReliable", {
     name: "GAMMA_WORLD.Settings.PshTechReliable.Name",
     hint: "GAMMA_WORLD.Settings.PshTechReliable.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -64,7 +78,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.NpcDamageMode.Name",
     hint: "GAMMA_WORLD.Settings.NpcDamageMode.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: {
       none: "GAMMA_WORLD.Settings.NpcDamageMode.Choice.None",
@@ -78,7 +92,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.PromptBeforeApplyDamage.Name",
     hint: "GAMMA_WORLD.Settings.PromptBeforeApplyDamage.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: false
   });
@@ -87,7 +101,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.NpcSaveMode.Name",
     hint: "GAMMA_WORLD.Settings.NpcSaveMode.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: {
       auto: "GAMMA_WORLD.Settings.NpcSaveMode.Choice.Auto",
@@ -100,7 +114,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.PlayerSaveTimeout.Name",
     hint: "GAMMA_WORLD.Settings.PlayerSaveTimeout.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Number,
     default: 0,
     range: { min: 0, max: 300, step: 5 }
@@ -117,7 +131,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.AttackRollMode.Name",
     hint: "GAMMA_WORLD.Settings.AttackRollMode.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: ROLL_MODE_CHOICES,
     default: "publicroll"
@@ -127,7 +141,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.DamageRollMode.Name",
     hint: "GAMMA_WORLD.Settings.DamageRollMode.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: ROLL_MODE_CHOICES,
     default: "publicroll"
@@ -137,7 +151,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.SaveRollMode.Name",
     hint: "GAMMA_WORLD.Settings.SaveRollMode.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: ROLL_MODE_CHOICES,
     default: "publicroll"
@@ -147,7 +161,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.HideGmRollDetails.Name",
     hint: "GAMMA_WORLD.Settings.HideGmRollDetails.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     choices: {
       none:   "GAMMA_WORLD.Settings.HideGmRollDetails.Choice.None",
@@ -163,7 +177,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.SuppressGmDiceAnimation.Name",
     hint: "GAMMA_WORLD.Settings.SuppressGmDiceAnimation.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: false
   });
@@ -172,7 +186,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.AutoRemoveInstantTemplate.Name",
     hint: "GAMMA_WORLD.Settings.AutoRemoveInstantTemplate.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -181,7 +195,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.AutoConsumeCharges.Name",
     hint: "GAMMA_WORLD.Settings.AutoConsumeCharges.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -190,7 +204,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.AutoTickFatigue.Name",
     hint: "GAMMA_WORLD.Settings.AutoTickFatigue.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -199,7 +213,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.ResetFatigueOnCombatEnd.Name",
     hint: "GAMMA_WORLD.Settings.ResetFatigueOnCombatEnd.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -208,7 +222,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
     hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Boolean,
     default: true
   });
@@ -217,7 +231,7 @@ export function registerMigrationSettings() {
     name: "GAMMA_WORLD.Settings.GrenadePersistentRounds.Name",
     hint: "GAMMA_WORLD.Settings.GrenadePersistentRounds.Hint",
     scope: "world",
-    config: true,
+    config: false,
     type: Number,
     default: 3,
     range: { min: 0, max: 20, step: 1 }

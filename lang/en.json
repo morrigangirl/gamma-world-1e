@@ -16,6 +16,24 @@
       "Title": "Gamma World 1st Edition"
     },
     "Settings": {
+      "Config": {
+        "MenuName": "Gamma World Configuration",
+        "MenuLabel": "Open Configuration Window",
+        "MenuHint": "One-stop window for every Gamma World system toggle: house rules, combat automation, roll visibility, and template lifecycle. Individual settings no longer appear in the default list — open this window to edit them.",
+        "WindowTitle": "Gamma World Configuration",
+        "Section": {
+          "HouseRules": "House Rules & Gameplay",
+          "CombatAutomation": "Combat Automation",
+          "RollVisibility": "Roll Visibility & Dice",
+          "Templates": "Templates & Grenades"
+        },
+        "Save": "Save",
+        "ResetDefaults": "Reset to Defaults",
+        "ResetConfirmTitle": "Reset Gamma World Configuration?",
+        "ResetConfirmBody": "This resets every setting in this window to its out-of-the-box default. Your world data is not touched.",
+        "ResetDone": "Gamma World settings reset to defaults.",
+        "Saved": "Gamma World settings saved."
+      },
       "PilotAnimations": {
         "Name": "Enable Pilot Animations",
         "Hint": "Play the system's Sequencer + JB2A combat and support effects for energy weapons, explosives, shields, and high-value Ancient gear when those modules are active."

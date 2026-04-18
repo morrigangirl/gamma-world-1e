@@ -1,0 +1,40 @@
+<section class="gw-config">
+  {{#each sections}}
+    <fieldset class="gw-config__section">
+      <legend>{{this.title}}</legend>
+      {{#each this.fields}}
+        <div class="form-group gw-config__field gw-config__field--{{this.kind}}">
+          <label for="gw-config-{{this.key}}">{{this.name}}</label>
+          <div class="form-fields">
+            {{#if (gwEq this.kind "boolean")}}
+              <input type="checkbox"
+                     id="gw-config-{{this.key}}"
+                     name="{{this.key}}"
+                     {{#if this.checked}}checked{{/if}}>
+            {{else if (gwEq this.kind "select")}}
+              <select id="gw-config-{{this.key}}" name="{{this.key}}">
+                {{#each this.options}}
+                  <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+              </select>
+            {{else if (gwEq this.kind "number")}}
+              <input type="number"
+                     id="gw-config-{{this.key}}"
+                     name="{{this.key}}"
+                     value="{{this.value}}"
+                     {{#if this.hasRange}}min="{{this.min}}" max="{{this.max}}" step="{{this.step}}"{{/if}}>
+            {{else}}
+              <input type="text"
+                     id="gw-config-{{this.key}}"
+                     name="{{this.key}}"
+                     value="{{this.text}}">
+            {{/if}}
+          </div>
+          {{#if this.hint}}
+            <p class="hint">{{this.hint}}</p>
+          {{/if}}
+        </div>
+      {{/each}}
+    </fieldset>
+  {{/each}}
+</section>
