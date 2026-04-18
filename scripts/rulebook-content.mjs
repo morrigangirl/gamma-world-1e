@@ -565,6 +565,79 @@ const CHAPTER_11 = {
         "Containers (backpacks, pouches, satchels) are not strictly RAW — they are added for usable inventory management.",
         "Strict encumbrance: carried weight over cap halves movement and zeroes DX AC bonus; over 2× cap disables movement, attacks, and mutations."
       )
+    }),
+    section({
+      name: "Skills & Proficiencies",
+      pageRange: "—",
+      body: p(
+        "<strong>House rule.</strong> Every PC gets a 25-skill sheet split across six groups (Field, Tech, Combat, Lore, Social, Medical). Each skill is tied to an ability (PS, DX, CN, IN, CH, or MS); the ability can be remapped per-character on the Skills tab if a mutation or unusual build justifies it.",
+        "Players may mark up to <strong>three</strong> skills as <em>proficient</em>. The skill roll is <code>1d20 + ability modifier</code>, and proficient rolls add a flat <strong>+2</strong> on top. There is no scaling by level, no expertise, and no advantage/disadvantage — the cap stays at three forever.",
+        "Ability modifiers use the same 6–15 neutral band as DX-to-hit, PS-damage, and PS-melee-to-hit. A PS 8 character gets +0 on Climbing/Traversal; a PS 18 character gets +3; a PS 4 character gets −2.",
+        "The Skills tab on the character sheet lists every skill as a compact row: name · ability (selectable) · total modifier · proficient toggle · Roll button. The header shows <code>N/3</code> so the proficient cap is always visible. Ticking a fourth proficient skill is blocked with a warning.",
+        "Skill checks exist as a narrative resolution tool. They do not route through the combat pipeline, do not trigger saves, and do not fire Phase 2b hooks. The result is the total on the chat card and nothing else — the GM decides what happens next.",
+        "<em>Design goal: \"you are slightly better at not dying stupidly.\"</em>"
+      )
+    }),
+    section({
+      name: "Field Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Survival (CN)</strong> — living off hostile terrain: finding food and water, reading weather, building shelter, enduring exposure.",
+        "<strong>Tracking (IN)</strong> — following trails, identifying creatures from spoor, and knowing when a trail's gone cold.",
+        "<strong>Navigation (IN)</strong> — finding a destination in the wastes without landmarks. Overland pathfinding and starmap reading.",
+        "<strong>Stealth (DX)</strong> — moving unseen and unheard in hostile territory. Also pickpocketing and hand-tricks.",
+        "<strong>Climbing / Traversal (PS)</strong> — ropes, chimneys, sheer walls, ruined stairwells, swimming in rough water, squeezing through tight passages."
+      )
+    }),
+    section({
+      name: "Tech Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Ancient Tech (IN)</strong> — identifying, activating, or safely handling unfamiliar pre-Fall gadgets. Paired with the artifact-session roll when an artifact's operation is still unknown.",
+        "<strong>Computers (IN)</strong> — coaxing answers from pre-Fall terminals, data cores, and holo-archives.",
+        "<strong>Jury-Rigging (IN)</strong> — stitching together emergency repairs from salvage. Getting one more use out of a broken device, or bolting two half-working ones into something useful.",
+        "<strong>Salvage (IN)</strong> — knowing what's valuable in a rubble pile, which components are worth pulling, and how to extract them without triggering a failsafe.",
+        "<strong>Robotics (IN)</strong> — diagnosing, commanding, and working around robotic units. Also recognizing robot types before they recognize you."
+      )
+    }),
+    section({
+      name: "Combat Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Ballistics (DX)</strong> — threading difficult ranged shots: curves, bank shots, leading a moving target, called shots. Does not replace the attack roll; it informs narrative situations around it.",
+        "<strong>Melee Technique (PS)</strong> — non-damage melee moves: disarms, trips, shoves, grapples, and fighting defensively to reach a wounded ally.",
+        "<strong>Tactics (IN)</strong> — reading enemy formations, spotting ambush terrain, improvising a plan under pressure.",
+        "<strong>Threat Assessment (MS)</strong> — sizing up a hostile encounter before swords come out. Guessing hit dice, cryptic alliances, mutational warning signs."
+      )
+    }),
+    section({
+      name: "Lore Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Abnormal Biology (IN)</strong> — recognizing mutant creatures by their anatomy, guessing what a new mutation might do, and knowing where to cut on a creature nobody's cataloged.",
+        "<strong>Radiation Lore (IN)</strong> — identifying radiation sources, reading hot zones from context, and knowing the long-term effects of various intensities.",
+        "<strong>Toxicology (IN)</strong> — identifying poisons, antidotes, contact hazards, and the intensity of a gas cloud from its color and smell.",
+        "<strong>Pre-Fall Lore (IN)</strong> — history, geography, and culture of the Ancient civilization; interpreting ruins, dates, and names.",
+        "<strong>Faction Lore (IN)</strong> — cryptic alliances, their ranks and watchwords, their grudges, their public faces and private aims."
+      )
+    }),
+    section({
+      name: "Social Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Barter (CH)</strong> — haggling, appraising, and not getting ripped off in a domar-economy where nobody agrees what a gun is worth.",
+        "<strong>Intimidation (CH)</strong> — threats, displays of force, posture. Works on scared creatures, cracks on brave ones, angers alliances.",
+        "<strong>Diplomacy (CH)</strong> — finding common ground with strangers, defusing tension, making requests that don't end in violence.",
+        "<strong>Deception (CH)</strong> — lying convincingly, bluffing, disguising intent or identity."
+      )
+    }),
+    section({
+      name: "Medical Skills",
+      pageRange: "—",
+      body: p(
+        "<strong>Field Medicine (IN)</strong> — first aid, bleeding control, setting breaks, stabilizing at 0 HP. Works with or without an Ancient medi-kit; the skill determines how effective the care is.",
+        "<strong>Biotech Handling (IN)</strong> — safely operating anti-radiation serum, cur-in doses, stim doses, rejuv chambers, and unknown biotech. Reduces the chance of a bad interaction when the patient's biology is novel."
+      )
     })
   ]
 };
