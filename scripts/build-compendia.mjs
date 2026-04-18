@@ -1,17 +1,21 @@
 /**
- * Build all ten system compendium packs directly into `packs/<name>/` LevelDB
- * using `@foundryvtt/foundryvtt-cli`. No running Foundry required.
+ * Build the `imported-rulebook` compendium pack into `packs/imported-rulebook/`
+ * LevelDB using `@foundryvtt/foundryvtt-cli`. No running Foundry required.
  *
- * For each doc (and every embedded doc — actor items, actor effects, item
- * effects, journal pages, table results) we assign:
+ * Scope: **this script only builds the `imported-rulebook` pack.** It does
+ * not read, modify, or delete any other pack directory under `packs/`.
+ * The other nine packs ship as committed LevelDB and are left untouched.
+ *
+ * For each doc (and every embedded doc — journal pages) we assign:
  *   - a stable 16-char `_id` (sha256 of pack + collection path + name/index),
  *   - a `_key` in the `!<collection>!<path>` format the CLI needs,
  *   - Foundry's core document fields (`_stats`, `ownership`, `flags`,
  *     `folder`, `sort`) so v13's DataModel validator accepts them and the
  *     compendium index populates in the UI.
  *
- * Safe to run any time. Foundry must be closed so LevelDB isn't re-reading
- * packs mid-build.
+ * Safe to run any time Foundry is not actively holding a lock on
+ * `packs/imported-rulebook/` (Foundry can stay running for the other packs;
+ * just close the Imported Rulebook compendium window before re-running).
  */
 
 import fs from "node:fs";
@@ -20,18 +24,7 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { compilePack } from "@foundryvtt/foundryvtt-cli";
 
-import {
-  actorPackSources,
-  crypticAlliancePackSources,
-  encounterTableSources,
-  equipmentPackSources,
-  journalPackSources,
-  monsterPackSources,
-  mutationPackSources,
-  robotChassisPackSources,
-  rollTablePackSources
-} from "./compendium-content.mjs";
-import { rulebookPackSources } from "./rulebook-content.mjs";
+import { importedRulebookPackSources } from "./imported-rulebook-content.mjs";
 
 const systemJson = JSON.parse(
   fs.readFileSync(new URL("../system.json", import.meta.url), "utf8")
@@ -149,16 +142,7 @@ function prepareDocument(doc, collection, packSeed, parentIdPath = [], seedIndex
 }
 
 const packSpecs = [
-  { name: "mutations",         type: "Item",         documents: mutationPackSources() },
-  { name: "equipment",         type: "Item",         documents: equipmentPackSources() },
-  { name: "sample-actors",     type: "Actor",        documents: actorPackSources() },
-  { name: "monsters",          type: "Actor",        documents: monsterPackSources() },
-  { name: "encounter-tables",  type: "RollTable",    documents: encounterTableSources() },
-  { name: "roll-tables",       type: "RollTable",    documents: rollTablePackSources() },
-  { name: "cryptic-alliances", type: "JournalEntry", documents: crypticAlliancePackSources() },
-  { name: "robot-chassis",     type: "JournalEntry", documents: robotChassisPackSources() },
-  { name: "rulebook",          type: "JournalEntry", documents: rulebookPackSources() },
-  { name: "system-docs",       type: "JournalEntry", documents: journalPackSources() }
+  { name: "imported-rulebook", type: "JournalEntry", documents: importedRulebookPackSources() }
 ];
 
 function cleanDir(dir) {
@@ -199,7 +183,10 @@ async function main() {
   fs.rmSync(tempRoot, { recursive: true, force: true });
 
   console.log("");
-  console.log(`Compiled ${packSpecs.length} compendium packs into packs/. Foundry may be relaunched now.`);
+  console.log(
+    `Compiled ${packSpecs.length} pack${packSpecs.length === 1 ? "" : "s"} into packs/. ` +
+    `Other pack directories were not touched. Reload the world (or the compendium) to see changes.`
+  );
 }
 
 main().catch((error) => {

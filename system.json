@@ -85,6 +85,13 @@
       "system": "gamma-world-1e"
     },
     {
+      "name": "imported-rulebook",
+      "label": "Imported Rulebook",
+      "path": "packs/imported-rulebook",
+      "type": "JournalEntry",
+      "system": "gamma-world-1e"
+    },
+    {
       "name": "system-docs",
       "label": "System Documentation",
       "path": "packs/system-docs",
