@@ -778,6 +778,10 @@ import {
   buildUndoSnapshot,
   captureActorSnapshot
 } from "../module/undo.mjs";
+import {
+  RESOURCE_KIND_LABELS,
+  RESOURCE_KIND_PATHS
+} from "../module/resource-consumption.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -1061,6 +1065,25 @@ test("buildUndoSnapshot wraps actor snapshots and is JSON-safe", () => {
   const withNulls = buildUndoSnapshot({ kind: "x", actors: [null, a1, undefined] });
   assert.equal(withNulls.actorStates.length, 1);
   assert.equal(withNulls.actorStates[0].uuid, "Actor.a");
+});
+
+test("Resource-consumption kind paths and labels stay in sync", () => {
+  // Both maps must cover the same set of kinds — a drift here means the
+  // depletion card would miss a label (or vice versa).
+  const pathKinds = Object.keys(RESOURCE_KIND_PATHS).sort();
+  const labelKinds = Object.keys(RESOURCE_KIND_LABELS).sort();
+  assert.deepEqual(pathKinds, labelKinds,
+    "RESOURCE_KIND_PATHS and RESOURCE_KIND_LABELS must enumerate identical kinds");
+
+  // The two currently-supported kinds each resolve to the schema fields
+  // we actually decrement in the runtime. If these paths shift we break
+  // every consume call.
+  assert.equal(RESOURCE_KIND_PATHS.ammo, "system.ammo.current");
+  assert.equal(RESOURCE_KIND_PATHS.artifactCharge, "system.artifact.charges.current");
+
+  // Both maps are frozen so downstream mutation is impossible.
+  assert.equal(Object.isFrozen(RESOURCE_KIND_PATHS), true);
+  assert.equal(Object.isFrozen(RESOURCE_KIND_LABELS), true);
 });
 
 test("Hook surface exports the expected constants and is test-safe", () => {

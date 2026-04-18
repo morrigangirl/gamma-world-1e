@@ -17,6 +17,7 @@ import { autoApplyOnHitEffect, shouldHideManualFollowUp } from "./on-hit-effects
 import { determineRangeBand } from "./range.mjs";
 import { buildAttackContext, serializeAttackContext } from "./attack-context.mjs";
 import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
+import { consumeResource, postDepletedNotice } from "./resource-consumption.mjs";
 import {
   clampSaveScore,
   evaluateSaveForActor,
@@ -547,6 +548,7 @@ export async function rollAttack(actor, weapon) {
     }
   } else if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
     ui.notifications?.warn("No ammunition remaining.");
+    await postDepletedNotice(weapon, "ammo");
     return;
   }
 
@@ -587,6 +589,21 @@ export async function rollAttack(actor, weapon) {
   const effectMode = weapon.system.effect?.mode || "damage";
   const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
+  // Build the AttackContext early (Phase 2a/4): the ammo-consume path
+  // below writes into `context.resources` so a later refund flow can
+  // trace the debit back to this attack.
+  const context = buildAttackContext({
+    actor, token: sourceToken, weapon, target, roll, range,
+    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
+    damageFormula, damageType: weapon.system.damage?.type ?? "",
+    effectMode, effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "",
+    nonlethal: !!weapon.system.traits?.nonlethal,
+    sourceKind: "weapon", sourceName: weapon.name
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -611,12 +628,17 @@ export async function rollAttack(actor, weapon) {
   );
 
   // Consume the ammo gear item first; fall back to the weapon's inline
-  // counter if no gear ammo was found.
+  // counter if no gear ammo was found. The inline path routes through
+  // consumeResource so the `autoConsumeCharges` setting, depletion
+  // notice, and resourceConsumed hook fire consistently (Phase 4).
   if (ammoItem) {
+    // Ammo gear items track counts under system.ammo.rounds, not
+    // system.ammo.current — the consumeResource helper doesn't know
+    // about this shape. Keep the direct update here.
     const remaining = Math.max(0, Number(ammoItem.system.ammo.rounds ?? 0) - 1);
     await ammoItem.update({ "system.ammo.rounds": remaining });
   } else if (weapon.system.ammo?.consumes) {
-    await weapon.update({ "system.ammo.current": Math.max(0, Number(weapon.system.ammo.current ?? 0) - 1) });
+    await consumeResource(weapon, "ammo", 1, { context });
   }
 
   await game.gammaWorld?.animations?.playWeaponProjectile?.({
@@ -648,23 +670,9 @@ export async function rollAttack(actor, weapon) {
     nonlethal: !!weapon.system.traits?.nonlethal
   };
 
-  // AttackContext (Phase 2a) — additive: the legacy `attack` flags above
-  // stay unchanged for back-compat; the new `context` shape is what
-  // downstream phases (hooks, undo, resource tracking) will read.
-  const context = buildAttackContext({
-    actor, token: sourceToken, weapon, target, roll, range,
-    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
-    damageFormula, damageType: weapon.system.damage?.type ?? "",
-    effectMode, effectFormula: weapon.system.effect?.formula || "",
-    effectStatus: weapon.system.effect?.status || "",
-    effectNotes: weapon.system.effect?.notes || "",
-    weaponTag: weapon.system.traits?.tag || "",
-    nonlethal: !!weapon.system.traits?.nonlethal,
-    sourceKind: "weapon", sourceName: weapon.name
-  });
-
   // Phase 2b: attackRollComplete — announce-only, fires after the roll
-  // resolves and before the card posts.
+  // resolves and before the card posts. `context` was built earlier so
+  // the ammo-consume path could record its debit on it.
   fireAnnounceHook(HOOK.attackRollComplete, { context, roll });
 
   await ChatMessage.create({
@@ -705,6 +713,7 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
   // defensive inline counter only if somebody deliberately set one.
   if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
     ui.notifications?.warn("No ammunition remaining.");
+    await postDepletedNotice(weapon, "ammo");
     return;
   }
 
@@ -740,6 +749,20 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
   const effectMode = weapon.system.effect?.mode || "damage";
   const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
+  // AttackContext (Phase 2a/4) — built early so ammo-consume can record
+  // the debit on it.
+  const context = buildAttackContext({
+    actor, token: sourceToken, weapon, target, roll, range,
+    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
+    damageFormula, damageType: weapon.system.damage?.type ?? "physical",
+    effectMode, effectFormula: weapon.system.effect?.formula || "",
+    effectStatus: weapon.system.effect?.status || "",
+    effectNotes: weapon.system.effect?.notes || "",
+    weaponTag: weapon.system.traits?.tag || "natural",
+    nonlethal: !!weapon.system.traits?.nonlethal,
+    sourceKind: "natural", sourceName: weapon.name
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -763,8 +786,8 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     }
   );
 
-  if (weapon.system.ammo.consumes) {
-    await weapon.update({ "system.ammo.current": Math.max(0, Number(weapon.system.ammo.current ?? 0) - 1) });
+  if (weapon.system.ammo?.consumes) {
+    await consumeResource(weapon, "ammo", 1, { context });
   }
 
   const attackFlags = {
@@ -789,19 +812,6 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     weaponTag: weapon.system.traits?.tag || "natural",
     nonlethal: !!weapon.system.traits?.nonlethal
   };
-
-  // AttackContext (Phase 2a) — see comment in rollAttack.
-  const context = buildAttackContext({
-    actor, token: sourceToken, weapon, target, roll, range,
-    attackBonus, hitTarget: targetNumber, hit, isCritical, isFumble,
-    damageFormula, damageType: weapon.system.damage?.type ?? "physical",
-    effectMode, effectFormula: weapon.system.effect?.formula || "",
-    effectStatus: weapon.system.effect?.status || "",
-    effectNotes: weapon.system.effect?.notes || "",
-    weaponTag: weapon.system.traits?.tag || "natural",
-    nonlethal: !!weapon.system.traits?.nonlethal,
-    sourceKind: "natural", sourceName: weapon.name
-  });
 
   fireAnnounceHook(HOOK.attackRollComplete, { context, roll });
 

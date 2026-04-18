@@ -302,11 +302,14 @@ export async function setArtifactAmbientAvailability(item, available) {
   return true;
 }
 
-export async function consumeArtifactCharge(item, amount = 1) {
-  const current = Math.max(0, Number(item.system.artifact?.charges?.current ?? 0));
-  await item.update({
-    "system.artifact.charges.current": Math.max(0, current - Math.max(0, Number(amount ?? 0)))
-  });
+export async function consumeArtifactCharge(item, amount = 1, { context = null } = {}) {
+  // Phase 4: route through the unified consumeResource helper so this
+  // respects the autoConsumeCharges setting, emits the resourceConsumed
+  // hook, posts a depletion notice when the charges are already at
+  // zero, and (when passed an AttackContext) records the debit for
+  // future undo/refund work.
+  const { consumeResource } = await import("./resource-consumption.mjs");
+  return consumeResource(item, "artifactCharge", Math.max(0, Number(amount ?? 0)), { context });
 }
 
 export async function rechargeArtifact(item) {
