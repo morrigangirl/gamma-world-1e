@@ -25,6 +25,19 @@ function damageBonusFromStrength(score) {
   return 0;
 }
 
+/**
+ * Physical Strength contributes a to-hit bonus on melee and thrown
+ * attacks (RAW GW1e uses PS for melee to-hit and damage; DX for ranged
+ * to-hit). Same 6–15 neutral band as the damage bonus so the two stay
+ * numerically in sync.
+ */
+function hitBonusFromStrength(score) {
+  const value = Math.round(Number(score) || 0);
+  if (value > 15) return value - 15;
+  if (value < 6) return value - 6;
+  return 0;
+}
+
 function fillVariant(summary, variant) {
   if (!variant) return summary ?? "";
   return String(summary ?? "").replace(/_+/g, variant);
@@ -720,7 +733,11 @@ export function applyMutationModifiers(actor, derived) {
 
 export function baseCombatBonuses(actor) {
   return {
-    toHitBonus: combatBonusFromDexterity(actor.system.attributes.dx.value),
-    damageFlat: damageBonusFromStrength(actor.system.attributes.ps.value)
+    toHitBonus:      combatBonusFromDexterity(actor.system.attributes.dx.value),
+    meleeToHitBonus: hitBonusFromStrength(actor.system.attributes.ps.value),
+    damageFlat:      damageBonusFromStrength(actor.system.attributes.ps.value)
   };
 }
+
+/** Exposed for tests. */
+export { hitBonusFromStrength, damageBonusFromStrength, combatBonusFromDexterity };

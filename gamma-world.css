@@ -2417,3 +2417,44 @@ body.system-gamma-world-1e,
   min-height: 1.95rem;
   padding: 0.3rem 0.6rem;
 }
+
+/* ----- Bonus / penalty contributions breakdown ----------------------- */
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions {
+  margin: 0.35rem 0 0.15rem;
+  padding: 0.35rem 0.55rem;
+  background: rgba(31, 36, 40, 0.06);
+  border-left: 2px solid rgba(31, 36, 40, 0.35);
+  font-size: 0.78rem;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.08rem 0;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions__row + .gw-damage-contributions__row {
+  border-top: 1px dotted rgba(31, 36, 40, 0.18);
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions__label {
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.75));
+  letter-spacing: 0.02em;
+}
+
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--gw-ink, #1f2428);
+}
+
+/* Attack-bonus variant sits just below the Target / bonus / defense
+   summary line and reads a hair more compact. */
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions--attack {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+}

@@ -782,6 +782,12 @@ import {
   RESOURCE_KIND_LABELS,
   RESOURCE_KIND_PATHS
 } from "../module/resource-consumption.mjs";
+import {
+  baseCombatBonuses,
+  combatBonusFromDexterity,
+  damageBonusFromStrength,
+  hitBonusFromStrength
+} from "../module/mutation-rules.mjs";
 
 test("fatigue matrix resolves weapon families and layered penalties", () => {
   assert.equal(resolveWeaponFatigueFamily({ name: "Long Sword", weaponClass: 3 }), "sword-one");
@@ -1065,6 +1071,43 @@ test("buildUndoSnapshot wraps actor snapshots and is JSON-safe", () => {
   const withNulls = buildUndoSnapshot({ kind: "x", actors: [null, a1, undefined] });
   assert.equal(withNulls.actorStates.length, 1);
   assert.equal(withNulls.actorStates[0].uuid, "Actor.a");
+});
+
+test("Attribute-to-combat bonus bands match the existing 6-15 neutral range", () => {
+  // Thresholds: below 6 = score - 6, above 15 = score - 15, else 0.
+  // All three helpers (DX to-hit, PS damage, PS to-hit) use the same
+  // band so they stay numerically in sync.
+
+  // Dexterity to-hit.
+  assert.equal(combatBonusFromDexterity(3),  -3);
+  assert.equal(combatBonusFromDexterity(5),  -1);
+  assert.equal(combatBonusFromDexterity(6),   0);
+  assert.equal(combatBonusFromDexterity(8),   0, "PS 8 (mid band) = no bonus/penalty");
+  assert.equal(combatBonusFromDexterity(15),  0);
+  assert.equal(combatBonusFromDexterity(16), +1);
+  assert.equal(combatBonusFromDexterity(18), +3);
+
+  // Strength damage.
+  assert.equal(damageBonusFromStrength(3),  -3);
+  assert.equal(damageBonusFromStrength(8),   0, "Sara's PS 8 correctly yields 0 damage bonus");
+  assert.equal(damageBonusFromStrength(16), +1);
+  assert.equal(damageBonusFromStrength(18), +3);
+
+  // Strength to-hit (new — mirrors the damage band so a PS 18 fighter
+  // gets +3 to hit AND +3 damage on melee, and Sara at PS 8 gets 0/0).
+  assert.equal(hitBonusFromStrength(3),   -3);
+  assert.equal(hitBonusFromStrength(8),    0);
+  assert.equal(hitBonusFromStrength(15),   0);
+  assert.equal(hitBonusFromStrength(17),  +2);
+  assert.equal(hitBonusFromStrength(18),  +3);
+
+  // baseCombatBonuses returns the full contributor set. The shape must
+  // include `meleeToHitBonus` now so dice.mjs can read it.
+  const actor = { system: { attributes: { dx: { value: 16 }, ps: { value: 18 } } } };
+  const bonuses = baseCombatBonuses(actor);
+  assert.equal(bonuses.toHitBonus,       +1, "DX 16 → +1 dexterity to-hit");
+  assert.equal(bonuses.meleeToHitBonus,  +3, "PS 18 → +3 strength melee to-hit");
+  assert.equal(bonuses.damageFlat,       +3, "PS 18 → +3 damage");
 });
 
 test("Resource-consumption kind paths and labels stay in sync", () => {

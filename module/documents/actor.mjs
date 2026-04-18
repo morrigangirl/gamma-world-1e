@@ -91,6 +91,7 @@ export function buildActorDerived(actor) {
     movement: roundMovement(system.details.movement ?? 120),
     initiative: actorInitiativeModifier(actor),
     toHitBonus: baseBonuses.toHitBonus,
+    meleeToHitBonus: baseBonuses.meleeToHitBonus ?? 0,
     closeRangeToHitBonus: 0,
     damageFlat: baseBonuses.damageFlat,
     damagePerDie: 0,

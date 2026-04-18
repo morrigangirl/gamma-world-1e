@@ -319,19 +319,95 @@ async function resolveAttackTarget(actor, { allowManualAc = true } = {}) {
 
 export { determineRangeBand };
 
-function computeWeaponDamageFormula(actor, weapon) {
-  let formula = weapon.system.damage?.formula || "1d6";
-  const derived = actor.gw ?? {};
+/**
+ * Build an ordered list of attack-bonus contributions so the attack
+ * card can surface each component on its own line. Zero values are
+ * omitted so only factors that actually changed the total appear.
+ */
+function buildAttackBonusBreakdown({ dxToHit = 0, psToHit = 0, closeRangeBonus = 0, rangePenalty = 0, rangeLabel = "" } = {}) {
+  const parts = [];
+  const push = (label, value) => {
+    const n = Number(value) || 0;
+    if (!n) return;
+    parts.push({ label, value: n, signed: n > 0 ? `+${n}` : `${n}` });
+  };
+  push("DX (Dexterity)", dxToHit);
+  push("PS (Physical Strength)", psToHit);
+  push("Close range", closeRangeBonus);
+  if (rangePenalty) {
+    parts.push({
+      label: rangeLabel ? `Range (${rangeLabel})` : "Range",
+      value: rangePenalty,
+      signed: rangePenalty > 0 ? `+${rangePenalty}` : `${rangePenalty}`
+    });
+  }
+  return parts;
+}
 
-  formula = addDiceToFormula(formula, derived.weaponExtraDice ?? 0);
+/**
+ * Return both the final damage formula AND an ordered list of
+ * contributions so chat cards can surface where each bonus / penalty
+ * came from. The `.formula` return is what actually gets rolled.
+ *
+ * Each contribution is `{ label, value, signed }`:
+ *   - `label`: human-readable source (e.g. "PS (Physical Strength)")
+ *   - `value`: the numeric or formula delta as a string
+ *   - `signed`: the signed string form for template display ("+3", "-1")
+ *
+ * Zero-valued contributions are skipped so the breakdown only lists
+ * factors that actually changed the result.
+ */
+function computeWeaponDamageFormula(actor, weapon) {
+  const base = weapon.system.damage?.formula || "1d6";
+  let formula = base;
+  const derived = actor.gw ?? {};
+  const contributions = [{ label: "Base", value: base, signed: base }];
+
+  const weaponExtra = Number(derived.weaponExtraDice ?? 0) || 0;
+  if (weaponExtra) {
+    formula = addDiceToFormula(formula, weaponExtra);
+    contributions.push({
+      label: "Bonus dice",
+      value: weaponExtra,
+      signed: weaponExtra > 0 ? `+${weaponExtra}d` : `${weaponExtra}d`
+    });
+  }
+
   if (weapon.system.attackType !== "energy") {
-    formula = addDiceToFormula(formula, derived.conventionalWeaponExtraDice ?? 0);
+    const convExtra = Number(derived.conventionalWeaponExtraDice ?? 0) || 0;
+    if (convExtra) {
+      formula = addDiceToFormula(formula, convExtra);
+      contributions.push({
+        label: "Conventional weapon dice",
+        value: convExtra,
+        signed: convExtra > 0 ? `+${convExtra}d` : `${convExtra}d`
+      });
+    }
   }
+
   if (weapon.system.attackType === "melee" || weapon.system.attackType === "thrown") {
-    formula = addFlatBonusToFormula(formula, derived.damageFlat ?? 0);
+    const psFlat = Number(derived.damageFlat ?? 0) || 0;
+    if (psFlat) {
+      formula = addFlatBonusToFormula(formula, psFlat);
+      contributions.push({
+        label: "PS damage",
+        value: psFlat,
+        signed: psFlat > 0 ? `+${psFlat}` : `${psFlat}`
+      });
+    }
   }
-  formula = addPerDieBonusToFormula(formula, derived.damagePerDie ?? 0);
-  return formula;
+
+  const perDie = Number(derived.damagePerDie ?? 0) || 0;
+  if (perDie) {
+    formula = addPerDieBonusToFormula(formula, perDie);
+    contributions.push({
+      label: "Bonus per die",
+      value: perDie,
+      signed: perDie > 0 ? `+${perDie}/die` : `${perDie}/die`
+    });
+  }
+
+  return { formula, contributions };
 }
 
 async function createDamageCard({
@@ -346,7 +422,12 @@ async function createDamageCard({
   weaponTag = "",
   nonlethal = false,
   notes = "",
-  isCritical = false
+  isCritical = false,
+  /** Ordered list of damage contributions from computeWeaponDamageFormula
+   *  (or a caller-supplied equivalent). Surfaced on the chat card so the
+   *  GM can see where each +/- came from at a glance. Optional; omit for
+   *  callers that roll a plain formula without bonus context. */
+  contributions = null
 }) {
   // Phase 2b: preRollDamage — veto-capable. Payload is a minimal
   // damage-intent snapshot keyed from the args (callers don't thread
@@ -401,6 +482,20 @@ async function createDamageCard({
     templateTargets.push({ uuid, name });
   }
 
+  // Only surface the contributions section if there's more than just
+  // the base formula (i.e. at least one actual bonus/penalty kicked in).
+  // For a crit, insert a doubled-dice contribution so the breakdown
+  // doesn't lie about why the formula grew.
+  const contributionList = Array.isArray(contributions) ? contributions.slice() : [];
+  if (isCritical && contributionList.length > 0) {
+    contributionList.splice(1, 0, {
+      label: "Critical hit",
+      value: "×2 dice",
+      signed: "×2 dice"
+    });
+  }
+  const showContributions = contributionList.length > 1;
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/damage-card.hbs`,
     {
@@ -415,6 +510,8 @@ async function createDamageCard({
       isCritical,
       rollTooltip,
       rollFormula: roll.formula,
+      contributions: contributionList,
+      showContributions,
       targets: templateTargets,
       hasTargets: templateTargets.length > 0
     }
@@ -592,9 +689,23 @@ export async function rollAttack(actor, weapon) {
     return;
   }
 
-  const attackBonus = (actor.gw?.toHitBonus ?? 0)
-    + (target.distance && target.distance <= 30 ? actor.gw?.closeRangeToHitBonus ?? 0 : 0)
-    + range.penalty;
+  // RAW GW1e: Physical Strength bonus applies to melee and thrown
+  // to-hit (stacked on top of the dexterity bonus from the same band).
+  // Ranged / energy weapons don't get the PS to-hit contribution.
+  const isMeleeLike = weapon.system.attackType === "melee"
+    || weapon.system.attackType === "thrown";
+  const psToHit = isMeleeLike ? Number(actor.gw?.meleeToHitBonus ?? 0) || 0 : 0;
+  const closeRangeBonus = target.distance && target.distance <= 30
+    ? Number(actor.gw?.closeRangeToHitBonus ?? 0) || 0
+    : 0;
+  const dxToHit = Number(actor.gw?.toHitBonus ?? 0) || 0;
+  const attackBonus = dxToHit + psToHit + closeRangeBonus + range.penalty;
+
+  const attackBonusContributions = buildAttackBonusBreakdown({
+    dxToHit, psToHit, closeRangeBonus,
+    rangePenalty: range.penalty,
+    rangeLabel: range.label
+  });
 
   const meleeTurn = Number(actor.system.combat?.fatigue?.round ?? 0);
   const fatigueFactor = combinedFatigueFactor({
@@ -619,7 +730,8 @@ export async function rollAttack(actor, weapon) {
   const isCritical = d20Value === 20;
   const isFumble = d20Value === 1;
   const hit = isCritical || (!isFumble && roll.total >= targetNumber);
-  const damageFormula = computeWeaponDamageFormula(actor, weapon);
+  const { formula: damageFormula, contributions: damageContributions } =
+    computeWeaponDamageFormula(actor, weapon);
   const effectMode = weapon.system.effect?.mode || "damage";
   const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
@@ -661,7 +773,9 @@ export async function rollAttack(actor, weapon) {
       followUpLabel: followUpLabelForWeapon(weapon),
       showFollowUp: !hideFollowUp,
       rollTooltip,
-      rollFormula: roll.formula
+      rollFormula: roll.formula,
+      attackBonusContributions,
+      showAttackBonusBreakdown: attackBonusContributions.length > 0
     }
   );
 
@@ -697,6 +811,7 @@ export async function rollAttack(actor, weapon) {
     isCritical,
     isFumble,
     damageFormula,
+    damageContributions,
     damageType: weapon.system.damage?.type ?? "",
     sourceName: weapon.name,
     sourceKind: "weapon",
@@ -761,9 +876,22 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     return;
   }
 
-  const attackBonus = (actor.gw?.toHitBonus ?? 0)
-    + (target.distance && target.distance <= 30 ? actor.gw?.closeRangeToHitBonus ?? 0 : 0)
-    + range.penalty;
+  // Natural weapons (claws, bites, tentacles) are effectively melee
+  // regardless of the attackType field — include the PS to-hit bonus.
+  const isMeleeLike = weapon.system.attackType !== "ranged"
+    && weapon.system.attackType !== "energy";
+  const psToHit = isMeleeLike ? Number(actor.gw?.meleeToHitBonus ?? 0) || 0 : 0;
+  const closeRangeBonus = target.distance && target.distance <= 30
+    ? Number(actor.gw?.closeRangeToHitBonus ?? 0) || 0
+    : 0;
+  const dxToHit = Number(actor.gw?.toHitBonus ?? 0) || 0;
+  const attackBonus = dxToHit + psToHit + closeRangeBonus + range.penalty;
+
+  const attackBonusContributions = buildAttackBonusBreakdown({
+    dxToHit, psToHit, closeRangeBonus,
+    rangePenalty: range.penalty,
+    rangeLabel: range.label
+  });
 
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
 
@@ -783,7 +911,8 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
   const isCritical = d20Value === 20;
   const isFumble = d20Value === 1;
   const hit = isCritical || (!isFumble && roll.total >= targetNumber);
-  const damageFormula = computeWeaponDamageFormula(actor, weapon);
+  const { formula: damageFormula, contributions: damageContributions } =
+    computeWeaponDamageFormula(actor, weapon);
   const effectMode = weapon.system.effect?.mode || "damage";
   const hideFollowUp = hit && shouldHideManualFollowUp(effectMode);
 
@@ -824,7 +953,9 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
       followUpLabel: followUpLabelForWeapon(weapon),
       showFollowUp: !hideFollowUp,
       rollTooltip,
-      rollFormula: roll.formula
+      rollFormula: roll.formula,
+      attackBonusContributions,
+      showAttackBonusBreakdown: attackBonusContributions.length > 0
     }
   );
 
@@ -844,6 +975,7 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
     isCritical,
     isFumble,
     damageFormula,
+    damageContributions,
     damageType: weapon.system.damage?.type ?? "physical",
     sourceName: weapon.name,
     sourceKind: "natural",
@@ -891,7 +1023,14 @@ export async function rollNaturalAttack(actor) {
   if (!target) return;
   const sourceToken = actor.getActiveTokens?.()[0] ?? null;
 
-  const attackBonus = actor.gw?.toHitBonus ?? 0;
+  // Generic natural attacks are melee by definition — include the PS
+  // to-hit bonus on top of the DX bonus.
+  const dxToHit = Number(actor.gw?.toHitBonus ?? 0) || 0;
+  const psToHit = Number(actor.gw?.meleeToHitBonus ?? 0) || 0;
+  const attackBonus = dxToHit + psToHit;
+  const attackBonusContributions = buildAttackBonusBreakdown({
+    dxToHit, psToHit, closeRangeBonus: 0, rangePenalty: 0, rangeLabel: "melee"
+  });
   const targetNumber = naturalAttackTarget(actor.system.details.level ?? 1, target.armorClass);
 
   // Phase 2b: preAttackRoll — veto-capable. Generic natural attack has
@@ -914,7 +1053,16 @@ export async function rollNaturalAttack(actor) {
   const hit = isCritical || (!isFumble && roll.total >= targetNumber);
   const attackName = actor.system.combat?.naturalAttack?.name || "Natural Attack";
   const baseFormula = actor.system.combat?.naturalAttack?.damage || "1d3";
-  const damageFormula = addFlatBonusToFormula(baseFormula, actor.gw?.damageFlat ?? 0);
+  const psFlat = Number(actor.gw?.damageFlat ?? 0) || 0;
+  const damageFormula = addFlatBonusToFormula(baseFormula, psFlat);
+  const damageContributions = [{ label: "Base", value: baseFormula, signed: baseFormula }];
+  if (psFlat) {
+    damageContributions.push({
+      label: "PS damage",
+      value: psFlat,
+      signed: psFlat > 0 ? `+${psFlat}` : `${psFlat}`
+    });
+  }
 
   const rollTooltip = await roll.getTooltip();
 
@@ -939,7 +1087,9 @@ export async function rollNaturalAttack(actor) {
       followUpLabel: "Roll Damage",
       showFollowUp: true,
       rollTooltip,
-      rollFormula: roll.formula
+      rollFormula: roll.formula,
+      attackBonusContributions,
+      showAttackBonusBreakdown: attackBonusContributions.length > 0
     }
   );
 
@@ -955,6 +1105,7 @@ export async function rollNaturalAttack(actor) {
     isCritical,
     isFumble,
     damageFormula,
+    damageContributions,
     damageType: "physical",
     sourceName: attackName,
     sourceKind: "natural"
@@ -1083,7 +1234,8 @@ export async function rollDamageFromFlags(flags) {
     nonlethal: !!flags.nonlethal,
     sourceUuid: flags.weaponUuid ?? flags.sourceUuid ?? null,
     sourceKind: flags.sourceKind ?? "weapon",
-    isCritical: !!flags.isCritical
+    isCritical: !!flags.isCritical,
+    contributions: Array.isArray(flags.damageContributions) ? flags.damageContributions : null
   });
 }
 

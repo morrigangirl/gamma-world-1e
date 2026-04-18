@@ -17,6 +17,16 @@
       {{{rollTooltip}}}
     </div>
   {{/if}}
+  {{#if showContributions}}
+    <div class="gw-damage-contributions">
+      {{#each contributions}}
+        <div class="gw-damage-contributions__row">
+          <span class="gw-damage-contributions__label">{{this.label}}</span>
+          <span class="gw-damage-contributions__value">{{this.signed}}</span>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
   {{#if notes}}
     <div class="gw-card-meta">{{notes}}</div>
   {{/if}}
