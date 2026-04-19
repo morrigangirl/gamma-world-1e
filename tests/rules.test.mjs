@@ -1907,5 +1907,51 @@ test("0.8.3 — preSkillRoll / skillRollComplete hooks are declared", async () =
   assert.equal(HOOK.skillRollComplete, "gammaWorld.v1.skillRollComplete");
 });
 
+test("0.8.3 — Cinematic socket dispatcher routes events to listeners", async () => {
+  const {
+    CINEMATIC_EVENTS,
+    onCinematicEvent,
+    dispatchCinematicLocal,
+    broadcastCinematicEvent,
+    __resetCinematicListenersForTesting
+  } = await import("../module/cinematic/socket.mjs");
+
+  __resetCinematicListenersForTesting();
+
+  const calls = [];
+  const dispose = onCinematicEvent(CINEMATIC_EVENTS.begin, (payload, meta) => {
+    calls.push({ payload, meta });
+  });
+
+  // Local dispatch fires the listener synchronously.
+  dispatchCinematicLocal(CINEMATIC_EVENTS.begin, { requestId: "abc" }, { sender: "gm-1" });
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].payload, { requestId: "abc" });
+  assert.equal(calls[0].meta.sender, "gm-1");
+
+  // Disposer unsubscribes.
+  dispose();
+  dispatchCinematicLocal(CINEMATIC_EVENTS.begin, { requestId: "def" });
+  assert.equal(calls.length, 1, "disposed listener should not fire again");
+
+  // Unknown kinds throw on registration AND on broadcast.
+  assert.throws(() => onCinematicEvent("nope", () => {}), /Unknown cinematic event kind/);
+  assert.throws(() => broadcastCinematicEvent("nope", {}),      /Unknown cinematic event kind/);
+
+  // broadcastCinematicEvent delivers locally even without a game global.
+  __resetCinematicListenersForTesting();
+  const received = [];
+  onCinematicEvent(CINEMATIC_EVENTS.result, (payload) => received.push(payload));
+  const originalGame = globalThis.game;
+  globalThis.game = { user: { id: "user-xyz" }, socket: { emit: () => {} } };
+  try {
+    broadcastCinematicEvent(CINEMATIC_EVENTS.result, { actorUuid: "Actor.1", total: 17 });
+    assert.equal(received.length, 1);
+    assert.equal(received[0].total, 17);
+  } finally {
+    globalThis.game = originalGame;
+  }
+});
+
 
 
