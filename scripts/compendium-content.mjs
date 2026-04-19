@@ -1,3 +1,7 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { SYSTEM_ID } from "../module/config.mjs";
 import { buildMutationItemSource } from "../module/mutation-rules.mjs";
 import { MUTATION_DEFINITIONS, findMutationByName } from "../module/tables/mutation-data.mjs";
@@ -31,6 +35,41 @@ function htmlParagraphs(...parts) {
   return parts.filter(Boolean).map((text) => `<p>${text}</p>`).join("");
 }
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(__dirname, "..");
+
+function slugifyName(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * 0.8.1: if a generated icon exists at `assets/<subdir>/<slug>.png`,
+ * return the Foundry systems-relative path so the compendium item
+ * picks it up. Otherwise return `fallback`. Checked at build time; the
+ * compiled pack inlines whichever path wins.
+ */
+function generatedIconPath(subdir, name, fallback) {
+  const slug = slugifyName(name);
+  if (!slug) return fallback;
+  const diskPath = path.join(repoRoot, "assets", subdir, `${slug}.png`);
+  if (fs.existsSync(diskPath)) {
+    return `systems/${SYSTEM_ID}/assets/${subdir}/${slug}.png`;
+  }
+  return fallback;
+}
+
+function weaponIconPath(name) {
+  return generatedIconPath("weapons", name, "icons/svg/sword.svg");
+}
+
+function mutationIconPath(name) {
+  return generatedIconPath("mutations", name, "icons/svg/aura.svg");
+}
+
 function weaponSource({
   name,
   weaponClass,
@@ -55,7 +94,7 @@ function weaponSource({
   const source = {
     name,
     type: "weapon",
-    img: "icons/svg/sword.svg",
+    img: weaponIconPath(name),
     system: {
       weaponClass,
       category: category ?? "",
@@ -431,9 +470,16 @@ export function mutationPackSources() {
   // Skin Structure Change, etc.) onto an actor triggers a fresh roll
   // via the preCreateItem hook rather than always applying the value
   // that happened to roll at pack-build time.
+  //
+  // 0.8.1: post-process each source so generated icons under
+  // `assets/mutations/<slug>.png` replace the SVG default when present.
   return [...MUTATION_DEFINITIONS]
     .sort((a, b) => (a.subtype.localeCompare(b.subtype) || a.code - b.code || a.name.localeCompare(b.name)))
-    .map((entry) => buildMutationItemSource(entry, { rollVariant: false }));
+    .map((entry) => {
+      const source = buildMutationItemSource(entry, { rollVariant: false });
+      source.img = mutationIconPath(source.name);
+      return source;
+    });
 }
 
 export function equipmentPackSources() {
