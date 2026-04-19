@@ -1970,6 +1970,76 @@ test("0.8.3 — Cinematic composer buildBeginPayload normalizes form data", asyn
   }
 });
 
+test("0.8.3 — Cinematic resolver dispatches to the right runner per roll type", async () => {
+  const { resolveCinematicRoll } = await import("../module/cinematic/resolvers.mjs");
+
+  // Stub the Foundry Roll class since we're running under node.
+  const originalRoll = globalThis.Roll;
+  let lastFormula = null;
+  globalThis.Roll = class {
+    constructor(formula, data) { this.formula = formula; this.data = data ?? {}; }
+    async evaluate() {
+      lastFormula = this.formula;
+      // Deterministic: d20 face = 15, so total = 15 + data.mod / bonus
+      const mod = Number(this.data?.mod ?? 0);
+      const bonus = Number(this.data?.bonus ?? 0);
+      this.terms = [{ total: 15 }];
+      this.total = 15 + mod + bonus;
+      return this;
+    }
+  };
+
+  try {
+    // Attribute check — resolver reads ability key from registry entry.
+    const actor = {
+      uuid: "Actor.A",
+      name: "Test",
+      system: {
+        attributes: {
+          ms: { value: 10 }, in: { value: 10 }, dx: { value: 10 },
+          ch: { value: 10 }, cn: { value: 14 }, ps: { value: 18 }
+        },
+        skills: {},
+        resources: {}
+      },
+      items: []
+    };
+
+    const attrResult = await resolveCinematicRoll(actor, {
+      rollTypeKey: "attribute.ps",
+      dc: 17
+    });
+    assert.equal(attrResult.d20, 15);
+    assert.equal(attrResult.total, 18, "PS 18 → +3 mod → d20 15 + 3 = 18");
+    assert.equal(attrResult.passed, true, "18 meets DC 17");
+    assert.ok(attrResult.breakdown.includes("PS"));
+
+    // Poison save — bare d20 + CN mod vs intensity.
+    const poisonResult = await resolveCinematicRoll(actor, {
+      rollTypeKey: "save.poison",
+      intensity: 15
+    });
+    assert.equal(poisonResult.total, 15, "CN 14 → mod 0 → d20 15 + 0 = 15");
+    assert.equal(poisonResult.passed, true, "15 meets DC 15");
+    assert.equal(poisonResult.band, "half");
+
+    // Radiation save below threshold — no roll, auto-pass.
+    const radSafe = await resolveCinematicRoll(actor, {
+      rollTypeKey: "save.radiation",
+      intensity: 9
+    });
+    assert.equal(radSafe.passed, true);
+    assert.equal(radSafe.band, "below-threshold");
+
+    // Initiative — populates initiativeValue.
+    const initResult = await resolveCinematicRoll(actor, { rollTypeKey: "initiative" });
+    assert.ok(Number.isFinite(initResult.initiativeValue));
+    assert.equal(initResult.total, 15, "DX 10 → +0 mod");
+  } finally {
+    globalThis.Roll = originalRoll;
+  }
+});
+
 test("0.8.3 — Cinematic socket dispatcher routes events to listeners", async () => {
   const {
     CINEMATIC_EVENTS,

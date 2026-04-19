@@ -28,6 +28,7 @@
 
 import { SYSTEM_ID, SKILLS, ATTRIBUTES } from "../config.mjs";
 import { getRollType } from "./roll-types.mjs";
+import { resolveCinematicRoll } from "./resolvers.mjs";
 import {
   CINEMATIC_EVENTS,
   broadcastCinematicEvent,
@@ -239,7 +240,10 @@ export class CinematicRollBanner extends HandlebarsApplicationMixin(ApplicationV
       d20: payload.d20 ?? null,
       total: payload.total ?? payload.d20 ?? null,
       passed: payload.passed ?? null,
-      rollFormula: payload.rollFormula ?? null
+      band: payload.band ?? null,
+      breakdown: payload.breakdown ?? "",
+      rollFormula: payload.rollFormula ?? null,
+      initiativeValue: payload.initiativeValue ?? null
     };
     this.render();
 
@@ -288,21 +292,39 @@ export class CinematicRollBanner extends HandlebarsApplicationMixin(ApplicationV
       ui.notifications?.warn("You don't own that actor.");
       return;
     }
+    if (!card.actor) {
+      ui.notifications?.warn(`Actor "${card.name}" could not be resolved.`);
+      return;
+    }
     card.pending = true;
     this.render();
 
-    // Commit 4 ships a stub d20; Commit 5 replaces this with real
-    // resolver dispatch (skill / save / attribute / initiative).
-    const roll = await new Roll("1d20").evaluate();
-    const total = roll.total;
+    let resolved = null;
+    try {
+      resolved = await resolveCinematicRoll(card.actor, this.#request);
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | cinematic resolver failed`, error);
+      ui.notifications?.error(error?.message ?? String(error));
+      card.pending = false;
+      this.render();
+      return;
+    }
+    if (!resolved) {
+      card.pending = false;
+      this.render();
+      return;
+    }
 
     broadcastCinematicEvent(CINEMATIC_EVENTS.result, {
       requestId: this.#request.requestId,
       actorUuid: uuid,
-      d20: roll.terms?.[0]?.total ?? total,
-      total,
-      rollFormula: roll.formula,
-      passed: null // resolver wiring in Commit 5 will populate this
+      d20: resolved.d20,
+      total: resolved.total,
+      rollFormula: resolved.rollFormula,
+      breakdown: resolved.breakdown ?? "",
+      passed: resolved.passed ?? null,
+      band: resolved.band ?? null,
+      initiativeValue: resolved.initiativeValue ?? null
     });
   }
 }
