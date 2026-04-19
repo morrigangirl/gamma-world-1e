@@ -274,3 +274,30 @@ export async function openCinematicComposer() {
   broadcastCinematicEvent(CINEMATIC_EVENTS.begin, payload);
   return payload;
 }
+
+/**
+ * Programmatic entry point — macro-friendly. Accepts a request shape
+ * directly (no dialog) and emits cinematic-begin.
+ *
+ *   game.gammaWorld.cinematic.requestRoll({
+ *     rollTypeKey: "save.radiation",
+ *     intensity: 14,
+ *     actorUuids: ["Actor.abc", "Actor.def"],
+ *     title: "Walked into a radioactive cloud",
+ *     blind: false
+ *   });
+ *
+ * Returns the canonical payload (with requestId). Errors are thrown
+ * synchronously (not caught) so macro authors see the problem.
+ */
+export function requestCinematicRoll(request) {
+  if (!request || typeof request !== "object") {
+    throw new Error("requestCinematicRoll requires a request object.");
+  }
+  const payload = buildBeginPayload(request, {
+    actorUuids: request.actorUuids ?? [],
+    user: game?.user ?? null
+  });
+  broadcastCinematicEvent(CINEMATIC_EVENTS.begin, payload);
+  return payload;
+}

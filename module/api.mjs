@@ -55,6 +55,11 @@ import {
   getRadiationCondition
 } from "./conditions.mjs";
 import { applyCatastrophicRadiation, applyRadiationSickness } from "./dice.mjs";
+import {
+  openCinematicComposer,
+  requestCinematicRoll
+} from "./cinematic/compose.mjs";
+import { getCurrentBanner } from "./cinematic/banner.mjs";
 
 export function createSystemApi() {
   const animations = createAnimationApi();
@@ -122,6 +127,12 @@ export function createSystemApi() {
     applyCatastrophicRadiation,
     clearRadiationSickness,
     clearCatastrophicRadiation,
-    getRadiationCondition
+    getRadiationCondition,
+    // 0.8.3 Cinematic Roll Request
+    cinematic: {
+      openComposer:   openCinematicComposer,
+      requestRoll:    requestCinematicRoll,
+      getCurrentBanner
+    }
   };
 }
