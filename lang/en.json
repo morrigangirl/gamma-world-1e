@@ -376,13 +376,19 @@
     "Effects": {
       "Title": "Active Effects",
       "Hint": "Passive bonuses + temporary states applied to this character. Transferred effects from mutations and equipped items show their source; direct effects can be edited in place.",
+      "ItemHint": "ActiveEffects attached to this item. With Transfers ON, each effect auto-applies to the actor when the item is on their sheet (and auto-removes on delete).",
       "From": "From",
       "ChangesLabel": "change(s)",
       "Enable": "Enable",
       "Disable": "Disable",
       "Edit": "Edit effect",
       "Delete": "Delete effect",
-      "Empty": "No active effects."
+      "Create": "New Effect",
+      "DefaultName": "New Effect",
+      "Passive": "Passive",
+      "Transfers": "Transfers",
+      "Empty": "No active effects.",
+      "EmptyItem": "This item has no ActiveEffects. Click \"New Effect\" to add one."
     },
     "Skill": {
       "Survival": "Survival",

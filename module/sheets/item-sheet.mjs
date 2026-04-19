@@ -25,7 +25,11 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
-      clearMalfunction: GammaWorldItemSheet.#onClearMalfunction
+      clearMalfunction: GammaWorldItemSheet.#onClearMalfunction,
+      createItemAE: GammaWorldItemSheet.#onCreateItemAE,
+      toggleItemAE: GammaWorldItemSheet.#onToggleItemAE,
+      editItemAE:   GammaWorldItemSheet.#onEditItemAE,
+      deleteItemAE: GammaWorldItemSheet.#onDeleteItemAE
     }
   };
 
@@ -52,9 +56,14 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
       : (context.artifactSession ? "Active session" : "No active session");
 
     // Artifact tab is only meaningful for weapon/armor/gear. Mutations
-    // and other types hide the tab button entirely.
+    // and other types hide the tab button entirely. The Effects tab is
+    // available for every item type. Clamp the stored active-tab value
+    // to tabs that are actually rendered for this item type so clicking
+    // back after a reload doesn't land on a hidden panel.
     context.hasArtifactTab = ["weapon", "armor", "gear"].includes(item.type);
-    context.activeTab = context.hasArtifactTab ? this.#activeTab : "item";
+    const validTabs = new Set(["item", "effects"]);
+    if (context.hasArtifactTab) validTabs.add("artifact");
+    context.activeTab = validTabs.has(this.#activeTab) ? this.#activeTab : "item";
 
     // Phase 5: armor trait multi-select options. Exposed to every sheet
     // context for uniformity; only the armor template reads them.
@@ -96,6 +105,34 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     );
     context.enrichedDescription = await enrich(item.system.description?.value ?? "", { relativeTo: item });
 
+    // 0.8.4 Tier 5 — Effects tab on the item sheet. Flattens the item's
+    // embedded ActiveEffect collection into display rows the template
+    // iterates. Row UUIDs let the action handlers resolve effects via
+    // fromUuid regardless of which parent owns them.
+    context.effectsList = [...(item.effects ?? [])].map((effect) => {
+      const duration = effect.duration ?? {};
+      let durationLabel = "";
+      if (duration.rounds) durationLabel = `${duration.rounds} round${duration.rounds === 1 ? "" : "s"}`;
+      else if (duration.turns) durationLabel = `${duration.turns} turn${duration.turns === 1 ? "" : "s"}`;
+      else if (duration.seconds) durationLabel = `${Math.round(duration.seconds / 60)} min`;
+      const changes = Array.isArray(effect.changes) ? effect.changes : [];
+      const keys = changes.map((c) => c.key).filter(Boolean);
+      return {
+        uuid: effect.uuid,
+        id: effect.id,
+        name: effect.name ?? "Effect",
+        img: effect.img ?? "icons/svg/aura.svg",
+        disabled: !!effect.disabled,
+        transfer: !!effect.transfer,
+        durationLabel,
+        changesCount: changes.length,
+        changesSummary: keys.slice(0, 3).join(", ") + (keys.length > 3 ? "…" : "")
+      };
+    }).sort((a, b) => {
+      if (a.disabled !== b.disabled) return a.disabled ? 1 : -1;
+      return a.name.localeCompare(b.name);
+    });
+
     return context;
   }
 
@@ -134,6 +171,53 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
    * mishap bricks the item forever without a way to recover. This button
    * is the recovery path (for GM fiat / repair narrative beats).
    */
+  /* --- 0.8.4 Tier 5: item-level ActiveEffect CRUD -------------------- */
+
+  static async #onCreateItemAE(event, _target) {
+    event?.preventDefault?.();
+    const item = this.document;
+    if (!item) return;
+    const [effect] = await item.createEmbeddedDocuments("ActiveEffect", [{
+      name: game.i18n?.localize?.("GAMMA_WORLD.Effects.DefaultName") ?? "New Effect",
+      img: "icons/svg/aura.svg",
+      disabled: false,
+      transfer: true,
+      changes: []
+    }]);
+    effect?.sheet?.render?.(true);
+  }
+
+  static async #onToggleItemAE(event, target) {
+    event?.preventDefault?.();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    await effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onEditItemAE(event, target) {
+    event?.preventDefault?.();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    effect.sheet?.render?.(true);
+  }
+
+  static async #onDeleteItemAE(event, target) {
+    event?.preventDefault?.();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    if (typeof effect.deleteDialog === "function") {
+      await effect.deleteDialog();
+    } else {
+      await effect.delete();
+    }
+  }
+
   static async #onClearMalfunction(event, button) {
     event?.preventDefault?.();
     if (!game.user?.isGM) {

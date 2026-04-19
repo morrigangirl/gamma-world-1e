@@ -20,6 +20,13 @@
       <span>Artifact</span>
     </button>
     {{/if}}
+    <button type="button"
+            class="gw-item-form__tab-button{{#if (gwEq activeTab "effects")}} active{{/if}}"
+            data-tab="effects">
+      <i class="fa-solid fa-wand-sparkles"></i>
+      <span>{{localize "GAMMA_WORLD.Effects.Title"}}</span>
+      {{#if effectsList.length}}<span class="gw-item-form__tab-badge">{{effectsList.length}}</span>{{/if}}
+    </button>
   </nav>
 
   <div class="gw-item-form__body">
@@ -593,6 +600,58 @@
 
   </div>{{! /panel[artifact] }}
   {{/if}}{{! /hasArtifactTab }}
+
+  <div class="gw-item-form__panel{{#if (gwEq activeTab "effects")}} active{{/if}}" data-panel="effects">
+    <section class="gw-item-effects">
+      <header class="gw-item-effects__header">
+        <h3>{{localize "GAMMA_WORLD.Effects.Title"}}</h3>
+        <p class="gw-item-effects__hint">{{localize "GAMMA_WORLD.Effects.ItemHint"}}</p>
+        <button type="button" class="gw-item-effects__create" data-action="createItemAE">
+          <i class="fa-solid fa-plus" aria-hidden="true"></i>
+          <span>{{localize "GAMMA_WORLD.Effects.Create"}}</span>
+        </button>
+      </header>
+      {{#if effectsList.length}}
+        <ul class="gw-item-effects__list">
+          {{#each effectsList}}
+            <li class="gw-item-effects__row{{#if this.disabled}} is-disabled{{/if}}">
+              <img class="gw-item-effects__icon" src="{{this.img}}" alt="" />
+              <div class="gw-item-effects__body">
+                <div class="gw-item-effects__name">{{this.name}}</div>
+                <div class="gw-item-effects__meta">
+                  {{#if this.transfer}}{{localize "GAMMA_WORLD.Effects.Transfers"}} &middot; {{/if}}
+                  {{#if this.durationLabel}}{{this.durationLabel}}{{else}}{{localize "GAMMA_WORLD.Effects.Passive"}}{{/if}}
+                  {{#if this.changesCount}} &middot; {{this.changesCount}} {{localize "GAMMA_WORLD.Effects.ChangesLabel"}}{{/if}}
+                </div>
+                {{#if this.changesSummary}}
+                  <div class="gw-item-effects__changes">{{this.changesSummary}}</div>
+                {{/if}}
+              </div>
+              <div class="gw-item-effects__actions">
+                <button type="button" class="gw-item-effects__action"
+                        data-action="toggleItemAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{#if this.disabled}}{{localize 'GAMMA_WORLD.Effects.Enable'}}{{else}}{{localize 'GAMMA_WORLD.Effects.Disable'}}{{/if}}">
+                  <i class="fa-solid {{#if this.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="gw-item-effects__action"
+                        data-action="editItemAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{localize 'GAMMA_WORLD.Effects.Edit'}}">
+                  <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="gw-item-effects__action gw-item-effects__action--danger"
+                        data-action="deleteItemAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{localize 'GAMMA_WORLD.Effects.Delete'}}">
+                  <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gw-item-effects__empty">{{localize "GAMMA_WORLD.Effects.EmptyItem"}}</p>
+      {{/if}}
+    </section>
+  </div>{{! /panel[effects] }}
 
   </div>{{! /gw-item-form__body }}
 
