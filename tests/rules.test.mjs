@@ -2186,16 +2186,139 @@ test("0.8.4 Tier 1 — applyMutationEffects folds AE-style changes into derived"
       assert.equal(derived.damagePerDie, 3);
     }
 
-    // Non-pilot mutation is untouched by applyMutationEffects.
+    // Non-pilot mutation is untouched by applyMutationEffects. Heightened
+    // Constitution stays in the hardcoded switch because it scales from
+    // an attribute value (CN × 2 HP) — AE can't express that cleanly
+    // without CUSTOM mode.
     {
       const actor = {
-        items: [{ type: "mutation", name: "Heightened Intelligence",
+        items: [{ type: "mutation", name: "Heightened Constitution",
+          system: { activation: { mode: "passive", enabled: false } } }],
+        system: { attributes: { cn: { value: 12 } } }
+      };
+      const derived = { hpBonus: 0, poisonResistance: 10, radiationResistance: 10 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.hpBonus, 0,
+        "Non-pilot mutations should not be touched by applyMutationEffects");
+      assert.equal(derived.radiationResistance, 10);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.5 Tier 2 — DOWNGRADE, OVERRIDE-beats-ADD, and stacked surprise bonuses", async () => {
+  const { applyMutationEffects, AE_MIGRATED_MUTATIONS } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Tier 2 pilot set includes the 14 new mutations.
+    const newlyMigrated = [
+      "Double Physical Pain", "Multiple Damage", "Heightened Intelligence",
+      "Mental Defense Shield", "Heightened Precision", "Increased Speed",
+      "Mental Defenselessness", "Molecular Understanding", "Partial Carapace",
+      "Heightened Smell", "Heightened Vision", "Ultravision", "Infravision",
+      "Total Carapace"
+    ];
+    for (const name of newlyMigrated) {
+      assert.ok(AE_MIGRATED_MUTATIONS.has(name), `${name} must be in the Tier 2 pilot set`);
+    }
+
+    // DOWNGRADE — Partial Carapace caps descending-AC at 6 only when
+    // current is worse (higher). Already-better armor is preserved.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Partial Carapace",
           system: { activation: { mode: "passive", enabled: false } } }]
       };
-      const derived = { mentalResistance: 10 };
+      const derivedWorse  = { baseAc: 10 };
+      const derivedBetter = { baseAc: 4 };
+      applyMutationEffects(actor, derivedWorse);
+      applyMutationEffects(actor, derivedBetter);
+      assert.equal(derivedWorse.baseAc, 6,
+        "DOWNGRADE caps 10 at 6");
+      assert.equal(derivedBetter.baseAc, 4,
+        "DOWNGRADE leaves 4 alone (already better than 6)");
+    }
+
+    // OVERRIDE-beats-ADD via priority — Mental Defenselessness (priority
+    // 50, OVERRIDE 3) wins over Heightened Intelligence (priority 20,
+    // ADD +4) regardless of item order. Final mentalResistance = 3.
+    for (const order of [
+      ["Heightened Intelligence", "Mental Defenselessness"],
+      ["Mental Defenselessness", "Heightened Intelligence"] // reversed
+    ]) {
+      const actor = {
+        items: order.map((name) => ({ type: "mutation", name,
+          system: { activation: { mode: "passive", enabled: false } } }))
+      };
+      const derived = { mentalResistance: 3 };
       applyMutationEffects(actor, derived);
-      assert.equal(derived.mentalResistance, 10,
-        "Non-pilot mutations should not be touched by applyMutationEffects");
+      assert.equal(derived.mentalResistance, 3,
+        `priority 50 OVERRIDE 3 wins over priority 20 ADD +4 (item order: ${order.join(", ")})`);
+    }
+
+    // Stacked ADDs — Heightened Smell + Heightened Vision + Ultravision
+    // all each add +1 to surpriseModifier, summing to +3 on one actor.
+    {
+      const actor = {
+        items: [
+          { type: "mutation", name: "Heightened Smell",
+            system: { activation: { mode: "passive", enabled: false } } },
+          { type: "mutation", name: "Heightened Vision",
+            system: { activation: { mode: "passive", enabled: false } } },
+          { type: "mutation", name: "Ultravision",
+            system: { activation: { mode: "passive", enabled: false } } }
+        ]
+      };
+      const derived = { surpriseModifier: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.surpriseModifier, 3);
+    }
+
+    // Total Carapace bundle — three changes in one effect applied together.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Total Carapace",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = {
+        baseAc: 10,
+        damageReductionMultiplier: 1,
+        movementMultiplier: 1
+      };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.baseAc, 4);
+      assert.equal(derived.damageReductionMultiplier, 0.5);
+      assert.equal(derived.movementMultiplier, 0.75);
+    }
+
+    // Increased Speed stacks across two effect fields — MULTIPLY movement
+    // ×2 AND ADD extraAttacks +1.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Increased Speed",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { movementMultiplier: 1, extraAttacks: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.movementMultiplier, 2);
+      assert.equal(derived.extraAttacks, 1);
     }
   } finally {
     globalThis.foundry = originalFoundry;

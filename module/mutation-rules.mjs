@@ -29,6 +29,7 @@ const AE_MODE = Object.freeze({
  * their case branches, populate their `effects` in the rule table.
  */
 export const AE_MIGRATED_MUTATIONS = new Set([
+  // Tier 1 (0.8.4)
   "Heightened Strength",
   "Radar/Sonar",
   "Wings",
@@ -38,7 +39,24 @@ export const AE_MIGRATED_MUTATIONS = new Set([
   "Vision Defect",
   "Weight Decrease",
   "Intuition",
-  "Heightened Hearing"
+  "Heightened Hearing",
+  // Tier 2 (0.8.5) — fixed-value passives with no attribute scaling
+  // or enabled-gate; mental resistance tweaks rely on the existing
+  // 3-18 clamp in buildActorDerived to cap at 18 after the ADD fires.
+  "Double Physical Pain",
+  "Multiple Damage",
+  "Heightened Intelligence",
+  "Mental Defense Shield",
+  "Heightened Precision",
+  "Increased Speed",
+  "Mental Defenselessness",
+  "Molecular Understanding",
+  "Partial Carapace",
+  "Heightened Smell",
+  "Heightened Vision",
+  "Ultravision",
+  "Infravision",
+  "Total Carapace"
 ]);
 
 function randomChoice(choices, rng = Math.random) {
@@ -643,6 +661,130 @@ export const MUTATION_RULES = {
           { key: "gw.surpriseModifier",  mode: AE_MODE.ADD,      value: "2",    priority: 20 }
         ] }
     ]
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* 0.8.5 Tier 2 — AE pilot expansion                                  */
+  /*                                                                    */
+  /* Fourteen more passives. Every entry here has fixed numeric values  */
+  /* only — no attribute scaling, no enabled-gate, no variant branching.*/
+  /* Mental-resistance tweaks rely on the 3-18 clamp that still runs    */
+  /* in buildActorDerived AFTER applyMutationEffects, so the ADD +4     */
+  /* can't spill over 18.                                               */
+  /* ------------------------------------------------------------------ */
+
+  "Double Physical Pain": {
+    mode: "passive",
+    effects: [
+      { label: "Double Physical Pain — double damage taken",
+        changes: [{ key: "gw.damageTakenMultiplier", mode: AE_MODE.MULTIPLY, value: "2", priority: 20 }] }
+    ]
+  },
+  "Multiple Damage": {
+    mode: "passive",
+    effects: [
+      { label: "Multiple Damage — double damage taken",
+        changes: [{ key: "gw.damageTakenMultiplier", mode: AE_MODE.MULTIPLY, value: "2", priority: 20 }] }
+    ]
+  },
+  "Heightened Intelligence": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Intelligence — mental resistance",
+        // +4 to MR; the 3-18 clamp in buildActorDerived keeps it from
+        // exceeding 18 without needing a second DOWNGRADE effect here.
+        changes: [{ key: "gw.mentalResistance", mode: AE_MODE.ADD, value: "4", priority: 20 }] }
+    ]
+  },
+  "Mental Defense Shield": {
+    mode: "passive",
+    effects: [
+      { label: "Mental Defense Shield — mental resistance",
+        changes: [{ key: "gw.mentalResistance", mode: AE_MODE.ADD, value: "4", priority: 20 }] }
+    ]
+  },
+  "Heightened Precision": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Precision — extra damage dice",
+        changes: [{ key: "gw.weaponExtraDice", mode: AE_MODE.ADD, value: "2", priority: 20 }] }
+    ]
+  },
+  "Increased Speed": {
+    mode: "passive",
+    effects: [
+      { label: "Increased Speed — double move + extra attack",
+        changes: [
+          { key: "gw.movementMultiplier", mode: AE_MODE.MULTIPLY, value: "2", priority: 20 },
+          { key: "gw.extraAttacks",       mode: AE_MODE.ADD,      value: "1", priority: 20 }
+        ] }
+    ]
+  },
+  "Mental Defenselessness": {
+    mode: "passive",
+    effects: [
+      { label: "Mental Defenselessness — MR floored at 3",
+        // OVERRIDE at higher priority than the Heightened Intelligence /
+        // Mental Defense Shield ADDs so this wins if the character has
+        // both mutations. 3-18 clamp enforces the floor anyway.
+        changes: [{ key: "gw.mentalResistance", mode: AE_MODE.OVERRIDE, value: "3", priority: 50 }] }
+    ]
+  },
+  "Molecular Understanding": {
+    mode: "passive",
+    effects: [
+      { label: "Molecular Understanding — extra damage die",
+        changes: [{ key: "gw.weaponExtraDice", mode: AE_MODE.ADD, value: "1", priority: 20 }] }
+    ]
+  },
+  "Partial Carapace": {
+    mode: "passive",
+    effects: [
+      { label: "Partial Carapace — AC cap",
+        // Descending-AC: DOWNGRADE sets to min(current, 6). If the
+        // character's baseAc is already below 6 (better natural armor)
+        // the DOWNGRADE leaves it alone.
+        changes: [{ key: "gw.baseAc", mode: AE_MODE.DOWNGRADE, value: "6", priority: 20 }] }
+    ]
+  },
+  "Heightened Smell": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Smell — surprise modifier",
+        changes: [{ key: "gw.surpriseModifier", mode: AE_MODE.ADD, value: "1", priority: 20 }] }
+    ]
+  },
+  "Heightened Vision": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Vision — surprise modifier",
+        changes: [{ key: "gw.surpriseModifier", mode: AE_MODE.ADD, value: "1", priority: 20 }] }
+    ]
+  },
+  "Ultravision": {
+    mode: "passive",
+    effects: [
+      { label: "Ultravision — surprise modifier",
+        changes: [{ key: "gw.surpriseModifier", mode: AE_MODE.ADD, value: "1", priority: 20 }] }
+    ]
+  },
+  "Infravision": {
+    mode: "passive",
+    effects: [
+      { label: "Infravision — surprise modifier",
+        changes: [{ key: "gw.surpriseModifier", mode: AE_MODE.ADD, value: "1", priority: 20 }] }
+    ]
+  },
+  "Total Carapace": {
+    mode: "passive",
+    effects: [
+      { label: "Total Carapace — heavy armor bundle",
+        changes: [
+          { key: "gw.baseAc",                    mode: AE_MODE.DOWNGRADE, value: "4",    priority: 20 },
+          { key: "gw.damageReductionMultiplier", mode: AE_MODE.MULTIPLY,  value: "0.5",  priority: 20 },
+          { key: "gw.movementMultiplier",        mode: AE_MODE.MULTIPLY,  value: "0.75", priority: 20 }
+        ] }
+    ]
   }
 };
 
@@ -878,7 +1020,14 @@ export function enrichMutationSystemData(item) {
  * that work here. Future tiers will expand the supported targets.
  */
 export function applyMutationEffects(actor, derived) {
+  // Collect every change across every enabled mutation, then sort by
+  // priority ascending (Foundry's convention). Priority lets high-
+  // priority OVERRIDEs (Mental Defenselessness → MR 3, priority 50)
+  // win over low-priority ADDs (Heightened Intelligence → MR +4,
+  // priority 20) regardless of the order the mutation items appear in
+  // the actor's inventory.
   const mutations = actor.items.filter((item) => item.type === "mutation");
+  const collected = [];
   for (const item of mutations) {
     if (!mutationIsEnabled(item)) continue;
     const rule = getMutationRule(item);
@@ -886,9 +1035,15 @@ export function applyMutationEffects(actor, derived) {
     if (!Array.isArray(effects) || !effects.length) continue;
     for (const effect of effects) {
       const changes = Array.isArray(effect?.changes) ? effect.changes : [];
-      for (const change of changes) applyEffectChange(derived, change);
+      for (const change of changes) collected.push(change);
     }
   }
+  collected.sort((a, b) => {
+    const pa = Number.isFinite(Number(a?.priority)) ? Number(a.priority) : 20;
+    const pb = Number.isFinite(Number(b?.priority)) ? Number(b.priority) : 20;
+    return pa - pb;
+  });
+  for (const change of collected) applyEffectChange(derived, change);
 }
 
 function applyEffectChange(derived, change) {
@@ -951,11 +1106,12 @@ export function applyMutationModifiers(actor, derived) {
     const name = item.name;
     const variant = item.system.reference?.variant ?? "";
 
+    // Tier 1 (0.8.4) + Tier 2 (0.8.5) — mutations in AE_MIGRATED_MUTATIONS
+    // are handled by applyMutationEffects via declarative rule data.
+    // Three no-op cases (Heightened Brain Talent, Heightened Touch,
+    // No Sensory Nerve Endings) were also removed — they had empty
+    // bodies, pure namesake passives with no numeric effect.
     switch (name) {
-      case "Double Physical Pain":
-      case "Multiple Damage":
-        derived.damageTakenMultiplier *= 2;
-        break;
       case "Genius Capability":
         if (variant === "military") {
           derived.toHitBonus += 4;
@@ -972,27 +1128,6 @@ export function applyMutationModifiers(actor, derived) {
       case "Heightened Dexterity":
         if (!encumbered) derived.baseAc = Math.min(derived.baseAc, 4);
         break;
-      case "Heightened Intelligence":
-      case "Mental Defense Shield":
-        derived.mentalResistance = Math.min(18, derived.mentalResistance + 4);
-        break;
-      case "Heightened Brain Talent":
-        break;
-      case "Heightened Precision":
-        derived.weaponExtraDice += 2;
-        break;
-      case "Heightened Strength":
-        derived.conventionalWeaponExtraDice += 3;
-        break;
-      case "Increased Speed":
-        derived.movementMultiplier *= 2;
-        derived.extraAttacks += 1;
-        break;
-      case "Intuition":
-        derived.toHitBonus += 1;
-        derived.damagePerDie += 3;
-        derived.cannotBeSurprised = true;
-        break;
       case "Mental Control Over Physical State":
         if (enabled) {
           derived.toHitBonus += Math.max(0, combatBonusFromDexterity(actor.system.attributes.dx.value));
@@ -1000,57 +1135,8 @@ export function applyMutationModifiers(actor, derived) {
           derived.movementMultiplier *= 2;
         }
         break;
-      case "Mental Defenselessness":
-        derived.mentalResistance = 3;
-        break;
-      case "Molecular Understanding":
-        derived.weaponExtraDice += 1;
-        break;
-      case "Partial Carapace":
-        derived.baseAc = Math.min(derived.baseAc, 6);
-        break;
-      case "Heightened Hearing":
-        derived.cannotBeSurprised = true;
-        derived.surpriseModifier += 2;
-        break;
-      case "Heightened Smell":
-      case "Heightened Vision":
-      case "Ultravision":
-      case "Infravision":
-        derived.surpriseModifier += 1;
-        break;
-      case "Heightened Touch":
-      case "No Sensory Nerve Endings":
-        break;
-      case "Radar/Sonar":
-        derived.closeRangeToHitBonus += 2;
-        break;
-      case "Shorter":
-        derived.ac = Math.max(1, derived.ac - 1);
-        derived.damageReductionMultiplier *= 0.75;
-        break;
-      case "Taller":
-        derived.damageFlat += 2;
-        derived.toHitBonus -= 1;
-        break;
-      case "Fat Cell Accumulation":
-        derived.movementMultiplier *= 0.75;
-        derived.toHitBonus -= 1;
-        break;
       case "Telekinetic Flight":
         if (enabled) derived.flightSpeed = Math.max(derived.flightSpeed, 200);
-        break;
-      case "Total Carapace":
-        derived.baseAc = Math.min(derived.baseAc, 4);
-        derived.damageReductionMultiplier *= 0.5;
-        derived.movementMultiplier *= 0.75;
-        break;
-      case "Vision Defect":
-        derived.toHitBonus -= 4;
-        break;
-      case "Weight Decrease":
-        derived.movementMultiplier *= 0.75;
-        derived.damageFlat -= 1;
         break;
       case "Will Force":
         if (enabled) {

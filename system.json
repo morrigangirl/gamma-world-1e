@@ -2,7 +2,7 @@
   "id": "gamma-world-1e",
   "title": "Gamma World 1st Edition",
   "description": "A Foundry VTT v13 game system for Gamma World 1st Edition with chargen, combat, mutations, artifacts, robots, encounter automation, and bundled compendia for gear, sample actors, monsters, cryptic alliances, robot chassis, roll tables, and system docs.",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
