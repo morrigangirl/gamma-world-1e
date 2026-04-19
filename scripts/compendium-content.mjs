@@ -19,7 +19,12 @@ import {
 } from "../module/tables/combat-matrix.mjs";
 import { POISON_MATRIX, RADIATION_MATRIX } from "../module/tables/resistance-tables.mjs";
 import { enrichEquipmentSystemData } from "../module/equipment-rules.mjs";
-import { createPrototypeTokenSource, defaultPrototypeTokenOptions } from "../module/token-defaults.mjs";
+import {
+  createPrototypeTokenSource,
+  defaultPrototypeTokenOptions,
+  monsterPortraitPath,
+  monsterTokenPath
+} from "../module/token-defaults.mjs";
 import { monsterPackSources } from "./monster-content.mjs";
 
 function htmlParagraphs(...parts) {
@@ -1771,6 +1776,17 @@ const ROBOT_CHASSIS_CATALOG = [
     notes: "Immobile cognitive engine. Answers questions, solves puzzles, occasionally asks for something in trade." }
 ];
 
+function robotChassisProse(entry) {
+  return htmlParagraphs(
+    `<strong>Power Source:</strong> ${entry.power}.`,
+    `<strong>Armor Class:</strong> ${entry.ac}. <strong>Hit Points:</strong> ${entry.hp}.`,
+    `<strong>Armament:</strong> ${entry.armament}.`,
+    `<strong>Sensors:</strong> ${entry.sensors}.`,
+    `<strong>Controls:</strong> ${entry.controls}.`,
+    entry.notes
+  );
+}
+
 function robotChassisJournalEntry(entry) {
   return {
     name: entry.name,
@@ -1780,14 +1796,7 @@ function robotChassisJournalEntry(entry) {
         type: "text",
         text: {
           format: 1,
-          content: htmlParagraphs(
-            `<strong>Power Source:</strong> ${entry.power}.`,
-            `<strong>Armor Class:</strong> ${entry.ac}. <strong>Hit Points:</strong> ${entry.hp}.`,
-            `<strong>Armament:</strong> ${entry.armament}.`,
-            `<strong>Sensors:</strong> ${entry.sensors}.`,
-            `<strong>Controls:</strong> ${entry.controls}.`,
-            entry.notes
-          )
+          content: robotChassisProse(entry)
         }
       }
     ]
@@ -1797,6 +1806,177 @@ function robotChassisJournalEntry(entry) {
 export function robotChassisPackSources() {
   return ROBOT_CHASSIS_CATALOG.map(robotChassisJournalEntry);
 }
+
+/**
+ * Best-effort parse of a ROBOT_CHASSIS_CATALOG `armament` string into a
+ * weapon item. The 1e prose (e.g. "Laser pistol (3d6, 30/60/120m)") is
+ * regular enough to pull out a damage formula and attack-type flag with
+ * simple regexes; everything else becomes the weapon's description so
+ * the GM can fine-tune. Returns `null` for the literal "None".
+ */
+function parseRobotArmamentToWeapon(armament) {
+  if (!armament || armament.trim().toLowerCase() === "none") return null;
+
+  const damageMatch = armament.match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/);
+  const damage = damageMatch ? damageMatch[1].replace(/\s+/g, "") : "1d6";
+
+  const rangeMatch = armament.match(/(\d+)\s*\/\s*(\d+)\s*\/\s*(\d+)\s*m/);
+  const shortRange = rangeMatch ? Number(rangeMatch[1]) : 0;
+  const mediumRange = rangeMatch ? Number(rangeMatch[2]) : 0;
+  const longRange = rangeMatch ? Number(rangeMatch[3]) : 0;
+
+  // Take everything up to the first "(" as the weapon name; strip trailing
+  // commas/spaces. Fallback to the whole armament if there's no "(".
+  const rawName = armament.split("(")[0].trim().replace(/,\s*$/, "");
+  const name = rawName || armament.slice(0, 32);
+
+  // Energy weapons broadcast their "beam" nature in the name. Anything with
+  // "laser"/"blaster"/"ray"/"fusion"/"stun field" uses the energy bucket so
+  // armor class / resistance trait lookups fire on hit.
+  const isEnergy = /laser|blaster|ray\b|fusion|stun field|ray gun/i.test(armament);
+
+  return {
+    name,
+    type: "weapon",
+    img: "icons/svg/sword.svg",
+    flags: { [SYSTEM_ID]: { naturalWeapon: true } },
+    system: {
+      weaponClass: 10,
+      category: "artifact",
+      ammoType: [],
+      damage: { formula: damage, type: isEnergy ? "energy" : "physical" },
+      range: { short: shortRange, medium: mediumRange, long: longRange },
+      attackType: isEnergy ? "energy" : (shortRange > 0 ? "ranged" : "melee"),
+      rof: 1,
+      ammo: { current: 0, max: 0, consumes: false },
+      effect: { mode: "damage", formula: "", status: "", notes: "" },
+      traits: {
+        tag: "",
+        deflectAc2Hits: 0,
+        deflectAc1Hits: 0,
+        bypassesForceField: false,
+        requiresNoForceField: false,
+        nonlethal: false
+      },
+      quantity: 1,
+      weight: 0,
+      equipped: true,
+      description: { value: `<p>${armament}</p>` }
+    }
+  };
+}
+
+/**
+ * 0.8.1: produce a monster-Actor source record for each robotic unit. The
+ * JournalEntry pack still holds the prose reference, but GMs can now drag
+ * any of the 18 chassis directly onto the canvas as a token.
+ *
+ * Ability scores default to 10 across the board per owner preference
+ * ("GM tunes per-encounter"); HP / AC come from the catalog; the bio
+ * tab reproduces the journal prose; a best-effort parse of the armament
+ * string emits an embedded weapon the GM can fire straight out of the
+ * sheet.
+ */
+function robotMonsterSource(entry) {
+  const hp = Math.max(1, Number(entry.hp) || 1);
+  const level = Math.max(1, Math.ceil(hp / 6));
+  const flatStats = { ms: 10, in: 10, dx: 10, ch: 10, cn: 10, ps: 10 };
+  const biographyHtml = robotChassisProse(entry);
+  const speaksCommon = /voice/i.test(entry.controls);
+  const independent = /independent/i.test(entry.controls);
+
+  const weapon = parseRobotArmamentToWeapon(entry.armament);
+  const items = weapon ? [weapon] : [];
+
+  const source = {
+    name: entry.name,
+    type: "monster",
+    img: monsterPortraitPath(entry.name),
+    prototypeToken: createPrototypeTokenSource(defaultPrototypeTokenOptions(
+      { name: entry.name, type: "monster", img: monsterPortraitPath(entry.name) },
+      { textureSrc: monsterTokenPath(entry.name) }
+    )),
+    system: {
+      details: {
+        type: "robot",
+        animalForm: "",
+        level,
+        xp: 0,
+        movement: 60,
+        alliance: "created",
+        role: "robotic unit",
+        speech: speaksCommon ? "common, machine codes" : "machine codes",
+        creatureClass: entry.name
+      },
+      attributes: Object.fromEntries(
+        Object.entries(flatStats).map(([k, v]) => [k, { value: v, mod: 0, save: 0 }])
+      ),
+      combat: {
+        baseAc: entry.ac,
+        naturalAttack: {
+          name: "Servo Strike",
+          damage: "1d6"
+        }
+      },
+      resources: {
+        hp: { base: hp, value: hp, max: hp, formula: "" },
+        ac: entry.ac,
+        mentalResistance: 10,
+        radResistance: 10,
+        poisonResistance: 10
+      },
+      biography: {
+        value: biographyHtml,
+        appearance: "",
+        notes: ""
+      },
+      social: {
+        languages: speaksCommon ? "Common, machine codes" : "Machine codes",
+        literacy: "",
+        relatives: "",
+        homeRegion: "",
+        reputation: 0
+      },
+      encounter: {
+        reactionModifier: 0,
+        surpriseModifier: 0,
+        morale: 0,
+        intelligence: independent ? "high" : "auto",
+        cannotBeSurprised: false
+      },
+      robotics: {
+        isRobot: true,
+        mode: "programmed",
+        chassis: entry.name,
+        identifier: "",
+        controller: "",
+        powerSource: entry.power,
+        powerCurrent: 0,
+        powerMax: 0,
+        broadcastCapable: /broadcast/i.test(entry.controls),
+        backupHours: 0,
+        repairDifficulty: 0,
+        malfunction: ""
+      },
+      chargen: {
+        rolled: true,
+        statMethod: "manual",
+        mutationMethod: "random",
+        mutationsRolled: false
+      }
+    },
+    items
+  };
+
+  return source;
+}
+
+export function robotMonsterSources() {
+  return ROBOT_CHASSIS_CATALOG.map(robotMonsterSource);
+}
+
+// Exported so the rules test suite can exercise the parse + shape.
+export { robotMonsterSource, parseRobotArmamentToWeapon };
 
 /* ------------------------------------------------------------------ */
 /* Roll tables                                                        */

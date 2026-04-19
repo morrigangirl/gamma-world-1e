@@ -49,6 +49,7 @@ import {
   rollTablePackSources,
   crypticAlliancePackSources,
   robotChassisPackSources,
+  robotMonsterSources,
   journalPackSources
 } from "./compendium-content.mjs";
 import { monsterPackSources } from "./monster-content.mjs";
@@ -178,7 +179,10 @@ const ALL_PACK_SPECS = [
   { name: "mutations",         type: "Item",         load: () => mutationPackSources() },
   { name: "equipment",         type: "Item",         load: () => equipmentPackSources() },
   { name: "sample-actors",     type: "Actor",        load: () => actorPackSources() },
-  { name: "monsters",          type: "Actor",        load: () => monsterPackSources() },
+  // 0.8.1: robotic chassis get Actor records in the monsters pack so
+  // GMs can drop them as tokens. The robot-chassis JournalEntry pack
+  // below is still authored for lore reference.
+  { name: "monsters",          type: "Actor",        load: () => [...monsterPackSources(), ...robotMonsterSources()] },
   { name: "encounter-tables",  type: "RollTable",    load: () => encounterTableSources() },
   { name: "roll-tables",       type: "RollTable",    load: () => rollTablePackSources() },
   { name: "cryptic-alliances", type: "JournalEntry", load: () => crypticAlliancePackSources() },

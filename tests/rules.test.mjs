@@ -1605,3 +1605,62 @@ test("Phase 0.8.1 — WEAPON_RENAMES_081 + Needler constants are well-formed", a
   assert.equal(legacyAmmoTypeString(""),                               "");
 });
 
+test("Phase 0.8.1 — robot monster sources shape match the catalog", async () => {
+  const { robotMonsterSources, parseRobotArmamentToWeapon } =
+    await import("../scripts/compendium-content.mjs");
+
+  const robots = robotMonsterSources();
+  assert.equal(robots.length, 18, "expected 18 robot chassis Actor records");
+
+  for (const robot of robots) {
+    assert.equal(robot.type, "monster", `${robot.name} should be a monster actor`);
+    assert.ok(robot.name && typeof robot.name === "string");
+    assert.ok(robot.system, `${robot.name} needs a system block`);
+
+    // Owner preference: all robots default to ability 10 across the board.
+    for (const key of ["ms", "in", "dx", "ch", "cn", "ps"]) {
+      assert.equal(robot.system.attributes[key].value, 10,
+        `${robot.name} ${key} should default to 10 (GM tunes per-encounter)`);
+    }
+
+    // Robotics metadata set.
+    assert.equal(robot.system.robotics.isRobot, true);
+    assert.equal(robot.system.robotics.mode, "programmed");
+    assert.ok(robot.system.robotics.chassis);
+    assert.ok(robot.system.robotics.powerSource);
+
+    // HP and AC passed through from the catalog.
+    const hp = robot.system.resources.hp.max;
+    assert.ok(hp > 0, `${robot.name} HP should be > 0`);
+    assert.ok(robot.system.combat.baseAc > 0, `${robot.name} baseAc should be > 0`);
+
+    // Biography includes the journal prose (Power Source line is a good canary).
+    assert.ok(robot.system.biography.value.includes("Power Source"),
+      `${robot.name} biography should quote the catalog prose`);
+  }
+
+  // Armament parsing: "None" returns null, real strings return weapon items.
+  assert.equal(parseRobotArmamentToWeapon("None"), null);
+  assert.equal(parseRobotArmamentToWeapon(""), null);
+  assert.equal(parseRobotArmamentToWeapon(undefined), null);
+
+  const laser = parseRobotArmamentToWeapon("Laser pistol (3d6, 30/60/120m)");
+  assert.equal(laser.name, "Laser pistol");
+  assert.equal(laser.system.damage.formula, "3d6");
+  assert.equal(laser.system.damage.type, "energy");
+  assert.equal(laser.system.attackType, "energy");
+  assert.equal(laser.system.range.short, 30);
+  assert.equal(laser.system.range.medium, 60);
+  assert.equal(laser.system.range.long, 120);
+
+  const minigun = parseRobotArmamentToWeapon("Defensive minigun (2d6, 40m)");
+  assert.equal(minigun.system.damage.formula, "2d6");
+  assert.equal(minigun.system.damage.type, "physical");
+  // Single-range format yields zero bands; GM tunes if they care.
+
+  // Unknown damage string defaults to 1d6 with physical attack type.
+  const fallback = parseRobotArmamentToWeapon("Some odd mystery gadget");
+  assert.equal(fallback.system.damage.formula, "1d6");
+  assert.equal(fallback.system.attackType, "melee");
+});
+
