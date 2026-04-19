@@ -433,6 +433,40 @@ export const MUTATION_RULES = {
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Blend into the environment; treat the mutant as invisible until revealed." },
     action: "toggle"
+  },
+
+  // 0.8.4 quick-win gap fixes (ported from the audit report).
+  // Two plant mutations with clear damage formulas route to the
+  // existing damage / life-leech handlers; two sensory-bump plant
+  // mutations that were inferred as "guided" become explicit passives
+  // so they don't show up as activated abilities at all.
+  "Carnivorous Jaws": {
+    mode: "action",
+    range: "2 m",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "2d6", saveType: "", notes: "Hinged jaws close around a target within 2m for 2d6 bite damage." },
+    action: "damage"
+  },
+  "Sucker Vines": {
+    mode: "action",
+    range: "Melee",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d4", saveType: "", notes: "Vines drain 1d4 HP from each gripped victim; the plant heals by the same amount." },
+    action: "life-leech"
+  },
+  "Color Sensitivity": {
+    // Summary text is mechanically a +4 stealth/observation bump — a
+    // passive trait, not an activated ability. Flipping to passive
+    // removes it from the audit's "active effect but no automation"
+    // list; GMs apply the +4 narratively when the player is hiding
+    // or looking for something specific.
+    mode: "passive"
+  },
+  "Increased Senses": {
+    // Same shape as Color Sensitivity: a +4 detection bump.
+    mode: "passive"
   }
 };
 

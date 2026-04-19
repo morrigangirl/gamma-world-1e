@@ -501,29 +501,40 @@ async function handleDensityControlOthers(actor, item) {
 async function handleLifeLeech(actor, item) {
   const targets = currentTargetActors();
   if (!targets.length) {
-    ui.notifications?.warn("Target at least one creature for Life Leech.");
+    ui.notifications?.warn(`Target at least one creature for ${item.name}.`);
     return false;
   }
 
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
-  const amount = 6;
-  // Emit a GM-gated damage card for each target. Damage is not auto-applied.
+
+  // 0.8.4: formula comes from the mutation rule. RAW Life Leech is a
+  // flat 6 HP drain; Sucker Vines is 1d4. Both share this handler —
+  // the roll is evaluated once per target, and the user heals by the
+  // per-target total (so a 1d4 drain against three targets heals the
+  // user by the sum of three separate 1d4 rolls).
+  const formula = item.system.effect?.formula?.trim?.() || "6";
+  let totalDrained = 0;
   for (const target of targets) {
+    const roll = await new Roll(formula).evaluate();
+    const drained = Math.max(0, Math.round(Number(roll.total) || 0));
+    totalDrained += drained;
     await rollScaledDamageCard({
       actor,
       sourceName: `${item.name} (vs ${target.name})`,
-      baseFormula: String(amount),
+      baseFormula: String(drained),
       targetUuid: target.uuid,
       damageType: "life-leech",
-      notes: "Life Leech drains HP; on Apply, the user heals by the same amount."
+      notes: `${item.name} drains ${drained} HP (${formula}); on Apply, the user heals by the same amount.`
     });
   }
-  // Self-heal is a personal-action outcome of activating the mutation and remains direct.
-  await actor.heal(amount * targets.length);
+  // Self-heal is the personal-action outcome of activating the mutation
+  // — applied directly rather than through a card so the user doesn't
+  // need to click their own Apply button.
+  if (totalDrained > 0) await actor.heal(totalDrained);
   await postMutationMessage(
     actor,
     item,
-    `<p>${actor.name} drains ${amount} hit points from each targeted creature and heals ${amount * targets.length} HP (referee applies the target damage via the chat cards).</p>`
+    `<p>${actor.name} drains HP from each targeted creature (${formula} per target) and heals ${totalDrained} HP (referee applies the target damage via the chat cards).</p>`
   );
   return true;
 }
