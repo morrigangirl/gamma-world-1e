@@ -296,6 +296,19 @@ export function registerMigrationSettings() {
   registerSoundCue("soundCueConditionApplied",
     "GAMMA_WORLD.Settings.SoundCueConditionApplied.Name",
     "GAMMA_WORLD.Settings.SoundCueConditionApplied.Hint");
+
+  // 0.8.3 — Cinematic Roll Request cues. Intro fires when a banner
+  // opens; success / failure fire at the outro phase based on the
+  // aggregate result.
+  registerSoundCue("soundCueCinematicIntro",
+    "GAMMA_WORLD.Settings.SoundCueCinematicIntro.Name",
+    "GAMMA_WORLD.Settings.SoundCueCinematicIntro.Hint");
+  registerSoundCue("soundCueCinematicSuccess",
+    "GAMMA_WORLD.Settings.SoundCueCinematicSuccess.Name",
+    "GAMMA_WORLD.Settings.SoundCueCinematicSuccess.Hint");
+  registerSoundCue("soundCueCinematicFailure",
+    "GAMMA_WORLD.Settings.SoundCueCinematicFailure.Name",
+    "GAMMA_WORLD.Settings.SoundCueCinematicFailure.Hint");
 }
 
 function mutationUpdateData(item) {

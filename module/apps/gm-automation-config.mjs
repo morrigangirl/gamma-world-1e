@@ -83,7 +83,10 @@ const SECTIONS = [
       "soundCueDamageApplied",
       "soundCueSaveSuccess",
       "soundCueSaveFail",
-      "soundCueConditionApplied"
+      "soundCueConditionApplied",
+      "soundCueCinematicIntro",
+      "soundCueCinematicSuccess",
+      "soundCueCinematicFailure"
     ]
   }
 ];

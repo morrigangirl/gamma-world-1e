@@ -142,7 +142,10 @@
       "SoundCueDamageApplied":    { "Name": "Cue — damage applied",     "Hint": "Played when non-zero damage lands on a target after the apply flow." },
       "SoundCueSaveSuccess":      { "Name": "Cue — save succeeded",     "Hint": "Played when any save roll succeeds." },
       "SoundCueSaveFail":         { "Name": "Cue — save failed",        "Hint": "Played when any save roll fails." },
-      "SoundCueConditionApplied": { "Name": "Cue — condition applied",  "Hint": "Played when a timed condition is applied to an actor (paralysis, poison, stun, blind, etc.)." }
+      "SoundCueConditionApplied": { "Name": "Cue — condition applied",  "Hint": "Played when a timed condition is applied to an actor (paralysis, poison, stun, blind, etc.)." },
+      "SoundCueCinematicIntro":   { "Name": "Cue — cinematic intro",    "Hint": "Played when a Cinematic Roll Request banner opens on every client." },
+      "SoundCueCinematicSuccess": { "Name": "Cue — cinematic success",  "Hint": "Played at the outro phase when the aggregate cinematic result is a success." },
+      "SoundCueCinematicFailure": { "Name": "Cue — cinematic failure",  "Hint": "Played at the outro phase when the aggregate cinematic result is a failure or mixed." }
     },
     "Sheet": {
       "Character": "Character Sheet",
