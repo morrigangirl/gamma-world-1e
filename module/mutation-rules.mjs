@@ -136,8 +136,8 @@ export const MUTATION_RULES = {
     range: "30 m",
     duration: "One combat",
     usage: { limited: true, per: "week", uses: 1, max: 1 },
-    effect: { formula: "", saveType: "mental", notes: "Successful mental attack strips away a target's greatest mutation first." },
-    action: "note"
+    effect: { formula: "", saveType: "mental", notes: "On a failed mental save, strip the target's greatest mutation (GM picks which) for the rest of this combat." },
+    action: "mental-save"
   },
   "Density Control": {
     mode: "action",
@@ -168,8 +168,8 @@ export const MUTATION_RULES = {
     range: "30 m",
     duration: "Concentration",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
-    effect: { formula: "", saveType: "mental", notes: "Treat non-intelligent creatures as MR 12 when forcing emotions." },
-    action: "note"
+    effect: { formula: "", saveType: "mental", notes: "On a failed mental save, the target feels the emotion the user projects (treat non-intelligent creatures as MR 12)." },
+    action: "mental-save"
   },
   "Force Field Generation": {
     mode: "toggle",
@@ -233,8 +233,8 @@ export const MUTATION_RULES = {
     range: "100 m",
     duration: "25 rounds",
     usage: { limited: true, per: "day", uses: 1, max: 1 },
-    effect: { formula: "", saveType: "mental", notes: "Ferrous objects resist as MR 12." },
-    action: "note"
+    effect: { formula: "", saveType: "mental", notes: "On a failed mental save (ferrous objects resist as MR 12), the target is controlled for up to 25 rounds." },
+    action: "mental-save"
   },
   "Mental Blast": {
     mode: "action",
@@ -359,8 +359,8 @@ export const MUTATION_RULES = {
     range: "15 m",
     duration: "5 rounds on, 5 rounds off",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
-    effect: { formula: "", saveType: "mental", notes: "Living targets resist as mental attacks." },
-    action: "note"
+    effect: { formula: "", saveType: "mental", notes: "On a failed mental save, a living target can be lifted / moved (same weight the user can normally lift) for 5 rounds on, 5 rounds off. Inert objects auto-fail the save." },
+    action: "mental-save"
   },
   "Telekinetic Arm": {
     mode: "action",

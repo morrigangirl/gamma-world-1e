@@ -627,6 +627,48 @@ async function handleNote(actor, item) {
   return true;
 }
 
+/**
+ * 0.8.4 — "mental-save" handler.
+ *
+ * Fires a mental save against the primary target and posts the outcome
+ * as a chat card. No damage, no built-in effect application — the GM
+ * narrates the consequence based on the mutation's own rules text.
+ * Used by mutations that RAW-declare a mental save requirement but
+ * whose effect is bespoke enough that an automation handler would
+ * over-fit (Empathy, Magnetic Control, Telekinesis vs a living target,
+ * De-Evolution).
+ *
+ * The mechanical value here is that the d20 actually rolls and the
+ * save's matrix target gets consulted — previously these mutations
+ * posted chat-flavor only, and the save roll had to happen off-sheet.
+ */
+async function handleMentalSave(actor, item) {
+  const target = primaryTarget();
+  if (!target?.actor) {
+    ui.notifications?.warn(`Target a token before using ${item.name}.`);
+    return false;
+  }
+
+  await commitMutationUse(item, { consumeUse: true, setCooldown: true });
+  const save = await requestSaveResolution(target.actor, "mental", {
+    sourceName: item.name,
+    intensity: actor.gw?.mentalAttackStrength ?? actor.system.attributes.ms.value,
+    inputLocked: true
+  });
+  if (save?.status !== "resolved") return false;
+
+  const verdict = save.success ? "resisted" : "failed";
+  const effectText = item.system.effect?.notes || describeMutation(item);
+  await postMutationMessage(
+    actor,
+    item,
+    `<p>${target.actor.name} <strong>${verdict}</strong> the mental save vs ${item.name}.</p>
+     <p>${effectText}</p>
+     <p class="gw-card-meta">Referee adjudicates the on-hit effect based on the mutation's narrative.</p>`
+  );
+  return true;
+}
+
 async function handleGuided(actor, item) {
   const setup = await promptGuidedMutation(item);
   if (!setup) return false;
@@ -707,6 +749,8 @@ export async function useMutation(actor, item) {
       return handleFullHeal(actor, item);
     case "mental-control":
       return handleMentalControl(actor, item);
+    case "mental-save":
+      return handleMentalSave(actor, item);
     case "guided":
       return handleGuided(actor, item);
     case "note":
