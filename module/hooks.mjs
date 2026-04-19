@@ -1,7 +1,9 @@
 import { SYSTEM_ID } from "./config.mjs";
 import {
+  applyCatastrophicRadiation,
   applyDamageToTargets,
   applyHealingToTargets,
+  applyRadiationSickness,
   resolveHazardDamage,
   resolveHazardLethal,
   resolveHazardMutation,
@@ -25,6 +27,8 @@ const GM_ONLY_CHAT_ACTIONS = new Set([
   "gw-hazard-damage",
   "gw-hazard-lethal",
   "gw-hazard-mutation",
+  "gw-hazard-rad-sickness",
+  "gw-hazard-rad-catastrophic",
   "gw-aoe-resolve-all",
   "gw-undo"
 ]);
@@ -295,6 +299,23 @@ function onRenderChatMessage(message, html) {
       event.preventDefault();
       if (!flags.hazard) return;
       await resolveHazardMutation(flags.hazard);
+    });
+  });
+
+  html.querySelectorAll('[data-action="gw-hazard-rad-sickness"]').forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      if (!flags.hazard) return;
+      const severity = button.dataset.severity === "severe" ? "severe" : "mild";
+      await applyRadiationSickness(flags.hazard, severity);
+    });
+  });
+
+  html.querySelectorAll('[data-action="gw-hazard-rad-catastrophic"]').forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      if (!flags.hazard) return;
+      await applyCatastrophicRadiation(flags.hazard);
     });
   });
 

@@ -1621,7 +1621,13 @@ async function rollMentalSave(actor) {
 }
 
 export async function resolveHazardCard(actor, type, intensity, { sourceName = "" } = {}) {
-  const normalizedIntensity = clampSaveScore(intensity ?? 10);
+  // Intensity is no longer clamped to 3-18 for hazard saves — a radiation
+  // intensity of 2 or 22 should pass through so the new "below 10 =
+  // no effect" / "catastrophic ≥ 7 margin" rules read the raw number.
+  const rawIntensity = Math.max(0, Math.round(Number(intensity ?? 10) || 0));
+  const normalizedIntensity = type === "mental"
+    ? clampSaveScore(rawIntensity)
+    : rawIntensity;
   const context = saveContextForActor(actor, type);
   let evaluation;
   const saveRolls = [];
@@ -1629,25 +1635,30 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
   if ((type !== "mental") && actorHasHazardProtection(actor, type)) {
     evaluation = {
       kind: type,
-      code: "*",
+      code: "IMMUNE",
+      band: "immune",
       targetNumber: null,
       resistance: context.resistance,
+      saveBonus: context.saveBonus ?? context.resistance,
       intensity: normalizedIntensity,
       rollTotal: null,
       rollTotals: [],
+      total: null,
+      marginOfFailure: null,
       success: true,
       damageDice: 0,
+      damageMultiplier: 0,
       outcome: "Protected by shielding.",
       resistanceSummary: context.resistanceSummary,
       resistanceDetails: context.resistanceDetails,
       attemptCount: context.attemptCount ?? 1,
       attemptSources: context.attemptSources ?? [],
       attemptLabel: context.attemptLabel ?? "",
-      result: { kind: type, outcome: "*" }
+      result: { kind: type, band: "immune" }
     };
-  } else {
+  } else if (type === "mental") {
     evaluation = evaluateSaveForActor(actor, type, normalizedIntensity);
-    if ((type === "mental") && (typeof evaluation.targetNumber === "number")) {
+    if (typeof evaluation.targetNumber === "number") {
       for (let index = 0; index < Math.max(1, evaluation.attemptCount ?? 1); index += 1) {
         saveRolls.push(await new Roll("1d20").evaluate());
       }
@@ -1655,15 +1666,39 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
         rollTotals: saveRolls.map((roll) => roll.total)
       });
     }
+  } else {
+    // 0.8.2 homebrew — poison + radiation saves now roll 1d20 + save bonus
+    // vs the hazard's difficulty / intensity. Roll once up front, then
+    // evaluate so the card reflects the rolled total.
+    const pre = evaluateSaveForActor(actor, type, normalizedIntensity);
+    if (pre.code === "BELOW-THRESHOLD") {
+      // Radiation < 10 — skip the roll entirely.
+      evaluation = pre;
+    } else {
+      const roll = await new Roll("1d20").evaluate();
+      saveRolls.push(roll);
+      evaluation = evaluateSaveForActor(actor, type, normalizedIntensity, {
+        rollTotal: roll.total
+      });
+    }
   }
 
   let damageFormula = "";
   let damageTotal = 0;
   let damageRoll = null;
-  if (Number.isInteger(evaluation.damageDice) && evaluation.damageDice > 0) {
-    damageFormula = `${evaluation.damageDice}d6`;
-    damageRoll = await new Roll(damageFormula).evaluate();
-    damageTotal = damageRoll.total;
+  const multiplier = Number.isFinite(evaluation.damageMultiplier)
+    ? Number(evaluation.damageMultiplier)
+    : (evaluation.success === false ? 1 : 0);
+  if (Number.isInteger(evaluation.damageDice) && evaluation.damageDice > 0 && multiplier > 0) {
+    damageFormula = multiplier === 0.5
+      ? `(${evaluation.damageDice}d6) / 2`
+      : `${evaluation.damageDice}d6`;
+    // Always roll the raw dice; apply the multiplier on the total so the
+    // click-to-expand tooltip still shows honest per-die results.
+    const rawRoll = await new Roll(`${evaluation.damageDice}d6`).evaluate();
+    damageRoll = rawRoll;
+    const rawTotal = rawRoll.total;
+    damageTotal = multiplier === 0.5 ? Math.floor(rawTotal / 2) : rawTotal;
   }
 
   // Combine per-save-attempt tooltips + damage tooltip (if any) for the
@@ -1679,6 +1714,20 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
     damageRoll ? `${damageFormula} = ${damageTotal}` : null
   ].filter(Boolean).join(" | ");
 
+  // Mental saves build a "N+ on 1d20" target label. Poison + radiation
+  // use a signed-save-bonus label so the card reads "DC 14 · +2" etc.
+  const targetLabel = type === "mental"
+    ? (typeof evaluation.targetNumber === "number" ? `${evaluation.targetNumber}+ on 1d20` : "")
+    : (typeof evaluation.targetNumber === "number"
+      ? `DC ${evaluation.targetNumber}`
+      : "");
+
+  const rollLabel = evaluation.rollTotals?.length
+    ? (type === "mental"
+      ? evaluation.rollTotals.join(", ")
+      : `${evaluation.rollTotals[0]}${Number.isFinite(evaluation.saveBonus) ? ` ${evaluation.saveBonus >= 0 ? "+" : ""}${evaluation.saveBonus} = ${evaluation.total}` : ""}`)
+    : "";
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/save-card.hbs`,
     {
@@ -1687,15 +1736,20 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
       typeLabel: saveTypeLabel(type),
       resistance: evaluation.resistance,
       resistanceSummary: evaluation.resistanceSummary ?? "",
+      saveBonus: Number.isFinite(evaluation.saveBonus) ? evaluation.saveBonus : null,
       intensity: evaluation.intensity,
       target: evaluation.code ?? "—",
-      targetLabel: typeof evaluation.targetNumber === "number" ? `${evaluation.targetNumber}+ on 1d20` : "",
-      rollLabel: evaluation.rollTotals?.length ? evaluation.rollTotals.join(", ") : "",
+      band: evaluation.band ?? null,
+      marginOfFailure: evaluation.marginOfFailure ?? null,
+      total: evaluation.total ?? null,
+      targetLabel,
+      rollLabel,
       attemptLabel: evaluation.attemptLabel ?? "",
       success: !!evaluation.success,
       outcome: evaluation.outcome,
       damageFormula,
       damageTotal,
+      damageMultiplier: evaluation.damageMultiplier ?? null,
       sourceName,
       rollTooltip,
       rollFormula
@@ -1716,6 +1770,11 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
           targetNumber: evaluation.targetNumber ?? null,
           rollTotal: evaluation.rollTotal ?? null,
           rollTotals: evaluation.rollTotals ?? [],
+          total: evaluation.total ?? null,
+          saveBonus: Number.isFinite(evaluation.saveBonus) ? evaluation.saveBonus : null,
+          band: evaluation.band ?? null,
+          marginOfFailure: evaluation.marginOfFailure ?? null,
+          damageMultiplier: evaluation.damageMultiplier ?? null,
           success: !!evaluation.success,
           outcome: evaluation.outcome,
           intensity: evaluation.intensity,
@@ -1731,6 +1790,17 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
     }
   });
 
+  // Severe radiation automatically manifests a mutation — handled here so
+  // the chat card's "Grant Mutation" button isn't required when the rule
+  // is unambiguous. GM can still undo via the standard delete path.
+  if (type === "radiation" && evaluation.band === "severe") {
+    try {
+      await grantRandomMutation(actor, { defectOnly: false });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | severe radiation mutation grant failed`, error);
+    }
+  }
+
   return {
     status: "resolved",
     actorUuid: actor.uuid,
@@ -1739,10 +1809,15 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
     sourceName,
     resistance: evaluation.resistance,
     resistanceSummary: evaluation.resistanceSummary ?? "",
+    saveBonus: Number.isFinite(evaluation.saveBonus) ? evaluation.saveBonus : null,
     intensity: evaluation.intensity,
     targetNumber: evaluation.targetNumber ?? null,
     rollTotal: evaluation.rollTotal ?? null,
     rollTotals: evaluation.rollTotals ?? [],
+    total: evaluation.total ?? null,
+    band: evaluation.band ?? null,
+    marginOfFailure: evaluation.marginOfFailure ?? null,
+    damageMultiplier: evaluation.damageMultiplier ?? null,
     success: !!evaluation.success,
     outcome: evaluation.outcome,
     code: evaluation.code ?? null,
@@ -1789,6 +1864,64 @@ export async function resolveHazardLethal(flags) {
     }
     await actor.setHitPoints(0);
   }
+}
+
+/**
+ * 0.8.2 homebrew: stamp a Radiation Sickness bout on the actor as a flag.
+ * Commit 2 of the homebrew pass adds the world-time ticker + fatigue
+ * derived-data hook that reads this flag; for now the flag persists and
+ * Chat card follow-ups / sheet indicators depend on it.
+ *
+ * Duration rolled deterministically from the band:
+ *   mild   → 1d3 days
+ *   severe → 1d4+2 days  (3-6)
+ */
+export async function applyRadiationSickness(flags, severity) {
+  const actor = await resolveActorFromUuid(flags?.actorUuid);
+  if (!actor) return null;
+  const normalizedSeverity = severity === "severe" ? "severe" : "mild";
+  const { radiationSicknessDurationDays } = await import("./tables/resistance-tables.mjs");
+  const durationDays = radiationSicknessDurationDays(normalizedSeverity);
+  const now = Number(game.time?.worldTime ?? 0);
+  await actor.setFlag(SYSTEM_ID, "radiationSickness", {
+    severity: normalizedSeverity,
+    durationDays,
+    appliedAt: now,
+    expiresAt: now + (durationDays * 86400)
+  });
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="gw-chat-card"><h3>Radiation Sickness (${normalizedSeverity})</h3>`
+      + `<p>${actor.name} suffers radiation sickness for ${durationDays} day${durationDays === 1 ? "" : "s"}. `
+      + `Treated as fully fatigued until the bout passes.</p></div>`
+  });
+  return { severity: normalizedSeverity, durationDays };
+}
+
+/**
+ * 0.8.2 homebrew: stamp catastrophic radiation exposure on the actor.
+ * Onset is "the next day", i.e. 24 hours after exposure. Once active,
+ * Commit 2's ticker will decrement 10% of max HP per hour until the
+ * actor dies or the state is cleared (ancient radiation treatment).
+ */
+export async function applyCatastrophicRadiation(flags) {
+  const actor = await resolveActorFromUuid(flags?.actorUuid);
+  if (!actor) return null;
+  const now = Number(game.time?.worldTime ?? 0);
+  const onsetAt = now + 86400;
+  await actor.setFlag(SYSTEM_ID, "catastrophicRadiation", {
+    active: true,
+    appliedAt: now,
+    onsetAt,
+    lastTickAt: onsetAt
+  });
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="gw-chat-card"><h3>Catastrophic Radiation Exposure</h3>`
+      + `<p>${actor.name} appears fine for now. Beginning tomorrow, the body deteriorates at `
+      + `<strong>−10% max HP per hour</strong> until ancient radiation treatment is applied or death.</p></div>`
+  });
+  return { onsetAt };
 }
 
 export async function grantRandomMutation(actor, { defectOnly = false } = {}) {

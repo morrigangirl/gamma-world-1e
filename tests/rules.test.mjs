@@ -15,12 +15,15 @@ import {
   weaponAttackTarget
 } from "../module/tables/combat-matrix.mjs";
 import {
+  damageDiceFromIntensity,
   describePoisonOutcome,
   describeRadiationOutcome,
+  radiationBandFromMargin,
   resolvePoison,
   resolveRadiation
 } from "../module/tables/resistance-tables.mjs";
 import {
+  collectHazardSaveFlags,
   evaluateSaveForActor,
   saveContextForActor,
   preferredSaveUserId,
@@ -295,12 +298,21 @@ test("save helpers apply extra mental saves and derived radiation modifiers", ()
     ]
   };
 
+  // Mental save flow unchanged — matrix-based, clamped 3-18 resistance.
   const mentalContext = saveContextForActor(actor, "mental");
   assert.equal(mentalContext.resistance, 14);
   assert.equal(mentalContext.attemptCount, 4);
 
+  // 0.8.2 homebrew radiation save — `resistance` is now the signed save
+  // bonus, not a clamped 3-18 score. CN 12 → mod 0 (inside the 6-15
+  // neutral band), Heightened Constitution +3, Will Force (CN) +12 → 15.
+  // Heightened Constitution also caps radiation severity at "severe"
+  // (no catastrophic band from a single exposure).
   const radiationContext = saveContextForActor(actor, "radiation");
-  assert.equal(radiationContext.resistance, 18);
+  assert.equal(radiationContext.resistance, 15);
+  assert.equal(radiationContext.saveBonus, 15);
+  assert.equal(radiationContext.saveFlags.capSeverityAt, "severe");
+  assert.equal(radiationContext.saveFlags.targetBonus, 15);
 
   const targetNumber = mentalAttackTarget(10, mentalContext.resistance);
   const evaluation = evaluateSaveForActor(actor, "mental", 10, {
@@ -1663,4 +1675,116 @@ test("Phase 0.8.1 — robot monster sources shape match the catalog", async () =
   assert.equal(fallback.system.damage.formula, "1d6");
   assert.equal(fallback.system.attackType, "melee");
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.8.2 homebrew poison + radiation                                  */
+/* ------------------------------------------------------------------ */
+
+test("0.8.2 — damageDiceFromIntensity band thresholds", () => {
+  assert.equal(damageDiceFromIntensity(0),  1);
+  assert.equal(damageDiceFromIntensity(6),  1);
+  assert.equal(damageDiceFromIntensity(7),  2);
+  assert.equal(damageDiceFromIntensity(11), 2);
+  assert.equal(damageDiceFromIntensity(12), 3);
+  assert.equal(damageDiceFromIntensity(15), 3);
+  assert.equal(damageDiceFromIntensity(16), 4);
+  assert.equal(damageDiceFromIntensity(99), 4);
+});
+
+test("0.8.2 — radiationBandFromMargin maps fail margins to bands", () => {
+  assert.equal(radiationBandFromMargin(-5),  "safe");
+  assert.equal(radiationBandFromMargin(0),   "safe");
+  assert.equal(radiationBandFromMargin(1),   "mild");
+  assert.equal(radiationBandFromMargin(3),   "mild");
+  assert.equal(radiationBandFromMargin(4),   "severe");
+  assert.equal(radiationBandFromMargin(6),   "severe");
+  assert.equal(radiationBandFromMargin(7),   "catastrophic");
+  assert.equal(radiationBandFromMargin(99),  "catastrophic");
+});
+
+test("0.8.2 — radiation save below intensity 10 is a free pass", () => {
+  const actor = { system: { attributes: { cn: { value: 10 } } }, items: [] };
+  const evaluation = evaluateSaveForActor(actor, "radiation", 9);
+  assert.equal(evaluation.band, "below-threshold");
+  assert.equal(evaluation.success, true);
+  assert.equal(evaluation.damageDice, 0);
+});
+
+test("0.8.2 — radiation save margin bands dispatch correctly", () => {
+  const actor = { system: { attributes: { cn: { value: 10 } } }, items: [] };
+  const intensity = 14;
+  // CN 10 → mod 0. rollTotal + 0 = rollTotal.
+  const passing     = evaluateSaveForActor(actor, "radiation", intensity, { rollTotal: 14 });
+  const missByTwo   = evaluateSaveForActor(actor, "radiation", intensity, { rollTotal: 12 });
+  const missByFive  = evaluateSaveForActor(actor, "radiation", intensity, { rollTotal: 9 });
+  const missByEight = evaluateSaveForActor(actor, "radiation", intensity, { rollTotal: 6 });
+
+  assert.equal(passing.band, "safe");
+  assert.equal(passing.success, true);
+
+  assert.equal(missByTwo.band, "mild");
+  assert.equal(missByTwo.success, false);
+  assert.equal(missByTwo.marginOfFailure, 2);
+
+  assert.equal(missByFive.band, "severe");
+  assert.equal(missByFive.marginOfFailure, 5);
+
+  assert.equal(missByEight.band, "catastrophic");
+  assert.equal(missByEight.marginOfFailure, 8);
+});
+
+test("0.8.2 — Heightened Constitution caps radiation severity at 'severe'", () => {
+  const actor = {
+    system: { attributes: { cn: { value: 10 } } },
+    items: [
+      { type: "mutation", name: "Heightened Constitution", system: { activation: { enabled: true }, reference: {} } }
+    ]
+  };
+  // CN 10 → mod 0; HC gives +3; rollTotal 6 → total 9 vs DC 16 → margin 7 (catastrophic)
+  const evaluation = evaluateSaveForActor(actor, "radiation", 16, { rollTotal: 6 });
+  assert.equal(evaluation.band, "severe",
+    "Heightened Constitution should down-step catastrophic to severe");
+  assert.equal(evaluation.marginOfFailure, 7);
+});
+
+test("0.8.2 — poison save: success halves damage, failure = full damage", () => {
+  const actor = { system: { attributes: { cn: { value: 10 } } }, items: [] };
+  // intensity 12 → damageDice 3
+  const hit = evaluateSaveForActor(actor, "poison", 12, { rollTotal: 12 });
+  assert.equal(hit.band, "half");
+  assert.equal(hit.success, true);
+  assert.equal(hit.damageDice, 3);
+  assert.equal(hit.damageMultiplier, 0.5);
+
+  const miss = evaluateSaveForActor(actor, "poison", 12, { rollTotal: 6 });
+  assert.equal(miss.band, "full");
+  assert.equal(miss.success, false);
+  assert.equal(miss.damageMultiplier, 1);
+});
+
+test("0.8.2 — 'No Resistance to Poison' mutation removes the CN bonus on poison saves", () => {
+  const highCn = {
+    system: { attributes: { cn: { value: 18 } } },
+    items: [
+      { type: "mutation", name: "No Resistance To Poison", system: { activation: { enabled: true }, reference: {} } }
+    ]
+  };
+  const context = saveContextForActor(highCn, "poison");
+  assert.equal(context.saveBonus, 0, "CN +3 should be cancelled");
+  assert.equal(context.saveFlags.disableConModifier, true);
+});
+
+test("0.8.2 — collectHazardSaveFlags surfaces per-mutation homebrew hooks", () => {
+  const symbiosis = {
+    system: { attributes: { cn: { value: 12 } } },
+    items: [
+      { type: "mutation", name: "Bacterial Symbiosis", system: { activation: { enabled: true }, reference: {} } }
+    ]
+  };
+  const rad = collectHazardSaveFlags(symbiosis, "radiation");
+  const poi = collectHazardSaveFlags(symbiosis, "poison");
+  assert.equal(rad.targetBonus, 3);
+  assert.equal(poi.targetBonus, 3);
+});
+
 

@@ -1,13 +1,22 @@
-<div class="gw-chat-card gw-save-card">
+<div class="gw-chat-card gw-save-card{{#if band}} gw-save-card--{{band}}{{/if}}">
   <h3>{{typeLabel}}</h3>
   <div class="gw-card-meta">
     {{actorName}}
     {{#if sourceName}} &middot; Source: {{sourceName}}{{/if}}
   </div>
-  <div class="gw-card-meta">
-    Resistance: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{resistance}}{{/if}}
-    &middot; Intensity: {{intensity}}
-  </div>
+  {{#if (gwEq type "mental")}}
+    <div class="gw-card-meta">
+      Resistance: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{resistance}}{{/if}}
+      &middot; Intensity: {{intensity}}
+    </div>
+  {{else}}
+    <div class="gw-card-meta">
+      Save bonus: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{gwSigned saveBonus}}{{/if}}
+    </div>
+    <div class="gw-card-meta">
+      {{#if (gwEq type "poison")}}Poison difficulty{{else}}Radiation intensity{{/if}}: {{intensity}}
+    </div>
+  {{/if}}
   {{#if attemptLabel}}
     <div class="gw-card-meta">Attempts: {{attemptLabel}}</div>
   {{/if}}
@@ -29,7 +38,27 @@
     </div>
   {{/if}}
   <div class="gw-card-result {{#if success}}is-hit{{else}}is-miss{{/if}}">
-    Result: {{target}}
+    {{#if (gwEq type "mental")}}
+      Result: {{target}}
+    {{else if (gwEq band "immune")}}
+      Immune
+    {{else if (gwEq band "below-threshold")}}
+      Below threshold — no effect
+    {{else if (gwEq band "safe")}}
+      Passed ({{total}} vs DC {{intensity}})
+    {{else if (gwEq band "half")}}
+      Passed ({{total}} vs DC {{intensity}}) — half damage
+    {{else if (gwEq band "full")}}
+      Failed ({{total}} vs DC {{intensity}}) — full damage
+    {{else if (gwEq band "mild")}}
+      Radiation Sickness (mild) — missed by {{marginOfFailure}}
+    {{else if (gwEq band "severe")}}
+      Radiation Sickness (severe) + mutation — missed by {{marginOfFailure}}
+    {{else if (gwEq band "catastrophic")}}
+      Catastrophic exposure — missed by {{marginOfFailure}}
+    {{else}}
+      Result: {{target}}
+    {{/if}}
   </div>
   {{#if rollTooltip}}
     <div class="gw-roll-breakdown" hidden>
@@ -39,19 +68,26 @@
   {{/if}}
   <div class="gw-card-meta">{{outcome}}</div>
   {{#if damageFormula}}
-    <div class="gw-card-meta">Damage: {{damageFormula}} = {{damageTotal}}</div>
+    <div class="gw-card-meta">
+      Damage: {{damageFormula}} = {{damageTotal}}{{#if (gwEq band "half")}} (halved){{/if}}
+    </div>
     <div class="gw-card-actions">
       <button type="button" data-action="gw-hazard-damage">Apply Damage</button>
     </div>
   {{/if}}
-  {{#if (gwEq target "M")}}
+  {{#if (gwEq band "mild")}}
     <div class="gw-card-actions">
-      <button type="button" data-action="gw-hazard-mutation">Grant Mutation</button>
+      <button type="button" data-action="gw-hazard-rad-sickness" data-severity="mild">Apply Radiation Sickness (Mild)</button>
     </div>
   {{/if}}
-  {{#if (gwEq target "D")}}
+  {{#if (gwEq band "severe")}}
     <div class="gw-card-actions">
-      <button type="button" data-action="gw-hazard-lethal">Resolve Lethal Result</button>
+      <button type="button" data-action="gw-hazard-rad-sickness" data-severity="severe">Apply Radiation Sickness (Severe)</button>
+    </div>
+  {{/if}}
+  {{#if (gwEq band "catastrophic")}}
+    <div class="gw-card-actions">
+      <button type="button" data-action="gw-hazard-rad-catastrophic">Flag Catastrophic Exposure</button>
     </div>
   {{/if}}
 </div>

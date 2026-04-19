@@ -4,12 +4,20 @@
  * Source: local OCR'd rulebook in `ref/gamma-world-core-rules.pdf`
  * (reference sheets / POISON MATRIX / RADIATION MATRIX).
  *
- * Poison outcomes:
+ * NOTE (0.8.2 homebrew): the matrices + `resolvePoison` / `resolveRadiation`
+ * helpers below are kept as RAW reference only. The live save pipeline no
+ * longer consumes them — `save-flow.mjs` runs a `d20 + CN mod vs difficulty`
+ * roll and consults `damageDiceFromIntensity` / `radiationBandFromMargin`
+ * below. See Chapter 11 "Homebrew & Departures" in the rulebook pack for
+ * the in-fiction rules. These functions are retained so macros / external
+ * content referring to the original matrices still load.
+ *
+ * Poison outcomes (legacy / RAW):
  * - "*" => no effect
  * - 1/2/3 => that many d6 damage
  * - "D" => death unless antidote is administered within two turns
  *
- * Radiation outcomes:
+ * Radiation outcomes (legacy / RAW):
  * - 0..8 => that many d6 damage
  * - "M" => new mutation
  * - "D" => 20% mutational defect, 80% death
@@ -93,5 +101,62 @@ export function describeRadiationOutcome(result) {
   if (Number.isInteger(result.outcome)) return `${result.outcome}d6 radiation damage.`;
   if (result.outcome === "M") return "Gain one new mutation.";
   return "20% chance of a mutational defect, 80% chance of death.";
+}
+
+/* ------------------------------------------------------------------ */
+/* 0.8.2 homebrew helpers                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Intensity → number of d6 of damage for the new homebrew poison /
+ * radiation rules. Kept deliberately flat — four bands, no per-intensity
+ * micro-scaling. A weapon/hazard author who needs finer control can
+ * override the damage formula directly on the effect.
+ *
+ *   intensity ≤ 6   → 1d6
+ *   intensity 7-11  → 2d6
+ *   intensity 12-15 → 3d6
+ *   intensity ≥ 16  → 4d6
+ */
+export function damageDiceFromIntensity(intensity) {
+  const numeric = Math.max(0, Math.round(Number(intensity) || 0));
+  if (numeric <= 6) return 1;
+  if (numeric <= 11) return 2;
+  if (numeric <= 15) return 3;
+  return 4;
+}
+
+/**
+ * Radiation fail-margin → outcome band (homebrew).
+ *
+ *   margin ≤ 0 → "safe"         (roll met or beat intensity)
+ *   margin 1-3 → "mild"         (Radiation Sickness, fully fatigued 1-3 days)
+ *   margin 4-6 → "severe"       (Radiation Sickness + 1 random mutation)
+ *   margin ≥ 7 → "catastrophic" (seems fine; tomorrow: -10% max HP / hour)
+ *
+ * Intensity < 10 is handled at a higher layer (auto-pass, no band); this
+ * helper only runs when a save has already been rolled.
+ */
+export function radiationBandFromMargin(margin) {
+  const numeric = Math.round(Number(margin) || 0);
+  if (numeric <= 0) return "safe";
+  if (numeric <= 3) return "mild";
+  if (numeric <= 6) return "severe";
+  return "catastrophic";
+}
+
+/**
+ * Random duration (in days) for a Radiation Sickness bout.
+ *
+ *   "mild"   → 1-3 days  (1d3)
+ *   "severe" → 3-6 days  (roughly 1d4+2)
+ *
+ * Accepts an optional rng (defaults to `Math.random`) so tests can
+ * pin the roll deterministically.
+ */
+export function radiationSicknessDurationDays(band, rng = Math.random) {
+  if (band === "mild")   return 1 + Math.floor(rng() * 3);
+  if (band === "severe") return 3 + Math.floor(rng() * 4);
+  return 0;
 }
 

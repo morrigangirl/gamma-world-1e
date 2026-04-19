@@ -1,11 +1,9 @@
 import { getActorState } from "./effect-state.mjs";
-import { mutationIsEnabled } from "./mutation-rules.mjs";
+import { abilityModifierFromScore, mutationIsEnabled } from "./mutation-rules.mjs";
 import { mentalAttackTarget } from "./tables/combat-matrix.mjs";
 import {
-  describePoisonOutcome,
-  describeRadiationOutcome,
-  resolvePoison,
-  resolveRadiation
+  damageDiceFromIntensity,
+  radiationBandFromMargin
 } from "./tables/resistance-tables.mjs";
 
 const OWNER_LEVEL = 3;
@@ -204,70 +202,134 @@ function mentalResistanceDetails(actor) {
   };
 }
 
-function hazardResistanceDetails(actor, type) {
-  const base = clampSaveScore(
-    actor?.system?.attributes?.cn?.value
-    ?? (type === "radiation" ? actor?.system?.resources?.radResistance : actor?.system?.resources?.poisonResistance)
-    ?? (type === "radiation" ? actor?.gw?.radiationResistance : actor?.gw?.poisonResistance)
-    ?? (type === "radiation" ? actor?.radiationResistance : actor?.poisonResistance)
-    ?? 3
-  );
-  const details = [`CN ${base}`];
-  let total = base;
+/**
+ * 0.8.2 homebrew: hazard saves (poison + radiation) are now d20 + CN mod +
+ * mutation/effect bonuses vs the hazard's intensity. This helper returns
+ * the bonus side of the sum plus the mutation-flag surface that drives
+ * the band outcome (severity caps, auto-success tokens, immunity, etc.).
+ *
+ * Mutation alternate effects under the new rules:
+ *   - Heightened Constitution      → +3 save; radiation severity caps at
+ *                                    "severe" (never catastrophic).
+ *   - Bacterial Symbiosis (plant)  → +3 save on both poison and radiation.
+ *   - No Resistance to Poison      → poison saves lose the CN modifier.
+ *   - Will Force (CN variant)      → +CN score bonus (legacy behavior
+ *                                    preserved; fires once, any save type).
+ *   - Poison-/Radiation-immune     → auto-success (chassis traits honored
+ *                                    via actorHasHazardProtection upstream;
+ *                                    flag echoed here for tests).
+ */
+export function collectHazardSaveFlags(actor, type) {
+  const flags = {
+    targetBonus: 0,
+    bonusDetails: [],
+    disableConModifier: false,
+    capSeverityAt: null,
+    autoSuccess: false,
+    immune: false
+  };
 
-  if (activeMutation(actor, "Heightened Constitution")) {
-    if (type === "radiation") {
-      total += 3;
-      details.push("Heightened Constitution +3");
-    } else if (total < 18) {
-      total = 18;
-      details.push("Heightened Constitution sets PR to 18");
-    } else {
-      details.push("Heightened Constitution maintains PR 18");
-    }
+  if (type === "radiation" && activeMutation(actor, "Heightened Constitution")) {
+    flags.targetBonus += 3;
+    flags.bonusDetails.push("Heightened Constitution +3");
+    flags.capSeverityAt = "severe";
+  }
+  if (type === "poison" && activeMutation(actor, "Heightened Constitution")) {
+    flags.targetBonus += 3;
+    flags.bonusDetails.push("Heightened Constitution +3");
+  }
+
+  if (activeMutation(actor, "Bacterial Symbiosis")) {
+    flags.targetBonus += 3;
+    flags.bonusDetails.push("Bacterial Symbiosis +3");
+  }
+
+  if (type === "poison" && activeMutation(actor, "No Resistance To Poison")) {
+    flags.disableConModifier = true;
+    flags.bonusDetails.push("No Resistance to Poison (CN bonus disabled)");
   }
 
   const willForce = activeMutation(actor, "Will Force");
   if ((willForce?.system?.reference?.variant ?? "") === "cn") {
     const cnScore = Math.max(0, Math.round(Number(actor?.system?.attributes?.cn?.value ?? 0) || 0));
     if (cnScore) {
-      total += cnScore;
-      details.push(`Will Force (CN) ${signed(cnScore)}`);
+      flags.targetBonus += cnScore;
+      flags.bonusDetails.push(`Will Force (CN) ${signed(cnScore)}`);
     }
   }
 
-  if (robotActor(actor)) {
-    total = Math.max(total, 18);
-    details.push("Robot chassis sets resistance to 18");
+  if (type === "radiation" && actor?.gw?.radiationImmune) flags.immune = true;
+  if (type === "poison" && actor?.gw?.poisonImmune) flags.immune = true;
+  if (robotActor(actor)) flags.immune = true;
+
+  return flags;
+}
+
+/**
+ * Build the save-bonus side of a hazard save (signed integer that gets
+ * added to the d20 before comparing against intensity). Replaces the
+ * old clamped-resistance matrix lookup axis. Returns the full breakdown
+ * so the chat card can surface each contributor.
+ */
+function hazardSaveBonus(actor, type) {
+  const cnScore = Math.max(3, Math.round(Number(actor?.system?.attributes?.cn?.value ?? 10) || 10));
+  const conMod = abilityModifierFromScore(cnScore);
+  const details = [];
+  const saveFlags = collectHazardSaveFlags(actor, type);
+  let bonus = 0;
+
+  if (!saveFlags.disableConModifier) {
+    bonus += conMod;
+    details.push(`CN ${cnScore} ${signed(conMod)}`);
+  } else {
+    details.push(`CN modifier disabled`);
   }
 
+  bonus += saveFlags.targetBonus;
+  for (const line of saveFlags.bonusDetails) details.push(line);
+
+  // Temporary effects keep contributing via the same keys the 0.7.0 trait
+  // framework uses, so an armor grant of "+2 radiation resistance" still
+  // reads as a save bonus under the new rules.
   for (const effect of temporaryEffects(actor)) {
     const changes = effect?.changes ?? {};
     const additiveKey = type === "radiation" ? "radiationResistance" : "poisonResistance";
     const additive = Math.round(Number(changes[additiveKey]) || 0);
     if (additive) {
-      total += additive;
-      details.push(`${detailLabel(effect, "Temporary effect")} ${type} resistance ${signed(additive)}`);
+      bonus += additive;
+      details.push(`${detailLabel(effect, "Temporary effect")} ${type} save ${signed(additive)}`);
     }
-
     const cnShift = Math.round(Number(changes.attributes?.cn) || 0);
-    if (cnShift) {
-      total += cnShift;
-      details.push(`${detailLabel(effect, "Temporary effect")} CN ${signed(cnShift)}`);
+    if (cnShift && !saveFlags.disableConModifier) {
+      // CN shift affects the ability modifier — recompute the delta by
+      // sampling the band function at the new CN value.
+      const shiftedMod = abilityModifierFromScore(cnScore + cnShift);
+      const delta = shiftedMod - conMod;
+      if (delta) {
+        bonus += delta;
+        details.push(`${detailLabel(effect, "Temporary effect")} CN ${signed(cnShift)} (mod ${signed(delta)})`);
+      }
     }
   }
 
-  const override = derivedResistanceOverride(actor, type);
-  if ((override != null) && (override !== total)) {
-    total = override;
-    details.push(`Effective ${type === "radiation" ? "RR" : "PR"} ${override}`);
-  }
+  return { bonus, conMod, cnScore, details, flags: saveFlags };
+}
 
-  const resistance = finalizeResistance(total, details);
+function hazardResistanceDetails(actor, type) {
+  const { bonus, conMod, cnScore, details, flags } = hazardSaveBonus(actor, type);
+  const summary = `${signed(bonus)} (${details.join("; ")})`;
   return {
-    resistance,
-    resistanceSummary: `${resistance} (${details.join("; ")})`,
+    // Historical fields retained for consumers (chat card, UI, tests) that
+    // still read "resistance" from the context. Under the new rules this
+    // value IS the save bonus (no longer a clamped 3-18 score).
+    resistance: bonus,
+    resistanceSummary: summary,
     resistanceDetails: details,
+    // New fields — surface the pieces the banner / chat card break out.
+    saveBonus: bonus,
+    conMod,
+    cnScore,
+    saveFlags: flags,
     attemptCount: 1,
     attemptSources: [],
     attemptLabel: ""
@@ -397,49 +459,245 @@ function evaluateMentalSave({
   };
 }
 
-function evaluatePoisonSave({ defenderContext, intensity }) {
-  const resistance = clampSaveScore(defenderContext?.resistance ?? 3);
-  const result = resolvePoison(resistance, intensity);
+/**
+ * 0.8.2 homebrew poison save.
+ *   roll + saveBonus ≥ intensity  →  success (half damage)
+ *   roll + saveBonus <  intensity  →  failure (full damage)
+ * Mutation-granted immunity (e.g. robot chassis) short-circuits to success
+ * with zero damage. There is no "save or die" outcome under the new rules.
+ */
+function evaluatePoisonSave({ defenderContext, intensity, rollTotal }) {
+  const saveBonus = Number.isFinite(defenderContext?.saveBonus)
+    ? Number(defenderContext.saveBonus)
+    : 0;
+  const flags = defenderContext?.saveFlags ?? {};
+  const difficulty = Math.max(3, Math.round(Number(intensity) || 0));
+  const damageDice = damageDiceFromIntensity(difficulty);
+
+  if (flags.immune) {
+    return {
+      kind: "poison",
+      code: "IMMUNE",
+      band: "immune",
+      targetNumber: difficulty,
+      resistance: saveBonus,
+      saveBonus,
+      intensity: difficulty,
+      rollTotal: null,
+      rollTotals: [],
+      total: null,
+      marginOfFailure: null,
+      success: true,
+      damageDice: 0,
+      damageMultiplier: 0,
+      outcome: "Immune to poison.",
+      resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
+      resistanceDetails: defenderContext?.resistanceDetails ?? [],
+      attemptCount: 1,
+      attemptSources: [],
+      attemptLabel: "",
+      result: { kind: "poison", outcome: "IMMUNE" }
+    };
+  }
+
+  const numericRoll = rollTotal == null ? null : Math.round(Number(rollTotal) || 0);
+  if (numericRoll == null) {
+    // Evaluator called without a roll — return an "awaiting roll" envelope
+    // so the caller can roll, then re-evaluate with the rollTotal. Keeps
+    // the two-phase pattern mental saves already use.
+    return {
+      kind: "poison",
+      code: null,
+      band: null,
+      targetNumber: difficulty,
+      resistance: saveBonus,
+      saveBonus,
+      intensity: difficulty,
+      rollTotal: null,
+      rollTotals: [],
+      total: null,
+      marginOfFailure: null,
+      success: null,
+      damageDice,
+      damageMultiplier: null,
+      outcome: `Roll 1d20 ${signed(saveBonus)} vs difficulty ${difficulty}.`,
+      resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
+      resistanceDetails: defenderContext?.resistanceDetails ?? [],
+      attemptCount: 1,
+      attemptSources: [],
+      attemptLabel: "",
+      result: { kind: "poison", pending: true }
+    };
+  }
+
+  const total = numericRoll + saveBonus;
+  const margin = difficulty - total;
+  const success = total >= difficulty;
+  const band = success ? "half" : "full";
+
   return {
     kind: "poison",
-    code: result.outcome,
-    targetNumber: null,
-    resistance: result.constitution,
-    intensity: result.strength,
-    rollTotal: null,
-    rollTotals: [],
-    success: result.outcome === "*",
-    damageDice: result.damageDice ?? 0,
-    outcome: describePoisonOutcome(result),
-    resistanceSummary: defenderContext?.resistanceSummary ?? `${result.constitution}`,
+    code: success ? "HALF" : "FULL",
+    band,
+    targetNumber: difficulty,
+    resistance: saveBonus,
+    saveBonus,
+    intensity: difficulty,
+    rollTotal: numericRoll,
+    rollTotals: [numericRoll],
+    total,
+    marginOfFailure: success ? 0 : margin,
+    success,
+    damageDice,
+    damageMultiplier: success ? 0.5 : 1,
+    outcome: success
+      ? `Poison save resisted — take half damage (${damageDice}d6 halved).`
+      : `Poison save failed — take full damage (${damageDice}d6).`,
+    resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
     resistanceDetails: defenderContext?.resistanceDetails ?? [],
     attemptCount: 1,
     attemptSources: [],
     attemptLabel: "",
-    result
+    result: { kind: "poison", success, total, damageDice, band }
   };
 }
 
-function evaluateRadiationSave({ defenderContext, intensity }) {
-  const resistance = clampSaveScore(defenderContext?.resistance ?? 3);
-  const result = resolveRadiation(resistance, intensity);
+/**
+ * 0.8.2 homebrew radiation save.
+ *   intensity < 10       →  no effect (band "below-threshold", no save)
+ *   roll + bonus ≥ int   →  no effect (band "safe", recheck in 1 hour)
+ *   fail by 1-3          →  "mild"          Radiation Sickness (1-3 days fatigue)
+ *   fail by 4-6          →  "severe"        Radiation Sickness (3-6 days fatigue) + mutation
+ *   fail by 7+           →  "catastrophic"  onset tomorrow, -10% max HP / hour until cured
+ */
+function evaluateRadiationSave({ defenderContext, intensity, rollTotal }) {
+  const saveBonus = Number.isFinite(defenderContext?.saveBonus)
+    ? Number(defenderContext.saveBonus)
+    : 0;
+  const flags = defenderContext?.saveFlags ?? {};
+  const difficulty = Math.max(3, Math.round(Number(intensity) || 0));
+  const damageDice = damageDiceFromIntensity(difficulty);
+
+  if (difficulty < 10) {
+    return {
+      kind: "radiation",
+      code: "BELOW-THRESHOLD",
+      band: "below-threshold",
+      targetNumber: difficulty,
+      resistance: saveBonus,
+      saveBonus,
+      intensity: difficulty,
+      rollTotal: null,
+      rollTotals: [],
+      total: null,
+      marginOfFailure: null,
+      success: true,
+      damageDice: 0,
+      damageMultiplier: 0,
+      outcome: "Intensity below 10 — no save required, no mechanical effect.",
+      resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
+      resistanceDetails: defenderContext?.resistanceDetails ?? [],
+      attemptCount: 1,
+      attemptSources: [],
+      attemptLabel: "",
+      result: { kind: "radiation", band: "below-threshold" }
+    };
+  }
+
+  if (flags.immune) {
+    return {
+      kind: "radiation",
+      code: "IMMUNE",
+      band: "immune",
+      targetNumber: difficulty,
+      resistance: saveBonus,
+      saveBonus,
+      intensity: difficulty,
+      rollTotal: null,
+      rollTotals: [],
+      total: null,
+      marginOfFailure: null,
+      success: true,
+      damageDice: 0,
+      damageMultiplier: 0,
+      outcome: "Immune to radiation.",
+      resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
+      resistanceDetails: defenderContext?.resistanceDetails ?? [],
+      attemptCount: 1,
+      attemptSources: [],
+      attemptLabel: "",
+      result: { kind: "radiation", band: "immune" }
+    };
+  }
+
+  const numericRoll = rollTotal == null ? null : Math.round(Number(rollTotal) || 0);
+  if (numericRoll == null) {
+    return {
+      kind: "radiation",
+      code: null,
+      band: null,
+      targetNumber: difficulty,
+      resistance: saveBonus,
+      saveBonus,
+      intensity: difficulty,
+      rollTotal: null,
+      rollTotals: [],
+      total: null,
+      marginOfFailure: null,
+      success: null,
+      damageDice,
+      damageMultiplier: null,
+      outcome: `Roll 1d20 ${signed(saveBonus)} vs intensity ${difficulty}.`,
+      resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
+      resistanceDetails: defenderContext?.resistanceDetails ?? [],
+      attemptCount: 1,
+      attemptSources: [],
+      attemptLabel: "",
+      result: { kind: "radiation", pending: true }
+    };
+  }
+
+  const total = numericRoll + saveBonus;
+  const margin = difficulty - total;
+  let band = radiationBandFromMargin(margin);
+
+  // Mutation flag: Heightened Constitution caps radiation severity at
+  // "severe" (catastrophic gets stepped down so the character still
+  // suffers, but no delayed lethal spiral).
+  if ((band === "catastrophic") && (flags.capSeverityAt === "severe")) {
+    band = "severe";
+  }
+
+  const success = band === "safe";
+  const outcomes = {
+    safe:           `Radiation save passed — no immediate effect. Recheck in 1 hour if still exposed.`,
+    mild:           `Radiation save failed by ${margin} — Radiation Sickness (mild). Fully fatigued for 1–3 days.`,
+    severe:         `Radiation save failed by ${margin} — Radiation Sickness (severe). Fully fatigued for 3–6 days and a new mutation manifests.`,
+    catastrophic:   `Radiation save failed by ${margin} — catastrophic exposure. Tomorrow onward: −10% max HP per hour until ancient treatment is applied.`
+  };
+
   return {
     kind: "radiation",
-    code: result.outcome,
-    targetNumber: null,
-    resistance: result.constitution,
-    intensity: result.intensity,
-    rollTotal: null,
-    rollTotals: [],
-    success: Number.isInteger(result.outcome) ? (result.outcome === 0) : false,
-    damageDice: result.damageDice ?? 0,
-    outcome: describeRadiationOutcome(result),
-    resistanceSummary: defenderContext?.resistanceSummary ?? `${result.constitution}`,
+    code: band.toUpperCase(),
+    band,
+    targetNumber: difficulty,
+    resistance: saveBonus,
+    saveBonus,
+    intensity: difficulty,
+    rollTotal: numericRoll,
+    rollTotals: [numericRoll],
+    total,
+    marginOfFailure: success ? 0 : margin,
+    success,
+    damageDice: 0,
+    damageMultiplier: 0,
+    outcome: outcomes[band],
+    resistanceSummary: defenderContext?.resistanceSummary ?? signed(saveBonus),
     resistanceDetails: defenderContext?.resistanceDetails ?? [],
     attemptCount: 1,
     attemptSources: [],
     attemptLabel: "",
-    result
+    result: { kind: "radiation", band, margin, success, total }
   };
 }
 
@@ -466,13 +724,15 @@ export function evaluateSaveForActor(actor, type, intensity, {
   if (type === "poison") {
     return evaluatePoisonSave({
       defenderContext: saveContextForActor(actor, type),
-      intensity
+      intensity,
+      rollTotal: totals[0] ?? null
     });
   }
 
   return evaluateRadiationSave({
     defenderContext: saveContextForActor(actor, type),
-    intensity
+    intensity,
+    rollTotal: totals[0] ?? null
   });
 }
 
