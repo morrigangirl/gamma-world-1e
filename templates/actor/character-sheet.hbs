@@ -120,13 +120,13 @@
         </label>
       </div>
       <div class="gamma-world__resource">
-        <label>{{localize "GAMMA_WORLD.Resource.RadResistance"}}
-          <input type="number" value="{{derived.radiationResistance}}" readonly />
+        <label title="{{derived.radiationSaveSummary}}">{{localize "GAMMA_WORLD.Resource.RadSave"}}
+          <input type="text" value="{{gwSigned derived.radiationSaveBonus}}" readonly />
         </label>
       </div>
       <div class="gamma-world__resource">
-        <label>{{localize "GAMMA_WORLD.Resource.PoisonResistance"}}
-          <input type="number" value="{{derived.poisonResistance}}" readonly />
+        <label title="{{derived.poisonSaveSummary}}">{{localize "GAMMA_WORLD.Resource.PoisonSave"}}
+          <input type="text" value="{{gwSigned derived.poisonSaveBonus}}" readonly />
         </label>
       </div>
       <div class="gamma-world__resource">

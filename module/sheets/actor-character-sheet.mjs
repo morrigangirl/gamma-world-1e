@@ -11,6 +11,7 @@ import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../
 import { applyRest } from "../healing.mjs";
 import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
 import { overlayRadiationIndicatorState } from "../conditions.mjs";
+import { saveContextForActor } from "../save-flow.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -431,7 +432,20 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
 
     context.actor  = actor;
     context.system = system;
-    context.derived = actor.gw ?? {};
+    // 0.8.2: the Main-tab "Poison Resistance" / "Radiation Resistance"
+    // fields now display the signed save bonus (CN mod + mutation hooks
+    // + temp effects), matching what the save chat card uses when the
+    // GM clicks Roll Poison / Roll Radiation. Mental save stays on the
+    // matrix so derived.mentalResistance keeps its legacy 3-18 shape.
+    const poisonCtx = saveContextForActor(actor, "poison");
+    const radiationCtx = saveContextForActor(actor, "radiation");
+    context.derived = {
+      ...(actor.gw ?? {}),
+      poisonSaveBonus: Number.isFinite(poisonCtx?.saveBonus) ? poisonCtx.saveBonus : 0,
+      poisonSaveSummary: poisonCtx?.resistanceSummary ?? "",
+      radiationSaveBonus: Number.isFinite(radiationCtx?.saveBonus) ? radiationCtx.saveBonus : 0,
+      radiationSaveSummary: radiationCtx?.resistanceSummary ?? ""
+    };
     context.config = CONFIG.GAMMA_WORLD;
     context.attributeKeys = ATTRIBUTE_KEYS;
     context.tabs   = this._prepareTabs("primary");
