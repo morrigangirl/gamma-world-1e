@@ -479,6 +479,33 @@ export const MUTATION_RULES = {
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "10", saveType: "", notes: "Target is restrained. They may attempt a Strength check (1d20 + PS mod) vs DC 18 to break free; on success the GM clears the effect." },
     action: "restrain"
+  },
+
+  // 0.8.4 Category C gap fixes — three mental mutations that the rule-
+  // inference keyword matcher classified as activated abilities are
+  // actually declarative / reactive passives. Summary text describes
+  // an always-on sensory bump or a conditional reflect/mimic trait.
+  // GM narrates the conditional bonus when it applies; no player
+  // activation is needed.
+  "Radar/Sonar": {
+    // RAW: "See day or night, +2 to hit within 30 meters." The
+    // day/night sight is continuous. The +2 to-hit is range-gated and
+    // applied by the GM narratively when the target is within 30m;
+    // wiring it into derived data would over-reward (no easy way to
+    // gate by per-attack distance from the defender's sheet).
+    mode: "passive"
+  },
+  "Sound Imitation": {
+    // RAW: "Reflect sonic attack (still take effects) or mimic sounds."
+    // The reflect-sonic-attack path is a reactive passive (triggers on
+    // incoming sonic damage, not on the mutant's turn). The mimicry is
+    // narrative. Neither is an activated ability.
+    mode: "passive"
+  },
+  "Thought Imitation": {
+    // Same shape as Sound Imitation but for mental attacks + thought
+    // mimicry. Reactive reflect + narrative mimic.
+    mode: "passive"
   }
 };
 
