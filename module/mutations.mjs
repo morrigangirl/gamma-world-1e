@@ -628,6 +628,64 @@ async function handleNote(actor, item) {
 }
 
 /**
+ * 0.8.4 — "restrain" handler.
+ *
+ * Applies a Restrained temporary effect to the primary target with a
+ * default duration (overridable via the mutation rule's effect.formula
+ * — interpret a scalar like "10" as rounds). The target attempts a
+ * Strength check against a DC set in the mutation's notes to break
+ * free; on success the GM removes the effect manually (or a future
+ * cinematic-roll request can automate it).
+ *
+ * Used by Tangle Vines (RAW: "Strength save vs 18 to break free").
+ * The effect carries a -4 to-hit modifier while active so the target
+ * feels the mechanical weight — escape rolls themselves are GM-
+ * initiated via the sheet's Roll PS button.
+ */
+async function handleRestrain(actor, item) {
+  const target = primaryTarget();
+  if (!target?.actor) {
+    ui.notifications?.warn(`Target a token before using ${item.name}.`);
+    return false;
+  }
+
+  const defaultRounds = 10;
+  const formula = item.system.effect?.formula?.trim?.();
+  let rounds = defaultRounds;
+  if (formula) {
+    try {
+      const durationRoll = await new Roll(formula).evaluate();
+      rounds = Math.max(1, Math.round(Number(durationRoll.total) || defaultRounds));
+    } catch (_) {
+      rounds = defaultRounds;
+    }
+  }
+
+  await commitMutationUse(item, { consumeUse: true, setCooldown: true });
+
+  await applyTemporaryEffect(target.actor, {
+    id: `${item.id}:restrain:${target.actor.id}`,
+    label: item.name,
+    mode: "generic",
+    remainingRounds: rounds,
+    statusId: "restrained",
+    sourceName: item.name,
+    changes: {
+      toHitBonus: -4
+    }
+  });
+
+  await postMutationMessage(
+    actor,
+    item,
+    `<p>${target.actor.name} is <strong>restrained</strong> by ${item.name} for up to ${rounds} round(s).</p>
+     <p>${item.system.effect?.notes || "Make a Strength check to break free; on success the GM clears the effect."}</p>
+     <p class="gw-card-meta">-4 to-hit while restrained.</p>`
+  );
+  return true;
+}
+
+/**
  * 0.8.4 — "mental-save" handler.
  *
  * Fires a mental save against the primary target and posts the outcome
@@ -751,6 +809,8 @@ export async function useMutation(actor, item) {
       return handleMentalControl(actor, item);
     case "mental-save":
       return handleMentalSave(actor, item);
+    case "restrain":
+      return handleRestrain(actor, item);
     case "guided":
       return handleGuided(actor, item);
     case "note":

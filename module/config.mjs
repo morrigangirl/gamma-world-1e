@@ -420,6 +420,14 @@ export const GAMMA_WORLD_STATUS_EFFECTS = [
     id: "sleeping",
     name: "GAMMA_WORLD.Status.Sleeping",
     img: "icons/svg/sleep.svg"
+  },
+  {
+    // 0.8.4: added for Tangle Vines and other restrain-style effects.
+    // If Foundry core already defines "restrained", registerGammaWorld-
+    // StatusEffects keeps core's entry (dedupe by id).
+    id: "restrained",
+    name: "GAMMA_WORLD.Status.Restrained",
+    img: "icons/svg/net.svg"
   }
 ];
 

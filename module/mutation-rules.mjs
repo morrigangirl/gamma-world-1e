@@ -467,6 +467,18 @@ export const MUTATION_RULES = {
   "Increased Senses": {
     // Same shape as Color Sensitivity: a +4 detection bump.
     mode: "passive"
+  },
+  "Tangle Vines": {
+    // RAW: Vines entangle victims within 3m; Strength save vs 18 to
+    // break free. The handler applies a Restrained temp effect with a
+    // -4 to-hit penalty; the GM removes it when the victim escapes
+    // (via the PS-check button on the sheet).
+    mode: "action",
+    range: "3 m",
+    duration: "Until escape",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "10", saveType: "", notes: "Target is restrained. They may attempt a Strength check (1d20 + PS mod) vs DC 18 to break free; on success the GM clears the effect." },
+    action: "restrain"
   }
 };
 
