@@ -2977,3 +2977,134 @@ test("0.9.0 Tier 3 — applyEffectChange exported from mutation-rules.mjs applie
     globalThis.foundry = originalFoundry;
   }
 });
+
+/* ================================================================= */
+/* 0.9.1 Tier 4 — Equipment ActiveEffect migration                    */
+/* ================================================================= */
+
+test("0.9.1 Tier 4 — evaluateCondition supports equipped primitive", async () => {
+  const { evaluateCondition } = await import("../module/mutation-rules.mjs");
+
+  const equippedItem = { system: { equipped: true } };
+  const unequippedItem = { system: { equipped: false } };
+
+  // Bare string form.
+  assert.equal(evaluateCondition("equipped", { item: equippedItem }), true);
+  assert.equal(evaluateCondition("equipped", { item: unequippedItem }), false);
+
+  // Object form with explicit truthy/falsy values.
+  assert.equal(evaluateCondition({ equipped: true }, { item: equippedItem }), true);
+  assert.equal(evaluateCondition({ equipped: true }, { item: unequippedItem }), false);
+  assert.equal(evaluateCondition({ equipped: false }, { item: unequippedItem }), true,
+    "Explicit { equipped: false } passes when the item is NOT equipped");
+  assert.equal(evaluateCondition({ equipped: false }, { item: equippedItem }), false);
+
+  // Missing item or item without equipped field → falsy baseline.
+  assert.equal(evaluateCondition("equipped", {}), false);
+  assert.equal(evaluateCondition("equipped", { item: { system: {} } }), false);
+
+  // Compound with other primitives.
+  assert.equal(evaluateCondition({ all: [{ equipped: true }] }, { item: equippedItem }), true);
+  assert.equal(evaluateCondition({ all: [{ equipped: true }] }, { item: unequippedItem }), false);
+});
+
+test("0.9.1 Tier 4 — applyEquipmentEffects upgrades flight/lift from powered armor", async () => {
+  const { applyEquipmentEffects } = await import("../module/equipment-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Equipped Powered Battle Armor → flight 100 + lift 1.5.
+    {
+      const actor = {
+        items: [{ type: "armor", name: "Powered Battle Armor", system: { equipped: true } }]
+      };
+      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      applyEquipmentEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 100, "UPGRADE flight from 0 → 100");
+      assert.equal(derived.movementBase, 120, "UPGRADE keeps the larger existing value");
+      assert.equal(derived.liftCapacity, 1.5, "UPGRADE lift from 0 → 1.5");
+    }
+
+    // UNequipped armor → no modifiers applied.
+    {
+      const actor = {
+        items: [{ type: "armor", name: "Powered Battle Armor", system: { equipped: false } }]
+      };
+      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      applyEquipmentEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 0, "equipped condition blocks the AE when off");
+      assert.equal(derived.liftCapacity, 0);
+    }
+
+    // Stacking two equipped powered armors — UPGRADE picks the max.
+    {
+      const actor = {
+        items: [
+          { type: "armor", name: "Powered Battle Armor", system: { equipped: true } },
+          { type: "armor", name: "Powered Assault Armor", system: { equipped: true } }
+        ]
+      };
+      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      applyEquipmentEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 250, "Powered Assault Armor flight wins (max of 100, 250)");
+      assert.equal(derived.liftCapacity, 2, "both armors grant 2 lift (Assault) vs 1.5 (Battle); max = 2");
+    }
+
+    // Energized Armor — jump only.
+    {
+      const actor = {
+        items: [{ type: "armor", name: "Energized Armor", system: { equipped: true } }]
+      };
+      const derived = { jumpSpeed: 0, flightSpeed: 0 };
+      applyEquipmentEffects(actor, derived);
+      assert.equal(derived.jumpSpeed, 200);
+      assert.equal(derived.flightSpeed, 0, "Energized Armor doesn't grant flight");
+    }
+
+    // Armor without effects in the rule (e.g. Inertia Armor) — no-op.
+    {
+      const actor = {
+        items: [{ type: "armor", name: "Inertia Armor", system: { equipped: true } }]
+      };
+      const derived = { flightSpeed: 0, liftCapacity: 0 };
+      applyEquipmentEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 0);
+      assert.equal(derived.liftCapacity, 0);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.9.1 Tier 4 — getArmorRule exposes effects arrays for powered armors", async () => {
+  const { getArmorRule } = await import("../module/equipment-rules.mjs");
+
+  const battle = getArmorRule({ name: "Powered Battle Armor" });
+  assert.ok(Array.isArray(battle.effects));
+  assert.equal(battle.effects.length, 2, "flight + lift effects");
+  assert.equal(battle.effects[0].condition, "equipped", "condition gates on equipped state");
+
+  const assault = getArmorRule({ name: "Powered Assault Armor" });
+  const flightEffect = assault.effects.find((e) => e.label.includes("flight"));
+  const flightChange = flightEffect.changes.find((c) => c.key === "gw.flightSpeed");
+  assert.equal(flightChange.value, "250");
+  assert.equal(flightChange.mode, 4, "UPGRADE mode (4)");
+
+  const inertia = getArmorRule({ name: "Inertia Armor" });
+  assert.equal(inertia.effects, undefined, "Inertia Armor has no effects — traits-only");
+});

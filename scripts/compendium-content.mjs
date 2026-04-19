@@ -22,7 +22,7 @@ import {
   WEAPON_DAMAGE_TABLE
 } from "../module/tables/combat-matrix.mjs";
 import { POISON_MATRIX, RADIATION_MATRIX } from "../module/tables/resistance-tables.mjs";
-import { enrichEquipmentSystemData } from "../module/equipment-rules.mjs";
+import { enrichEquipmentSystemData, getArmorRule } from "../module/equipment-rules.mjs";
 import {
   createPrototypeTokenSource,
   defaultPrototypeTokenOptions,
@@ -181,6 +181,35 @@ function armorSource({
     }
   };
   enrichEquipmentSystemData(source);
+  // 0.9.1 Tier 4 — emit declarative effects from the armor rule onto
+  // the item source so Foundry's Effects tab shows them when the armor
+  // is dragged onto an actor. Runtime apply still goes through
+  // applyEquipmentEffects (which reads the rule table), but the item
+  // gets a user-visible display copy via transferred AEs.
+  const rule = getArmorRule(source);
+  const ruleEffects = Array.isArray(rule?.effects) ? rule.effects : [];
+  if (ruleEffects.length) {
+    source.effects = ruleEffects.map((effect, index) => ({
+      name: effect.label ?? effect.name ?? `${name} effect ${index + 1}`,
+      img: "icons/svg/aura.svg",
+      transfer: true,
+      // Start disabled — the updateItem hook flips the flag based on
+      // equipped state the first time the item lands on an actor and
+      // on each subsequent equip toggle.
+      disabled: effect.condition != null,
+      changes: (Array.isArray(effect.changes) ? effect.changes : []).map((change) => ({
+        key: change.key,
+        mode: Number.isInteger(change.mode) ? change.mode : 2,
+        value: String(change.value ?? ""),
+        priority: Number.isFinite(Number(change.priority)) ? Number(change.priority) : 20
+      })),
+      flags: {
+        "gamma-world-1e": {
+          condition: effect.condition ?? null
+        }
+      }
+    }));
+  }
   return source;
 }
 

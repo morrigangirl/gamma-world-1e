@@ -1,5 +1,20 @@
 import { SYSTEM_ID } from "./config.mjs";
 import { artifactFunctionChance } from "./tables/artifact-tables.mjs";
+import { applyEffectChange, evaluateCondition } from "./mutation-rules.mjs";
+
+/**
+ * 0.9.1 Tier 4 — Foundry ACTIVE_EFFECT_MODES numeric enum mirror for
+ * use in armor rule effects entries. Matches the AE_MODE constant in
+ * mutation-rules.mjs + effect-state.mjs.
+ */
+const AE_MODE = Object.freeze({
+  CUSTOM:    0,
+  MULTIPLY:  1,
+  ADD:       2,
+  DOWNGRADE: 3,
+  UPGRADE:   4,
+  OVERRIDE:  5
+});
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -263,7 +278,14 @@ const grantedItemSyncs = new Map();
 const ARMOR_RULES = {
   "Energized Armor": {
     mobility: { jump: 200 },
-    field: { mode: "none", capacity: 0 }
+    field: { mode: "none", capacity: 0 },
+    effects: [
+      { label: "Energized Armor — jump",
+        condition: "equipped",
+        changes: [
+          { key: "gw.jumpSpeed", mode: AE_MODE.UPGRADE, value: "200", priority: 20 }
+        ] }
+    ]
   },
   "Inertia Armor": {
     field: { mode: "partial", capacity: 25 },
@@ -281,6 +303,19 @@ const ARMOR_RULES = {
     field: { mode: "full", capacity: 30 },
     mobility: { flight: 100, lift: 1.5 },
     offense: { punchDamage: "8d6" },
+    effects: [
+      { label: "Powered Battle Armor — flight",
+        condition: "equipped",
+        changes: [
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "100", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "100", priority: 20 }
+        ] },
+      { label: "Powered Battle Armor — lift",
+        condition: "equipped",
+        changes: [
+          { key: "gw.liftCapacity", mode: AE_MODE.UPGRADE, value: "1.5", priority: 20 }
+        ] }
+    ],
     grantedItems: [
       weaponSource({
         name: "Powered Battle Fist",
@@ -296,6 +331,19 @@ const ARMOR_RULES = {
     field: { mode: "full", capacity: 40 },
     mobility: { flight: 150, lift: 2 },
     offense: { punchDamage: "9d6" },
+    effects: [
+      { label: "Powered Attack Armor — flight",
+        condition: "equipped",
+        changes: [
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "150", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "150", priority: 20 }
+        ] },
+      { label: "Powered Attack Armor — lift",
+        condition: "equipped",
+        changes: [
+          { key: "gw.liftCapacity", mode: AE_MODE.UPGRADE, value: "2", priority: 20 }
+        ] }
+    ],
     grantedItems: [
       weaponSource({
         name: "Powered Attack Fist",
@@ -346,6 +394,19 @@ const ARMOR_RULES = {
     field: { mode: "full", capacity: 50 },
     mobility: { flight: 250, lift: 2 },
     offense: { punchDamage: "9d6" },
+    effects: [
+      { label: "Powered Assault Armor — flight",
+        condition: "equipped",
+        changes: [
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "250", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "250", priority: 20 }
+        ] },
+      { label: "Powered Assault Armor — lift",
+        condition: "equipped",
+        changes: [
+          { key: "gw.liftCapacity", mode: AE_MODE.UPGRADE, value: "2", priority: 20 }
+        ] }
+    ],
     grantedItems: [
       weaponSource({
         name: "Powered Assault Fist",
@@ -1632,20 +1693,54 @@ export function applyEquipmentModifiers(actor, derived) {
   };
 
   for (const armor of equippedArmor) {
-    if (Number(armor.system.mobility?.flight ?? 0) > 0) {
-      derived.flightSpeed = Math.max(derived.flightSpeed, Number(armor.system.mobility.flight ?? 0));
-      derived.movementBase = Math.max(derived.movementBase, Number(armor.system.mobility.flight ?? 0));
-    }
-    if (Number(armor.system.mobility?.jump ?? 0) > 0) {
-      derived.jumpSpeed = Math.max(Number(derived.jumpSpeed ?? 0), Number(armor.system.mobility.jump ?? 0));
-    }
-    if (Number(armor.system.mobility?.lift ?? 0) > 0) {
-      derived.liftCapacity = Math.max(Number(derived.liftCapacity ?? 0), Number(armor.system.mobility.lift ?? 0));
-    }
+    // 0.9.1 Tier 4 — mobility bonuses (flight / jump / lift) migrated to
+    // the declarative rule-table effects path (applyEquipmentEffects).
+    // The `protection.*` booleans below remain in the imperative path
+    // because they're deprecated legacy fields (Phase 5 replaces them
+    // with `traits.grants*` which are already declarative via the
+    // armor-trait rollup in buildActorDerived).
     if (armor.system.protection?.radiationImmune) derived.hazardProtection.radiation = true;
     if (armor.system.protection?.poisonImmune) derived.hazardProtection.poison = true;
     if (armor.system.protection?.blackRayImmune) derived.hazardProtection.blackRay = true;
     if (armor.system.protection?.laserImmune) derived.laserImmune = true;
     if (armor.system.protection?.mentalImmune) derived.mentalImmune = true;
   }
+}
+
+/**
+ * 0.9.1 Tier 4 — apply declarative equipment effects from the ARMOR_RULES
+ * table. Mirrors the Phase 3 mutation pipeline: iterate equipped armor,
+ * collect per-effect changes (filtered by condition), sort by priority,
+ * apply via the shared `applyEffectChange`. Currently covers the four
+ * powered armors' mobility bonuses (flight / jump / lift) plus
+ * Energized Armor's jump — everything that used to live in the
+ * imperative loop inside `applyEquipmentModifiers`.
+ *
+ * Runs AFTER `applyEquipmentModifiers` so the imperative path can
+ * continue to set the `hazardProtection` / immunity booleans for
+ * deprecated `protection.*` fields.
+ */
+export function applyEquipmentEffects(actor, derived) {
+  const armors = actor.items.filter((item) => item.type === "armor");
+  const collected = [];
+  for (const armor of armors) {
+    const rule = getArmorRule(armor);
+    const effects = Array.isArray(rule?.effects) ? rule.effects : [];
+    if (!effects.length) continue;
+    const ctx = { actor, item: armor, derived };
+    for (const effect of effects) {
+      if (effect?.condition && !evaluateCondition(effect.condition, ctx)) continue;
+      const changes = Array.isArray(effect?.changes) ? effect.changes : [];
+      for (const change of changes) {
+        if (change?.condition && !evaluateCondition(change.condition, ctx)) continue;
+        collected.push({ change, ctx });
+      }
+    }
+  }
+  collected.sort((a, b) => {
+    const pa = Number.isFinite(Number(a?.change?.priority)) ? Number(a.change.priority) : 20;
+    const pb = Number.isFinite(Number(b?.change?.priority)) ? Number(b.change.priority) : 20;
+    return pa - pb;
+  });
+  for (const entry of collected) applyEffectChange(derived, entry.change, entry.ctx);
 }

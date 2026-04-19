@@ -9,7 +9,7 @@ import {
   resolveHazardMutation,
   rollDamageFromFlags
 } from "./dice.mjs";
-import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate } from "./equipment-rules.mjs";
+import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate, getArmorRule } from "./equipment-rules.mjs";
 import { resetCombatFatigue, syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
 import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
 import { renderUndoButton, requestUndo } from "./undo.mjs";
@@ -405,6 +405,10 @@ async function onMutationRelevantItemChange(item, changesOrOptions = {}, maybeOp
   // Runtime apply (applyMutationEffects) already respects the condition
   // independently; this sync only affects visual state.
   if (item.type === "mutation") await syncConditionalEffectsDisabledState(item, actor);
+  // 0.9.1 Tier 4 — same sync for armor items: when equipped flips, the
+  // rule-declared "equipped" condition changes truthiness, so the
+  // transferred AE's disabled flag should update accordingly.
+  if (item.type === "armor") await syncArmorEffectsDisabledState(item, actor);
   await scheduleActorMaintenance(actor);
 }
 
@@ -447,6 +451,41 @@ async function syncConditionalEffectsDisabledState(item, actor) {
       await item.updateEmbeddedDocuments("ActiveEffect", updates, { gammaWorldSync: true });
     } catch (error) {
       console.warn(`${SYSTEM_ID} | failed to sync conditional AE state on "${item.name}"`, error);
+    }
+  }
+}
+
+/**
+ * 0.9.1 Tier 4 — mirror of `syncConditionalEffectsDisabledState` for
+ * armor. The armor rule's `effects[i].condition` (usually "equipped")
+ * is evaluated against the live item state and the corresponding AE's
+ * `disabled` field is flipped to match. Runtime apply (applyEquipment-
+ * Effects) already respects the condition independently; this sync
+ * only affects the Effects tab display.
+ */
+async function syncArmorEffectsDisabledState(item, actor) {
+  const rule = getArmorRule(item);
+  const effects = Array.isArray(rule?.effects) ? rule.effects : [];
+  if (!effects.length || !item.effects?.size) return;
+  const ctx = { actor, item, derived: {} };
+  const updates = [];
+  const itemEffects = [...item.effects.contents];
+  for (let i = 0; i < effects.length; i += 1) {
+    const rule_effect = effects[i];
+    const ae = itemEffects[i];
+    if (!ae) continue;
+    const condition = rule_effect.condition ?? null;
+    const shouldBeEnabled = evaluateCondition(condition, ctx);
+    const wantDisabled = !shouldBeEnabled;
+    if (!!ae.disabled !== wantDisabled) {
+      updates.push({ _id: ae.id, disabled: wantDisabled });
+    }
+  }
+  if (updates.length) {
+    try {
+      await item.updateEmbeddedDocuments("ActiveEffect", updates, { gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | failed to sync armor AE state on "${item.name}"`, error);
     }
   }
 }

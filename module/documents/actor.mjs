@@ -3,7 +3,7 @@
  */
 
 import { applyMutationEffects, applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData } from "../mutation-rules.mjs";
-import { applyEquipmentModifiers } from "../equipment-rules.mjs";
+import { applyEquipmentEffects, applyEquipmentModifiers } from "../equipment-rules.mjs";
 import { applyTemporaryDerivedModifiers } from "../effect-state.mjs";
 import { actorInitiativeModifier } from "../initiative.mjs";
 import { applyRobotDerived, actorIsRobot } from "../robots.mjs";
@@ -148,6 +148,13 @@ export function buildActorDerived(actor) {
   // derived object to fold into.
   applyMutationEffects(actor, derived);
   applyEquipmentModifiers(actor, derived);
+  // 0.9.1 Tier 4 — declarative armor effects (flight / jump / lift from
+  // powered armors and Energized Armor). Runs after applyEquipmentModifiers
+  // so the imperative hazardProtection booleans land first; the
+  // declarative path then layers mobility UPGRADEs on top. Both paths
+  // read `item.system.equipped` as the gate, so unequipped armor is a
+  // no-op through either.
+  applyEquipmentEffects(actor, derived);
   applyRobotDerived(actor, derived);
 
   // Armor trait rollup — every equipped armor piece contributes its

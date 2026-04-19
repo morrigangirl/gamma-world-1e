@@ -1281,6 +1281,12 @@ export function evaluateCondition(condition, ctx) {
   if (typeof condition === "string") {
     if (condition === "toggleEnabled") return !!ctx?.item?.system?.activation?.enabled;
     if (condition === "unencumbered") return !ctx?.derived?.encumbered;
+    // 0.9.1 Tier 4 — true when the context item has `system.equipped`
+    // set. Lets armor (and other equippable items) gate their effects
+    // on equipped state. Reads from ctx.item, not ctx.derived, so an
+    // armor's AE-via-rule entry self-gates without iterating actor-wide
+    // state.
+    if (condition === "equipped") return !!ctx?.item?.system?.equipped;
     return false;
   }
   if (typeof condition === "object") {
@@ -1289,6 +1295,9 @@ export function evaluateCondition(condition, ctx) {
     }
     if (condition.unencumbered != null) {
       return !ctx?.derived?.encumbered === !!condition.unencumbered;
+    }
+    if (condition.equipped != null) {
+      return !!ctx?.item?.system?.equipped === !!condition.equipped;
     }
     if (condition.variantIs != null) {
       return String(ctx?.item?.system?.reference?.variant ?? "") === String(condition.variantIs);
