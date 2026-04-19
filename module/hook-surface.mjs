@@ -34,6 +34,8 @@
  *   gammaWorld.v1.preSaveRoll              before save resolves    yes
  *   gammaWorld.v1.saveResolved             after save outcome      no
  *   gammaWorld.v1.conditionApplied         after AE applied        no
+ *   gammaWorld.v1.preSkillRoll             before skill d20 evals  yes
+ *   gammaWorld.v1.skillRollComplete        after skill d20, before card
  *
  * A tenth hook, `gammaWorld.v1.resourceConsumed`, is declared here for
  * naming consistency but wired in Phase 4 alongside the consumeResource
@@ -50,7 +52,12 @@ export const HOOK = Object.freeze({
   preSaveRoll:          "gammaWorld.v1.preSaveRoll",
   saveResolved:         "gammaWorld.v1.saveResolved",
   conditionApplied:     "gammaWorld.v1.conditionApplied",
-  resourceConsumed:     "gammaWorld.v1.resourceConsumed"
+  resourceConsumed:     "gammaWorld.v1.resourceConsumed",
+  // 0.8.3 — Cinematic Roll Request surface. Skills posted silently in
+  // 0.8.0; these hooks let the banner substitute the skill chat card
+  // without duplicating it, and give macro authors a veto point.
+  preSkillRoll:         "gammaWorld.v1.preSkillRoll",
+  skillRollComplete:    "gammaWorld.v1.skillRollComplete"
 });
 
 export const HOOK_SURFACE_VERSION = 1;

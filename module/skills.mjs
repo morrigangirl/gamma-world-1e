@@ -23,6 +23,7 @@
 
 import { SYSTEM_ID, SKILLS, ATTRIBUTES } from "./config.mjs";
 import { abilityModifierFromScore } from "./mutation-rules.mjs";
+import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
 
 /**
  * Pure-JS computation of an actor's total modifier on a given skill.
@@ -78,14 +79,34 @@ export function countProficientSkills(actor) {
  * inspect the result; the primary side effect is the ChatMessage.
  *
  * Exposed on `game.gammaWorld.rollSkill` for macro use (see api.mjs).
+ *
+ * 0.8.3 — fires the `gammaWorld.v1.preSkillRoll` veto hook before
+ * evaluating the d20 and the `gammaWorld.v1.skillRollComplete` announce
+ * hook before posting the card. Accepts a `{ suppressCard }` option so
+ * the Cinematic Roll Request banner can consume the roll without
+ * duplicating the chat card.
  */
-export async function rollSkill(actor, skillKey) {
+export async function rollSkill(actor, skillKey, { suppressCard = false } = {}) {
   if (!actor) return null;
   const mod = computeSkillModifier(actor, skillKey);
   if (!mod.ok) {
     ui.notifications?.warn(`Unknown skill: ${skillKey}`);
     return null;
   }
+
+  // Veto-capable pre-hook — macros / the banner can swap in a different
+  // resolution here (e.g. auto-success for a narrative moment).
+  const preProceed = fireVetoHook(HOOK.preSkillRoll, {
+    actorUuid: actor.uuid,
+    actorName: actor.name,
+    skillKey,
+    abilityKey: mod.abilityKey,
+    abilityMod: mod.abilityMod,
+    profBonus: mod.profBonus,
+    proficient: mod.proficient
+  });
+  if (!preProceed) return null;
+
   const roll = await new Roll("1d20 + @ability + @prof", {
     ability: mod.abilityMod,
     prof: mod.profBonus
@@ -117,25 +138,45 @@ export async function rollSkill(actor, skillKey) {
     rollTooltip
   });
 
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    content,
-    rolls: [roll],
-    flags: {
-      [SYSTEM_ID]: {
-        card: "skill",
-        skill: {
-          actorUuid: actor.uuid,
-          skillKey,
-          abilityKey: mod.abilityKey,
-          abilityMod: mod.abilityMod,
-          profBonus: mod.profBonus,
-          proficient: mod.proficient,
-          total: roll.total
+  // Announce-only — fires for BOTH sheet-initiated rolls and banner-
+  // initiated rolls. The Cinematic Roll Request banner subscribes here
+  // to snapshot the total onto its per-actor card, regardless of whether
+  // it also asked us to suppress the chat card.
+  fireAnnounceHook(HOOK.skillRollComplete, {
+    actorUuid: actor.uuid,
+    actorName: actor.name,
+    skillKey,
+    abilityKey: mod.abilityKey,
+    abilityMod: mod.abilityMod,
+    profBonus: mod.profBonus,
+    proficient: mod.proficient,
+    d20: roll.terms?.[0]?.total ?? roll.total,
+    total: roll.total,
+    rollFormula: roll.formula,
+    roll
+  });
+
+  if (!suppressCard) {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content,
+      rolls: [roll],
+      flags: {
+        [SYSTEM_ID]: {
+          card: "skill",
+          skill: {
+            actorUuid: actor.uuid,
+            skillKey,
+            abilityKey: mod.abilityKey,
+            abilityMod: mod.abilityMod,
+            profBonus: mod.profBonus,
+            proficient: mod.proficient,
+            total: roll.total
+          }
         }
       }
-    }
-  });
+    });
+  }
 
   return { roll, ...mod };
 }

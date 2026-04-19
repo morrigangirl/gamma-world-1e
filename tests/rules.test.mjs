@@ -1329,7 +1329,8 @@ test("Hook surface exports the expected constants and is test-safe", () => {
   assert.equal(HOOK_SURFACE_VERSION, 1);
   assert.equal(Object.isFrozen(HOOK), true, "HOOK table must be frozen so macro authors can trust the names");
 
-  // The nine pipeline hooks + the Phase 4 resourceConsumed reservation.
+  // The nine pipeline hooks + the Phase 4 resourceConsumed reservation
+  // + the 0.8.3 skill hook pair for the Cinematic Roll Request banner.
   const expected = {
     preAttackRoll:      "gammaWorld.v1.preAttackRoll",
     attackRollComplete: "gammaWorld.v1.attackRollComplete",
@@ -1340,7 +1341,9 @@ test("Hook surface exports the expected constants and is test-safe", () => {
     preSaveRoll:        "gammaWorld.v1.preSaveRoll",
     saveResolved:       "gammaWorld.v1.saveResolved",
     conditionApplied:   "gammaWorld.v1.conditionApplied",
-    resourceConsumed:   "gammaWorld.v1.resourceConsumed"
+    resourceConsumed:   "gammaWorld.v1.resourceConsumed",
+    preSkillRoll:       "gammaWorld.v1.preSkillRoll",
+    skillRollComplete:  "gammaWorld.v1.skillRollComplete"
   };
   for (const [key, value] of Object.entries(expected)) {
     assert.equal(HOOK[key], value, `HOOK.${key} should equal "${value}"`);
@@ -1832,5 +1835,77 @@ test("0.8.2 — radiation conditions module: read + override helpers", async () 
     globalThis.game = originalGame;
   }
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.8.3 Cinematic Roll Request                                       */
+/* ------------------------------------------------------------------ */
+
+test("0.8.3 — Cinematic roll-type registry is well-formed", async () => {
+  const {
+    ROLL_TYPES,
+    RESOLVERS,
+    CATEGORIES,
+    getRollType,
+    hasRollType,
+    rollTypesByCategory
+  } = await import("../module/cinematic/roll-types.mjs");
+
+  const resolverKeys = new Set(Object.values(RESOLVERS));
+  const categorySet = new Set(CATEGORIES);
+
+  // Every entry has a unique key, a valid resolver, and a valid category.
+  const seenKeys = new Set();
+  for (const entry of ROLL_TYPES) {
+    assert.ok(typeof entry.key === "string" && entry.key.length > 0, `bad key: ${JSON.stringify(entry)}`);
+    assert.equal(seenKeys.has(entry.key), false, `duplicate roll-type key: ${entry.key}`);
+    seenKeys.add(entry.key);
+    assert.ok(resolverKeys.has(entry.resolver), `${entry.key} has unknown resolver ${entry.resolver}`);
+    assert.ok(categorySet.has(entry.category), `${entry.key} has unknown category ${entry.category}`);
+    assert.ok(typeof entry.label === "string" && entry.label.length > 0, `${entry.key} missing label`);
+  }
+
+  // Every category has at least one entry.
+  const grouped = rollTypesByCategory();
+  for (const cat of CATEGORIES) {
+    assert.ok(Array.isArray(grouped[cat]) && grouped[cat].length > 0,
+      `category ${cat} must have at least one entry`);
+  }
+
+  // Six attribute entries (one per ability). Three save entries. One
+  // skill entry. One initiative entry. Total 11.
+  assert.equal(grouped.attribute.length, 6);
+  assert.equal(grouped.save.length, 3);
+  assert.equal(grouped.skill.length, 1);
+  assert.equal(grouped.initiative.length, 1);
+
+  // Lookup helpers.
+  assert.equal(getRollType("save.poison").saveType, "poison");
+  assert.equal(hasRollType("save.poison"), true);
+  assert.equal(hasRollType("save.bogus"), false);
+  assert.throws(() => getRollType("save.bogus"), /Unknown Cinematic roll-type key/);
+
+  // Attribute entries carry the ability key the resolver needs.
+  const attrPs = ROLL_TYPES.find((entry) => entry.key === "attribute.ps");
+  assert.equal(attrPs.abilityKey, "ps");
+  assert.equal(attrPs.requiresDc, true);
+  assert.equal(attrPs.requiresIntensity, false);
+
+  // Save entries carry the saveType the resolver needs.
+  const saveRad = ROLL_TYPES.find((entry) => entry.key === "save.radiation");
+  assert.equal(saveRad.saveType, "radiation");
+  assert.equal(saveRad.requiresIntensity, true);
+  assert.equal(saveRad.requiresDc, false);
+
+  // Skill entry flags requiresSkill so the composer knows to show the
+  // second dropdown.
+  assert.equal(getRollType("skill").requiresSkill, true);
+});
+
+test("0.8.3 — preSkillRoll / skillRollComplete hooks are declared", async () => {
+  const { HOOK } = await import("../module/hook-surface.mjs");
+  assert.equal(HOOK.preSkillRoll, "gammaWorld.v1.preSkillRoll");
+  assert.equal(HOOK.skillRollComplete, "gammaWorld.v1.skillRollComplete");
+});
+
 
 
