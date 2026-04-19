@@ -4,6 +4,17 @@ import { getMutationRule } from "./mutation-rules.mjs";
 import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
 import { GammaWorldConfig } from "./apps/gm-automation-config.mjs";
+import {
+  AMMO_GEAR_BY_TYPE,
+  WEAPON_RENAMES_081,
+  NEEDLER_NAMES_081,
+  SLING_BULLETS_WEAPON_081,
+  legacyAmmoTypeString
+} from "./ammo-migration.mjs";
+
+// Re-export so existing callers (tests, other modules) can keep pulling
+// these off migrations.mjs.
+export { WEAPON_RENAMES_081, NEEDLER_NAMES_081, SLING_BULLETS_WEAPON_081 };
 
 const ALLIANCE_ALIASES = {
   "brotherhood of thought":    "brotherhood",
@@ -383,37 +394,19 @@ async function migrateItem(item) {
 }
 
 /**
- * Map ammoType keys to the canonical ammo gear item names that the generator
- * produces. Used by the inline-ammo migration to figure out which gear item
- * to grant on the actor.
- */
-const AMMO_GEAR_BY_TYPE = {
-  "arrow":             "Arrows (bundle of 20)",
-  "crossbow-bolt":     "Crossbow Bolts (bundle of 20)",
-  "sling-stone":       "Sling Stones (pouch of 30)",
-  "sling-bullet":      "Sling Bullets (pouch of 30)",
-  "slug":              "Slug-Thrower Rounds (clip of 15)",
-  "needler-paralysis": "Needler Darts, Paralysis (10)",
-  "needler-poison":    "Needler Darts, Poison (10)",
-  "stun-cell":         "Stun Rifle Cell (10 shots)",
-  "javelin":           "Javelin (single)",
-  "gyrojet":           "Gyrojet Slugs (clip of 10)"
-};
-
-/**
  * For ranged weapons on an actor with an inline ammo counter, create a gear
  * ammo item alongside the weapon and zero the inline counter. Called once per
- * actor during migration.
+ * actor during migration. 0.8.1: handles SetField-typed ammoType.
  */
 async function migrateInlineAmmoToGear(actor) {
   const weapons = actor.items.filter((i) => i.type === "weapon"
-    && i.system?.ammoType
+    && legacyAmmoTypeString(i.system?.ammoType)
     && Number(i.system?.ammo?.current ?? 0) > 0);
   if (!weapons.length) return;
 
   const equipmentPack = game.packs?.get(`${SYSTEM_ID}.equipment`);
   for (const weapon of weapons) {
-    const ammoType = String(weapon.system.ammoType);
+    const ammoType = legacyAmmoTypeString(weapon.system.ammoType);
     const gearName = AMMO_GEAR_BY_TYPE[ammoType];
     if (!gearName) continue;
 
@@ -441,6 +434,54 @@ async function migrateInlineAmmoToGear(actor) {
       "system.ammo.max": 0,
       "system.ammo.consumes": false
     }, { gammaWorldSync: true });
+  }
+}
+
+/**
+ * 0.8.1 weapon rename + Needler collapse + Sling Bullets deletion.
+ * Must run AFTER migrateInlineAmmoToGear so the pre-rename single-string
+ * ammoType is used to drain inline counters into the correct gear stack.
+ * Idempotent — re-running finds no matching old names.
+ */
+async function migrateWeaponRenames081(actor) {
+  const weapons = actor.items.filter((i) => i.type === "weapon");
+  if (!weapons.length) return;
+
+  // Plain renames (single rename per weapon entry).
+  for (const weapon of weapons) {
+    const rename = WEAPON_RENAMES_081[weapon.name];
+    if (rename) {
+      await weapon.update({
+        name: rename.name,
+        "system.ammoType": rename.ammoType
+      }, { gammaWorldSync: true });
+    }
+  }
+
+  // Needler collapse: the first matching weapon becomes "Needler" with both
+  // dart types; any additional matches are deleted as duplicates.
+  const needlers = weapons.filter((w) => NEEDLER_NAMES_081.has(w.name));
+  const deleteIds = [];
+  if (needlers.length) {
+    const keeper = needlers[0];
+    await keeper.update({
+      name: "Needler",
+      "system.ammoType": ["needler-poison", "needler-paralysis"]
+    }, { gammaWorldSync: true });
+    for (const donor of needlers.slice(1)) {
+      deleteIds.push(donor.id);
+    }
+  }
+
+  // Sling Bullets weapon → removed (lives on as ammo gear).
+  for (const weapon of weapons) {
+    if (weapon.name === SLING_BULLETS_WEAPON_081) {
+      deleteIds.push(weapon.id);
+    }
+  }
+
+  if (deleteIds.length) {
+    await actor.deleteEmbeddedDocuments("Item", [...new Set(deleteIds)]);
   }
 }
 
@@ -542,6 +583,12 @@ async function migrateActor(actor) {
 
   // 0.5.0: convert inline ammo counters into ammo gear items.
   await migrateInlineAmmoToGear(actor);
+
+  // 0.8.1: weapon renames + Needler collapse + Sling Bullets deletion. Runs
+  // AFTER inline-ammo migration so the pre-rename ammoType drives the gear
+  // lookup (e.g. "Needler (Poison)" with ammo.current=8 ends up as eight
+  // rounds in "Needler Darts, Poison (10)" gear).
+  await migrateWeaponRenames081(actor);
 
   await actor.refreshDerivedResources({ adjustCurrent: false });
 }

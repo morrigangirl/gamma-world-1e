@@ -1500,3 +1500,108 @@ test("Phase 0.8 — countProficientSkills iterates the canonical table", () => {
   assert.equal(countProficientSkills(null),           0);
 });
 
+test("Phase 0.8.1 — weapon renames applied in the equipment pack", async () => {
+  const { equipmentPackSources } = await import("../scripts/compendium-content.mjs");
+  const equipment = equipmentPackSources();
+  const weaponNames = new Set(equipment.filter((i) => i.type === "weapon").map((i) => i.name));
+
+  // Renames landed: canonical 0.8.1 names present.
+  assert.ok(weaponNames.has("Bow"),           "Bow (renamed from 'Bow and Arrows') should be in the pack");
+  assert.ok(weaponNames.has("Sling"),         "Sling (renamed from 'Sling Stones') should be in the pack");
+  assert.ok(weaponNames.has("Slug Thrower"),  "'Slug Thrower' (renamed from 'Slug Thrower (.38)') should be in the pack");
+  assert.ok(weaponNames.has("Needler"),       "'Needler' (collapsed from 'Needler (Poison)' + 'Needler (Paralysis)') should be in the pack");
+
+  // Legacy names are gone from the pack.
+  assert.ok(!weaponNames.has("Bow and Arrows"),     "legacy 'Bow and Arrows' weapon should be gone");
+  assert.ok(!weaponNames.has("Sling Stones"),       "legacy 'Sling Stones' weapon should be gone");
+  assert.ok(!weaponNames.has("Sling Bullets"),      "'Sling Bullets' weapon survives only as ammo gear");
+  assert.ok(!weaponNames.has("Slug Thrower (.38)"), "legacy 'Slug Thrower (.38)' weapon should be gone");
+  assert.ok(!weaponNames.has("Needler (Poison)"),   "legacy 'Needler (Poison)' weapon should be gone");
+  assert.ok(!weaponNames.has("Needler (Paralysis)"),"legacy 'Needler (Paralysis)' weapon should be gone");
+
+  // Sling Bullets still shipped as ammo gear (the one-pouch-of-30 stack).
+  const ammoNames = new Set(equipment
+    .filter((i) => i.type === "gear" && i.system?.subtype === "ammunition")
+    .map((i) => i.name));
+  assert.ok(ammoNames.has("Sling Bullets (pouch of 30)"),
+    "'Sling Bullets (pouch of 30)' ammo gear should still ship in the pack");
+});
+
+test("Phase 0.8.1 — ammoType is now a set with matching energy ammo gear", async () => {
+  const { equipmentPackSources } = await import("../scripts/compendium-content.mjs");
+  const equipment = equipmentPackSources();
+  const byName = new Map(equipment.filter((i) => i.type === "weapon").map((i) => [i.name, i]));
+
+  // Every pack weapon's ammoType is an array (SetField-compatible).
+  for (const weapon of byName.values()) {
+    assert.ok(Array.isArray(weapon.system.ammoType),
+      `${weapon.name}: ammoType should be an array of slugs, got ${typeof weapon.system.ammoType}`);
+  }
+
+  // Single-type weapons have exactly one slug. Needler has two.
+  assert.deepEqual(byName.get("Bow").system.ammoType,          ["arrow"]);
+  assert.deepEqual(byName.get("Crossbow").system.ammoType,     ["crossbow-bolt"]);
+  assert.deepEqual(byName.get("Slug Thrower").system.ammoType, ["slug"]);
+  assert.deepEqual(byName.get("Sling").system.ammoType,        ["sling-stone", "sling-bullet"]);
+  assert.deepEqual(byName.get("Needler").system.ammoType,      ["needler-poison", "needler-paralysis"]);
+
+  // Four new energy-weapon ammo types were added and have matching gear.
+  assert.deepEqual(byName.get("Laser Pistol").system.ammoType,          ["energy-clip"]);
+  assert.deepEqual(byName.get("Laser Rifle").system.ammoType,           ["energy-clip"]);
+  assert.deepEqual(byName.get("Mark V Blaster").system.ammoType,        ["blaster-pack"]);
+  assert.deepEqual(byName.get("Mark VII Blaster Rifle").system.ammoType,["blaster-pack"]);
+  assert.deepEqual(byName.get("Black Ray Gun").system.ammoType,         ["black-ray-cell"]);
+  assert.deepEqual(byName.get("Fusion Rifle").system.ammoType,          ["fusion-cell"]);
+
+  // Matching ammo gear items exist.
+  const ammoTypes = new Set(equipment
+    .filter((i) => i.type === "gear" && i.system?.subtype === "ammunition")
+    .map((i) => i.system?.ammo?.type));
+  for (const key of ["energy-clip", "blaster-pack", "black-ray-cell", "fusion-cell"]) {
+    assert.ok(ammoTypes.has(key), `no ammo gear item exists for new key '${key}'`);
+  }
+});
+
+test("Phase 0.8.1 — WEAPON_RENAMES_081 + Needler constants are well-formed", async () => {
+  const {
+    WEAPON_RENAMES_081,
+    NEEDLER_NAMES_081,
+    SLING_BULLETS_WEAPON_081,
+    legacyAmmoTypeString,
+    AMMO_GEAR_BY_TYPE
+  } = await import("../module/ammo-migration.mjs");
+
+  // Each rename entry points at a non-empty new name + array ammoType.
+  for (const [oldName, spec] of Object.entries(WEAPON_RENAMES_081)) {
+    assert.ok(typeof spec.name === "string" && spec.name.length > 0,
+      `rename for '${oldName}' must have a non-empty new name`);
+    assert.ok(Array.isArray(spec.ammoType) && spec.ammoType.length > 0,
+      `rename for '${oldName}' must have a non-empty ammoType array`);
+    // New name must differ from old name.
+    assert.notEqual(spec.name, oldName, `rename for '${oldName}' must not be a no-op`);
+    // Every declared ammo type has a corresponding gear entry.
+    for (const slug of spec.ammoType) {
+      assert.ok(AMMO_GEAR_BY_TYPE[slug], `rename '${oldName}' references unknown ammo slug '${slug}'`);
+    }
+  }
+
+  // Needler collapse set has exactly the two legacy entries.
+  assert.ok(NEEDLER_NAMES_081 instanceof Set, "NEEDLER_NAMES_081 should be a Set");
+  assert.equal(NEEDLER_NAMES_081.size, 2);
+  assert.ok(NEEDLER_NAMES_081.has("Needler (Poison)"));
+  assert.ok(NEEDLER_NAMES_081.has("Needler (Paralysis)"));
+
+  // Sling Bullets delete-target constant is a single string matching the pack entry.
+  assert.equal(SLING_BULLETS_WEAPON_081, "Sling Bullets");
+
+  // legacyAmmoTypeString coerces SetField/array/string values.
+  assert.equal(legacyAmmoTypeString("arrow"),                          "arrow");
+  assert.equal(legacyAmmoTypeString(["needler-poison"]),               "needler-poison");
+  assert.equal(legacyAmmoTypeString(["slug", "sling-bullet"]),         "slug");
+  assert.equal(legacyAmmoTypeString(new Set(["crossbow-bolt"])),       "crossbow-bolt");
+  assert.equal(legacyAmmoTypeString(new Set()),                        "");
+  assert.equal(legacyAmmoTypeString(null),                             "");
+  assert.equal(legacyAmmoTypeString(undefined),                        "");
+  assert.equal(legacyAmmoTypeString(""),                               "");
+});
+

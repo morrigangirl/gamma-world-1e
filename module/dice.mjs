@@ -666,10 +666,9 @@ function normalizeAmmoTypeList(value) {
 }
 
 /**
- * Find an ammo gear stack on the actor matching any of the supplied ammo
- * types. Accepts set / array / string input. Returns the first non-empty
- * matching stack (Commit 3 will add a DialogV2 picker when more than one
- * type is loaded).
+ * Find the first ammo gear stack on the actor matching any of the supplied
+ * ammo types (used by the pre-roll availability check). Accepts set / array
+ * / string input. Returns `null` when no matching stack is loaded.
  */
 function findAmmoGearItem(actor, ammoTypes) {
   const types = normalizeAmmoTypeList(ammoTypes);
@@ -683,6 +682,63 @@ function findAmmoGearItem(actor, ammoTypes) {
   ) ?? null;
 }
 
+/**
+ * Find every ammo gear stack matching any supplied type, with rounds > 0.
+ * Returns an array (empty when no matches); callers distinguish the
+ * zero / one / many cases explicitly.
+ */
+function findAllAmmoGearItems(actor, ammoTypes) {
+  const types = normalizeAmmoTypeList(ammoTypes);
+  if (!types.length || !actor?.items) return [];
+  const typeSet = new Set(types);
+  return actor.items.filter((item) =>
+    item?.type === "gear"
+    && item.system?.subtype === "ammunition"
+    && typeSet.has(item.system?.ammo?.type)
+    && Number(item.system?.ammo?.rounds ?? 0) > 0
+  );
+}
+
+/**
+ * Resolve which ammo gear stack to consume for the next shot. For weapons
+ * that accept multiple ammo types (Needler), prompts the player with a
+ * radio picker when more than one matching stack is loaded. For single-
+ * type weapons (or weapons with exactly one loaded stack), returns the
+ * stack silently. Returns `null` when nothing matches or the dialog is
+ * cancelled.
+ */
+async function resolveAmmoGearChoice(actor, weapon, ammoTypes) {
+  const matches = findAllAmmoGearItems(actor, ammoTypes);
+  if (matches.length === 0) return null;
+  if (matches.length === 1) return matches[0];
+
+  const optionsHtml = matches.map((item, idx) => {
+    const rounds = Number(item.system?.ammo?.rounds ?? 0);
+    const checked = idx === 0 ? "checked" : "";
+    return `<label style="display:block; padding: 0.2rem 0;">
+      <input type="radio" name="ammoStackId" value="${item.id}" ${checked} />
+      ${item.name} — ${rounds} round${rounds === 1 ? "" : "s"}
+    </label>`;
+  }).join("");
+
+  const chosenId = await DialogV2.prompt({
+    window: { title: `${weapon.name} — choose ammunition` },
+    content: `<form class="gw-ammo-picker">
+      <p>Multiple compatible stacks are loaded. Pick the one to fire:</p>
+      ${optionsHtml}
+    </form>`,
+    ok: {
+      label: "Fire",
+      callback: (_event, button) =>
+        new foundry.applications.ux.FormDataExtended(button.form).object.ammoStackId
+    },
+    rejectClose: false
+  });
+
+  if (!chosenId) return null;
+  return matches.find((m) => m.id === chosenId) ?? null;
+}
+
 export async function rollAttack(actor, weapon) {
   const target = await resolveAttackTarget(actor);
   if (!target) return;
@@ -690,18 +746,28 @@ export async function rollAttack(actor, weapon) {
 
   // Ammunition resolution: prefer a matching gear item; fall back to the
   // weapon's legacy inline counter so older content still fires. A weapon
-  // may accept one or more ammo types (Needler = poison + paralysis); the
-  // helper returns the first loaded stack that matches any accepted type.
+  // may accept one or more ammo types (Needler = poison + paralysis). If
+  // more than one compatible stack is loaded, prompt the player which
+  // stack to consume. Zero matches with no inline fallback → bail.
   const ammoTypes = normalizeAmmoTypeList(weapon.system.ammoType);
   let ammoItem = null;
   if (ammoTypes.length) {
-    ammoItem = findAmmoGearItem(actor, ammoTypes);
-    if (!ammoItem && (!weapon.system.ammo?.consumes || Number(weapon.system.ammo?.current ?? 0) <= 0)) {
-      const label = ammoTypes.length === 1
-        ? ammoTypes[0].replace(/-/g, " ")
-        : "matching";
-      ui.notifications?.warn(`No ${label} ammunition available.`);
-      return;
+    const matches = findAllAmmoGearItems(actor, ammoTypes);
+    if (matches.length === 0) {
+      if (!weapon.system.ammo?.consumes || Number(weapon.system.ammo?.current ?? 0) <= 0) {
+        const label = ammoTypes.length === 1
+          ? ammoTypes[0].replace(/-/g, " ")
+          : "matching";
+        ui.notifications?.warn(`No ${label} ammunition available.`);
+        return;
+      }
+      // fall through to inline-counter path below
+    } else if (matches.length === 1) {
+      ammoItem = matches[0];
+    } else {
+      // Multiple loaded stacks — ask the player.
+      ammoItem = await resolveAmmoGearChoice(actor, weapon, ammoTypes);
+      if (!ammoItem) return; // user cancelled the picker
     }
   } else if (weapon.system.ammo?.consumes && Number(weapon.system.ammo.current ?? 0) <= 0) {
     ui.notifications?.warn("No ammunition remaining.");
