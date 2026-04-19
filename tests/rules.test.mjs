@@ -1907,6 +1907,69 @@ test("0.8.3 — preSkillRoll / skillRollComplete hooks are declared", async () =
   assert.equal(HOOK.skillRollComplete, "gammaWorld.v1.skillRollComplete");
 });
 
+test("0.8.3 — Cinematic composer buildBeginPayload normalizes form data", async () => {
+  const { buildBeginPayload } = await import("../module/cinematic/compose.mjs");
+
+  // Stub foundry.utils.randomID so requestId is predictable in tests.
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: { randomID: () => "test-req-1" }
+  };
+  try {
+    // Skill roll — requires skillKey.
+    const skillPayload = buildBeginPayload({
+      rollTypeKey: "skill",
+      skillKey: "stealth",
+      dc: "15",
+      title: "  Sneak past the patrol  ",
+      blind: true
+    }, { actorUuids: ["Actor.A", "Actor.B"], user: { id: "gm-1" } });
+
+    assert.equal(skillPayload.requestId, "test-req-1");
+    assert.equal(skillPayload.rollTypeKey, "skill");
+    assert.equal(skillPayload.resolver, "skill");
+    assert.equal(skillPayload.category, "skill");
+    assert.equal(skillPayload.skillKey, "stealth");
+    assert.equal(skillPayload.dc, 15);
+    assert.equal(skillPayload.title, "Sneak past the patrol");
+    assert.equal(skillPayload.blind, true);
+    assert.equal(skillPayload.requesterId, "gm-1");
+    assert.deepEqual(skillPayload.actorUuids, ["Actor.A", "Actor.B"]);
+
+    // Radiation save — requires intensity + saveType but NOT a dc.
+    const radPayload = buildBeginPayload({
+      rollTypeKey: "save.radiation",
+      intensity: "14"
+    }, { actorUuids: ["Actor.C"], user: { id: "gm-1" } });
+    assert.equal(radPayload.saveType, "radiation");
+    assert.equal(radPayload.intensity, 14);
+    assert.equal(radPayload.dc, undefined, "saves don't carry a dc field");
+
+    // Attribute check — requires dc + abilityKey from the registry.
+    const attrPayload = buildBeginPayload({
+      rollTypeKey: "attribute.dx",
+      dc: "13"
+    }, { actorUuids: ["Actor.D"], user: null });
+    assert.equal(attrPayload.abilityKey, "dx");
+    assert.equal(attrPayload.dc, 13);
+    assert.equal(attrPayload.requesterId, null);
+
+    // Unknown roll type throws with a helpful message.
+    assert.throws(() => buildBeginPayload(
+      { rollTypeKey: "save.vacuum" },
+      { actorUuids: [], user: null }
+    ), /unknown rollTypeKey/i);
+
+    // Skill type WITHOUT a skillKey throws.
+    assert.throws(() => buildBeginPayload(
+      { rollTypeKey: "skill", skillKey: "" },
+      { actorUuids: ["Actor.A"], user: null }
+    ), /needs a valid skillKey/);
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
 test("0.8.3 — Cinematic socket dispatcher routes events to listeners", async () => {
   const {
     CINEMATIC_EVENTS,

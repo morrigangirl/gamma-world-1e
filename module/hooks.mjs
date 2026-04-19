@@ -16,6 +16,7 @@ import { renderUndoButton, requestUndo } from "./undo.mjs";
 import { fillVariant, mutationHasVariant, mutationVariant } from "./mutation-rules.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
+import { openCinematicComposer } from "./cinematic/compose.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
 
 const actorMaintenanceJobs = new Map();
@@ -346,14 +347,22 @@ function injectChatRequestToolbar(html) {
   const form = root.querySelector("form");
   const toolbar = document.createElement("div");
   toolbar.className = "gw-chat-request-toolbar";
-  toolbar.innerHTML = `<button type="button" class="gw-chat-request-button">
+  toolbar.innerHTML = `<button type="button" class="gw-chat-request-button" data-gw-request="quiet">
     <i class="fas fa-dice-d20" aria-hidden="true"></i>
     <span>${game.i18n.localize("GAMMA_WORLD.Chat.RequestRoll")}</span>
+  </button>
+  <button type="button" class="gw-chat-request-button" data-gw-request="cinematic">
+    <i class="fas fa-star-of-life" aria-hidden="true"></i>
+    <span>${game.i18n.localize("GAMMA_WORLD.Chat.CinematicRoll")}</span>
   </button>`;
 
-  toolbar.querySelector("button")?.addEventListener("click", async (event) => {
+  toolbar.querySelector('[data-gw-request="quiet"]')?.addEventListener("click", async (event) => {
     event.preventDefault();
     await openChatRollRequestDialog();
+  });
+  toolbar.querySelector('[data-gw-request="cinematic"]')?.addEventListener("click", async (event) => {
+    event.preventDefault();
+    await openCinematicComposer();
   });
 
   if (form) form.prepend(toolbar);

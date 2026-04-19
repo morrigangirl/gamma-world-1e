@@ -242,7 +242,46 @@
       "RollMental": "Roll Mental Save"
     },
     "Chat": {
-      "RequestRoll": "Request Roll"
+      "RequestRoll": "Request Roll",
+      "CinematicRoll": "Cinematic Roll"
+    },
+    "Cinematic": {
+      "Category": {
+        "Attribute": "Attribute Checks",
+        "Save": "Saves",
+        "Skill": "Skills",
+        "Initiative": "Initiative"
+      },
+      "RollType": {
+        "AttributeMS": "Mental Strength Check",
+        "AttributeIN": "Intelligence Check",
+        "AttributeDX": "Dexterity Check",
+        "AttributeCH": "Charisma Check",
+        "AttributeCN": "Constitution Check",
+        "AttributePS": "Physical Strength Check",
+        "SaveMental": "Mental Save",
+        "SaveRadiation": "Radiation Save",
+        "SavePoison": "Poison Save",
+        "Skill": "Skill Check",
+        "Initiative": "Initiative"
+      },
+      "Compose": {
+        "Title": {
+          "Window": "Cinematic Roll Request"
+        },
+        "Type": "Roll Type",
+        "Skill": "Skill",
+        "DC": "DC",
+        "Intensity": "Intensity",
+        "TitleLabel": "Title (optional)",
+        "TitlePlaceholder": "Leave blank for auto-generated",
+        "Targets": "Actors",
+        "Blind": "Blind (hide results until reveal)",
+        "Send": "Roll!",
+        "GMOnly": "Only the GM can request a cinematic roll.",
+        "NoActors": "No eligible actors to roll.",
+        "NoTargets": "Pick at least one actor."
+      }
     },
     "RollRequest": {
       "Title": "Request Roll",
