@@ -28,6 +28,7 @@ import { registerArtifactSessionSocket } from "./module/artifacts.mjs";
 import { ensureEncounterTablesImported } from "./module/compendium-bootstrap.mjs";
 import { registerConditionTicker } from "./module/conditions.mjs";
 import { registerCinematicSocket } from "./module/cinematic/socket.mjs";
+import { registerCinematicBanner } from "./module/cinematic/banner.mjs";
 
 Hooks.once("init", () => {
   console.log(`${SYSTEM_ID} | Initializing Gamma World 1st Edition system`);
@@ -103,6 +104,7 @@ Hooks.once("ready", () => {
     registerGmExecutor();
     registerArtifactSessionSocket();
     registerCinematicSocket();
+    registerCinematicBanner();
     await migrateWorld();
     if (!game.user?.isGM) return;
     await ensureEncounterTablesImported();

@@ -1,0 +1,42 @@
+<div class="gw-cinematic-banner__overlay gw-cinematic-banner--{{phase}}">
+  <div class="gw-cinematic-banner__stage gw-cinematic-banner__stage--{{category}}">
+    <div class="gw-cinematic-banner__title" role="heading" aria-level="1">{{title}}</div>
+
+    <div class="gw-cinematic-banner__cards">
+      {{#each cards}}
+        <div class="gw-cinematic-banner__card{{#if this.hasResult}} is-resolved{{/if}}{{#if this.pending}} is-pending{{/if}}" data-actor-uuid="{{this.uuid}}">
+          <div class="gw-cinematic-banner__portrait">
+            <img src="{{this.img}}" alt="{{this.name}}" />
+          </div>
+          <div class="gw-cinematic-banner__name">{{this.name}}</div>
+          <div class="gw-cinematic-banner__badge{{#if this.passed}} is-pass{{/if}}{{#if (gwEq this.passed false)}} is-fail{{/if}}">
+            {{this.badge}}
+          </div>
+          {{#if this.canRoll}}
+            <button type="button"
+                    class="gw-cinematic-banner__roll"
+                    data-action="rollActor"
+                    data-actor-uuid="{{this.uuid}}">
+              Roll
+            </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+
+    {{#if isOutro}}
+      <div class="gw-cinematic-banner__outcome gw-cinematic-banner__outcome--{{aggregate}}">
+        {{#if (gwEq aggregate "success")}}Success{{/if}}
+        {{#if (gwEq aggregate "failure")}}Failure{{/if}}
+        {{#if (gwEq aggregate "mixed")}}Mixed result{{/if}}
+        {{#if (gwEq aggregate "partial")}}…{{/if}}
+      </div>
+    {{/if}}
+
+    {{#if isGM}}
+      <button type="button" class="gw-cinematic-banner__dismiss" data-action="dismiss" aria-label="Close banner">
+        ✕
+      </button>
+    {{/if}}
+  </div>
+</div>
