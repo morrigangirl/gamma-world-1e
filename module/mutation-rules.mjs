@@ -1376,7 +1376,13 @@ export function applyMutationEffects(actor, derived) {
   for (const entry of collected) applyEffectChange(derived, entry.change, entry.ctx);
 }
 
-function applyEffectChange(derived, change, ctx) {
+/**
+ * 0.9.0 Tier 3 — exposed so effect-state.mjs can reuse the same mode
+ * switch for AE-backed temp effects. applyMutationEffects still owns the
+ * priority-flatten-sort pass for mutation items; this helper is the
+ * per-change atomic apply that both paths share.
+ */
+export function applyEffectChange(derived, change, ctx) {
   const rawKey = String(change?.key ?? "");
   if (!rawKey.startsWith("gw.")) return; // future: handle system.* / flags.*
   const path = rawKey.slice(3); // strip "gw."

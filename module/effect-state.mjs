@@ -5,6 +5,265 @@ import { runAsGM } from "./gm-executor.mjs";
 import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
 
 /**
+ * 0.9.0 Tier 3 — modes that stay on the legacy flag array because
+ * their mechanics (per-round procedural rolls, counter-scaled
+ * modifiers, callback-driven continuation) don't fit Foundry's
+ * declarative ActiveEffect model. Everything else (mode === "generic")
+ * emits a real AE on the actor via createTemporaryActiveEffect.
+ */
+const STATEFUL_TEMP_EFFECT_MODES = new Set([
+  "tear-gas",
+  "poison-cloud",
+  "stun-cloud",
+  "morale-watch"
+]);
+
+/**
+ * Foundry ACTIVE_EFFECT_MODES mapped to the numeric enum values used
+ * on-wire. Repeated here to keep effect-state.mjs free of the core
+ * CONFIG import; matches the AE_MODE constant in mutation-rules.mjs.
+ */
+const AE_MODE = Object.freeze({
+  CUSTOM:    0,
+  MULTIPLY:  1,
+  ADD:       2,
+  DOWNGRADE: 3,
+  UPGRADE:   4,
+  OVERRIDE:  5
+});
+
+/**
+ * Scalar-keyed legacy change entries → `gw.*` target path. Producers
+ * wrote `changes.toHitBonus = -4` and the derived fold-in was
+ * hardcoded; now the same keys emit as AE changes targeting
+ * `gw.toHitBonus` (ADD mode) so Foundry's AE pipeline + our shared
+ * applyEffectChange can both read them.
+ */
+const SCALAR_CHANGE_KEYS = Object.freeze({
+  acDelta:              "gw.acDelta",
+  toHitBonus:           "gw.toHitBonus",
+  damageFlat:           "gw.damageFlat",
+  damagePerDie:         "gw.damagePerDie",
+  extraAttacks:         "gw.extraAttacks",
+  closeRangeToHitBonus: "gw.closeRangeToHitBonus",
+  hpBonus:              "gw.hpBonus",
+  mentalResistance:     "gw.mentalResistance",
+  radiationResistance:  "gw.radiationResistance",
+  poisonResistance:     "gw.poisonResistance",
+  artifactAnalysisBonus:"gw.artifactAnalysisBonus",
+  reactionAdjustment:   "gw.reactionAdjustment",
+  surpriseModifier:     "gw.surpriseModifier",
+  mentalAttackStrength: "gw.mentalAttackStrength"
+});
+
+/** Reverse lookup used by the AE → legacy-shape adapter. */
+const SCALAR_CHANGE_KEYS_REVERSE = Object.freeze(
+  Object.fromEntries(Object.entries(SCALAR_CHANGE_KEYS).map(([scalar, path]) => [path, scalar]))
+);
+
+/** Boolean-valued legacy change keys → `gw.*` target path. All emit OVERRIDE true. */
+const BOOLEAN_CHANGE_KEYS = Object.freeze({
+  cannotBeSurprised: "gw.cannotBeSurprised",
+  laserImmune:       "gw.laserImmune",
+  mentalImmune:      "gw.mentalImmune"
+});
+
+const BOOLEAN_CHANGE_KEYS_REVERSE = Object.freeze(
+  Object.fromEntries(Object.entries(BOOLEAN_CHANGE_KEYS).map(([scalar, path]) => [path, scalar]))
+);
+
+const ATTRIBUTE_CHANGE_KEYS = Object.freeze(["dx", "ps", "ms", "ch", "cn"]);
+
+/**
+ * 0.9.0 Tier 3 — translate a legacy `changes` object (e.g., what
+ * `applyTemporaryEffect` used to shove into the flag array under
+ * `.changes`) into an AE-shaped `changes[]` array. Keys with value 0 /
+ * absent are omitted. Attribute shifts get emitted as
+ * `gw.attributeShift.<key>` ADDs so the post-apply cascade in
+ * buildActorDerived can re-run the combat-bonus helpers against the
+ * shifted scores without recomputing from raw legacy fields.
+ *
+ * Shared by `createTemporaryActiveEffect` (runtime writer path) and
+ * `migrateTempEffectsToAE` (world upgrade). Exported for test use.
+ */
+export function changesToAEChanges(changes = {}) {
+  const result = [];
+  for (const [key, value] of Object.entries(changes ?? {})) {
+    if (key === "attributes") continue; // handled below
+    if (SCALAR_CHANGE_KEYS[key]) {
+      const delta = Math.round(Number(value) || 0);
+      if (delta === 0) continue;
+      result.push({
+        key: SCALAR_CHANGE_KEYS[key],
+        mode: AE_MODE.ADD,
+        value: String(delta),
+        priority: 20
+      });
+      continue;
+    }
+    if (key === "movementMultiplier") {
+      const factor = Number(value ?? 1);
+      if (!Number.isFinite(factor) || factor === 1) continue;
+      result.push({
+        key: "gw.movementMultiplier",
+        mode: AE_MODE.MULTIPLY,
+        value: String(factor),
+        priority: 20
+      });
+      continue;
+    }
+    if (BOOLEAN_CHANGE_KEYS[key]) {
+      if (!value) continue;
+      result.push({
+        key: BOOLEAN_CHANGE_KEYS[key],
+        mode: AE_MODE.OVERRIDE,
+        value: "true",
+        priority: 20
+      });
+      continue;
+    }
+    console.warn(`${SYSTEM_ID} | changesToAEChanges: unknown key "${key}" (value: ${JSON.stringify(value)}) — skipped`);
+  }
+  const attrs = changes?.attributes ?? {};
+  for (const attr of ATTRIBUTE_CHANGE_KEYS) {
+    const shift = Math.round(Number(attrs?.[attr]) || 0);
+    if (shift === 0) continue;
+    result.push({
+      key: `gw.attributeShift.${attr}`,
+      mode: AE_MODE.ADD,
+      value: String(shift),
+      priority: 20
+    });
+  }
+  return result;
+}
+
+/**
+ * Reverse translator: given a Foundry ActiveEffect document (or
+ * plain object with `changes[]`), reconstruct the legacy
+ * `{ scalarKey: number, attributes: { ... }, booleanKey: true }` shape.
+ * Used by save-flow.mjs to keep its itemized details logic working
+ * while consuming AE-backed temp effects. Exported for test use.
+ */
+export function aeChangesToLegacyChanges(aeEffect) {
+  const changes = aeEffect?.changes ?? [];
+  const result = {};
+  const attributes = {};
+  for (const change of changes) {
+    const key = String(change?.key ?? "");
+    if (!key.startsWith("gw.")) continue;
+    if (SCALAR_CHANGE_KEYS_REVERSE[key]) {
+      const legacyKey = SCALAR_CHANGE_KEYS_REVERSE[key];
+      result[legacyKey] = (result[legacyKey] ?? 0) + (Number(change.value) || 0);
+      continue;
+    }
+    if (key === "gw.movementMultiplier") {
+      const prior = result.movementMultiplier ?? 1;
+      result.movementMultiplier = prior * (Number(change.value) || 1);
+      continue;
+    }
+    if (BOOLEAN_CHANGE_KEYS_REVERSE[key]) {
+      const legacyKey = BOOLEAN_CHANGE_KEYS_REVERSE[key];
+      result[legacyKey] = String(change.value) === "true";
+      continue;
+    }
+    if (key.startsWith("gw.attributeShift.")) {
+      const attr = key.slice("gw.attributeShift.".length);
+      if (ATTRIBUTE_CHANGE_KEYS.includes(attr)) {
+        attributes[attr] = (attributes[attr] ?? 0) + (Number(change.value) || 0);
+      }
+    }
+  }
+  if (Object.keys(attributes).length) result.attributes = attributes;
+  return result;
+}
+
+/**
+ * 0.9.0 Tier 3 — emit a native Foundry ActiveEffect on the actor
+ * mirroring the legacy temp-effect spec. Used by the generic-mode
+ * branch of `applyTemporaryEffect`. Status icons sync via the AE's
+ * `statuses` field (Foundry picks it up automatically); duration
+ * countdown is handled by Foundry's combat tick.
+ */
+async function createTemporaryActiveEffect(actor, spec, { origin = null } = {}) {
+  const rounds = Math.max(0, Number(spec.remainingRounds ?? 0));
+  const aeData = {
+    name: spec.label || spec.sourceName || spec.id || "Temporary Effect",
+    img: spec.statusId
+      ? (CONFIG.statusEffects?.find?.((entry) => entry.id === spec.statusId)?.img ?? "icons/svg/aura.svg")
+      : "icons/svg/aura.svg",
+    transfer: false,
+    disabled: false,
+    statuses: spec.statusId ? [spec.statusId] : [],
+    duration: {
+      // Foundry accepts null for an unbounded duration; remainingRounds=0
+      // in the legacy API meant "until manually cleared" (toggle-style).
+      rounds: rounds > 0 ? rounds : null,
+      seconds: null,
+      turns: null
+    },
+    changes: changesToAEChanges(spec.changes ?? {}),
+    origin: origin ?? undefined,
+    flags: {
+      [SYSTEM_ID]: {
+        temporaryEffect: true,
+        effectId: spec.id,
+        mode: "generic",
+        sourceName: spec.sourceName ?? "",
+        notes: spec.notes ?? ""
+      }
+    }
+  };
+  try {
+    const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [aeData], { gammaWorldSync: true });
+    return created ?? null;
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | createTemporaryActiveEffect failed for "${spec.label ?? spec.id}"`, error);
+    return null;
+  }
+}
+
+/**
+ * 0.9.0 Tier 3 — exported for save-flow.mjs. Given an AE, return a
+ * legacy-shape `{ id, label, sourceName, mode, changes, remainingRounds }`
+ * object so downstream readers that iterate `{ effect.changes }` keep
+ * working without knowing whether the source was a legacy flag entry
+ * or an AE. The save-flow resistance-details loop (e.g.,
+ * "Temporary effect ... mental resistance +N") relies on this.
+ */
+export function aeChangesToLegacyShape(ae) {
+  const flags = ae?.flags?.[SYSTEM_ID] ?? {};
+  return {
+    id: flags.effectId ?? ae?.id ?? "",
+    label: ae?.name ?? flags.sourceName ?? "",
+    sourceName: flags.sourceName ?? "",
+    mode: flags.mode ?? "generic",
+    changes: aeChangesToLegacyChanges(ae),
+    remainingRounds: Math.max(0, Number(ae?.duration?.rounds ?? 0)),
+    statusId: Array.isArray(ae?.statuses) ? (ae.statuses[0] ?? "") : (ae?.statuses?.first?.() ?? ""),
+    notes: flags.notes ?? ""
+  };
+}
+
+/**
+ * List the AE-backed temp effects on an actor. Filters to non-disabled
+ * AEs marked via `flags["gamma-world-1e"].temporaryEffect`.
+ */
+function getActorTemporaryAEs(actor) {
+  const effects = Array.from(actor?.effects ?? []);
+  return effects.filter((ae) => !ae.disabled && ae.flags?.[SYSTEM_ID]?.temporaryEffect);
+}
+
+/**
+ * Lookup an AE-backed temp effect by its producer-assigned id
+ * (stored under flags.gamma-world-1e.effectId). Returns null if not found.
+ */
+function findActorTemporaryAEById(actor, effectId) {
+  if (!effectId) return null;
+  return getActorTemporaryAEs(actor).find((ae) => ae.flags?.[SYSTEM_ID]?.effectId === effectId) ?? null;
+}
+
+/**
  * Canonicalize incoming damage into one of the DAMAGE_TYPES. `weaponTag`
  * carries the finer-grained channel when a weapon explicitly declares
  * one (laser / fusion / black-ray), so it wins over the broad
@@ -174,6 +433,42 @@ export function activeTemporaryEffects(actor) {
 
 export async function applyTemporaryEffect(actor, effect) {
   const normalized = normalizeTemporaryEffect(effect);
+
+  // 0.9.0 Tier 3 — generic-mode effects emit real ActiveEffects on the
+  // actor (duration-tracked by Foundry, status-icon-synced via the
+  // `statuses` field, visible on the Effects tab with standard
+  // toggle / edit / delete controls). Stateful-mode effects
+  // (tear-gas / clouds / morale-watch) still flow through the legacy
+  // flag array because their per-round procedural logic + counter-
+  // scaled modifiers can't be expressed declaratively.
+  if (!STATEFUL_TEMP_EFFECT_MODES.has(normalized.mode)) {
+    // If an AE with the same producer id already exists, update it in
+    // place; otherwise create a new one.
+    const existing = findActorTemporaryAEById(actor, normalized.id);
+    if (existing) {
+      const rounds = Math.max(0, Number(normalized.remainingRounds ?? 0));
+      await existing.update({
+        name: normalized.label || existing.name,
+        statuses: normalized.statusId ? [normalized.statusId] : [],
+        "duration.rounds": rounds > 0 ? rounds : null,
+        changes: changesToAEChanges(normalized.changes ?? {}),
+        [`flags.${SYSTEM_ID}.sourceName`]: normalized.sourceName ?? "",
+        [`flags.${SYSTEM_ID}.notes`]: normalized.notes ?? "",
+        disabled: false
+      }, { gammaWorldSync: true });
+    } else {
+      await createTemporaryActiveEffect(actor, normalized);
+    }
+
+    fireAnnounceHook(HOOK.conditionApplied, {
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      effect: normalized
+    });
+    return getActorState(actor);
+  }
+
+  // Legacy path — stateful modes still live in the flag array.
   const state = await updateActorState(actor, async (next) => {
     const index = next.temporaryEffects.findIndex((entry) => entry.id === normalized.id);
     if (index >= 0) next.temporaryEffects[index] = normalized;
@@ -194,6 +489,28 @@ export async function applyTemporaryEffect(actor, effect) {
 }
 
 export async function removeTemporaryEffect(actor, effectId) {
+  // 0.9.0 Tier 3 — check both surfaces. Producers used to store in the
+  // flag array; generic-mode producers now emit AEs. Either source
+  // might hold the effect depending on when / how it was created.
+  const aeEntry = findActorTemporaryAEById(actor, effectId);
+  if (aeEntry) {
+    const statusId = aeEntry.statuses?.first?.() ?? (Array.isArray(aeEntry.statuses) ? aeEntry.statuses[0] : "") ?? "";
+    try {
+      await aeEntry.delete({ gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | removeTemporaryEffect: AE delete failed`, error);
+    }
+    // If any OTHER source (legacy flag entry or a different AE) still
+    // declares the same status, leave the icon alone; otherwise drop it.
+    if (statusId) {
+      const state = getActorState(actor);
+      const stillClaimed = statusStillActive(state, statusId)
+        || getActorTemporaryAEs(actor).some((ae) => ae.statuses?.has?.(statusId) || (Array.isArray(ae.statuses) && ae.statuses.includes(statusId)));
+      if (!stillClaimed) await setActorStatus(actor, statusId, false);
+    }
+    return getActorState(actor);
+  }
+
   const effect = getActorState(actor).temporaryEffects.find((entry) => entry.id === effectId);
   const statusId = effect?.statusId ?? "";
   const state = await updateActorState(actor, async (next) => {
@@ -201,7 +518,11 @@ export async function removeTemporaryEffect(actor, effectId) {
   });
 
   if (statusId && !statusStillActive(state, statusId)) {
-    await setActorStatus(actor, statusId, false);
+    // Also check AE-backed effects before clearing.
+    const aeClaimsStatus = getActorTemporaryAEs(actor).some((ae) =>
+      ae.statuses?.has?.(statusId) || (Array.isArray(ae.statuses) && ae.statuses.includes(statusId))
+    );
+    if (!aeClaimsStatus) await setActorStatus(actor, statusId, false);
   }
   return state;
 }
@@ -242,7 +563,14 @@ export function temporaryEffectSummary(actor) {
       id: effect.id,
       label: effect.label,
       suffix,
-      removable: true
+      removable: true,
+      // 0.9.0 Tier 3 — `source` lets the sheet filter between legacy
+      // flag entries (kept for stateful tear-gas / clouds / morale
+      // watchers that aren't AE-shaped) and barriers (HP-pool force
+      // fields, also not AE-shaped). AE-backed temp effects are no
+      // longer included here — the Tier 5 Effects tab renders them
+      // via `context.effectsList`.
+      source: "legacy"
     };
   });
 
@@ -252,7 +580,8 @@ export function temporaryEffectSummary(actor) {
       id: `barrier:${barrier.id}`,
       label: barrier.label,
       suffix: `${Math.max(0, Number(barrier.remaining ?? 0))} hp`,
-      removable: false
+      removable: false,
+      source: "barrier"
     }));
 
   return [...effects, ...barriers];
@@ -278,8 +607,29 @@ export function applyTemporaryDerivedModifiers(actor, derived) {
     return 0;
   };
 
+  // 0.9.0 Tier 3 — unified fold-in that covers both legacy flag
+  // entries (now only the stateful modes — tear-gas, clouds, morale-
+  // watch) and AE-backed entries (everything previously mode:
+  // "generic"). Each entry is normalized into the same
+  // { changes: {...} } shape so the existing scalar/attribute/boolean
+  // application logic handles them identically. `derived.attributeShift`
+  // accumulates per-attribute deltas so the subsequent cascade in
+  // buildActorDerived can re-run combat-bonus helpers against the
+  // shifted scores.
+  const entries = [];
   for (const effect of state.temporaryEffects) {
-    const changes = { ...effect.changes };
+    entries.push({ source: "legacy", effect, changes: { ...(effect.changes ?? {}) } });
+  }
+  for (const ae of getActorTemporaryAEs(actor)) {
+    entries.push({ source: "ae", effect: ae, changes: aeChangesToLegacyChanges(ae) });
+  }
+
+  // `derived.attributeShift` is initialized in buildActorDerived. Each
+  // loop iteration below accumulates its contribution so external
+  // callers (save-flow, future sheet badges) can read the final delta.
+  for (const entry of entries) {
+    const effect = entry.effect;
+    const changes = entry.changes;
     const attributeChanges = changes.attributes ?? {};
     if (effect.mode === "tear-gas") {
       const stacks = Math.max(1, Number(effect.stacks || 1));
@@ -311,20 +661,25 @@ export function applyTemporaryDerivedModifiers(actor, derived) {
 
     if (dxShift) {
       derived.toHitBonus += combatBonusFromDexterity(baseDx + dxShift) - combatBonusFromDexterity(baseDx);
+      derived.attributeShift.dx += dxShift;
     }
     if (psShift) {
       derived.damageFlat += damageBonusFromStrength(basePs + psShift) - damageBonusFromStrength(basePs);
+      derived.attributeShift.ps += psShift;
     }
     if (msShift) {
       derived.mentalResistance += msShift;
       derived.mentalAttackStrength += msShift;
+      derived.attributeShift.ms += msShift;
     }
     if (chShift) {
       derived.reactionAdjustment += charismaReactionAdjustment(baseCh + chShift) - charismaReactionAdjustment(baseCh);
+      derived.attributeShift.ch += chShift;
     }
     if (cnShift) {
       derived.radiationResistance += cnShift;
       derived.poisonResistance += cnShift;
+      derived.attributeShift.cn += cnShift;
     }
 
     if (changes.cannotBeSurprised) derived.cannotBeSurprised = true;
@@ -702,6 +1057,13 @@ export async function tickActorStateForActor(actor) {
       }
 
       default:
+        // 0.9.0 Tier 3 — generic-mode effects now emit as Foundry
+        // ActiveEffects with `duration.rounds` set; Foundry's built-in
+        // combat tick decrements the duration and auto-removes expired
+        // AEs. Any legacy flag entry that still falls through here
+        // (pre-migration world, edge-case) gets the countdown for
+        // back-compat; post-migration the flag array only contains
+        // stateful-mode entries handled above.
         if (effect.remainingRounds > 0) {
           effect.remainingRounds -= 1;
           if (effect.remainingRounds <= 0) removals.push(effect.id);

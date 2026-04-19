@@ -129,6 +129,11 @@ export function buildActorDerived(actor) {
     damageResistance:    new Set(system.traits?.damageResistance    ?? []),
     damageImmunity:      new Set(system.traits?.damageImmunity      ?? []),
     damageVulnerability: new Set(system.traits?.damageVulnerability ?? []),
+    // 0.9.0 Tier 3 — per-attribute delta accumulated from temp effects
+    // (both AE-backed and legacy flag entries). applyTemporaryDerivedModifiers
+    // increments each attribute's tally; external readers can inspect the
+    // shift without walking the temp-effect list.
+    attributeShift: { dx: 0, ps: 0, ms: 0, ch: 0, cn: 0 },
     activeEffects: []
   };
 

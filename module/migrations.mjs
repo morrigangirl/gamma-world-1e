@@ -617,6 +617,16 @@ async function migrateActor(actor) {
   // on create (Foundry's item.create pipeline handles it).
   await migrateGeniusCapability086(actor);
 
+  // 0.9.0 Tier 3: retire the legacy temporaryEffects flag array for
+  // generic-mode entries. Converts each into a real Foundry
+  // ActiveEffect on the actor; stateful-mode entries (tear-gas,
+  // clouds, morale-watch) stay in place since they drive per-round
+  // procedural logic the AE framework can't express.
+  const tempCount = await migrateTempEffectsToAE090(actor);
+  if (tempCount > 0) {
+    globalThis.gammaWorldTempEffectsMigrated = (globalThis.gammaWorldTempEffectsMigrated ?? 0) + tempCount;
+  }
+
   await actor.refreshDerivedResources({ adjustCurrent: false });
 }
 
@@ -676,6 +686,52 @@ async function migrateGeniusCapability086(actor) {
 }
 
 /**
+ * 0.9.0 Tier 3 — retire the legacy `flags[SYSTEM_ID].state.temporaryEffects`
+ * array. For each generic-mode entry on the actor, emit a matching
+ * Foundry ActiveEffect with duration, statuses, and changes translated
+ * from the legacy shape. Stateful-mode entries (tear-gas / poison-cloud
+ * / stun-cloud / morale-watch) stay in the flag array because their
+ * per-round procedural mechanics don't fit AE.
+ *
+ * Returns the number of entries converted to AE (0 if nothing to do).
+ * Idempotent: on a second run, the flag array has no generic entries
+ * left so the function is a no-op. If the AE with the matching
+ * effectId flag already exists (e.g., manual re-run), the entry is
+ * skipped and the flag entry is still cleared from the array.
+ */
+async function migrateTempEffectsToAE090(actor) {
+  const { getActorState, setActorState } = await import("./effect-state.mjs");
+  const state = getActorState(actor);
+  const temp = Array.isArray(state.temporaryEffects) ? state.temporaryEffects : [];
+  if (!temp.length) return 0;
+
+  const STATEFUL_MODES = new Set(["tear-gas", "poison-cloud", "stun-cloud", "morale-watch"]);
+  const toMigrate = temp.filter((entry) => !STATEFUL_MODES.has(entry.mode ?? "generic"));
+  if (!toMigrate.length) return 0;
+
+  const { applyTemporaryEffect } = await import("./effect-state.mjs");
+  let migrated = 0;
+
+  // Clear the generic entries from the flag array FIRST so
+  // applyTemporaryEffect (which will now route to the AE writer for
+  // generic mode) doesn't observe the in-flight legacy copy.
+  const remaining = temp.filter((entry) => STATEFUL_MODES.has(entry.mode ?? "generic"));
+  state.temporaryEffects = remaining;
+  await setActorState(actor, state, { refresh: false });
+
+  for (const entry of toMigrate) {
+    try {
+      await applyTemporaryEffect(actor, entry);
+      migrated += 1;
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | migrateTempEffectsToAE090: failed to migrate "${entry.label ?? entry.id}" on ${actor.name}`, error);
+    }
+  }
+
+  return migrated;
+}
+
+/**
  * 0.8.4 Tier 1 — for every piloted mutation on the actor whose rule
  * has an `effects` array AND whose item's effects collection is empty,
  * materialize matching ActiveEffect docs via `item.createEmbeddedDocuments`.
@@ -716,6 +772,10 @@ export async function migrateWorld() {
   const storedVersion = game.settings.get(SYSTEM_ID, "schemaVersion");
   if (storedVersion === currentVersion) return;
 
+  // 0.9.0 Tier 3 — counter for the chat notice posted once per world
+  // when temp-effect migration converts legacy flag entries into AEs.
+  globalThis.gammaWorldTempEffectsMigrated = 0;
+
   for (const item of game.items.contents) {
     await migrateItem(item);
   }
@@ -739,6 +799,22 @@ export async function migrateWorld() {
     if (currentNpcMode === "onHit") {
       const nextMode = legacyAutoRollNpc ? "always" : "none";
       await game.settings.set(SYSTEM_ID, "npcDamageMode", nextMode);
+    }
+  }
+
+  // 0.9.0 Tier 3 — post a one-shot chat summary if any temp effects
+  // were migrated this pass. Scoped to the GM to avoid duplicate
+  // messages when multiple clients load the world.
+  const migratedCount = Number(globalThis.gammaWorldTempEffectsMigrated ?? 0);
+  globalThis.gammaWorldTempEffectsMigrated = 0;
+  if (migratedCount > 0 && game.user?.isGM) {
+    try {
+      await ChatMessage.create({
+        speaker: { alias: "Gamma World" },
+        content: `<div class="gw-chat-card"><p><strong>Tier 3 migration:</strong> ${migratedCount} temporary effect${migratedCount === 1 ? "" : "s"} moved to the new Effects panel.</p></div>`
+      });
+    } catch (_error) {
+      // Cosmetic; don't block migration on a chat failure.
     }
   }
 

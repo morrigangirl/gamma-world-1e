@@ -2827,3 +2827,153 @@ test("0.8.6 Phase 3 — skill roll formula reads the bonus field", async () => {
   assert.equal(legacy.bonus, 0);
   assert.equal(legacy.total, 2);
 });
+
+/* ================================================================= */
+/* 0.9.0 Tier 3 — Temp-Effects Retirement                             */
+/* ================================================================= */
+
+test("0.9.0 Tier 3 — changesToAEChanges translates scalar keys to gw.* ADD", async () => {
+  const { changesToAEChanges } = await import("../module/effect-state.mjs");
+
+  const ae = changesToAEChanges({
+    toHitBonus: -4,
+    damageFlat: 2,
+    mentalResistance: 3,
+    acDelta: 1
+  });
+
+  assert.equal(ae.length, 4);
+  const byKey = Object.fromEntries(ae.map((c) => [c.key, c]));
+  assert.equal(byKey["gw.toHitBonus"].mode, 2, "ADD mode");
+  assert.equal(byKey["gw.toHitBonus"].value, "-4");
+  assert.equal(byKey["gw.damageFlat"].value, "2");
+  assert.equal(byKey["gw.mentalResistance"].value, "3");
+  assert.equal(byKey["gw.acDelta"].value, "1");
+});
+
+test("0.9.0 Tier 3 — changesToAEChanges translates movementMultiplier + booleans + attributes", async () => {
+  const { changesToAEChanges } = await import("../module/effect-state.mjs");
+
+  const ae = changesToAEChanges({
+    movementMultiplier: 0.5,
+    cannotBeSurprised: true,
+    mentalImmune: true,
+    attributes: { dx: 4, ps: -2 }
+  });
+
+  const byKey = Object.fromEntries(ae.map((c) => [c.key, c]));
+  assert.equal(byKey["gw.movementMultiplier"].mode, 1, "MULTIPLY mode");
+  assert.equal(byKey["gw.movementMultiplier"].value, "0.5");
+  assert.equal(byKey["gw.cannotBeSurprised"].mode, 5, "OVERRIDE mode");
+  assert.equal(byKey["gw.cannotBeSurprised"].value, "true");
+  assert.equal(byKey["gw.mentalImmune"].value, "true");
+  assert.equal(byKey["gw.attributeShift.dx"].mode, 2, "ADD mode");
+  assert.equal(byKey["gw.attributeShift.dx"].value, "4");
+  assert.equal(byKey["gw.attributeShift.ps"].value, "-2");
+});
+
+test("0.9.0 Tier 3 — changesToAEChanges omits zero-valued / absent keys", async () => {
+  const { changesToAEChanges } = await import("../module/effect-state.mjs");
+
+  // All zero — nothing emitted.
+  assert.equal(changesToAEChanges({ toHitBonus: 0, damageFlat: 0 }).length, 0);
+  // Empty input.
+  assert.equal(changesToAEChanges({}).length, 0);
+  assert.equal(changesToAEChanges().length, 0);
+  // movementMultiplier 1 is neutral — skipped.
+  assert.equal(changesToAEChanges({ movementMultiplier: 1 }).length, 0);
+  // Falsy boolean — skipped.
+  assert.equal(changesToAEChanges({ cannotBeSurprised: false }).length, 0);
+});
+
+test("0.9.0 Tier 3 — aeChangesToLegacyChanges round-trips the translation", async () => {
+  const { changesToAEChanges, aeChangesToLegacyChanges } = await import("../module/effect-state.mjs");
+
+  const input = {
+    toHitBonus: -4,
+    damageFlat: 2,
+    mentalResistance: 3,
+    movementMultiplier: 0.5,
+    cannotBeSurprised: true,
+    attributes: { dx: 4, ms: 2 }
+  };
+  const ae = { changes: changesToAEChanges(input) };
+  const back = aeChangesToLegacyChanges(ae);
+
+  assert.equal(back.toHitBonus, -4);
+  assert.equal(back.damageFlat, 2);
+  assert.equal(back.mentalResistance, 3);
+  assert.equal(back.movementMultiplier, 0.5);
+  assert.equal(back.cannotBeSurprised, true);
+  assert.deepEqual(back.attributes, { dx: 4, ms: 2 });
+});
+
+test("0.9.0 Tier 3 — aeChangesToLegacyShape emits full legacy record", async () => {
+  const { aeChangesToLegacyShape } = await import("../module/effect-state.mjs");
+
+  const ae = {
+    id: "native-ae-id",
+    name: "Tangle Vines",
+    disabled: false,
+    statuses: ["restrained"],
+    duration: { rounds: 3 },
+    changes: [
+      { key: "gw.toHitBonus", mode: 2, value: "-4" }
+    ],
+    flags: {
+      "gamma-world-1e": {
+        temporaryEffect: true,
+        effectId: "producer-id-123",
+        mode: "generic",
+        sourceName: "Tangle Vines",
+        notes: "Vine wraps around limb."
+      }
+    }
+  };
+
+  const shape = aeChangesToLegacyShape(ae);
+  assert.equal(shape.id, "producer-id-123", "producer effectId wins over native AE id");
+  assert.equal(shape.label, "Tangle Vines");
+  assert.equal(shape.sourceName, "Tangle Vines");
+  assert.equal(shape.mode, "generic");
+  assert.equal(shape.remainingRounds, 3);
+  assert.equal(shape.statusId, "restrained");
+  assert.equal(shape.notes, "Vine wraps around limb.");
+  assert.equal(shape.changes.toHitBonus, -4);
+});
+
+test("0.9.0 Tier 3 — applyEffectChange exported from mutation-rules.mjs applies gw.* ADD", async () => {
+  const { applyEffectChange } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    const derived = { toHitBonus: 0 };
+    applyEffectChange(derived, { key: "gw.toHitBonus", mode: 2, value: "-4" }, {});
+    assert.equal(derived.toHitBonus, -4);
+
+    applyEffectChange(derived, { key: "gw.toHitBonus", mode: 2, value: "2" }, {});
+    assert.equal(derived.toHitBonus, -2, "ADD stacks additively");
+
+    // System.* keys are intentionally ignored here (Foundry's core AE
+    // pipeline handles those paths; our custom path owns gw.* only).
+    applyEffectChange(derived, { key: "system.skills.ancientTech.bonus", mode: 2, value: "2" }, {});
+    assert.equal(derived.toHitBonus, -2, "system.* target is a no-op in the gw.* applier");
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});

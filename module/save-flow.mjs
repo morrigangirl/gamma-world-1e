@@ -1,4 +1,5 @@
-import { getActorState } from "./effect-state.mjs";
+import { getActorState, aeChangesToLegacyShape } from "./effect-state.mjs";
+import { SYSTEM_ID } from "./config.mjs";
 import { abilityModifierFromScore, mutationIsEnabled } from "./mutation-rules.mjs";
 import { mentalAttackTarget } from "./tables/combat-matrix.mjs";
 import {
@@ -34,7 +35,15 @@ function temporaryEffects(actor) {
   if (!actor || (typeof actor.getFlag !== "function")) {
     return Array.isArray(actor?.temporaryEffects) ? actor.temporaryEffects : [];
   }
-  return getActorState(actor).temporaryEffects ?? [];
+  const legacy = getActorState(actor).temporaryEffects ?? [];
+  // 0.9.0 Tier 3 — include AE-backed temp effects in the itemized
+  // details. `aeChangesToLegacyShape` reverse-translates each AE into
+  // the same `{ label, sourceName, changes: {...} }` shape that the
+  // downstream loops (lines ~168, ~294) already read.
+  const aes = Array.from(actor?.effects ?? [])
+    .filter((ae) => !ae.disabled && ae.flags?.[SYSTEM_ID]?.temporaryEffect)
+    .map((ae) => aeChangesToLegacyShape(ae));
+  return [...legacy, ...aes];
 }
 
 function detailLabel(effect, fallback) {
