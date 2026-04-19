@@ -23,3 +23,9 @@ __pycache__/
 output/
 test-results/
 tmp/
+
+# Foundry compendium LevelDB lock files — written when a pack is open
+# (by Foundry, by seal-packs.mjs, etc.) and NEVER belong in version
+# control. A committed LOCK file can cause the pack to fail to open on
+# another machine.
+packs/*/LOCK
