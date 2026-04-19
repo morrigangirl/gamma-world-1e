@@ -171,6 +171,75 @@ function prepareDocument(doc, collection, packSeed, parentIdPath = [], seedIndex
 }
 
 /**
+ * 0.8.1: folders emitted alongside the pack documents. Each folder is a
+ * top-level Folder doc with `_key: !folders!<id>` and `type` matching
+ * the pack's document type ("Item" for mutations). Mutations then set
+ * `folder: <folderId>` via MUTATION_FOLDER_BY_SUBTYPE below so v13's
+ * compendium browser groups them at a glance.
+ *
+ * Folder IDs are stable (derived from the pack + subtype) so rebuilds
+ * don't orphan existing world references to specific mutations — only
+ * the new parent-folder field changes.
+ */
+const FOLDER_ID_BY_KEY = {
+  "mutations:mental":   stableId("mutations:folder:mental"),
+  "mutations:physical": stableId("mutations:folder:physical"),
+  "mutations:plant":    stableId("mutations:folder:plant"),
+  "mutations:defect":   stableId("mutations:folder:defect")
+};
+
+const FOLDERS_BY_PACK = {
+  mutations: [
+    { _id: FOLDER_ID_BY_KEY["mutations:mental"],   name: "Mental Mutations",   type: "Item", sorting: "a", color: "#6b5b95" },
+    { _id: FOLDER_ID_BY_KEY["mutations:physical"], name: "Physical Mutations", type: "Item", sorting: "a", color: "#a84a4a" },
+    { _id: FOLDER_ID_BY_KEY["mutations:plant"],    name: "Plant Mutations",    type: "Item", sorting: "a", color: "#4a7a2e" },
+    { _id: FOLDER_ID_BY_KEY["mutations:defect"],   name: "Defects",            type: "Item", sorting: "a", color: "#555555" }
+  ]
+};
+
+/** Per-subtype folder lookup consumed by the mutation pack assignment step. */
+const MUTATION_FOLDER_BY_SUBTYPE = Object.freeze({
+  mental:   FOLDER_ID_BY_KEY["mutations:mental"],
+  physical: FOLDER_ID_BY_KEY["mutations:physical"],
+  plant:    FOLDER_ID_BY_KEY["mutations:plant"],
+  defect:   FOLDER_ID_BY_KEY["mutations:defect"]
+});
+
+function folderDoc(spec, packName) {
+  const doc = {
+    _id: spec._id,
+    name: spec.name,
+    type: spec.type ?? TYPE_TO_COLLECTION[packName] ?? "Item",
+    folder: null,
+    sorting: spec.sorting ?? "a",
+    color: spec.color ?? "#888888",
+    description: spec.description ?? "",
+    flags: {},
+    sort: spec.sort ?? 0
+  };
+  doc._key = `!folders!${doc._id}`;
+  // Folders carry the same _stats envelope as other docs so v13 doesn't
+  // silently reject them.
+  doc._stats = baseStats();
+  doc.ownership = { default: 0 };
+  return doc;
+}
+
+/**
+ * Mutate each mutation doc in-place so `system.subtype` drives `folder`.
+ * Called inside buildPack right after `spec.load()` so the assignment
+ * happens before prepareDocument stamps the rest of the metadata.
+ */
+function assignMutationFolders(documents) {
+  for (const doc of documents) {
+    const subtype = doc.system?.subtype;
+    if (!subtype) continue;
+    const folderId = MUTATION_FOLDER_BY_SUBTYPE[subtype];
+    if (folderId) doc.folder = folderId;
+  }
+}
+
+/**
  * Full pack lineup. Order here is also the order in which packs are
  * built; each is independent. Filter on CLI args to build a subset:
  *   `node scripts/build-compendia.mjs equipment monsters`
@@ -202,9 +271,28 @@ async function buildPack(spec) {
 
   const documents = spec.load();
 
+  // 0.8.1: mutations group by subtype into folders surfaced in the v13
+  // compendium browser. Run the folder assignment before prepareDocument
+  // so the `folder` field survives the stable-ID pass.
+  if (spec.name === "mutations") {
+    assignMutationFolders(documents);
+  }
+
   const workDir = path.join(tempRoot, spec.name);
   const destDir = path.join(repoPacksDir, spec.name);
   cleanDir(workDir);
+
+  // Emit folder JSON files first (if any) — they carry _key=!folders!<id>
+  // which compilePack routes into the LevelDB folders section.
+  const folderSpecs = FOLDERS_BY_PACK[spec.name] ?? [];
+  for (const folderSpec of folderSpecs) {
+    const folder = folderDoc(folderSpec, spec.name);
+    fs.writeFileSync(
+      path.join(workDir, `__folder__${folder._id}.json`),
+      JSON.stringify(folder, null, 2),
+      "utf8"
+    );
+  }
 
   documents.forEach((doc, index) => {
     prepareDocument(doc, collection, spec.name, [], index);
