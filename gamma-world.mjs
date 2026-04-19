@@ -26,6 +26,7 @@ import { syncActorProtectionState } from "./module/effect-state.mjs";
 import { registerGmExecutor } from "./module/gm-executor.mjs";
 import { registerArtifactSessionSocket } from "./module/artifacts.mjs";
 import { ensureEncounterTablesImported } from "./module/compendium-bootstrap.mjs";
+import { registerConditionTicker } from "./module/conditions.mjs";
 
 Hooks.once("init", () => {
   console.log(`${SYSTEM_ID} | Initializing Gamma World 1st Edition system`);
@@ -92,6 +93,7 @@ Hooks.once("init", () => {
   registerHooks();
   registerAnimationHooks();
   registerSoundCueHooks();
+  registerConditionTicker();
 });
 
 Hooks.once("ready", () => {

@@ -1787,4 +1787,50 @@ test("0.8.2 — collectHazardSaveFlags surfaces per-mutation homebrew hooks", ()
   assert.equal(poi.targetBonus, 3);
 });
 
+test("0.8.2 — radiation conditions module: read + override helpers", async () => {
+  const {
+    getRadiationCondition,
+    effectiveFatigueRound,
+    overlayRadiationIndicatorState
+  } = await import("../module/conditions.mjs");
+
+  // No state → no override.
+  const clean = { flags: {}, system: { combat: { fatigue: { round: 4 } } } };
+  assert.equal(effectiveFatigueRound(clean), 4);
+  assert.deepEqual(getRadiationCondition(clean), { sickness: null, catastrophic: null });
+
+  // Radiation sickness active → fatigue saturated to 20.
+  const sick = {
+    flags: { "gamma-world-1e": { radiationSickness: {
+      severity: "mild", durationDays: 2, appliedAt: 0, expiresAt: 172800
+    } } },
+    system: { combat: { fatigue: { round: 0 } } }
+  };
+  assert.equal(effectiveFatigueRound(sick), 20);
+  assert.equal(getRadiationCondition(sick).sickness.severity, "mild");
+
+  // Stub game.time for the overlay helper.
+  const originalGame = globalThis.game;
+  globalThis.game = { time: { worldTime: 0 } };
+  try {
+    const baseState = { round: 4, level: "green", label: "Fresh", title: "Fatigue round 4 — Fresh", badge: null };
+    const mild = overlayRadiationIndicatorState(baseState, sick);
+    assert.equal(mild.level, "red");
+    assert.equal(mild.badge, "sickness-mild");
+    assert.match(mild.title, /Radiation Sickness/);
+
+    const cata = overlayRadiationIndicatorState(baseState, {
+      flags: { "gamma-world-1e": { catastrophicRadiation: {
+        active: true, appliedAt: 0, onsetAt: 86400, lastTickAt: 86400
+      } } },
+      system: { combat: { fatigue: { round: 0 } } }
+    });
+    assert.equal(cata.level, "red");
+    assert.equal(cata.badge, "catastrophic");
+    assert.match(cata.title, /Catastrophic/);
+  } finally {
+    globalThis.game = originalGame;
+  }
+});
+
 

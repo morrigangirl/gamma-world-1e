@@ -30,13 +30,14 @@
             <input type="number" name="system.details.xp" value="{{system.details.xp}}" min="0" />
           </label>
           <span class="gw-fatigue-klaxon-slot">
-            <span class="gw-fatigue-klaxon gw-fatigue-klaxon--{{fatigueState.level}}"
+            <span class="gw-fatigue-klaxon gw-fatigue-klaxon--{{fatigueState.level}}{{#if fatigueState.badge}} gw-fatigue-klaxon--{{fatigueState.badge}}{{/if}}"
                   role="img"
                   aria-label="{{fatigueState.title}}"
                   title="{{fatigueState.title}}"
                   data-fatigue-round="{{fatigueState.round}}">
               <span class="gw-fatigue-klaxon__bulb"></span>
               <span class="gw-fatigue-klaxon__ring"></span>
+              {{#if fatigueState.badge}}<span class="gw-fatigue-klaxon__mark" aria-hidden="true">☢</span>{{/if}}
             </span>
           </span>
         {{/if}}

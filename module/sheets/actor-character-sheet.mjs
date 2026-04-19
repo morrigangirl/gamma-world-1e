@@ -10,6 +10,7 @@ import { artifactNeedsPowerManagement, artifactPowerSummary } from "../artifact-
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
 import { applyRest } from "../healing.mjs";
 import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
+import { overlayRadiationIndicatorState } from "../conditions.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -459,12 +460,18 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       fatigueLevel = "yellow";
       fatigueLabel = "Caution — heavy weapons fatiguing";
     }
-    context.fatigueState = {
+    const baseFatigueState = {
       round: fatigueRound,
       level: fatigueLevel,
       label: fatigueLabel,
-      title: `Fatigue round ${fatigueRound} — ${fatigueLabel}`
+      title: `Fatigue round ${fatigueRound} — ${fatigueLabel}`,
+      badge: null
     };
+    // 0.8.2: Radiation Sickness / catastrophic exposure overlay the
+    // klaxon so the worst active state shows at a glance. The stored
+    // combat round is preserved — the overlay only mutates the
+    // display-level level/label/title.
+    context.fatigueState = overlayRadiationIndicatorState(baseFatigueState, actor);
 
     // Phase 5 — damage-trait multi-select options for the Bio tab. Built
     // from the canonical DAMAGE_TYPES vocabulary; each entry carries a

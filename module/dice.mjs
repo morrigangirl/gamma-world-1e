@@ -24,6 +24,7 @@ import {
   preferredSaveUserId,
   saveContextForActor
 } from "./save-flow.mjs";
+import { effectiveFatigueRound } from "./conditions.mjs";
 
 const DialogV2 = foundry.applications.api.DialogV2;
 
@@ -799,7 +800,11 @@ export async function rollAttack(actor, weapon) {
     rangeLabel: range.label
   });
 
-  const meleeTurn = Number(actor.system.combat?.fatigue?.round ?? 0);
+  // 0.8.2 homebrew: Radiation Sickness "fully fatigues" the actor — inflate
+  // the fatigue round to saturate every weapon / armor penalty even if the
+  // stored round counter is still low. effectiveFatigueRound leaves the
+  // persisted round value untouched.
+  const meleeTurn = effectiveFatigueRound(actor);
   const fatigueFactor = combinedFatigueFactor({
     family: resolveWeaponFatigueFamily({ name: weapon.name, weaponClass: weapon.system.weaponClass }),
     armorClass: actor.system.resources?.ac,

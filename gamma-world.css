@@ -2564,6 +2564,51 @@ body.system-gamma-world-1e,
   }
 }
 
+/* 0.8.2 — Radiation sickness / catastrophic exposure overlay. A tiny
+   "☢" glyph sits on top of the bulb in a biohazard yellow when sickness
+   is active; catastrophic exposure flips to a dangerous green glow to
+   distinguish it from vanilla red-band fatigue. */
+.application.gamma-world .gw-fatigue-klaxon__mark {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: rgba(255, 215, 0, 0.9);
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.75),
+    0 0 3px rgba(255, 215, 0, 0.6);
+  pointer-events: none;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.application.gamma-world .gw-fatigue-klaxon--sickness-severe .gw-fatigue-klaxon__mark,
+.application.gamma-world .gw-fatigue-klaxon--catastrophic .gw-fatigue-klaxon__mark {
+  color: rgba(90, 255, 120, 0.95);
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.8),
+    0 0 4px rgba(90, 255, 120, 0.6);
+}
+
+.application.gamma-world .gw-fatigue-klaxon--catastrophic {
+  --klaxon-bulb: #4aff4a;
+  --klaxon-edge: #0a5a0a;
+  --klaxon-glow: rgba(90, 255, 90, 0.85);
+  --klaxon-glow-spread: 0.55rem;
+}
+
+.application.gamma-world .gw-fatigue-klaxon--catastrophic .gw-fatigue-klaxon__bulb {
+  animation: gw-klaxon-pulse 900ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .application.gamma-world .gw-fatigue-klaxon--catastrophic .gw-fatigue-klaxon__bulb {
+    animation: none;
+  }
+}
+
 /* ----- Damage-trait multi-select section (Bio tab) ------------------- */
 
 .application.gamma-world .gw-damage-traits {

@@ -49,6 +49,12 @@ import { syncGrantedItems } from "./equipment-rules.mjs";
 import { actorIsRobot, cycleRobotMode, rechargeRobot, repairRobot, spendRobotPower, syncRobotImpairments } from "./robots.mjs";
 import { beneficialMutationChoices, pickMutation } from "./tables/mutation-tables.mjs";
 import { computeSkillModifier, countProficientSkills, rollSkill } from "./skills.mjs";
+import {
+  clearCatastrophicRadiation,
+  clearRadiationSickness,
+  getRadiationCondition
+} from "./conditions.mjs";
+import { applyCatastrophicRadiation, applyRadiationSickness } from "./dice.mjs";
 
 export function createSystemApi() {
   const animations = createAnimationApi();
@@ -110,6 +116,12 @@ export function createSystemApi() {
     pickMutation,
     rollSkill,
     computeSkillModifier,
-    countProficientSkills
+    countProficientSkills,
+    // 0.8.2 radiation conditions
+    applyRadiationSickness,
+    applyCatastrophicRadiation,
+    clearRadiationSickness,
+    clearCatastrophicRadiation,
+    getRadiationCondition
   };
 }
