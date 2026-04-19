@@ -13,7 +13,13 @@ import { syncGrantedItems, enrichEquipmentSystemData, equipmentMigrationUpdate }
 import { resetCombatFatigue, syncActorProtectionState, tickCombatActorState } from "./effect-state.mjs";
 import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
 import { renderUndoButton, requestUndo } from "./undo.mjs";
-import { fillVariant, mutationHasVariant, mutationVariant } from "./mutation-rules.mjs";
+import {
+  evaluateCondition,
+  fillVariant,
+  getMutationRule,
+  mutationHasVariant,
+  mutationVariant
+} from "./mutation-rules.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { openCinematicComposer } from "./cinematic/compose.mjs";
@@ -393,7 +399,56 @@ async function onMutationRelevantItemChange(item, changesOrOptions = {}, maybeOp
   }
   const actor = item.parent;
   if (!(actor instanceof Actor) || !["character", "monster"].includes(actor.type)) return;
+  // 0.8.6 — keep each conditional AE's `disabled` flag in sync with its
+  // rule-declared condition so the Effects tab shows the right greyed-
+  // out state after the user toggles a mutation or swaps its variant.
+  // Runtime apply (applyMutationEffects) already respects the condition
+  // independently; this sync only affects visual state.
+  if (item.type === "mutation") await syncConditionalEffectsDisabledState(item, actor);
   await scheduleActorMaintenance(actor);
+}
+
+/**
+ * 0.8.6 — for a mutation item whose rule has `effects[i].condition`,
+ * evaluate each condition against the current actor/item state and
+ * flip the matching embedded ActiveEffect's `disabled` field if it
+ * doesn't match. Runs on both createItem (initial sync after emit-time
+ * default) and updateItem (variant / toggle changes).
+ */
+async function syncConditionalEffectsDisabledState(item, actor) {
+  const rule = getMutationRule(item);
+  const effects = Array.isArray(rule?.effects) ? rule.effects : [];
+  if (!effects.length || !item.effects?.size) return;
+  const ctx = {
+    actor,
+    item,
+    derived: {
+      encumbered: actor.items.some((entry) => entry.type === "armor" && entry.system?.equipped)
+    }
+  };
+  const updates = [];
+  // Pair each rule effect with its emitted AE by insertion order. Most
+  // mutations have a single effect entry; Will Force has six. The
+  // stable ordering matches buildMutationItemSource's map().
+  const itemEffects = [...item.effects.contents];
+  for (let i = 0; i < effects.length; i += 1) {
+    const rule_effect = effects[i];
+    const ae = itemEffects[i];
+    if (!ae) continue;
+    const condition = rule_effect.condition ?? null;
+    const shouldBeEnabled = evaluateCondition(condition, ctx);
+    const wantDisabled = !shouldBeEnabled;
+    if (!!ae.disabled !== wantDisabled) {
+      updates.push({ _id: ae.id, disabled: wantDisabled });
+    }
+  }
+  if (updates.length) {
+    try {
+      await item.updateEmbeddedDocuments("ActiveEffect", updates, { gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | failed to sync conditional AE state on "${item.name}"`, error);
+    }
+  }
 }
 
 async function onMutationRelevantItemDelete(item, options = {}) {

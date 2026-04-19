@@ -2,7 +2,7 @@
   <h3>{{skillLabel}} ({{abilityAbbr}})</h3>
   <div class="gw-card-meta">{{actorName}}{{#if proficient}} &middot; <span class="gw-skill-card__prof">Proficient</span>{{/if}}</div>
   <div class="gw-card-meta">
-    Roll: {{d20}} &middot; {{abilityAbbr}}: {{gwSigned abilityMod}}{{#if profBonus}} &middot; Proficiency: +{{profBonus}}{{/if}}
+    Roll: {{d20}} &middot; {{abilityAbbr}}: {{gwSigned abilityMod}}{{#if profBonus}} &middot; Proficiency: +{{profBonus}}{{/if}}{{#if bonus}} &middot; Bonus: {{gwSigned bonus}}{{/if}}
   </div>
   <div class="gw-card-result">
     Total:

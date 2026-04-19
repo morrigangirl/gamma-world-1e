@@ -160,16 +160,46 @@ export const MUTATION_DEFINITIONS = [
     summary: "Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.",
     page: 12
   },
+  // 0.8.6 — Genius Capability retired. Split into three standalone
+  // mutations with distinct slots on the d100 table. Heightened Brain
+  // Talent loses 2 slots (humanoid 5→3, mutated-animal 3→1) to make
+  // room; overall Genius-flavored odds triple (1-in-100 → 3-in-100)
+  // per the Phase 3 plan. Existing "Genius Capability" items on actors
+  // are migrated via migrateGeniusCapability086().
   {
     code: 14,
-    name: "Genius Capability",
+    name: "Military Genius",
     subtype: "mental",
     category: "beneficial",
     ranges: {
       humanoid: [26, 26],
       "mutated-animal": [25, 25]
     },
-    summary: "+4 to hit and +1 die, or better artifact crafting, or +3 charisma.",
+    summary: "Tactical prodigy: +4 to hit and +1 damage die on all attacks.",
+    page: 12
+  },
+  {
+    code: 14.1,
+    name: "Economic Genius",
+    subtype: "mental",
+    category: "beneficial",
+    ranges: {
+      humanoid: [27, 27],
+      "mutated-animal": [26, 26]
+    },
+    summary: "Shrewd trader and leader: +3 charisma bonus.",
+    page: 12
+  },
+  {
+    code: 14.2,
+    name: "Scientific Genius",
+    subtype: "mental",
+    category: "beneficial",
+    ranges: {
+      humanoid: [28, 28],
+      "mutated-animal": [27, 27]
+    },
+    summary: "Technical savant: +2 to technical skills and artifact analysis.",
     page: 12
   },
   {
@@ -178,8 +208,8 @@ export const MUTATION_DEFINITIONS = [
     subtype: "mental",
     category: "beneficial",
     ranges: {
-      humanoid: [27, 31],
-      "mutated-animal": [26, 28]
+      humanoid: [29, 31],
+      "mutated-animal": [28, 28]
     },
     summary: "Figure out artificat in 1/3 time; 2 mental saves; detect all lies.",
     page: 12

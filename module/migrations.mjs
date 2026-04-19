@@ -579,10 +579,14 @@ async function migrateActor(actor) {
   const existingSkills = actor.system?.skills ?? {};
   for (const [key, def] of Object.entries(SKILLS)) {
     if (existingSkills[key] == null) {
-      update[`system.skills.${key}`] = { ability: def.ability, proficient: false };
+      update[`system.skills.${key}`] = { ability: def.ability, proficient: false, bonus: 0 };
     } else {
       if (existingSkills[key].ability == null) update[`system.skills.${key}.ability`] = def.ability;
       if (existingSkills[key].proficient == null) update[`system.skills.${key}.proficient`] = false;
+      // 0.8.6 — per-skill `bonus` field backfill; target of Scientific
+      // Genius's +2 ActiveEffects. Defaults to 0 so rolls stay identical
+      // for pre-0.8.6 actors until an AE writes a nonzero value.
+      if (existingSkills[key].bonus == null) update[`system.skills.${key}.bonus`] = 0;
     }
   }
 
@@ -607,7 +611,68 @@ async function migrateActor(actor) {
   // so old-world characters see their effects on the Effects tab.
   await migrateMutationEffects084(actor);
 
+  // 0.8.6 Phase 3: retire Genius Capability in favor of three standalone
+  // mutations (Military/Economic/Scientific Genius). Must run AFTER the
+  // 0.8.4 AE backfill because the new items emit their own AE entries
+  // on create (Foundry's item.create pipeline handles it).
+  await migrateGeniusCapability086(actor);
+
   await actor.refreshDerivedResources({ adjustCurrent: false });
+}
+
+/**
+ * 0.8.6 Phase 3 — retire the "Genius Capability" mutation in favor of
+ * three standalone mutations (Military Genius, Economic Genius,
+ * Scientific Genius). For each Genius Capability item on the actor:
+ *   1. Read the legacy `system.reference.variant` field
+ *   2. Look up the matching replacement from the mutations pack
+ *   3. Delete the old item and create the replacement
+ * Idempotent: the actor's second migration pass finds no Genius
+ * Capability items to migrate (they were replaced on the first pass).
+ *
+ * Unknown or empty variants default to Scientific Genius (the safest
+ * pick — purely flavorful +2 technical skill bonuses, no combat math).
+ */
+async function migrateGeniusCapability086(actor) {
+  const legacy = actor.items.filter((item) => item.type === "mutation" && item.name === "Genius Capability");
+  if (!legacy.length) return;
+
+  const variantToReplacement = {
+    military:   "Military Genius",
+    economic:   "Economic Genius",
+    scientific: "Scientific Genius"
+  };
+
+  const mutationsPack = game.packs?.get(`${SYSTEM_ID}.mutations`);
+  if (!mutationsPack) {
+    console.warn(`${SYSTEM_ID} | Genius Capability migration: mutations pack unavailable`);
+    return;
+  }
+
+  const packIndex = await mutationsPack.getIndex();
+
+  for (const old of legacy) {
+    const variant = String(old.system?.reference?.variant ?? "").toLowerCase();
+    const replacementName = variantToReplacement[variant] ?? "Scientific Genius";
+    if (!variantToReplacement[variant]) {
+      console.warn(`${SYSTEM_ID} | Genius Capability on ${actor.name}: variant "${variant}" not recognized; defaulting to Scientific Genius`);
+    }
+
+    const entry = packIndex.find((e) => e.name === replacementName);
+    if (!entry) {
+      console.warn(`${SYSTEM_ID} | Genius Capability migration: ${replacementName} not found in mutations pack`);
+      continue;
+    }
+
+    const source = await mutationsPack.getDocument(entry._id);
+    const data = source.toObject();
+    try {
+      await Item.create(data, { parent: actor, gammaWorldSync: true });
+      await old.delete({ gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | failed to replace Genius Capability on ${actor.name} with ${replacementName}`, error);
+    }
+  }
 }
 
 /**

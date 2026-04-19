@@ -1,12 +1,18 @@
 /**
  * 0.8.0 — Lightweight skill + proficiency layer.
  *
- * Each actor carries a `system.skills.<key>` map with `{ ability, proficient }`
- * pairs for every canonical skill (25 total, declared in config.mjs).
+ * Each actor carries a `system.skills.<key>` map with `{ ability, proficient, bonus }`
+ * entries for every canonical skill (25 total, declared in config.mjs).
  * Rolling a skill:
  *
- *   1d20 + ability modifier          (not proficient)
- *   1d20 + ability modifier + 2      (proficient)
+ *   1d20 + ability modifier                          (baseline)
+ *   1d20 + ability modifier + 2                      (proficient)
+ *   1d20 + ability modifier + 2 + bonus              (proficient + AE-granted bonus)
+ *
+ * 0.8.6 — `bonus` integer per skill lets ActiveEffects add flat
+ * modifiers. Scientific Genius applies +2 to seven technical / scientific
+ * skills via AE changes targeting `system.skills.<key>.bonus`; the field
+ * defaults to 0 so existing rolls are unchanged when no AE is present.
  *
  * The ability modifier curve is the same 6–15 neutral band used elsewhere
  * in the system (see `abilityModifierFromScore` in mutation-rules.mjs) so
@@ -47,6 +53,7 @@ export function computeSkillModifier(actor, skillKey) {
   const abilityMod = abilityModifierFromScore(score);
   const proficient = !!entry.proficient;
   const profBonus = proficient ? 2 : 0;
+  const bonus = Number(entry.bonus ?? 0) || 0;
   return {
     ok: true,
     skillKey,
@@ -55,7 +62,8 @@ export function computeSkillModifier(actor, skillKey) {
     abilityMod,
     proficient,
     profBonus,
-    total: abilityMod + profBonus
+    bonus,
+    total: abilityMod + profBonus + bonus
   };
 }
 
@@ -103,13 +111,15 @@ export async function rollSkill(actor, skillKey, { suppressCard = false } = {}) 
     abilityKey: mod.abilityKey,
     abilityMod: mod.abilityMod,
     profBonus: mod.profBonus,
-    proficient: mod.proficient
+    proficient: mod.proficient,
+    bonus: mod.bonus
   });
   if (!preProceed) return null;
 
-  const roll = await new Roll("1d20 + @ability + @prof", {
+  const roll = await new Roll("1d20 + @ability + @prof + @bonus", {
     ability: mod.abilityMod,
-    prof: mod.profBonus
+    prof: mod.profBonus,
+    bonus: mod.bonus
   }).evaluate();
   const rollTooltip = await roll.getTooltip();
 
@@ -132,6 +142,7 @@ export async function rollSkill(actor, skillKey, { suppressCard = false } = {}) 
     abilityMod: mod.abilityMod,
     proficient: mod.proficient,
     profBonus: mod.profBonus,
+    bonus: mod.bonus,
     d20: roll.terms?.[0]?.total ?? roll.total,
     total: roll.total,
     rollFormula: roll.formula,
@@ -150,6 +161,7 @@ export async function rollSkill(actor, skillKey, { suppressCard = false } = {}) 
     abilityMod: mod.abilityMod,
     profBonus: mod.profBonus,
     proficient: mod.proficient,
+    bonus: mod.bonus,
     d20: roll.terms?.[0]?.total ?? roll.total,
     total: roll.total,
     rollFormula: roll.formula,
@@ -171,6 +183,7 @@ export async function rollSkill(actor, skillKey, { suppressCard = false } = {}) 
             abilityMod: mod.abilityMod,
             profBonus: mod.profBonus,
             proficient: mod.proficient,
+            bonus: mod.bonus,
             total: roll.total
           }
         }

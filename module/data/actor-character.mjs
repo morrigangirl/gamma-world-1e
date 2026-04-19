@@ -15,6 +15,12 @@ const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayFie
  * proficiency flag. The system only counts up to three proficient skills
  * per actor, but the cap is enforced in the sheet UI rather than the
  * schema so macros / homebrew overrides retain flexibility.
+ *
+ * 0.8.6 — per-skill `bonus` integer added so ActiveEffects can target
+ * `system.skills.<key>.bonus` directly (Foundry core handles the ADD).
+ * Scientific Genius is the first consumer (+2 to seven technical /
+ * scientific skills); the bonus feeds the d20 roll alongside the
+ * proficiency bonus.
  */
 function skillSchemaFields() {
   return Object.fromEntries(
@@ -25,7 +31,8 @@ function skillSchemaFields() {
         initial: def.ability,
         choices: [...ATTRIBUTE_KEYS]
       }),
-      proficient: new BooleanField({ initial: false })
+      proficient: new BooleanField({ initial: false }),
+      bonus:      new NumberField({ required: true, nullable: false, integer: true, initial: 0 })
     })])
   );
 }

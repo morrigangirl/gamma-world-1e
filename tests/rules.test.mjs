@@ -323,10 +323,17 @@ test("save helpers apply extra mental saves and derived radiation modifiers", ()
 });
 
 test("mutation tables expose complete, typed entries", () => {
+  // 0.8.6 — Genius Capability retired and split into three standalone
+  // mutations (Military / Economic / Scientific Genius), so mental
+  // mutation count rises by 2 (from 49 to 51).
   assert.equal(mutationEntriesFor("physical", "humanoid").length, 49);
-  assert.equal(mutationEntriesFor("mental", "mutated-animal").length, 49);
+  assert.equal(mutationEntriesFor("mental", "mutated-animal").length, 51);
   assert.equal(findMutationByPercentile("mental", "humanoid", 56)?.name, "Mental Blast");
   assert.equal(findMutationByPercentile("physical", "humanoid", 1)?.name, "Attraction Odor");
+  // The three Genius replacements each roll from their own slot.
+  assert.equal(findMutationByPercentile("mental", "humanoid", 26)?.name, "Military Genius");
+  assert.equal(findMutationByPercentile("mental", "humanoid", 27)?.name, "Economic Genius");
+  assert.equal(findMutationByPercentile("mental", "humanoid", 28)?.name, "Scientific Genius");
 });
 
 test("special mutation rolls reroll defects or pick a beneficial result", () => {
@@ -444,13 +451,19 @@ test("artifact flowcharts resolve exact public node transitions", () => {
 });
 
 test("artifact use profile applies RAW modifiers, instant charts, and timing", () => {
+  // 0.8.6 — Scientific Genius's -1 contribution migrated to ActiveEffect
+  // and flows through `actor.gw.artifactAnalysisBonus`. The test fixture
+  // carries the post-prepareDerivedData value directly to exercise the
+  // same combined-modifier output that artifactUseProfileForChart now
+  // surfaces to roll handlers.
   const actor = {
     system: {
       attributes: { in: { value: 18 } }
     },
+    gw: { artifactAnalysisBonus: -1 },  // simulates Scientific Genius AE applied
     items: [
       { type: "mutation", name: "Dual Brain", system: { activation: { enabled: true }, reference: {} } },
-      { type: "mutation", name: "Genius Capability", system: { activation: { enabled: true }, reference: { variant: "scientific" } } },
+      { type: "mutation", name: "Scientific Genius", system: { activation: { enabled: true }, reference: {} } },
       { type: "mutation", name: "Heightened Intelligence", system: { activation: { enabled: true }, reference: {} } },
       { type: "mutation", name: "Heightened Brain Talent", system: { activation: { enabled: true }, reference: {} } },
       { type: "mutation", name: "Molecular Understanding", system: { activation: { enabled: true }, reference: {} } },
@@ -462,12 +475,14 @@ test("artifact use profile applies RAW modifiers, instant charts, and timing", (
   assert.equal(clampArtifactUseRoll(-2), 1);
   assert.equal(clampArtifactUseRoll(17), 10);
 
+  // INT 18 → -3, Dual Brain → -1, Heightened Intelligence → -2, Scientific Genius AE → -1 = -7.
   const profileA = artifactUseProfileForChart(actor, "A");
   assert.equal(profileA.modifier, -7);
   assert.equal(profileA.speedMultiplier, 3);
   assert.equal(profileA.instantCharts.has("A"), true);
   assert.equal(profileA.notes.includes("Heightened Touch"), true);
 
+  // Chart B adds -2 from Molecular Understanding on top = -9.
   const profileB = artifactUseProfileForChart(actor, "B");
   assert.equal(profileB.modifier, -9);
   assert.equal(artifactElapsedMinutes({ rollsThisAttempt: 10, helperCount: 0, speedMultiplier: profileB.speedMultiplier }), 40);
@@ -1212,11 +1227,19 @@ test("Random-variant mutation table and helpers", () => {
   assert.equal(MUTATION_VARIANT_POOLS.Absorption.length, 6);
   assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes("paralysis rays"));
 
-  // Genius Capability is table-less (weighted d6), so it's NOT in the
-  // pools map — but mutationHasVariant should still return true so the
-  // drop hook rolls it.
+  // 0.8.6 — Genius Capability retired. Replaced by three standalone
+  // mutations (Military / Economic / Scientific Genius), each rolled
+  // from its own d100 slot rather than a variant sub-roll. Neither
+  // "Genius Capability" nor any of the three replacements participates
+  // in the variant-pool system.
   assert.equal(MUTATION_VARIANT_POOLS["Genius Capability"], undefined);
-  assert.equal(mutationHasVariant("Genius Capability"), true);
+  assert.equal(mutationHasVariant("Genius Capability"), false,
+    "Retired mutation no longer triggers the drop-roll hook");
+  assert.equal(mutationHasVariant("Military Genius"), false);
+  assert.equal(mutationHasVariant("Economic Genius"), false);
+  assert.equal(mutationHasVariant("Scientific Genius"), false);
+  assert.equal(mutationVariant("Genius Capability", () => 0.5), "",
+    "Retired mutation produces no variant");
 
   // Plain mutations (no variant slot) must return false so the drop
   // hook doesn't touch them.
@@ -1230,12 +1253,6 @@ test("Random-variant mutation table and helpers", () => {
   const rolled = mutationVariant("Absorption", stubRng);
   assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes(rolled),
     `Absorption roll "${rolled}" should be in the RAW pool`);
-
-  // Weighted Genius Capability — 0..1/3 = military, 1/3..2/3 = scientific,
-  // 2/3..1 = economic.
-  assert.equal(mutationVariant("Genius Capability", () => 0.01), "military");
-  assert.equal(mutationVariant("Genius Capability", () => 0.5),  "scientific");
-  assert.equal(mutationVariant("Genius Capability", () => 0.99), "economic");
 
   // fillVariant replaces underscore runs with the variant string.
   assert.equal(fillVariant("Unable to see or approach _______.", "robots"),
@@ -2186,10 +2203,10 @@ test("0.8.4 Tier 1 — applyMutationEffects folds AE-style changes into derived"
       assert.equal(derived.damagePerDie, 3);
     }
 
-    // Non-pilot mutation is untouched by applyMutationEffects. Heightened
-    // Constitution stays in the hardcoded switch because it scales from
-    // an attribute value (CN × 2 HP) — AE can't express that cleanly
-    // without CUSTOM mode.
+    // 0.8.6 — Heightened Constitution migrated to the AE framework with
+    // one literal ADD (+1 poison), one literal ADD (+1 radiation), and
+    // one computeValue change (CN × 2 HP bonus). Exercises `computeValue`
+    // without any condition — the first migration to use the primitive.
     {
       const actor = {
         items: [{ type: "mutation", name: "Heightened Constitution",
@@ -2198,9 +2215,29 @@ test("0.8.4 Tier 1 — applyMutationEffects folds AE-style changes into derived"
       };
       const derived = { hpBonus: 0, poisonResistance: 10, radiationResistance: 10 };
       applyMutationEffects(actor, derived);
-      assert.equal(derived.hpBonus, 0,
-        "Non-pilot mutations should not be touched by applyMutationEffects");
-      assert.equal(derived.radiationResistance, 10);
+      assert.equal(derived.hpBonus, 24, "CN 12 × 2 = +24 HP via computeValue");
+      assert.equal(derived.poisonResistance, 11, "+1 poison save literal ADD");
+      assert.equal(derived.radiationResistance, 11, "+1 radiation save literal ADD");
+    }
+
+    // Non-pilot mutation is still untouched by applyMutationEffects.
+    // Heightened Dexterity uses the `unencumbered` condition but lives
+    // in the conditional-effects framework — the test here demonstrates
+    // that an AE with a FAILED condition doesn't get applied. The next
+    // Phase 3 step migrates it to AE with a condition.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: false },
+                    reference: { variant: "to-hit" } } }],
+        system: { attributes: { dx: { value: 14 } } }
+      };
+      const derived = { toHitBonus: 0 };
+      applyMutationEffects(actor, derived);
+      // Will Force is disabled (activation.enabled: false) so even after
+      // migration its toggleEnabled-conditioned effects are skipped.
+      assert.equal(derived.toHitBonus, 0,
+        "Disabled toggle mutations stay out of applyMutationEffects");
     }
   } finally {
     globalThis.foundry = originalFoundry;
@@ -2325,4 +2362,468 @@ test("0.8.5 Tier 2 — DOWNGRADE, OVERRIDE-beats-ADD, and stacked surprise bonus
   }
 });
 
+/* ================================================================= */
+/* 0.8.6 Phase 3 — Conditional-effects framework + holdouts           */
+/* ================================================================= */
 
+test("0.8.6 Phase 3 — evaluateCondition dispatches each primitive", async () => {
+  const { evaluateCondition } = await import("../module/mutation-rules.mjs");
+
+  const enabledItem = { system: { activation: { enabled: true }, reference: { variant: "ms" } } };
+  const disabledItem = { system: { activation: { enabled: false }, reference: { variant: "ms" } } };
+
+  // No condition → always true
+  assert.equal(evaluateCondition(null, { item: enabledItem }), true);
+  assert.equal(evaluateCondition(undefined, { item: enabledItem }), true);
+
+  // toggleEnabled string form
+  assert.equal(evaluateCondition("toggleEnabled", { item: enabledItem }), true);
+  assert.equal(evaluateCondition("toggleEnabled", { item: disabledItem }), false);
+
+  // toggleEnabled object form with explicit truthy/falsy values
+  assert.equal(evaluateCondition({ toggleEnabled: true }, { item: enabledItem }), true);
+  assert.equal(evaluateCondition({ toggleEnabled: false }, { item: enabledItem }), false,
+    "Explicit { toggleEnabled: false } is satisfied ONLY when the item is disabled");
+  assert.equal(evaluateCondition({ toggleEnabled: false }, { item: disabledItem }), true);
+
+  // unencumbered — reads derived.encumbered
+  assert.equal(evaluateCondition("unencumbered", { derived: { encumbered: false } }), true);
+  assert.equal(evaluateCondition("unencumbered", { derived: { encumbered: true } }), false);
+  assert.equal(evaluateCondition({ unencumbered: true }, { derived: { encumbered: false } }), true);
+
+  // variantIs
+  assert.equal(evaluateCondition({ variantIs: "ms" }, { item: enabledItem }), true);
+  assert.equal(evaluateCondition({ variantIs: "ps" }, { item: enabledItem }), false);
+  assert.equal(evaluateCondition({ variantIs: "" }, { item: { system: { reference: {} } } }), true,
+    "Empty variant slot matches empty variantIs target");
+
+  // Compound { all: [...] }
+  assert.equal(evaluateCondition({ all: [{ toggleEnabled: true }, { variantIs: "ms" }] },
+    { item: enabledItem }), true);
+  assert.equal(evaluateCondition({ all: [{ toggleEnabled: true }, { variantIs: "ps" }] },
+    { item: enabledItem }), false, "variantIs must match for compound to pass");
+  assert.equal(evaluateCondition({ all: [{ toggleEnabled: true }, { variantIs: "ms" }] },
+    { item: disabledItem }), false, "toggleEnabled must pass for compound to pass");
+  assert.equal(evaluateCondition({ all: [] }, { item: enabledItem }), true,
+    "Empty all-array vacuously passes");
+
+  // Unknown condition shape — fail closed.
+  assert.equal(evaluateCondition({ frogLevel: "high" }, { item: enabledItem }), false);
+  assert.equal(evaluateCondition("wizards-only", { item: enabledItem }), false);
+});
+
+test("0.8.6 Phase 3 — computeValue resolves attribute-scaled changes", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Heightened Constitution — hpBonus = CN × 2 via computeValue.
+    const actor = {
+      items: [{ type: "mutation", name: "Heightened Constitution",
+        system: { activation: { mode: "passive", enabled: false } } }],
+      system: { attributes: { cn: { value: 15 } } }
+    };
+    const derived = { hpBonus: 0, poisonResistance: 10, radiationResistance: 10 };
+    applyMutationEffects(actor, derived);
+    assert.equal(derived.hpBonus, 30, "CN 15 × 2 = +30 HP");
+    assert.equal(derived.poisonResistance, 11);
+    assert.equal(derived.radiationResistance, 11);
+
+    // Swap CN to 8 → HP bonus recomputes to 16 at derive time.
+    const actor2 = {
+      items: [{ type: "mutation", name: "Heightened Constitution",
+        system: { activation: { mode: "passive", enabled: false } } }],
+      system: { attributes: { cn: { value: 8 } } }
+    };
+    const derived2 = { hpBonus: 0, poisonResistance: 10, radiationResistance: 10 };
+    applyMutationEffects(actor2, derived2);
+    assert.equal(derived2.hpBonus, 16, "CN 8 × 2 = +16 HP; computeValue tracks the live score");
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — Heightened Dexterity unencumbered gate", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // No armor → unencumbered → AC caps at 4.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Heightened Dexterity",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { baseAc: 10 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.baseAc, 4, "No armor ⇒ unencumbered ⇒ AC cap applies (descending DOWNGRADE to 4)");
+    }
+
+    // Armor equipped → encumbered → AC cap does NOT apply.
+    {
+      const actor = {
+        items: [
+          { type: "mutation", name: "Heightened Dexterity",
+            system: { activation: { mode: "passive", enabled: false } } },
+          { type: "armor", system: { equipped: true } }
+        ]
+      };
+      const derived = { baseAc: 10 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.baseAc, 10, "Armor equipped ⇒ encumbered ⇒ AC cap skipped");
+    }
+
+    // Armor present but NOT equipped → still unencumbered → cap applies.
+    {
+      const actor = {
+        items: [
+          { type: "mutation", name: "Heightened Dexterity",
+            system: { activation: { mode: "passive", enabled: false } } },
+          { type: "armor", system: { equipped: false } }
+        ]
+      };
+      const derived = { baseAc: 10 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.baseAc, 4, "Un-equipped armor doesn't trigger encumbered state");
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — Mental Control Over Physical State toggle gate", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Toggled on with DX 18, PS 18 — bonuses apply.
+    // combatBonusFromDexterity(18) = 3; damageBonusFromStrength(18) = 3.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Mental Control Over Physical State",
+          system: { activation: { mode: "toggle", enabled: true } } }],
+        system: { attributes: { dx: { value: 18 }, ps: { value: 18 } } }
+      };
+      const derived = { toHitBonus: 0, damageFlat: 0, movementMultiplier: 1 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, 3, "DX 18 combat bonus via computeValue");
+      assert.equal(derived.damageFlat, 3, "PS 18 damage bonus via computeValue");
+      assert.equal(derived.movementMultiplier, 2, "Movement × 2 literal MULTIPLY");
+    }
+
+    // Toggled off — bonuses suppressed by toggleEnabled condition.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Mental Control Over Physical State",
+          system: { activation: { mode: "toggle", enabled: false } } }],
+        system: { attributes: { dx: { value: 18 }, ps: { value: 18 } } }
+      };
+      const derived = { toHitBonus: 0, damageFlat: 0, movementMultiplier: 1 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, 0, "Disabled mutation ⇒ no bonus");
+      assert.equal(derived.damageFlat, 0);
+      assert.equal(derived.movementMultiplier, 1);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — Will Force compound { toggleEnabled + variantIs } gate", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Variant "to-hit" on: +1 toHitBonus.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: true }, reference: { variant: "to-hit" } } }],
+        system: { attributes: { dx: { value: 14 }, ps: { value: 14 }, ms: { value: 14 },
+                                ch: { value: 14 }, cn: { value: 14 } } }
+      };
+      const derived = { toHitBonus: 0, damageFlat: 0, mentalResistance: 3,
+                        charismaBonus: 0, radiationResistance: 3, poisonResistance: 3 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, 1, "to-hit variant adds +1");
+      assert.equal(derived.damageFlat, 0, "ps variant gated out");
+      assert.equal(derived.charismaBonus, 0, "ch variant gated out");
+    }
+
+    // Variant "dx" on: combatBonusFromDexterity(36) - combatBonusFromDexterity(18) = (36-15) - (18-15) = 21 - 3 = 18
+    // Wait — DX doubled from 18 to 36: combatBonusFromDexterity(36)=21, combatBonusFromDexterity(18)=3, delta=18.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: true }, reference: { variant: "dx" } } }],
+        system: { attributes: { dx: { value: 18 } } }
+      };
+      const derived = { toHitBonus: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, 18, "dx variant adds doubled-DX delta (18 at DX 18)");
+    }
+
+    // Variant "cn" on: +CN to both radiation and poison resistance.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: true }, reference: { variant: "cn" } } }],
+        system: { attributes: { cn: { value: 12 } } }
+      };
+      const derived = { radiationResistance: 3, poisonResistance: 3 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.radiationResistance, 15, "cn variant adds +12 to radiation (3 + 12)");
+      assert.equal(derived.poisonResistance, 15, "cn variant adds +12 to poison (3 + 12)");
+    }
+
+    // Toggle off → none of the six branches fire.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: false }, reference: { variant: "cn" } } }],
+        system: { attributes: { cn: { value: 12 } } }
+      };
+      const derived = { radiationResistance: 3, poisonResistance: 3 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.radiationResistance, 3, "Disabled toggle suppresses all variant branches");
+      assert.equal(derived.poisonResistance, 3);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — Military Genius + Economic Genius Tier-2-style passives", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Military Genius — +4 toHit, +1 weaponExtraDice.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Military Genius",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { toHitBonus: 0, weaponExtraDice: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, 4);
+      assert.equal(derived.weaponExtraDice, 1);
+    }
+
+    // Economic Genius — +3 charismaBonus.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Economic Genius",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { charismaBonus: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.charismaBonus, 3);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — Scientific Genius AE targets skill-bonus schema + artifact gw field", async () => {
+  const { getMutationRule } = await import("../module/mutation-rules.mjs");
+  const rule = getMutationRule("Scientific Genius");
+  assert.ok(Array.isArray(rule.effects));
+  assert.equal(rule.effects.length, 1);
+
+  const changes = rule.effects[0].changes;
+  const skillKeys = changes.filter((c) => c.key.startsWith("system.skills.")).map((c) => c.key);
+  assert.equal(skillKeys.length, 7, "Seven skill-bonus targets");
+  assert.ok(skillKeys.includes("system.skills.ancientTech.bonus"));
+  assert.ok(skillKeys.includes("system.skills.computers.bonus"));
+  assert.ok(skillKeys.includes("system.skills.juryRigging.bonus"));
+  assert.ok(skillKeys.includes("system.skills.salvage.bonus"));
+  assert.ok(skillKeys.includes("system.skills.robotics.bonus"));
+  assert.ok(skillKeys.includes("system.skills.abnormalBiology.bonus"));
+  assert.ok(skillKeys.includes("system.skills.toxicology.bonus"));
+
+  // Each skill AE adds +2.
+  for (const c of changes.filter((c) => c.key.startsWith("system.skills."))) {
+    assert.equal(String(c.value), "2");
+  }
+
+  // The artifact modifier targets the gw derived layer, NOT the schema
+  // (so our custom applyMutationEffects is what applies it).
+  const artifact = changes.find((c) => c.key === "gw.artifactAnalysisBonus");
+  assert.ok(artifact, "gw.artifactAnalysisBonus change present");
+  assert.equal(String(artifact.value), "-1");
+});
+
+test("0.8.6 Phase 3 — Scientific Genius AE folds into artifactUseProfileForChart", async () => {
+  // External roll handlers read actor.gw.artifactAnalysisBonus (populated
+  // by Phase 3 applyMutationEffects) on top of artifactUseProfile's
+  // switch-based modifier. End-to-end path: AE change → gw.field →
+  // profile.modifier when artifactUseProfileForChart runs.
+  const actor = {
+    system: { attributes: { in: { value: 15 } } },
+    gw: { artifactAnalysisBonus: -1 },  // simulates AE having applied
+    items: []
+  };
+  const profile = artifactUseProfileForChart(actor, "A");
+  assert.equal(profile.baseModifier, 0, "INT 15 baseline is 0");
+  assert.equal(profile.modifier, -1, "AE contribution folds in");
+  assert.ok(profile.notes.includes("Analysis Bonus"));
+});
+
+test("0.8.6 Phase 3 — applyMutationEffects sorts conditional changes by priority", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+      }
+    }
+  };
+
+  try {
+    // Will Force toggled on with ms variant — UPGRADE mentalResistance
+    // to min(18, MS × 2) — confirm with baseline MR at various values.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: true }, reference: { variant: "ms" } } }],
+        system: { attributes: { ms: { value: 8 } } }
+      };
+      const derived = { mentalResistance: 3 };
+      applyMutationEffects(actor, derived);
+      // MS 8 × 2 = 16; clamp 18; UPGRADE current 3 → 16.
+      assert.equal(derived.mentalResistance, 16);
+    }
+
+    // MS × 2 > 18 clamps at 18.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Will Force",
+          system: { activation: { mode: "toggle", enabled: true }, reference: { variant: "ms" } } }],
+        system: { attributes: { ms: { value: 15 } } }
+      };
+      const derived = { mentalResistance: 3 };
+      applyMutationEffects(actor, derived);
+      // MS 15 × 2 = 30 → clamped to 18 in computeValue; UPGRADE sets to 18.
+      assert.equal(derived.mentalResistance, 18);
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
+
+test("0.8.6 Phase 3 — skill roll formula reads the bonus field", async () => {
+  const { computeSkillModifier } = await import("../module/skills.mjs");
+
+  // Default actor: no bonus → total = abilityMod + profBonus only.
+  const actor = {
+    system: {
+      attributes: { in: { value: 14 } },
+      skills: { computers: { ability: "in", proficient: true, bonus: 0 } }
+    }
+  };
+  const base = computeSkillModifier(actor, "computers");
+  assert.equal(base.bonus, 0);
+  assert.equal(base.total, 2, "proficient only, no bonus");
+
+  // Scientific Genius applies bonus +2 → total rises.
+  actor.system.skills.computers.bonus = 2;
+  const boosted = computeSkillModifier(actor, "computers");
+  assert.equal(boosted.bonus, 2);
+  assert.equal(boosted.total, 4, "proficient +2 + bonus +2");
+
+  // Missing bonus field (pre-0.8.6 actor shape) reads as 0.
+  const legacyActor = {
+    system: {
+      attributes: { in: { value: 14 } },
+      skills: { computers: { ability: "in", proficient: true } }
+    }
+  };
+  const legacy = computeSkillModifier(legacyActor, "computers");
+  assert.equal(legacy.bonus, 0);
+  assert.equal(legacy.total, 2);
+});

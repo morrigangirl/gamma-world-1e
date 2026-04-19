@@ -1,6 +1,6 @@
 {
   "name": "gamma-world-1e",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "type": "module",
   "scripts": {
     "build:compendia": "node scripts/build-compendia.mjs",

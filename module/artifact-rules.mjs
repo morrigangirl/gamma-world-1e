@@ -76,12 +76,26 @@ export function clampArtifactUseRoll(total) {
   return Math.max(1, Math.min(10, Math.round(Number(total) || 0)));
 }
 
+/**
+ * 0.8.6 — the raw ActiveEffect + temp-effect contribution to the artifact
+ * analysis roll modifier. Scientific Genius's AE adds -1 to
+ * `gw.artifactAnalysisBonus`; applyTemporaryDerivedModifiers can stack
+ * further temp contributions. `artifactUseProfile` stays switch-only so
+ * the internal buildActorDerived call site (where `actor.gw` is still
+ * being computed) isn't fooled by a stale value; external callers fold
+ * this bonus in via `artifactUseProfileForChart` / `artifactUseModifier`.
+ */
+export function artifactAnalysisBonusFromDerived(actor) {
+  return Math.round(Number(actor?.gw?.artifactAnalysisBonus ?? 0)) || 0;
+}
+
 export function artifactUseProfile(actor) {
   const intelligence = Math.round(Number(actor?.system?.attributes?.in?.value ?? 0));
+  const baseModifier = artifactIntelligenceModifier(intelligence);
   const profile = {
     intelligence,
-    baseModifier: artifactIntelligenceModifier(intelligence),
-    modifier: artifactIntelligenceModifier(intelligence),
+    baseModifier,
+    modifier: baseModifier,
     speedMultiplier: 1,
     instantCharts: new Set(),
     notes: []
@@ -89,7 +103,6 @@ export function artifactUseProfile(actor) {
 
   for (const item of mutationEntries(actor)) {
     const name = String(item.name ?? "");
-    const variant = String(item.system?.reference?.variant ?? "").toLowerCase();
     const enabled = mutationEnabled(item);
     if (!enabled) continue;
 
@@ -98,16 +111,11 @@ export function artifactUseProfile(actor) {
         profile.modifier -= 1;
         profile.notes.push("Dual Brain");
         break;
-      case "Scientific Genius":
-        profile.modifier -= 1;
-        profile.notes.push("Scientific Genius");
-        break;
-      case "Genius Capability":
-        if (!variant || (variant === "scientific")) {
-          profile.modifier -= 1;
-          profile.notes.push("Scientific Genius");
-        }
-        break;
+      // "Scientific Genius" and the scientific variant of the retired
+      // "Genius Capability" migrated to ActiveEffect in 0.8.6. Their -1
+      // contribution flows through `actor.gw.artifactAnalysisBonus` and
+      // is folded in by `artifactUseProfileForChart` /
+      // `artifactUseModifier` on behalf of external callers.
       case "Heightened Intelligence":
         profile.modifier -= 2;
         profile.notes.push("Heightened Intelligence");
@@ -133,18 +141,23 @@ export function artifactUseProfile(actor) {
 
 export function artifactUseModifier(actor, chartId = "A") {
   const profile = artifactUseProfile(actor);
+  const aeBonus = artifactAnalysisBonusFromDerived(actor);
+  const base = profile.modifier + aeBonus;
   if (normalizeArtifactChartId(chartId) !== "A" && profile.notes.includes("Molecular Understanding")) {
-    return profile.modifier - 2;
+    return base - 2;
   }
-  return profile.modifier;
+  return base;
 }
 
 export function artifactUseProfileForChart(actor, chartId = "A") {
   const normalizedChart = normalizeArtifactChartId(chartId);
   const profile = artifactUseProfile(actor);
+  const aeBonus = artifactAnalysisBonusFromDerived(actor);
+  const base = profile.modifier + aeBonus;
   const modifier = normalizedChart !== "A" && profile.notes.includes("Molecular Understanding")
-    ? profile.modifier - 2
-    : profile.modifier;
+    ? base - 2
+    : base;
+  if (aeBonus) profile.notes.push("Analysis Bonus");
   return {
     ...profile,
     chartId: normalizedChart,

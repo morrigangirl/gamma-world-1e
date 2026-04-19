@@ -56,7 +56,29 @@ export const AE_MIGRATED_MUTATIONS = new Set([
   "Heightened Vision",
   "Ultravision",
   "Infravision",
-  "Total Carapace"
+  "Total Carapace",
+  // Phase 3 (0.8.6) — holdouts migrated via the conditional-effects
+  // framework. Telekinetic Flight and Heightened Constitution slot into
+  // the existing Tier 2 pattern; the rest exercise condition /
+  // computeValue / compound condition primitives.
+  "Telekinetic Flight",
+  "Heightened Constitution",
+  // Phase 3 Genius Capability retirement — three standalone mutations
+  // replace the variant-branched original. Military / Economic slot
+  // into the existing Tier 2 pattern (literal ADDs, no condition).
+  // Scientific Genius targets `system.skills.<key>.bonus` (Foundry
+  // core AE applies these) plus `gw.artifactAnalysisBonus`.
+  "Military Genius",
+  "Economic Genius",
+  "Scientific Genius",
+  // Phase 3 conditional holdouts — three primitives the earlier tiers
+  // couldn't express:
+  //   Heightened Dexterity: `unencumbered` condition (armor-gated AC cap)
+  //   Mental Control Over Physical State: `toggleEnabled` + computeValue
+  //   Will Force: compound `{ all: [toggleEnabled, variantIs] }`
+  "Heightened Dexterity",
+  "Mental Control Over Physical State",
+  "Will Force"
 ]);
 
 function randomChoice(choices, rng = Math.random) {
@@ -141,13 +163,11 @@ const MUTATION_VARIANT_POOLS = Object.freeze({
 function mutationVariant(name, rng = Math.random) {
   const pool = MUTATION_VARIANT_POOLS[name];
   if (pool) return randomChoice(pool, rng);
-  // Genius Capability — weighted d6 table per RAW p.12.
-  if (name === "Genius Capability") {
-    const roll = Math.floor(rng() * 6) + 1;
-    if (roll <= 2) return "military";
-    if (roll <= 4) return "scientific";
-    return "economic";
-  }
+  // 0.8.6 — Genius Capability retired and split into Military /
+  // Economic / Scientific Genius as standalone mutations, each with
+  // its own slot on the d100 table and no variant sub-roll. Items
+  // still named "Genius Capability" on legacy actors are migrated via
+  // migrateGeniusCapability086 on world load.
   return "";
 }
 
@@ -158,7 +178,7 @@ function mutationVariant(name, rng = Math.random) {
  * dropping a Heightened Brain Talent (no variant) doesn't trigger.
  */
 export function mutationHasVariant(name) {
-  return !!MUTATION_VARIANT_POOLS[name] || name === "Genius Capability";
+  return !!MUTATION_VARIANT_POOLS[name];
 }
 
 /** Exposed for the drop-hook so it can write the rolled variant + patch
@@ -318,7 +338,21 @@ export const MUTATION_RULES = {
     duration: "5d10 rounds in danger",
     usage: { limited: true, per: "week", uses: 1, max: 1 },
     effect: { formula: "5d10", saveType: "", notes: "Doubles strength, dexterity, and speed during overwhelming danger." },
-    action: "toggle"
+    action: "toggle",
+    // 0.8.6 — toggle-gated attribute-scaled bonuses.
+    effects: [
+      { label: "Mental Control Over Physical State — activated bonuses",
+        condition: "toggleEnabled",
+        changes: [
+          { key: "gw.toHitBonus", mode: AE_MODE.ADD,
+            computeValue: (actor) => Math.max(0, combatBonusFromDexterity(actor?.system?.attributes?.dx?.value)),
+            priority: 20 },
+          { key: "gw.damageFlat", mode: AE_MODE.ADD,
+            computeValue: (actor) => Math.max(0, damageBonusFromStrength(actor?.system?.attributes?.ps?.value)),
+            priority: 20 },
+          { key: "gw.movementMultiplier", mode: AE_MODE.MULTIPLY, value: "2", priority: 20 }
+        ] }
+    ]
   },
   "Molecular Disruption": {
     mode: "action",
@@ -429,13 +463,19 @@ export const MUTATION_RULES = {
     effect: { formula: "1d6", saveType: "", notes: "Acts as a telekinetic arm with Strength 18." },
     action: "damage"
   },
+  // 0.8.6 — Telekinetic Flight rule change: simplified to match Wings
+  // exactly. Passive, always-on flight speed of 20. No more toggle;
+  // the "Activate" button no longer appears on the item sheet.
   "Telekinetic Flight": {
-    mode: "toggle",
+    mode: "passive",
     range: "Self",
-    duration: "While active",
+    duration: "Always on",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Fly at up to 20 meters per second, carrying a normal load." },
-    action: "toggle"
+    effects: [
+      { label: "Telekinetic Flight — flight speed",
+        changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "20", priority: 20 }] }
+    ]
   },
   "Telepathy": {
     mode: "action",
@@ -477,13 +517,71 @@ export const MUTATION_RULES = {
     effect: { formula: "", saveType: "", notes: "Concentrate 6 rounds to begin the shift and 12 more to complete it." },
     action: "note"
   },
+  // 0.8.6 — Will Force: compound { toggleEnabled + variantIs } AE
+  // entries (one per ability variant). Most variants use computeValue
+  // to express attribute-scaled math. The active variant's effect
+  // lights up when toggle is on; the other five stay inert.
   "Will Force": {
     mode: "toggle",
     range: "Self",
     duration: "1d10 rounds",
     usage: { limited: true, per: "day", uses: 1, max: 1 },
     effect: { formula: "1d10", saveType: "", notes: "Choose one ability to double or gain +1 to hit while active." },
-    action: "toggle"
+    action: "toggle",
+    effects: [
+      { label: "Will Force — to-hit variant",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "to-hit" }] },
+        changes: [
+          { key: "gw.toHitBonus", mode: AE_MODE.ADD, value: "1", priority: 20 }
+        ] },
+      { label: "Will Force — dx variant (doubled DX to-hit)",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "dx" }] },
+        changes: [
+          { key: "gw.toHitBonus", mode: AE_MODE.ADD,
+            computeValue: (actor) => {
+              const dx = Number(actor?.system?.attributes?.dx?.value ?? 0) || 0;
+              return combatBonusFromDexterity(dx * 2) - combatBonusFromDexterity(dx);
+            },
+            priority: 20 }
+        ] },
+      { label: "Will Force — ps variant (doubled PS damage)",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "ps" }] },
+        changes: [
+          { key: "gw.damageFlat", mode: AE_MODE.ADD,
+            computeValue: (actor) => {
+              const ps = Number(actor?.system?.attributes?.ps?.value ?? 0) || 0;
+              return damageBonusFromStrength(ps * 2) - damageBonusFromStrength(ps);
+            },
+            priority: 20 }
+        ] },
+      { label: "Will Force — ms variant (doubled MS mental resistance)",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "ms" }] },
+        changes: [
+          { key: "gw.mentalResistance", mode: AE_MODE.UPGRADE,
+            computeValue: (actor) => {
+              const ms = Number(actor?.system?.attributes?.ms?.value ?? 0) || 0;
+              return Math.min(18, ms * 2);
+            },
+            priority: 20 }
+        ] },
+      { label: "Will Force — ch variant (doubled CH charisma)",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "ch" }] },
+        changes: [
+          { key: "gw.charismaBonus", mode: AE_MODE.ADD,
+            computeValue: (actor) => Number(actor?.system?.attributes?.ch?.value ?? 0) || 0,
+            priority: 20 }
+        ] },
+      { label: "Will Force — cn variant (doubled CN radiation / poison)",
+        condition: { all: [{ toggleEnabled: true }, { variantIs: "cn" }] },
+        changes: [
+          { key: "gw.radiationResistance", mode: AE_MODE.ADD,
+            computeValue: (actor) => Math.max(0, Number(actor?.system?.attributes?.cn?.value ?? 0) || 0),
+            priority: 20 },
+          { key: "gw.poisonResistance", mode: AE_MODE.ADD,
+            computeValue: (actor) => Math.max(0, Number(actor?.system?.attributes?.cn?.value ?? 0) || 0),
+            priority: 20 }
+        ] }
+    ]
   },
   "Chameleon Powers": {
     mode: "toggle",
@@ -785,6 +883,100 @@ export const MUTATION_RULES = {
           { key: "gw.movementMultiplier",        mode: AE_MODE.MULTIPLY,  value: "0.75", priority: 20 }
         ] }
     ]
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* 0.8.6 Phase 3 — Holdouts + conditional-effects framework           */
+  /*                                                                    */
+  /* These entries exercise the three new framework primitives:         */
+  /*   - `computeValue` on a change (Heightened Constitution hpBonus)   */
+  /*   - `condition` on an effect (MCOPS, Heightened Dexterity,         */
+  /*     Will Force — all added later in this tier)                     */
+  /*   - Compound `{ all: [...] }` conditions (Will Force variants)     */
+  /*                                                                    */
+  /* 0.8.6 rule change — Heightened Constitution's poison/radiation     */
+  /* effects simplified: +1 to each save rather than the previous +3    */
+  /* radiation / upgrade-to-18 poison. HP bonus (CN × 2) unchanged.     */
+  /* ------------------------------------------------------------------ */
+
+  "Heightened Constitution": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Constitution — CN bonuses",
+        changes: [
+          { key: "gw.poisonResistance",    mode: AE_MODE.ADD, value: "1", priority: 20 },
+          { key: "gw.radiationResistance", mode: AE_MODE.ADD, value: "1", priority: 20 },
+          // HP bonus scales with the live CN score; computeValue runs at
+          // derive time rather than emit time so attribute changes flow
+          // through without re-emitting the AE.
+          { key: "gw.hpBonus", mode: AE_MODE.ADD,
+            computeValue: (actor) => (Number(actor?.system?.attributes?.cn?.value ?? 0) || 0) * 2,
+            priority: 20 }
+        ] }
+    ]
+  },
+
+  // 0.8.6 — Genius Capability retirement. Replaced by three standalone
+  // mutations, each with its own d100 slot. All three are passive and
+  // always-on; no variant sub-roll.
+  "Military Genius": {
+    mode: "passive",
+    effects: [
+      { label: "Military Genius — tactical prodigy",
+        changes: [
+          { key: "gw.toHitBonus",     mode: AE_MODE.ADD, value: "4", priority: 20 },
+          { key: "gw.weaponExtraDice", mode: AE_MODE.ADD, value: "1", priority: 20 }
+        ] }
+    ]
+  },
+  "Economic Genius": {
+    mode: "passive",
+    effects: [
+      { label: "Economic Genius — leadership bonus",
+        changes: [
+          { key: "gw.charismaBonus", mode: AE_MODE.ADD, value: "3", priority: 20 }
+        ] }
+    ]
+  },
+  "Scientific Genius": {
+    mode: "passive",
+    effects: [
+      { label: "Scientific Genius — technical skills",
+        changes: [
+          // +2 to each of the seven technical / scientific skills.
+          // Targets live on the per-skill `bonus` schema field added in
+          // 0.8.6; Foundry core applies these via applyActiveEffects()
+          // during super.prepareDerivedData(). Skill roll formula picks
+          // them up as `@bonus` in the d20 roll.
+          { key: "system.skills.ancientTech.bonus",      mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.computers.bonus",        mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.juryRigging.bonus",      mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.salvage.bonus",          mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.robotics.bonus",         mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.abnormalBiology.bonus",  mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.toxicology.bonus",       mode: AE_MODE.ADD, value: "2", priority: 20 },
+          // Artifact analysis -1: flows through the derived bonus layer,
+          // which artifactUseProfileForChart folds into the roll mod.
+          { key: "gw.artifactAnalysisBonus", mode: AE_MODE.ADD, value: "-1", priority: 20 }
+        ] }
+    ]
+  },
+
+  // 0.8.6 — Heightened Dexterity: declarative AC cap gated on the
+  // unencumbered condition. Evaluator reads the derived.encumbered flag
+  // computed in applyMutationEffects (any equipped armor ⇒ encumbered).
+  // The Mental Control Over Physical State and Will Force entries live
+  // at their original positions above (grouped with other toggle/
+  // mental mutations) and carry the Phase 3 `effects` arrays directly.
+  "Heightened Dexterity": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Dexterity — unencumbered AC cap",
+        condition: "unencumbered",
+        changes: [
+          { key: "gw.baseAc", mode: AE_MODE.DOWNGRADE, value: "4", priority: 20 }
+        ] }
+    ]
   }
 };
 
@@ -904,6 +1096,40 @@ export function describeMutation(item) {
   return fillVariant(summary, item?.system?.reference?.variant);
 }
 
+/**
+ * 0.8.6 — initial `disabled` state for an emitted AE whose rule carries
+ * a `condition`. We don't have an actor context at emit time (this
+ * function runs during pack build and at mutation-drop), so any
+ * conditional effect starts disabled; the `updateItem` hook
+ * (onMutationRelevantItemChange) re-syncs the flag on first mount to
+ * the correct evaluator state. Unconditional effects start enabled.
+ */
+function conditionStartsDisabled(condition, _rule) {
+  return condition != null && condition !== false;
+}
+
+/**
+ * Serialize a rule-table `condition` into the flags bag on the emitted
+ * AE. Conditions are plain strings, plain objects, or arrays of them —
+ * all JSON-safe — so this is a passthrough today. The wrapper exists as
+ * a single strip point if a future condition primitive adds a
+ * non-serializable member (e.g. a function reference).
+ */
+function serializeCondition(condition) {
+  if (condition == null) return null;
+  if (typeof condition === "string") return condition;
+  if (Array.isArray(condition)) return condition.map(serializeCondition);
+  if (typeof condition === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(condition)) {
+      if (typeof v === "function") continue;
+      out[k] = serializeCondition(v);
+    }
+    return out;
+  }
+  return condition;
+}
+
 export function buildMutationItemSource(definition, { rng = Math.random, rollVariant = true } = {}) {
   const rule = getMutationRule(definition.name);
   // rollVariant = false: leave the variant empty and keep the summary
@@ -921,19 +1147,44 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
   // they auto-flow to the actor when the mutation is added. The embedded
   // ActiveEffectConfig sheet + Effects tab (Tier 5) inherit free UI for
   // viewing and toggling these.
+  //
+  // 0.8.6 — conditional + computed changes land here too. For conditions,
+  // the rule carries a declarative `condition` field (see
+  // evaluateCondition) that is serialized onto the AE flag bag; the
+  // emitted AE starts disabled when the condition requires state the
+  // item doesn't yet have (e.g. toggle off, variant unrolled). The
+  // updateItem hook (see module/hooks.mjs) re-syncs the `disabled` field
+  // whenever activation.enabled or reference.variant changes.
+  //
+  // For computed changes (rule uses `computeValue: (actor, item) => ...`
+  // instead of a static `value`), the emitted AE carries a placeholder
+  // "0" value and a `computed: true` flag so the Effects tab can badge
+  // the entry as dynamic. The authoritative apply path runs through
+  // applyMutationEffects, which resolves the function at derive time.
   const ruleEffects = Array.isArray(rule.effects) ? rule.effects : [];
-  const emittedEffects = ruleEffects.map((effect, index) => ({
-    name: effect.label ?? effect.name ?? `${definition.name} effect ${index + 1}`,
-    img: "icons/svg/aura.svg",
-    transfer: true,
-    disabled: false,
-    changes: Array.isArray(effect.changes) ? effect.changes.map((change) => ({
-      key: change.key,
-      mode: Number.isInteger(change.mode) ? change.mode : 2,
-      value: String(change.value ?? ""),
-      priority: Number.isFinite(Number(change.priority)) ? Number(change.priority) : 20
-    })) : []
-  }));
+  const emittedEffects = ruleEffects.map((effect, index) => {
+    const condition = effect.condition ?? null;
+    const changes = Array.isArray(effect.changes) ? effect.changes : [];
+    const hasComputed = changes.some((change) => typeof change?.computeValue === "function");
+    return {
+      name: effect.label ?? effect.name ?? `${definition.name} effect ${index + 1}`,
+      img: "icons/svg/aura.svg",
+      transfer: true,
+      disabled: conditionStartsDisabled(condition, rule),
+      changes: changes.map((change) => ({
+        key: change.key,
+        mode: Number.isInteger(change.mode) ? change.mode : 2,
+        value: typeof change.computeValue === "function" ? "0" : String(change.value ?? ""),
+        priority: Number.isFinite(Number(change.priority)) ? Number(change.priority) : 20
+      })),
+      flags: {
+        "gamma-world-1e": {
+          condition: serializeCondition(condition),
+          computed: hasComputed
+        }
+      }
+    };
+  });
 
   return {
     name: definition.name,
@@ -1009,10 +1260,76 @@ export function enrichMutationSystemData(item) {
 }
 
 /**
+ * 0.8.6 — evaluate a condition against a runtime context. Returns true
+ * when the condition permits its effect to apply; false otherwise.
+ *
+ * Supported forms:
+ *   "toggleEnabled"               — item.system.activation.enabled === true
+ *   "unencumbered"                — no armor item is equipped on the actor
+ *   { toggleEnabled: true|false } — same, explicit value form
+ *   { unencumbered: true|false }
+ *   { variantIs: "<string>" }     — item.system.reference.variant matches
+ *   { all: [cond1, cond2, ...] }  — every sub-condition passes (AND)
+ *   null / undefined              — no condition, applies unconditionally
+ *
+ * Unknown condition shapes fail closed (return false) so a typo or a
+ * rule referencing a future-but-unimplemented primitive doesn't silently
+ * grant a bonus.
+ */
+export function evaluateCondition(condition, ctx) {
+  if (condition == null) return true;
+  if (typeof condition === "string") {
+    if (condition === "toggleEnabled") return !!ctx?.item?.system?.activation?.enabled;
+    if (condition === "unencumbered") return !ctx?.derived?.encumbered;
+    return false;
+  }
+  if (typeof condition === "object") {
+    if (condition.toggleEnabled != null) {
+      return !!ctx?.item?.system?.activation?.enabled === !!condition.toggleEnabled;
+    }
+    if (condition.unencumbered != null) {
+      return !ctx?.derived?.encumbered === !!condition.unencumbered;
+    }
+    if (condition.variantIs != null) {
+      return String(ctx?.item?.system?.reference?.variant ?? "") === String(condition.variantIs);
+    }
+    if (Array.isArray(condition.all)) {
+      return condition.all.every((sub) => evaluateCondition(sub, ctx));
+    }
+  }
+  return false;
+}
+
+/**
+ * 0.8.6 — if a change carries a `computeValue(actor, item)` function,
+ * run it to derive the value at apply time. Returns the literal `value`
+ * field otherwise. Thrown errors resolve to 0 and log once so a broken
+ * custom computation doesn't stop the whole derived pass.
+ */
+function resolveChangeValue(change, ctx) {
+  if (typeof change?.computeValue === "function") {
+    try {
+      return change.computeValue(ctx?.actor, ctx?.item);
+    } catch (err) {
+      console.warn("gamma-world-1e: computeValue failed", err, change);
+      return 0;
+    }
+  }
+  return change?.value;
+}
+
+/**
  * 0.8.4 Tier 1 — apply data-driven AE-style effects to the derived
  * object. Iterates every enabled mutation item on the actor; for each
  * mutation whose rule has an `effects` array, applies each change's
  * mode to the target derived path.
+ *
+ * 0.8.6 — extends the flatten-sort-apply pipeline with:
+ *   - condition filtering (effect.condition OR change.condition)
+ *   - computeValue resolution (change.computeValue function replaces
+ *     the static `value` field when present)
+ *   - a computed `encumbered` context flag (matches the Heightened
+ *     Dexterity check: any armor equipped ⇒ encumbered)
  *
  * Only targets keys under `gw.*` today — AE changes targeting
  * `system.*` paths are handled by Foundry's own applyActiveEffects()
@@ -1020,6 +1337,14 @@ export function enrichMutationSystemData(item) {
  * that work here. Future tiers will expand the supported targets.
  */
 export function applyMutationEffects(actor, derived) {
+  // Compute the "encumbered" flag for condition evaluation. Matches the
+  // Heightened Dexterity gate in applyMutationModifiers (any equipped
+  // armor ⇒ encumbered). Computed here rather than stored on derived
+  // because _prepareEncumbrance (which populates `gw.encumbrance`) runs
+  // AFTER buildActorDerived, so we can't rely on derived.encumbered.
+  const encumbered = actor.items.some((entry) => entry.type === "armor" && entry.system?.equipped);
+  const evalCtx = { actor, derived: { ...derived, encumbered } };
+
   // Collect every change across every enabled mutation, then sort by
   // priority ascending (Foundry's convention). Priority lets high-
   // priority OVERRIDEs (Mental Defenselessness → MR 3, priority 50)
@@ -1033,24 +1358,29 @@ export function applyMutationEffects(actor, derived) {
     const rule = getMutationRule(item);
     const effects = rule?.effects;
     if (!Array.isArray(effects) || !effects.length) continue;
+    const itemCtx = { ...evalCtx, item };
     for (const effect of effects) {
+      if (effect?.condition && !evaluateCondition(effect.condition, itemCtx)) continue;
       const changes = Array.isArray(effect?.changes) ? effect.changes : [];
-      for (const change of changes) collected.push(change);
+      for (const change of changes) {
+        if (change?.condition && !evaluateCondition(change.condition, itemCtx)) continue;
+        collected.push({ change, ctx: itemCtx });
+      }
     }
   }
   collected.sort((a, b) => {
-    const pa = Number.isFinite(Number(a?.priority)) ? Number(a.priority) : 20;
-    const pb = Number.isFinite(Number(b?.priority)) ? Number(b.priority) : 20;
+    const pa = Number.isFinite(Number(a?.change?.priority)) ? Number(a.change.priority) : 20;
+    const pb = Number.isFinite(Number(b?.change?.priority)) ? Number(b.change.priority) : 20;
     return pa - pb;
   });
-  for (const change of collected) applyEffectChange(derived, change);
+  for (const entry of collected) applyEffectChange(derived, entry.change, entry.ctx);
 }
 
-function applyEffectChange(derived, change) {
+function applyEffectChange(derived, change, ctx) {
   const rawKey = String(change?.key ?? "");
   if (!rawKey.startsWith("gw.")) return; // future: handle system.* / flags.*
   const path = rawKey.slice(3); // strip "gw."
-  const rawValue = change?.value ?? "";
+  const rawValue = resolveChangeValue(change, ctx);
   const mode = Number(change?.mode) || 0;
 
   const currentRaw = foundry.utils.getProperty(derived, path);
@@ -1094,79 +1424,18 @@ function applyEffectChange(derived, change) {
   }
 }
 
-export function applyMutationModifiers(actor, derived) {
-  const equippedArmor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
-  const encumbered = equippedArmor.length > 0;
-
-  for (const item of actor.items.filter((entry) => entry.type === "mutation")) {
-    // 0.8.4 Tier 1 — pilot mutations defer to applyMutationEffects.
-    if (AE_MIGRATED_MUTATIONS.has(item.name)) continue;
-
-    const enabled = mutationIsEnabled(item);
-    const name = item.name;
-    const variant = item.system.reference?.variant ?? "";
-
-    // Tier 1 (0.8.4) + Tier 2 (0.8.5) — mutations in AE_MIGRATED_MUTATIONS
-    // are handled by applyMutationEffects via declarative rule data.
-    // Three no-op cases (Heightened Brain Talent, Heightened Touch,
-    // No Sensory Nerve Endings) were also removed — they had empty
-    // bodies, pure namesake passives with no numeric effect.
-    switch (name) {
-      case "Genius Capability":
-        if (variant === "military") {
-          derived.toHitBonus += 4;
-          derived.weaponExtraDice += 1;
-        } else if (variant === "economic") {
-          derived.charismaBonus += 3;
-        }
-        break;
-      case "Heightened Constitution":
-        derived.hpBonus += (actor.system.attributes.cn.value ?? 0) * 2;
-        derived.poisonResistance = Math.max(derived.poisonResistance, 18);
-        derived.radiationResistance += 3;
-        break;
-      case "Heightened Dexterity":
-        if (!encumbered) derived.baseAc = Math.min(derived.baseAc, 4);
-        break;
-      case "Mental Control Over Physical State":
-        if (enabled) {
-          derived.toHitBonus += Math.max(0, combatBonusFromDexterity(actor.system.attributes.dx.value));
-          derived.damageFlat += Math.max(0, damageBonusFromStrength(actor.system.attributes.ps.value));
-          derived.movementMultiplier *= 2;
-        }
-        break;
-      case "Telekinetic Flight":
-        if (enabled) derived.flightSpeed = Math.max(derived.flightSpeed, 200);
-        break;
-      case "Will Force":
-        if (enabled) {
-          const chosen = variant || "to-hit";
-          if (chosen === "to-hit") {
-            derived.toHitBonus += 1;
-          } else if (actor.system.attributes[chosen]) {
-            const score = actor.system.attributes[chosen].value ?? 0;
-            if (chosen === "dx") {
-              derived.toHitBonus += combatBonusFromDexterity(score * 2) - combatBonusFromDexterity(score);
-            } else if (chosen === "ps") {
-              derived.damageFlat += damageBonusFromStrength(score * 2) - damageBonusFromStrength(score);
-            } else if (chosen === "ms") {
-              derived.mentalResistance = Math.min(18, Math.max(derived.mentalResistance, score * 2));
-            } else if (chosen === "ch") {
-              derived.charismaBonus += score;
-            } else if (chosen === "cn") {
-              derived.radiationResistance += Math.max(0, score);
-              derived.poisonResistance += Math.max(0, score);
-            }
-          }
-        }
-        break;
-      case "Wings":
-        derived.flightSpeed = Math.max(derived.flightSpeed, 120);
-        break;
-      default:
-        break;
-    }
-  }
+/**
+ * 0.8.6 — every mutation with numeric mechanical effects has migrated
+ * to MUTATION_RULES.effects and flows through applyMutationEffects.
+ * This function stays as a no-op extension point (the buildActorDerived
+ * pipeline still calls it before applyMutationEffects) so any future
+ * mutation needing non-AE runtime logic can slot back in without
+ * re-wiring the derived pipeline. Remove it only when we're certain no
+ * future mutation will need the imperative path.
+ */
+// eslint-disable-next-line no-unused-vars
+export function applyMutationModifiers(_actor, _derived) {
+  // Intentionally empty. See block comment above.
 }
 
 export function baseCombatBonuses(actor) {

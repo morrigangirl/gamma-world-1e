@@ -189,13 +189,21 @@ export function buildActorDerived(actor) {
   derived.ac = clampArmorClass(derived.ac);
   derived.movement = roundMovement(derived.movementBase * derived.movementMultiplier);
   const profile = artifactUseProfile(actor);
+  // 0.8.6 — `derived.artifactAnalysisBonus` carries ONLY the AE + temp
+  // contribution (Scientific Genius -1, any temp cloud modifiers). The
+  // INT + switch portion lives in `profile.modifier`. The combined roll
+  // modifier surfaces on `derived.artifactUse.rollModifier`; external
+  // callers fetch the full value via `artifactUseProfileForChart`, which
+  // adds `actor.gw.artifactAnalysisBonus` back on top. Keeping the two
+  // sources separate prevents double-counting when an external roll
+  // re-computes the profile after prepareDerivedData has run.
+  const rawAnalysisBonus = Math.round(Number(derived.artifactAnalysisBonus) || 0);
   derived.artifactUse = {
-    rollModifier: profile.modifier + Math.round(Number(derived.artifactAnalysisBonus) || 0),
+    rollModifier: profile.modifier + rawAnalysisBonus,
     speedMultiplier: Math.max(1, Number(profile.speedMultiplier || 1)) * Math.max(1, Number(derived.artifactAnalysisSpeed || 1)),
     instantCharts: [...profile.instantCharts],
     notes: [...profile.notes]
   };
-  derived.artifactAnalysisBonus = derived.artifactUse.rollModifier;
   derived.artifactAnalysisSpeed = derived.artifactUse.speedMultiplier;
 
   return derived;
