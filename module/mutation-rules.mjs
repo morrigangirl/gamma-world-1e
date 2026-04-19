@@ -1,5 +1,46 @@
 import { findMutationByName } from "./tables/mutation-data.mjs";
 
+/**
+ * 0.8.4 Tier 1 — ActiveEffect migration pilot.
+ *
+ * Foundry core's ACTIVE_EFFECT_MODES mapped to the numeric enum values
+ * Foundry uses on-wire. Referenced when authoring `effects` arrays on
+ * mutation rule entries so the rule table stays readable without a
+ * CONST import at module-top.
+ */
+const AE_MODE = Object.freeze({
+  CUSTOM:    0,
+  MULTIPLY:  1,
+  ADD:       2,
+  DOWNGRADE: 3,
+  UPGRADE:   4,
+  OVERRIDE:  5
+});
+
+/**
+ * Pilot mutations that have been migrated to the AE-style data-driven
+ * effects pipeline. When a mutation's name appears in this set AND its
+ * rule entry declares an `effects` array, `applyMutationModifiers`
+ * skips its hardcoded case branch and defers to `applyMutationEffects`
+ * below, which reads the `effects` data off the rule and applies the
+ * changes to derived.
+ *
+ * Growing this set is the Tier 2 delivery — add more mutations, remove
+ * their case branches, populate their `effects` in the rule table.
+ */
+export const AE_MIGRATED_MUTATIONS = new Set([
+  "Heightened Strength",
+  "Radar/Sonar",
+  "Wings",
+  "Shorter",
+  "Taller",
+  "Fat Cell Accumulation",
+  "Vision Defect",
+  "Weight Decrease",
+  "Intuition",
+  "Heightened Hearing"
+]);
+
 function randomChoice(choices, rng = Math.random) {
   if (!Array.isArray(choices) || !choices.length) return "";
   const index = Math.floor(rng() * choices.length);
@@ -489,11 +530,15 @@ export const MUTATION_RULES = {
   // activation is needed.
   "Radar/Sonar": {
     // RAW: "See day or night, +2 to hit within 30 meters." The
-    // day/night sight is continuous. The +2 to-hit is range-gated and
-    // applied by the GM narratively when the target is within 30m;
-    // wiring it into derived data would over-reward (no easy way to
-    // gate by per-attack distance from the defender's sheet).
-    mode: "passive"
+    // day/night sight is continuous. The +2 is plumbed via AE into
+    // `gw.closeRangeToHitBonus` (already range-gated at attack-roll
+    // time to the <30m band — see module/dice.mjs ~L695), so wiring
+    // it here matches exactly what the hardcoded case did before.
+    mode: "passive",
+    effects: [
+      { label: "Radar/Sonar — close range bonus",
+        changes: [{ key: "gw.closeRangeToHitBonus", mode: AE_MODE.ADD, value: "2", priority: 20 }] }
+    ]
   },
   "Sound Imitation": {
     // RAW: "Reflect sonic attack (still take effects) or mimic sounds."
@@ -506,6 +551,98 @@ export const MUTATION_RULES = {
     // Same shape as Sound Imitation but for mental attacks + thought
     // mimicry. Reactive reflect + narrative mimic.
     mode: "passive"
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* 0.8.4 Tier 1 — AE pilot mutations                                  */
+  /*                                                                    */
+  /* Ten passive mutations with effects expressed declaratively as      */
+  /* ActiveEffect-style `changes` arrays. applyMutationModifiers skips  */
+  /* these (keyed by AE_MIGRATED_MUTATIONS above); applyMutationEffects */
+  /* reads the `effects` field and folds them into derived.             */
+  /* ------------------------------------------------------------------ */
+
+  "Heightened Strength": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Strength — conventional weapon damage",
+        changes: [{ key: "gw.conventionalWeaponExtraDice", mode: AE_MODE.ADD, value: "3", priority: 20 }] }
+    ]
+  },
+  "Wings": {
+    mode: "passive",
+    effects: [
+      { label: "Wings — flight speed",
+        changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "120", priority: 20 }] }
+    ]
+  },
+  "Shorter": {
+    mode: "passive",
+    effects: [
+      { label: "Shorter — stat adjustments",
+        changes: [
+          { key: "gw.ac",                        mode: AE_MODE.ADD,      value: "-1",   priority: 20 },
+          { key: "gw.damageReductionMultiplier", mode: AE_MODE.MULTIPLY, value: "0.75", priority: 20 }
+        ] }
+    ]
+  },
+  "Taller": {
+    mode: "passive",
+    effects: [
+      { label: "Taller — stat adjustments",
+        changes: [
+          { key: "gw.damageFlat", mode: AE_MODE.ADD, value: "2",  priority: 20 },
+          { key: "gw.toHitBonus", mode: AE_MODE.ADD, value: "-1", priority: 20 }
+        ] }
+    ]
+  },
+  "Fat Cell Accumulation": {
+    mode: "passive",
+    effects: [
+      { label: "Fat Cell Accumulation — stat adjustments",
+        changes: [
+          { key: "gw.movementMultiplier", mode: AE_MODE.MULTIPLY, value: "0.75", priority: 20 },
+          { key: "gw.toHitBonus",         mode: AE_MODE.ADD,      value: "-1",   priority: 20 }
+        ] }
+    ]
+  },
+  "Vision Defect": {
+    mode: "passive",
+    effects: [
+      { label: "Vision Defect — to-hit penalty",
+        changes: [{ key: "gw.toHitBonus", mode: AE_MODE.ADD, value: "-4", priority: 20 }] }
+    ]
+  },
+  "Weight Decrease": {
+    mode: "passive",
+    effects: [
+      { label: "Weight Decrease — stat adjustments",
+        changes: [
+          { key: "gw.movementMultiplier", mode: AE_MODE.MULTIPLY, value: "0.75", priority: 20 },
+          { key: "gw.damageFlat",         mode: AE_MODE.ADD,      value: "-1",   priority: 20 }
+        ] }
+    ]
+  },
+  "Intuition": {
+    mode: "passive",
+    effects: [
+      { label: "Intuition — combat + surprise bonuses",
+        changes: [
+          { key: "gw.toHitBonus",        mode: AE_MODE.ADD,      value: "1",    priority: 20 },
+          { key: "gw.damagePerDie",      mode: AE_MODE.ADD,      value: "3",    priority: 20 },
+          { key: "gw.cannotBeSurprised", mode: AE_MODE.OVERRIDE, value: "true", priority: 20 }
+        ] }
+    ]
+  },
+  "Heightened Hearing": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Hearing — surprise bonuses",
+        changes: [
+          { key: "gw.cannotBeSurprised", mode: AE_MODE.OVERRIDE, value: "true", priority: 20 },
+          { key: "gw.surpriseModifier",  mode: AE_MODE.ADD,      value: "2",    priority: 20 }
+        ] }
+    ]
   }
 };
 
@@ -637,6 +774,25 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
   const summary = fillVariant(definition.summary, variant);
   const notes = variant ? `Variant: ${variant}.` : "";
 
+  // 0.8.4 Tier 1 — emit the rule's `effects` array onto the item source
+  // as Foundry-native ActiveEffect documents with `transfer: true` so
+  // they auto-flow to the actor when the mutation is added. The embedded
+  // ActiveEffectConfig sheet + Effects tab (Tier 5) inherit free UI for
+  // viewing and toggling these.
+  const ruleEffects = Array.isArray(rule.effects) ? rule.effects : [];
+  const emittedEffects = ruleEffects.map((effect, index) => ({
+    name: effect.label ?? effect.name ?? `${definition.name} effect ${index + 1}`,
+    img: "icons/svg/aura.svg",
+    transfer: true,
+    disabled: false,
+    changes: Array.isArray(effect.changes) ? effect.changes.map((change) => ({
+      key: change.key,
+      mode: Number.isInteger(change.mode) ? change.mode : 2,
+      value: String(change.value ?? ""),
+      priority: Number.isFinite(Number(change.priority)) ? Number(change.priority) : 20
+    })) : []
+  }));
+
   return {
     name: definition.name,
     type: "mutation",
@@ -676,7 +832,8 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
       description: {
         value: `<p>${summary}</p>`
       }
-    }
+    },
+    effects: emittedEffects
   };
 }
 
@@ -709,11 +866,87 @@ export function enrichMutationSystemData(item) {
   return system;
 }
 
+/**
+ * 0.8.4 Tier 1 — apply data-driven AE-style effects to the derived
+ * object. Iterates every enabled mutation item on the actor; for each
+ * mutation whose rule has an `effects` array, applies each change's
+ * mode to the target derived path.
+ *
+ * Only targets keys under `gw.*` today — AE changes targeting
+ * `system.*` paths are handled by Foundry's own applyActiveEffects()
+ * during super.prepareDerivedData(), so we don't need to duplicate
+ * that work here. Future tiers will expand the supported targets.
+ */
+export function applyMutationEffects(actor, derived) {
+  const mutations = actor.items.filter((item) => item.type === "mutation");
+  for (const item of mutations) {
+    if (!mutationIsEnabled(item)) continue;
+    const rule = getMutationRule(item);
+    const effects = rule?.effects;
+    if (!Array.isArray(effects) || !effects.length) continue;
+    for (const effect of effects) {
+      const changes = Array.isArray(effect?.changes) ? effect.changes : [];
+      for (const change of changes) applyEffectChange(derived, change);
+    }
+  }
+}
+
+function applyEffectChange(derived, change) {
+  const rawKey = String(change?.key ?? "");
+  if (!rawKey.startsWith("gw.")) return; // future: handle system.* / flags.*
+  const path = rawKey.slice(3); // strip "gw."
+  const rawValue = change?.value ?? "";
+  const mode = Number(change?.mode) || 0;
+
+  const currentRaw = foundry.utils.getProperty(derived, path);
+  switch (mode) {
+    case 1: { // MULTIPLY
+      const current = Number(currentRaw) || 1;
+      const factor = Number(rawValue) || 1;
+      foundry.utils.setProperty(derived, path, current * factor);
+      break;
+    }
+    case 2: { // ADD
+      const current = Number(currentRaw) || 0;
+      const delta = Number(rawValue) || 0;
+      foundry.utils.setProperty(derived, path, current + delta);
+      break;
+    }
+    case 3: { // DOWNGRADE (min)
+      const current = Number(currentRaw);
+      const candidate = Number(rawValue) || 0;
+      const next = Number.isFinite(current) ? Math.min(current, candidate) : candidate;
+      foundry.utils.setProperty(derived, path, next);
+      break;
+    }
+    case 4: { // UPGRADE (max)
+      const current = Number(currentRaw) || 0;
+      const candidate = Number(rawValue) || 0;
+      foundry.utils.setProperty(derived, path, Math.max(current, candidate));
+      break;
+    }
+    case 5: { // OVERRIDE
+      let value = rawValue;
+      if (rawValue === "true") value = true;
+      else if (rawValue === "false") value = false;
+      else if (Number.isFinite(Number(rawValue)) && String(rawValue).trim() !== "") value = Number(rawValue);
+      foundry.utils.setProperty(derived, path, value);
+      break;
+    }
+    case 0: // CUSTOM — not yet supported; silently skip
+    default:
+      break;
+  }
+}
+
 export function applyMutationModifiers(actor, derived) {
   const equippedArmor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
   const encumbered = equippedArmor.length > 0;
 
   for (const item of actor.items.filter((entry) => entry.type === "mutation")) {
+    // 0.8.4 Tier 1 — pilot mutations defer to applyMutationEffects.
+    if (AE_MIGRATED_MUTATIONS.has(item.name)) continue;
+
     const enabled = mutationIsEnabled(item);
     const name = item.name;
     const variant = item.system.reference?.variant ?? "";

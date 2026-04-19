@@ -603,7 +603,45 @@ async function migrateActor(actor) {
   // rounds in "Needler Darts, Poison (10)" gear).
   await migrateWeaponRenames081(actor);
 
+  // 0.8.4 Tier 1: backfill ActiveEffect embeds on piloted mutation items
+  // so old-world characters see their effects on the Effects tab.
+  await migrateMutationEffects084(actor);
+
   await actor.refreshDerivedResources({ adjustCurrent: false });
+}
+
+/**
+ * 0.8.4 Tier 1 — for every piloted mutation on the actor whose rule
+ * has an `effects` array AND whose item's effects collection is empty,
+ * materialize matching ActiveEffect docs via `item.createEmbeddedDocuments`.
+ * Idempotent: skips items that already have effects.
+ */
+async function migrateMutationEffects084(actor) {
+  const { AE_MIGRATED_MUTATIONS } = await import("./mutation-rules.mjs");
+  const mutationItems = actor.items.filter((item) => item.type === "mutation" && AE_MIGRATED_MUTATIONS.has(item.name));
+  for (const item of mutationItems) {
+    if (item.effects?.size > 0) continue;
+    const rule = getMutationRule(item);
+    const effects = Array.isArray(rule?.effects) ? rule.effects : [];
+    if (!effects.length) continue;
+    const effectData = effects.map((effect, index) => ({
+      name: effect.label ?? `${item.name} effect ${index + 1}`,
+      img: "icons/svg/aura.svg",
+      transfer: true,
+      disabled: false,
+      changes: (Array.isArray(effect.changes) ? effect.changes : []).map((change) => ({
+        key: change.key,
+        mode: Number.isInteger(change.mode) ? change.mode : 2,
+        value: String(change.value ?? ""),
+        priority: Number.isFinite(Number(change.priority)) ? Number(change.priority) : 20
+      }))
+    }));
+    try {
+      await item.createEmbeddedDocuments("ActiveEffect", effectData);
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | failed to backfill effects on mutation "${item.name}"`, error);
+    }
+  }
 }
 
 export async function migrateWorld() {

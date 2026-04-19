@@ -2,7 +2,7 @@
  * Gamma World actor document with derived combat / mutation data helpers.
  */
 
-import { applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData } from "../mutation-rules.mjs";
+import { applyMutationEffects, applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData } from "../mutation-rules.mjs";
 import { applyEquipmentModifiers } from "../equipment-rules.mjs";
 import { applyTemporaryDerivedModifiers } from "../effect-state.mjs";
 import { actorInitiativeModifier } from "../initiative.mjs";
@@ -137,6 +137,11 @@ export function buildActorDerived(actor) {
   }
 
   applyMutationModifiers(actor, derived);
+  // 0.8.4 Tier 1 — data-driven AE-style mutation effects (pilot of 10
+  // mutations whose modifiers moved out of the hardcoded switch above).
+  // Runs after the switch so the pilot mutations see a fully-initialized
+  // derived object to fold into.
+  applyMutationEffects(actor, derived);
   applyEquipmentModifiers(actor, derived);
   applyRobotDerived(actor, derived);
 

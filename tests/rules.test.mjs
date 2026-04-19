@@ -2086,5 +2086,120 @@ test("0.8.3 — Cinematic socket dispatcher routes events to listeners", async (
   }
 });
 
+/* ------------------------------------------------------------------ */
+/* 0.8.4 Tier 1 — ActiveEffect pilot                                   */
+/* ------------------------------------------------------------------ */
+
+test("0.8.4 Tier 1 — applyMutationEffects folds AE-style changes into derived", async () => {
+  const { applyMutationEffects, AE_MIGRATED_MUTATIONS } = await import("../module/mutation-rules.mjs");
+
+  // Stub foundry.utils.getProperty / setProperty used by the effect
+  // applier (node tests don't have Foundry globals).
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+        return value;
+      }
+    }
+  };
+
+  try {
+    const expected = [
+      "Heightened Strength", "Radar/Sonar", "Wings", "Shorter", "Taller",
+      "Fat Cell Accumulation", "Vision Defect", "Weight Decrease",
+      "Intuition", "Heightened Hearing"
+    ];
+    for (const name of expected) {
+      assert.ok(AE_MIGRATED_MUTATIONS.has(name), `${name} should be in the Tier 1 pilot set`);
+    }
+
+    // ADD mode — Vision Defect applies -4 to toHitBonus.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Vision Defect",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { toHitBonus: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, -4);
+    }
+
+    // Stacking ADDs across two mutations on the same actor.
+    {
+      const actor = {
+        items: [
+          { type: "mutation", name: "Taller",        system: { activation: { mode: "passive", enabled: false } } },
+          { type: "mutation", name: "Vision Defect", system: { activation: { mode: "passive", enabled: false } } }
+        ]
+      };
+      const derived = { toHitBonus: 0, damageFlat: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.toHitBonus, -5, "Taller (-1) + Vision Defect (-4) should sum to -5");
+      assert.equal(derived.damageFlat, 2);
+    }
+
+    // MULTIPLY mode.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Fat Cell Accumulation",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { movementMultiplier: 1, toHitBonus: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.movementMultiplier, 0.75);
+      assert.equal(derived.toHitBonus, -1);
+    }
+
+    // UPGRADE mode.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Wings",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derivedLow  = { flightSpeed: 60 };
+      const derivedHigh = { flightSpeed: 200 };
+      applyMutationEffects(actor, derivedLow);
+      applyMutationEffects(actor, derivedHigh);
+      assert.equal(derivedLow.flightSpeed,  120);
+      assert.equal(derivedHigh.flightSpeed, 200, "UPGRADE leaves current alone when higher");
+    }
+
+    // OVERRIDE mode + coercion of "true" string → boolean.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Intuition",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { toHitBonus: 0, damagePerDie: 0, cannotBeSurprised: false };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.cannotBeSurprised, true);
+      assert.equal(derived.toHitBonus, 1);
+      assert.equal(derived.damagePerDie, 3);
+    }
+
+    // Non-pilot mutation is untouched by applyMutationEffects.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Heightened Intelligence",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { mentalResistance: 10 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.mentalResistance, 10,
+        "Non-pilot mutations should not be touched by applyMutationEffects");
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
+  }
+});
 
 
