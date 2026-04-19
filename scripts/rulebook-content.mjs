@@ -267,11 +267,11 @@ const CHAPTER_5 = {
     }),
     section({
       name: "Saving Throws: Radiation and Poison",
-      pageRange: "28",
+      pageRange: "28 (homebrew)",
       body: p(
-        "Radiation and poison damage are resolved by cross-referencing intensity (3-18) with the victim's Constitution on the respective matrix.",
-        "See the <strong>Hazards and Fatigue Reference</strong> journal in System Documentation for the exact radiation and poison matrices.",
-        "Outcomes: plain numbers = d6 of damage; \"D\" = death (save unavailable for radiation); \"M\" = mutation from radiation exposure."
+        "<strong>This system replaces the RAW 1e poison and radiation matrices with a save-vs-intensity homebrew.</strong> See Chapter 11, \"Homebrew &amp; Departures\", for the mechanical details of both saves, including the radiation fail-margin bands and the new Radiation Sickness and Catastrophic Exposure conditions.",
+        "Short form: roll <strong>1d20 + Constitution modifier</strong> and compare to the hazard's intensity (poison difficulty or radiation intensity). Poison deals damage on either outcome — half on a success, full on a failure — and no longer kills outright on a single bad roll.",
+        "The RAW matrices are preserved as reference material in the <strong>System Documentation</strong> pack's Poison Matrix and Radiation Matrix journals, but the live save pipeline no longer consults them."
       )
     }),
     section({
@@ -564,6 +564,38 @@ const CHAPTER_11 = {
       body: p(
         "Containers (backpacks, pouches, satchels) are not strictly RAW — they are added for usable inventory management.",
         "Strict encumbrance: carried weight over cap halves movement and zeroes DX AC bonus; over 2× cap disables movement, attacks, and mutations."
+      )
+    }),
+    section({
+      name: "Radiation Homebrew",
+      pageRange: "—",
+      body: p(
+        "<strong>House rule.</strong> RAW radiation uses a Constitution × Intensity matrix whose \"D\" cells kill the victim outright and whose \"M\" cells force an immediate new mutation. In ongoing play this is a character grinder — the rules below replace the matrix with a save-vs-intensity roll and four graded outcomes.",
+        "<strong>Baseline resistance.</strong> Radiation zones of intensity <strong>less than 10</strong> have no mechanical effect. No save is required and no damage accumulates. The Foundry system short-circuits these exposures to \"Below threshold — no effect\" on the save card.",
+        "<strong>The save.</strong> At intensity 10 or higher, roll <code>1d20 + CN modifier</code> and compare to the radiation intensity. CN modifier uses the same 6–15 neutral band the rest of the system uses (PS 8 = +0, PS 18 = +3, PS 4 = −2).",
+        "<strong>Outcome bands.</strong>",
+        "<strong>Pass (total ≥ intensity)</strong> — No immediate effect. Recheck after one hour if still exposed.",
+        "<strong>Miss by 1–3 — Radiation Sickness (Mild)</strong>. The character is immediately treated as <em>fully fatigued</em> (every weapon / armor fatigue penalty applies at maximum) for <strong>1d3 days</strong>.",
+        "<strong>Miss by 4–6 — Radiation Sickness (Severe)</strong>. Fully fatigued for <strong>1d4+2 days</strong>, and a random new mutation manifests immediately (the existing \"M\" outcome). The mutation grant fires automatically on the chat card.",
+        "<strong>Miss by 7 or more — Catastrophic Exposure</strong>. The character appears fine for now. <strong>Beginning the next day</strong>, the body deteriorates at <strong>−10% of maximum HP per hour</strong>. The only thing that halts the spiral is Ancient radiation treatment (rejuv chamber, anti-radiation serum, GM-fiat equivalent); without it, the character dies.",
+        "<strong>Mutation alternate effects.</strong>",
+        "<strong>Heightened Constitution</strong> now grants <strong>+3</strong> to radiation saves <em>and</em> caps radiation severity at \"severe\" — a Heightened Constitution character cannot take Catastrophic Exposure from a single roll.",
+        "<strong>Bacterial Symbiosis</strong> (plant mutation) grants <strong>+3</strong> to both radiation and poison saves.",
+        "<strong>Automation.</strong> The character sheet's fatigue klaxon overlays a ☢ mark and flips to the appropriate sickness or catastrophic state. The world-time hook auto-expires sickness when its duration elapses and auto-drips catastrophic HP loss every in-game hour. The <code>game.gammaWorld.clearCatastrophicRadiation(actor)</code> macro cancels the catastrophic spiral when the party finds an ancient treatment device."
+      )
+    }),
+    section({
+      name: "Poison Homebrew",
+      pageRange: "—",
+      body: p(
+        "<strong>House rule.</strong> RAW poison kills on a bad matrix row (the \"D\" cell); in practice, that turns every contact-poison encounter into a one-hit save-or-die. This system replaces the matrix with a damage roll modulated by a Constitution save.",
+        "<strong>The save.</strong> Roll <code>1d20 + CN modifier</code> vs. the poison's difficulty (the intensity number the poison source provides).",
+        "<strong>Outcome.</strong> Damage is <strong>N d6</strong> where N is pulled from the intensity band: intensity ≤ 6 = 1d6, 7–11 = 2d6, 12–15 = 3d6, 16+ = 4d6. On a <strong>success</strong> the victim takes <strong>half</strong> of the rolled damage (rounded down). On a <strong>failure</strong> the victim takes <strong>full</strong> damage. There is no \"save or die\" cell.",
+        "<strong>Mutation alternate effects.</strong>",
+        "<strong>Heightened Constitution</strong> grants <strong>+3</strong> to poison saves.",
+        "<strong>Bacterial Symbiosis</strong> grants <strong>+3</strong> to poison saves (in addition to radiation).",
+        "<strong>No Resistance to Poison</strong> (defect) removes the character's CN modifier entirely on poison saves — the roll is a flat <code>1d20</code> vs. difficulty.",
+        "<strong>Robots &amp; chassis immunity.</strong> Robot chassis still auto-succeed (no damage). Armor and chassis poison-immunity traits short-circuit the roll entirely."
       )
     }),
     section({

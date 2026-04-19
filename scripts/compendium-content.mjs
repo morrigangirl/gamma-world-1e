@@ -607,7 +607,7 @@ export function equipmentPackSources() {
       short: 50,
       long: 100,
       ammoType: ["needler-poison", "needler-paralysis"],
-      effect: { mode: "poison", formula: "17", notes: "Poison darts: resolve as poison intensity 17. Paralysis darts: paralyze victim for up to 20 minutes, less one minute per point of Constitution." },
+      effect: { mode: "poison", formula: "17", notes: "Poison darts: poison save vs. difficulty 17 (3d6 damage, halved on success). Paralysis darts: poison save vs. difficulty 17; on failure the victim is paralyzed for up to 20 minutes, less one minute per point of Constitution." },
       description: htmlParagraphs("Soundless dart weapon. Fires poison or paralysis capsules — load whichever ammo stack the situation calls for.")
     }),
     weaponSource({
@@ -691,8 +691,8 @@ export function equipmentPackSources() {
       short: 350,
       long: 700,
       ammoType: ["fusion-cell"],
-      effect: { mode: "radiation", formula: "18", notes: "Resolve as radiation intensity 18." },
-      description: htmlParagraphs("Projects twin beams of intensity-18 radiation.", "Requires an atomic energy cell carried in a converter backpack linked by cable.")
+      effect: { mode: "radiation", formula: "18", notes: "Radiation save (1d20 + CN mod) vs. intensity 18. Miss by 1–3 → Radiation Sickness (mild); 4–6 → Sickness (severe) + new mutation; 7+ → Catastrophic Exposure (onset next day, −10% max HP/hour until ancient treatment or death)." },
+      description: htmlParagraphs("Projects twin beams of intensity-18 radiation. A direct hit without Heightened Constitution or Bacterial Symbiosis is virtually certain to produce Catastrophic Exposure.", "Requires an atomic energy cell carried in a converter backpack linked by cable.")
     }),
     weaponSource({
       // Gap #1: Vibro-style blades and energy melee weapons are physical-reach
@@ -883,7 +883,7 @@ export function equipmentPackSources() {
     gearSource({
       name: "Mutation Bomb",
       tech: "v",
-      description: htmlParagraphs("30 meter radius. Living creatures without force-field protection either gain a random mutational defect (60%) or suffer intensity-12 radiation (40%)."),
+      description: htmlParagraphs("30 meter radius. Each living creature without force-field protection either gains a random mutational defect (60%) or makes a radiation save vs. intensity 12 (40%); failures land in the usual radiation sickness bands."),
       area: { shape: "circle", radius: 30, saveType: "radiation" }
     }),
     gearSource({
@@ -1574,35 +1574,37 @@ export function journalPackSources() {
           text: { format: 1, content: fatigueRulesPage() }
         },
         {
-          name: "Poison Matrix",
+          name: "Poison Matrix (RAW reference)",
           type: "text",
           text: {
             format: 1,
             content: hazardMatrixPage(POISON_MATRIX, {
-              intro: "Cross poison strength with the victim’s Constitution to determine the result.",
+              intro: "<strong>Reference only — not used by the live save pipeline.</strong> This system replaces the poison matrix with a d20 + CN save; see Chapter 11 \"Poison Homebrew\" in the Rulebook Reference pack for the active rules. The RAW matrix below is preserved for lookup and for any GM who wants to run the original save-or-die resolution.",
               rowLabel: "Constitution",
               columnLabel: "Poison Strength",
               codeNotes: [
                 "\"*\" means no effect.",
                 "A number means that many d6 of poison damage.",
-                "\"D\" means death unless the correct antidote is administered within two melee rounds."
+                "\"D\" means death unless the correct antidote is administered within two melee rounds.",
+                "<em>Under the live homebrew: roll 1d20 + CN modifier vs. poison difficulty. Success = half damage, failure = full damage, never death on one cell.</em>"
               ]
             })
           }
         },
         {
-          name: "Radiation Matrix",
+          name: "Radiation Matrix (RAW reference)",
           type: "text",
           text: {
             format: 1,
             content: hazardMatrixPage(RADIATION_MATRIX, {
-              intro: "Cross radiation intensity with the victim’s Constitution to determine the result.",
+              intro: "<strong>Reference only — not used by the live save pipeline.</strong> This system replaces the radiation matrix with a d20 + CN save banded by margin of failure; see Chapter 11 \"Radiation Homebrew\" in the Rulebook Reference pack for the live rules (thresholds, Radiation Sickness conditions, and the Catastrophic Exposure spiral). The RAW matrix below is preserved for reference.",
               rowLabel: "Constitution",
               columnLabel: "Radiation Intensity",
               codeNotes: [
                 "A number means that many d6 of radiation damage.",
                 "\"M\" means a new mutation manifests in one week.",
-                "\"D\" means a 20% chance of mutational defect and an 80% chance of death. There is no antidote for radiation."
+                "\"D\" means a 20% chance of mutational defect and an 80% chance of death. There is no antidote for radiation.",
+                "<em>Under the live homebrew: intensity &lt; 10 has no effect; otherwise roll 1d20 + CN modifier vs. intensity. Miss by 1–3 = Radiation Sickness (mild), 4–6 = Sickness (severe) + mutation, 7+ = Catastrophic Exposure (−10% max HP/hour starting tomorrow).</em>"
               ]
             })
           }

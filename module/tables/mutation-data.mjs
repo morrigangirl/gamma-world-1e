@@ -733,7 +733,7 @@ export const MUTATION_DEFINITIONS = [
       humanoid: [19, 22],
       "mutated-animal": [16, 21]
     },
-    summary: "+2HP per Constitution, +18 vs. Poison, +3 vs. Radiation.",
+    summary: "+2HP per Constitution. Under the 0.8.2 homebrew saves: +3 to poison and radiation saves, and radiation severity is capped at \"severe\" (never Catastrophic Exposure from a single exposure).",
     page: 9
   },
   {
@@ -937,7 +937,7 @@ export const MUTATION_DEFINITIONS = [
       humanoid: [54, 55],
       "mutated-animal": [49, 49]
     },
-    summary: "Any poison is fatal unless antidote is swiftly administered.",
+    summary: "Under the 0.8.2 homebrew saves: the character loses their Constitution modifier on every poison save — the roll is a flat 1d20 vs. poison difficulty. Successes still halve damage; failures still take full damage.",
     page: 10
   },
   {
