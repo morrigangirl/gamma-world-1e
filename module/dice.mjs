@@ -1625,6 +1625,98 @@ async function rollMentalSave(actor) {
   };
 }
 
+/**
+ * 0.8.2 homebrew — the sheet's "Roll Poison Save" / "Roll Radiation Save"
+ * buttons are now straight `1d20 + CN mod + mutation bonuses` with no DC
+ * prompt. The GM reads the total off the card and eyeballs it against
+ * whatever difficulty is in play. For hazard-driven saves with an
+ * explicit intensity (weapon on-hit, AOE gas cloud, radiation zone), the
+ * full `resolveHazardCard` flow is still the path — this is the
+ * "did they roll well today?" shortcut for the player sheet.
+ */
+async function rollBareHazardSave(actor, type) {
+  if (actorHasHazardProtection(actor, type)) {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="gw-chat-card gw-save-card">`
+        + `<h3>${foundry.utils.escapeHTML(saveTypeLabel(type))} Save</h3>`
+        + `<div class="gw-card-meta">${foundry.utils.escapeHTML(actor.name)}</div>`
+        + `<div class="gw-card-meta">Protected by shielding — auto-success.</div>`
+        + `</div>`
+    });
+    return {
+      status: "rolled",
+      actorUuid: actor?.uuid ?? null,
+      actorName: actor?.name ?? "",
+      type,
+      saveBonus: null,
+      rollTotal: null,
+      total: null,
+      immune: true
+    };
+  }
+
+  const context = saveContextForActor(actor, type);
+  const saveBonus = Number.isFinite(context?.saveBonus) ? context.saveBonus : 0;
+  const roll = await new Roll("1d20 + @bonus", { bonus: saveBonus }).evaluate();
+  const rollTooltip = await roll.getTooltip();
+  const d20 = Number(roll.terms?.[0]?.total ?? roll.total);
+
+  const content = await renderTemplate(
+    `systems/${SYSTEM_ID}/templates/chat/save-card.hbs`,
+    {
+      actorName: actor.name,
+      type,
+      typeLabel: `${saveTypeLabel(type)} Save`,
+      resistance: saveBonus,
+      resistanceSummary: context.resistanceSummary ?? "",
+      saveBonus,
+      intensity: null,
+      target: "—",
+      targetLabel: "",
+      band: "bare",
+      rollLabel: `${d20} ${saveBonus >= 0 ? "+" : ""}${saveBonus} = ${roll.total}`,
+      total: roll.total,
+      success: null,
+      outcome: "Compare this total against the hazard's intensity to resolve the outcome.",
+      damageFormula: "",
+      damageTotal: 0,
+      rollTooltip,
+      rollFormula: roll.formula
+    }
+  );
+
+  const message = await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content,
+    rolls: [roll],
+    flags: {
+      [SYSTEM_ID]: {
+        card: "hazard-bare",
+        hazard: {
+          actorUuid: actor.uuid,
+          type,
+          rollTotal: roll.total,
+          total: roll.total,
+          saveBonus,
+          band: "bare"
+        }
+      }
+    }
+  });
+
+  return {
+    status: "rolled",
+    actorUuid: actor?.uuid ?? null,
+    actorName: actor?.name ?? "",
+    type,
+    saveBonus,
+    rollTotal: roll.total,
+    total: roll.total,
+    messageId: message?.id ?? null
+  };
+}
+
 export async function resolveHazardCard(actor, type, intensity, { sourceName = "" } = {}) {
   // Intensity is no longer clamped to 3-18 for hazard saves — a radiation
   // intensity of 2 or 22 should pass through so the new "below 10 =
@@ -1838,6 +1930,14 @@ export async function resolveHazardCard(actor, type, intensity, { sourceName = "
 export async function rollSave(actor, type) {
   if (type === "mental") {
     return rollMentalSave(actor);
+  }
+
+  // 0.8.2: the sheet's Poison / Radiation buttons now roll a bare
+  // `1d20 + CN mod` with no DC prompt. Hazard-driven saves that supply
+  // an intensity still route through resolveHazardCard via the
+  // `requestSaveResolution` path from attacks / AOE / weapon on-hit.
+  if (type === "poison" || type === "radiation") {
+    return rollBareHazardSave(actor, type);
   }
 
   return promptAndResolveSave(actor, type);

@@ -9,6 +9,10 @@
       Resistance: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{resistance}}{{/if}}
       &middot; Intensity: {{intensity}}
     </div>
+  {{else if (gwEq band "bare")}}
+    <div class="gw-card-meta">
+      Save bonus: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{gwSigned saveBonus}}{{/if}}
+    </div>
   {{else}}
     <div class="gw-card-meta">
       Save bonus: {{#if resistanceSummary}}{{resistanceSummary}}{{else}}{{gwSigned saveBonus}}{{/if}}
@@ -37,8 +41,10 @@
       {{/if}}
     </div>
   {{/if}}
-  <div class="gw-card-result {{#if success}}is-hit{{else}}is-miss{{/if}}">
-    {{#if (gwEq type "mental")}}
+  <div class="gw-card-result{{#unless (gwEq band "bare")}}{{#if success}} is-hit{{else}} is-miss{{/if}}{{/unless}}">
+    {{#if (gwEq band "bare")}}
+      Total: {{total}}
+    {{else if (gwEq type "mental")}}
       Result: {{target}}
     {{else if (gwEq band "immune")}}
       Immune
