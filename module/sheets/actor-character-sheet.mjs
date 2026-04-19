@@ -330,13 +330,13 @@ function formatMutationItem(item) {
   return item;
 }
 
-function buildTabNav(tabs, { mutations = 0, inventory = 0 } = {}) {
+function buildTabNav(tabs, { mutations = 0, inventory = 0, effects = 0 } = {}) {
   // Keep this in sync with TABS.primary.tabs above. The filter drops any
   // tab ID that isn't in this list, so a new tab added to TABS without a
   // matching entry here will register correctly but never render a nav
   // button. (That's how the 0.8.0 Skills tab went missing in the first
   // pass.)
-  const ordered = ["main", "mutations", "skills", "inventory", "bio"];
+  const ordered = ["main", "mutations", "skills", "inventory", "effects", "bio"];
   return ordered
     .map((id) => tabs[id])
     .filter(Boolean)
@@ -346,8 +346,61 @@ function buildTabNav(tabs, { mutations = 0, inventory = 0 } = {}) {
         ? (mutations || "")
         : tab.id === "inventory"
           ? (inventory || "")
-          : ""
+          : tab.id === "effects"
+            ? (effects || "")
+            : ""
     }));
+}
+
+/**
+ * 0.8.4 Tier 5 — build the Effects tab row model.
+ *
+ * Pulls every ActiveEffect applicable to the actor (direct + transferred
+ * from embedded items) and flattens into a display-ready row. Each row
+ * carries the effect UUID so the toggle / edit / delete action handlers
+ * on the sheet can resolve it via `fromUuid(uuid)` regardless of
+ * whether the owning document is the actor or one of its items.
+ */
+function buildEffectsList(actor) {
+  const rows = [];
+  const allEffects = typeof actor.allApplicableEffects === "function"
+    ? [...actor.allApplicableEffects()]
+    : [...(actor.effects ?? [])];
+
+  for (const effect of allEffects) {
+    if (!effect) continue;
+    const parent = effect.parent;
+    const parentIsActor = parent === actor;
+    const duration = effect.duration ?? {};
+    let durationLabel = "";
+    if (duration.rounds) durationLabel = `${duration.rounds} round${duration.rounds === 1 ? "" : "s"}`;
+    else if (duration.turns) durationLabel = `${duration.turns} turn${duration.turns === 1 ? "" : "s"}`;
+    else if (duration.seconds) durationLabel = `${Math.round(duration.seconds / 60)} min`;
+    else durationLabel = "Passive";
+
+    const changeKeys = Array.isArray(effect.changes)
+      ? effect.changes.map((c) => c.key).filter(Boolean)
+      : [];
+
+    rows.push({
+      uuid: effect.uuid,
+      id: effect.id,
+      name: effect.name ?? "Effect",
+      img: effect.img ?? "icons/svg/aura.svg",
+      disabled: !!effect.disabled,
+      sourceName: parentIsActor ? actor.name : (parent?.name ?? "Unknown"),
+      sourceType: parentIsActor ? "actor" : (parent?.type ?? "item"),
+      durationLabel,
+      changesCount: changeKeys.length,
+      changesSummary: changeKeys.slice(0, 3).join(", ") + (changeKeys.length > 3 ? "…" : "")
+    });
+  }
+
+  rows.sort((a, b) => {
+    if (a.disabled !== b.disabled) return a.disabled ? 1 : -1;
+    return a.name.localeCompare(b.name);
+  });
+  return rows;
 }
 
 const actionLocks = new Set();
@@ -379,6 +432,9 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       revealArtifactFunction: GammaWorldCharacterSheet.#onRevealArtifactFunction,
       managePower:    GammaWorldCharacterSheet.#onManagePower,
       removeEffect:   GammaWorldCharacterSheet.#onRemoveEffect,
+      toggleAE:       GammaWorldCharacterSheet.#onToggleAE,
+      editAE:         GammaWorldCharacterSheet.#onEditAE,
+      deleteAE:       GammaWorldCharacterSheet.#onDeleteAE,
       resetMutations: GammaWorldCharacterSheet.#onResetMutations,
       toggleEquipped: GammaWorldCharacterSheet.#onToggleEquipped,
       robotSpendPower: GammaWorldCharacterSheet.#onRobotSpendPower,
@@ -409,6 +465,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
         { id: "mutations", label: "GAMMA_WORLD.Tab.Mutations" },
         { id: "skills",    label: "GAMMA_WORLD.Tab.Skills" },
         { id: "inventory", label: "GAMMA_WORLD.Tab.Inventory" },
+        { id: "effects",   label: "GAMMA_WORLD.Tab.Effects" },
         { id: "bio",       label: "GAMMA_WORLD.Tab.Bio" }
       ],
       initial: "main",
@@ -587,9 +644,17 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     context.items = grouped;
     context.mutationsBySubtype = mutationsBySubtype;
     context.activeEffects = actor.gw?.activeEffects ?? [];
+
+    // 0.8.4 Tier 5 — standard Foundry ActiveEffect list for the Effects
+    // tab. Pulls both direct actor-level AEs and transferred AEs from
+    // embedded items (mutations / armor / gear). Each row carries the
+    // effect's UUID so the toggle / edit / delete handlers can resolve
+    // it via fromUuid regardless of which embedded document owns it.
+    context.effectsList = buildEffectsList(actor);
     context.tabNav = buildTabNav(context.tabs, {
       mutations: grouped.mutation.length,
-      inventory: grouped.weapon.length + grouped.armor.length + grouped.gear.length
+      inventory: grouped.weapon.length + grouped.armor.length + grouped.gear.length,
+      effects:   context.effectsList.length
     });
     context.quickActions = {
       weapons: grouped.weapon.filter((item) => item.system.equipped && (item.gwCanAttack !== false)),
@@ -956,6 +1021,39 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     if (!effectId) return;
     const { removeTemporaryEffect } = await import("../effect-state.mjs");
     await removeTemporaryEffect(this.document, effectId);
+  }
+
+  /* --- 0.8.4 Tier 5: standard ActiveEffect row actions ------------- */
+
+  static async #onToggleAE(event, target) {
+    event.preventDefault();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    await effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onEditAE(event, target) {
+    event.preventDefault();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    effect.sheet?.render?.(true);
+  }
+
+  static async #onDeleteAE(event, target) {
+    event.preventDefault();
+    const uuid = target?.dataset?.effectUuid;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (!effect) return;
+    if (typeof effect.deleteDialog === "function") {
+      await effect.deleteDialog();
+    } else {
+      await effect.delete();
+    }
   }
 
   static async #onResetMutations(event, _target) {

@@ -370,7 +370,19 @@
       "Mutations": "Mutations",
       "Skills": "Skills",
       "Inventory": "Inventory",
+      "Effects": "Effects",
       "Bio": "Bio"
+    },
+    "Effects": {
+      "Title": "Active Effects",
+      "Hint": "Passive bonuses + temporary states applied to this character. Transferred effects from mutations and equipped items show their source; direct effects can be edited in place.",
+      "From": "From",
+      "ChangesLabel": "change(s)",
+      "Enable": "Enable",
+      "Disable": "Disable",
+      "Edit": "Edit effect",
+      "Delete": "Delete effect",
+      "Empty": "No active effects."
     },
     "Skill": {
       "Survival": "Survival",

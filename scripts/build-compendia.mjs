@@ -85,7 +85,13 @@ const EMBEDDED_HIERARCHY = {
   actors:  { items: "items",  effects: "effects" },
   items:   { effects: "effects" },
   journal: { pages: "pages" },
-  tables:  { results: "results" }
+  tables:  { results: "results" },
+  // 0.8.4: actor-owned items (sample-actor pregens + monster embedded
+  // items) can carry their own ActiveEffect children. Without this
+  // branch the recursive _id assignment stops at the item, and the
+  // embedded effect docs get packed with no _key and crash
+  // compilePack with "Key cannot be null or undefined".
+  "actors.items": { effects: "effects" }
 };
 
 function stableId(seed) {

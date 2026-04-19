@@ -3110,3 +3110,113 @@ body.system-gamma-world-1e,
   padding-left: 0.25rem;
 }
 
+
+/* ===================================================================
+ * 0.8.4 Tier 5 — Effects tab on the character sheet
+ * =================================================================== */
+
+.application.gamma-world .gw-effects-tab .gamma-world__list-header {
+  border-bottom: 1px solid rgba(31, 36, 40, 0.15);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.application.gamma-world .gw-effects-tab .gamma-world__hint {
+  font-size: 0.82rem;
+  color: rgba(31, 36, 40, 0.6);
+  margin: 0.25rem 0 0;
+}
+
+.application.gamma-world .gw-effects-tab__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.application.gamma-world .gw-effects-tab__row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.4rem 0.5rem;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(31, 36, 40, 0.12);
+  border-radius: 3px;
+  transition: background 120ms ease, opacity 120ms ease;
+}
+
+.application.gamma-world .gw-effects-tab__row.is-disabled {
+  opacity: 0.55;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.application.gamma-world .gw-effects-tab__row.is-disabled .gw-effects-tab__name {
+  text-decoration: line-through;
+  color: rgba(31, 36, 40, 0.55);
+}
+
+.application.gamma-world .gw-effects-tab__icon {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.application.gamma-world .gw-effects-tab__body {
+  min-width: 0;
+}
+
+.application.gamma-world .gw-effects-tab__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.1;
+}
+
+.application.gamma-world .gw-effects-tab__meta {
+  font-size: 0.78rem;
+  color: rgba(31, 36, 40, 0.65);
+  margin-top: 0.15rem;
+}
+
+.application.gamma-world .gw-effects-tab__changes {
+  font-family: var(--gw-font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  color: rgba(31, 36, 40, 0.55);
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.application.gamma-world .gw-effects-tab__actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.application.gamma-world .gw-effects-tab__action {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(31, 36, 40, 0.2);
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.application.gamma-world .gw-effects-tab__action:hover {
+  background: rgba(188, 154, 88, 0.18);
+  border-color: rgba(188, 154, 88, 0.65);
+}
+
+.application.gamma-world .gw-effects-tab__action--danger:hover {
+  background: rgba(230, 80, 80, 0.18);
+  border-color: rgba(230, 80, 80, 0.6);
+}

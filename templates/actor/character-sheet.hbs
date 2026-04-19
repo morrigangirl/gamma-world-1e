@@ -682,6 +682,54 @@
     </section>
   </div>
 
+  <div class="gamma-world__tab tab {{tabs.effects.cssClass}}" data-group="primary" data-tab="effects">
+    <section class="gamma-world__panel gw-effects-tab">
+      <header class="gamma-world__list-header">
+        <h3>{{localize "GAMMA_WORLD.Effects.Title"}}</h3>
+        <p class="gamma-world__hint">{{localize "GAMMA_WORLD.Effects.Hint"}}</p>
+      </header>
+      {{#if effectsList.length}}
+        <ul class="gw-effects-tab__list">
+          {{#each effectsList}}
+            <li class="gw-effects-tab__row{{#if this.disabled}} is-disabled{{/if}}">
+              <img class="gw-effects-tab__icon" src="{{this.img}}" alt="" />
+              <div class="gw-effects-tab__body">
+                <div class="gw-effects-tab__name">{{this.name}}</div>
+                <div class="gw-effects-tab__meta">
+                  {{localize "GAMMA_WORLD.Effects.From"}} <strong>{{this.sourceName}}</strong>
+                  {{#if this.durationLabel}} &middot; {{this.durationLabel}}{{/if}}
+                  {{#if this.changesCount}} &middot; {{this.changesCount}} {{localize "GAMMA_WORLD.Effects.ChangesLabel"}}{{/if}}
+                </div>
+                {{#if this.changesSummary}}
+                  <div class="gw-effects-tab__changes">{{this.changesSummary}}</div>
+                {{/if}}
+              </div>
+              <div class="gw-effects-tab__actions">
+                <button type="button" class="gw-effects-tab__action"
+                        data-action="toggleAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{#if this.disabled}}{{localize 'GAMMA_WORLD.Effects.Enable'}}{{else}}{{localize 'GAMMA_WORLD.Effects.Disable'}}{{/if}}">
+                  <i class="fa-solid {{#if this.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="gw-effects-tab__action"
+                        data-action="editAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{localize 'GAMMA_WORLD.Effects.Edit'}}">
+                  <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="gw-effects-tab__action gw-effects-tab__action--danger"
+                        data-action="deleteAE" data-effect-uuid="{{this.uuid}}"
+                        title="{{localize 'GAMMA_WORLD.Effects.Delete'}}">
+                  <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="gamma-world__empty">{{localize "GAMMA_WORLD.Effects.Empty"}}</p>
+      {{/if}}
+    </section>
+  </div>
+
   <div class="gamma-world__tab tab {{tabs.bio.cssClass}}" data-group="primary" data-tab="bio">
     <section class="gamma-world__panel">
       <header class="gamma-world__list-header">
