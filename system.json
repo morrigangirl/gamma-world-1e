@@ -17,6 +17,7 @@
   "styles": [
     "gamma-world.css"
   ],
+  "socket": true,
   "languages": [
     { "lang": "en", "name": "English", "path": "lang/en.json" }
   ],
