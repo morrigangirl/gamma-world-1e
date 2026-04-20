@@ -76,7 +76,7 @@ import {
   TOKEN_DISPLAY_MODES,
   prototypeTokenMigrationUpdate
 } from "../module/token-defaults.mjs";
-import { equipmentPackSources, actorPackSources, journalPackSources, monsterPackSources } from "../scripts/compendium-content.mjs";
+import { equipmentPackSources, actorPackSources, journalPackSources, monsterPackSources, robotMonsterSources } from "./helpers/pack-sources.mjs";
 
 test("simple dice helpers rewrite formulas predictably", () => {
   assert.deepEqual(parseSimpleDiceFormula("2d6+3"), { count: 2, faces: 6, modifier: 3 });
@@ -390,8 +390,9 @@ test("pilot animation registry resolves expanded weapons, ordnance, and support 
   assert.equal(resolvePilotAnimationKey("Stone Spear", { kind: "weapon" }), "");
 });
 
-test("animation registry covers every bundled weapon entry", () => {
-  const uncovered = equipmentPackSources()
+test("animation registry covers every bundled weapon entry", async () => {
+  const equipment = await equipmentPackSources();
+  const uncovered = equipment
     .filter((item) => item.type === "weapon")
     .map((item) => item.name)
     .filter((name) => !resolvePilotAnimationKey(name, { kind: "weapon" }));
@@ -571,8 +572,8 @@ test("encounter intelligence resolves from explicit overrides and actor context"
   assert.equal(resolveEncounterIntelligence(override), "semi-intelligent");
 });
 
-test("artifact defaults promote named ancient items and backfill stale records", () => {
-  const equipment = equipmentPackSources();
+test("artifact defaults promote named ancient items and backfill stale records", async () => {
+  const equipment = await equipmentPackSources();
   const portent = equipment.find((entry) => entry.name === "Portent");
   const laserRifle = equipment.find((entry) => entry.name === "Laser Rifle");
   const charger = equipment.find((entry) => entry.name === "Energy Cell Charger");
@@ -686,14 +687,14 @@ test("initiative helpers expose 5e-style initiative and Gamma World surprise bon
   assert.equal(initiativeBonusFromDexterity(18), 1);
 });
 
-test("expanded compendium sources include artifacts, robots, and docs", () => {
-  const equipment = equipmentPackSources();
+test("expanded compendium sources include artifacts, robots, and docs", async () => {
+  const equipment = await equipmentPackSources();
   assert.ok(equipment.some((entry) => entry.name === "Portent"));
   assert.ok(equipment.some((entry) => entry.name === "Life Ray"));
   assert.ok(equipment.some((entry) => entry.name === "Bubble Car"));
   assert.ok(equipment.length >= 90);
 
-  const actors = actorPackSources();
+  const actors = await actorPackSources();
   assert.ok(actors.some((entry) => entry.name === "Security Robotoid"));
   assert.ok(actors.some((entry) => entry.name === "Ambulatory Oak"));
   assert.ok(actors.some((entry) => entry.name === "Brotherhood Scholar"));
@@ -701,7 +702,7 @@ test("expanded compendium sources include artifacts, robots, and docs", () => {
   assert.equal(actors.every((entry) => entry.prototypeToken?.actorLink === true), true);
   assert.equal(actors.every((entry) => entry.prototypeToken?.displayBars === TOKEN_DISPLAY_MODES.OWNER_HOVER), true);
 
-  const monsters = monsterPackSources();
+  const monsters = await monsterPackSources();
   assert.ok(monsters.some((entry) => entry.name === "Hisser"));
   assert.ok(monsters.some((entry) => entry.name === "Android Warrior"));
   assert.ok(monsters.length >= 40);
@@ -709,7 +710,7 @@ test("expanded compendium sources include artifacts, robots, and docs", () => {
   assert.equal(monsters.every((entry) => entry.prototypeToken?.displayName === TOKEN_DISPLAY_MODES.OWNER_HOVER), true);
   assert.equal(monsters.every((entry) => entry.prototypeToken?.texture?.src?.includes("/assets/monsters/tokens/")), true);
 
-  const journals = journalPackSources();
+  const journals = await journalPackSources();
   assert.ok(journals.some((entry) => entry.name === "Artifacts and Robots"));
   assert.ok(journals.some((entry) => entry.name === "Encounter Procedures"));
   assert.ok(journals.length >= 5);
@@ -935,9 +936,7 @@ test("weapon category and gear subtype inference cover canonical items", async (
 });
 
 test("compendium generators include ammo items and every pregen type", async () => {
-  const { equipmentPackSources, actorPackSources } = await import("../scripts/compendium-content.mjs");
-
-  const equipment = equipmentPackSources();
+  const equipment = await equipmentPackSources();
   const ammo = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "ammunition");
   const containers = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "container");
   assert.ok(ammo.length >= 10, `expected at least 10 ammo items, got ${ammo.length}`);
@@ -951,7 +950,7 @@ test("compendium generators include ammo items and every pregen type", async () 
   assert.ok(!equipment.some((i) => i.name === "Broadcast Power Station"),
     "Broadcast Power Station should be removed from the equipment pack");
 
-  const pregens = actorPackSources();
+  const pregens = await actorPackSources();
   const types = new Set(pregens.map((p) => p.system?.details?.type));
   for (const t of ["psh", "humanoid", "mutated-animal", "mutated-plant", "robot"]) {
     assert.ok(types.has(t), `missing pregen for character type ${t}`);
@@ -1533,8 +1532,7 @@ test("Phase 0.8 — countProficientSkills iterates the canonical table", () => {
 });
 
 test("Phase 0.8.1 — weapon renames applied in the equipment pack", async () => {
-  const { equipmentPackSources } = await import("../scripts/compendium-content.mjs");
-  const equipment = equipmentPackSources();
+  const equipment = await equipmentPackSources();
   const weaponNames = new Set(equipment.filter((i) => i.type === "weapon").map((i) => i.name));
 
   // Renames landed: canonical 0.8.1 names present.
@@ -1560,8 +1558,7 @@ test("Phase 0.8.1 — weapon renames applied in the equipment pack", async () =>
 });
 
 test("Phase 0.8.1 — ammoType is now a set with matching energy ammo gear", async () => {
-  const { equipmentPackSources } = await import("../scripts/compendium-content.mjs");
-  const equipment = equipmentPackSources();
+  const equipment = await equipmentPackSources();
   const byName = new Map(equipment.filter((i) => i.type === "weapon").map((i) => [i.name, i]));
 
   // Every pack weapon's ammoType is an array (SetField-compatible).
@@ -1637,22 +1634,26 @@ test("Phase 0.8.1 — WEAPON_RENAMES_081 + Needler constants are well-formed", a
   assert.equal(legacyAmmoTypeString(""),                               "");
 });
 
-test("Phase 0.8.1 — robot monster sources shape match the catalog", async () => {
-  const { robotMonsterSources, parseRobotArmamentToWeapon } =
-    await import("../scripts/compendium-content.mjs");
-
-  const robots = robotMonsterSources();
-  assert.equal(robots.length, 18, "expected 18 robot chassis Actor records");
+test("Phase 0.8.1 — robot chassis catalog entries retain their shape in the committed pack", async () => {
+  // 0.11.x: sourced from the committed `packs/monsters` LevelDB, not
+  // the retired `compendium-content.mjs` factory. `robotMonsterSources`
+  // already filters to the chassis catalog (abilities default to 10 +
+  // biography quotes the catalog's "Power Source" prose), so every
+  // entry here should satisfy the full chassis invariants.
+  const robots = await robotMonsterSources();
+  assert.ok(robots.length >= 18,
+    `expected at least 18 chassis-catalog robot actors, got ${robots.length}`);
 
   for (const robot of robots) {
     assert.equal(robot.type, "monster", `${robot.name} should be a monster actor`);
     assert.ok(robot.name && typeof robot.name === "string");
     assert.ok(robot.system, `${robot.name} needs a system block`);
 
-    // Owner preference: all robots default to ability 10 across the board.
+    // Owner preference: chassis catalog robots default to ability 10
+    // across the board (GM tunes per-encounter).
     for (const key of ["ms", "in", "dx", "ch", "cn", "ps"]) {
       assert.equal(robot.system.attributes[key].value, 10,
-        `${robot.name} ${key} should default to 10 (GM tunes per-encounter)`);
+        `${robot.name} ${key} should default to 10`);
     }
 
     // Robotics metadata set.
@@ -1666,34 +1667,10 @@ test("Phase 0.8.1 — robot monster sources shape match the catalog", async () =
     assert.ok(hp > 0, `${robot.name} HP should be > 0`);
     assert.ok(robot.system.combat.baseAc > 0, `${robot.name} baseAc should be > 0`);
 
-    // Biography includes the journal prose (Power Source line is a good canary).
+    // Biography quotes the journal prose.
     assert.ok(robot.system.biography.value.includes("Power Source"),
       `${robot.name} biography should quote the catalog prose`);
   }
-
-  // Armament parsing: "None" returns null, real strings return weapon items.
-  assert.equal(parseRobotArmamentToWeapon("None"), null);
-  assert.equal(parseRobotArmamentToWeapon(""), null);
-  assert.equal(parseRobotArmamentToWeapon(undefined), null);
-
-  const laser = parseRobotArmamentToWeapon("Laser pistol (3d6, 30/60/120m)");
-  assert.equal(laser.name, "Laser pistol");
-  assert.equal(laser.system.damage.formula, "3d6");
-  assert.equal(laser.system.damage.type, "energy");
-  assert.equal(laser.system.attackType, "energy");
-  assert.equal(laser.system.range.short, 30);
-  assert.equal(laser.system.range.medium, 60);
-  assert.equal(laser.system.range.long, 120);
-
-  const minigun = parseRobotArmamentToWeapon("Defensive minigun (2d6, 40m)");
-  assert.equal(minigun.system.damage.formula, "2d6");
-  assert.equal(minigun.system.damage.type, "physical");
-  // Single-range format yields zero bands; GM tunes if they care.
-
-  // Unknown damage string defaults to 1d6 with physical attack type.
-  const fallback = parseRobotArmamentToWeapon("Some odd mystery gadget");
-  assert.equal(fallback.system.damage.formula, "1d6");
-  assert.equal(fallback.system.attackType, "melee");
 });
 
 /* ------------------------------------------------------------------ */

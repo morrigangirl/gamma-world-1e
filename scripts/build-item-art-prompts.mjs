@@ -6,7 +6,7 @@ import {
   equipmentPackSources,
   mutationPackSources,
   robotMonsterSources
-} from "./compendium-content.mjs";
+} from "./pack-readers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -152,22 +152,22 @@ function buildRobotPrompt(robot) {
 const CATEGORIES = {
   weapons: {
     default_out: path.join(repoRoot, "tmp", "imagegen", "weapon-prompts.jsonl"),
-    sources: () => equipmentPackSources().filter((item) => item.type === "weapon"),
+    sources: async () => (await equipmentPackSources()).filter((item) => item.type === "weapon"),
     promptFor: buildWeaponPrompt
   },
   mutations: {
     default_out: path.join(repoRoot, "tmp", "imagegen", "mutation-prompts.jsonl"),
-    sources: () => mutationPackSources(),
+    sources: async () => mutationPackSources(),
     promptFor: buildMutationPrompt
   },
   robots: {
     default_out: path.join(repoRoot, "tmp", "imagegen", "robot-prompts.jsonl"),
-    sources: () => robotMonsterSources(),
+    sources: async () => robotMonsterSources(),
     promptFor: buildRobotPrompt
   }
 };
 
-function main() {
+async function main() {
   const args = parseArgs(process.argv.slice(2));
   const category = args.category;
   if (!category || !CATEGORIES[category]) {
@@ -179,7 +179,7 @@ function main() {
   const config = CATEGORIES[category];
   const outPath = args.out ? path.resolve(args.out) : config.default_out;
 
-  const sources = config.sources();
+  const sources = await config.sources();
   const seen = new Set();
   const jobs = [];
   for (const item of sources) {
@@ -198,4 +198,7 @@ function main() {
   console.log(`Wrote ${jobs.length} ${category} prompt(s) to ${outPath}`);
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

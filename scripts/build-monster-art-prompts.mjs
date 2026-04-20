@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { monsterPackSources } from "./monster-content.mjs";
+import { monsterPackSources } from "./pack-readers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -86,12 +86,20 @@ function buildPrompt(monster) {
   return lines.join("\n");
 }
 
-const jobs = monsterPackSources().map((monster) => ({
-  prompt: buildPrompt(monster),
-  out: `${slugify(monster.name)}.png`
-}));
+async function main() {
+  const monsters = await monsterPackSources();
+  const jobs = monsters.map((monster) => ({
+    prompt: buildPrompt(monster),
+    out: `${slugify(monster.name)}.png`
+  }));
 
-fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, `${jobs.map((job) => JSON.stringify(job)).join("\n")}\n`, "utf8");
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, `${jobs.map((job) => JSON.stringify(job)).join("\n")}\n`, "utf8");
 
-console.log(`Wrote ${jobs.length} prompt(s) to ${outPath}`);
+  console.log(`Wrote ${jobs.length} prompt(s) to ${outPath}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

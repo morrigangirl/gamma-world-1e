@@ -24,8 +24,7 @@ A personal-use Foundry VTT system for **Gamma World 1st Edition** with working a
 - `Armory and Gear`: primitive weapons, Ancient weapons, armor, explosives, medical devices, vehicles, power cells, and common scavenger equipment.
 - `Sample Actors`: ready-to-import examples for PSH, humanoid, mutated-animal, and robot play.
 - `Monsters and Beasts`: core-book creatures as ready-to-import Monster actors with attacks, defenses, mutations, and encounter-ready notes.
-- `Rulebook Reference`: paraphrased rules summaries and factual tables, organized by chapter and cross-linked to compendium items.
-- `Imported Rulebook`: owner-transcribed rulebook prose, one journal entry per chapter, rebuilt on demand from `ref/rulebook-prose/*.md` (see *Transcribing the Rulebook* below).
+- `Rulebook Reference`: chapter-by-chapter rulebook prose plus factual tables, cross-linked to compendium items. Authored and rebuilt via the content studio (see below).
 - `System Documentation`: quick-start, artifact/robot notes, and encounter workflow docs.
 
 ## Development
@@ -37,10 +36,7 @@ npm run test:foundry:phase2
 npm run test:foundry:phase3
 npm run build:monster-prompts
 npm run build:monster-assets
-npm run extract:rulebook-prose
-npm run import:rulebook-prose
-npm run prose:refresh
-npm run build:compendia
+npm run build:mutation-descriptions
 npm run seal:packs
 ```
 
@@ -48,28 +44,19 @@ npm run seal:packs
 - `npm run test:foundry` runs a browser smoke test against a local Foundry instance at `http://127.0.0.1:30000/`.
 - `npm run test:foundry:phase2` runs the longer end-to-end player workflow validation for chargen, combat, saves, gear, mutations, artifacts, and robot actions.
 - `npm run test:foundry:phase3` runs the encounter/referee workflow validation for terrain encounters, route checks, morale tracking, and the new sheet controls.
-- `npm run build:monster-prompts` regenerates the JSONL prompt batch used to create the monster base art with the explicit image CLI fallback.
+- `npm run build:monster-prompts` regenerates the JSONL prompt batch used to create the monster base art with the explicit image CLI fallback. Reads from the committed `packs/monsters` LevelDB.
 - `npm run build:monster-assets` converts the generated transparent monster base renders in `output/imagegen/monsters/base/` into Foundry-ready portraits and token art in `assets/monsters/`.
-- `npm run extract:rulebook-prose` OCR-extracts `ref/gamma-world-core-rules.pdf` into one Markdown file per chapter under `ref/rulebook-prose/`. Chapter 10 is intentionally skipped (its first page is a map graphic whose OCR output is unusable). Existing hand-edited files without the generator sentinel comment at the top are left alone; marker-bearing files are regenerated from scratch.
-- `npm run import:rulebook-prose` reads `ref/rulebook-prose/*.md` and writes `scripts/rulebook-prose.generated.mjs` — the overlay module consumed by the Imported Rulebook pack generator.
-- `npm run build:compendia` wipes and rebuilds only `packs/imported-rulebook/` from the prose overlay via `@foundryvtt/foundryvtt-cli`'s `compilePack`. No other compendium pack on disk is read, modified, or deleted. Running Foundry is fine as long as the Imported Rulebook compendium window is closed.
-- `npm run prose:refresh` is the one-liner that chains `extract:rulebook-prose && import:rulebook-prose && build:compendia` — use it after polishing transcriptions or after re-extracting from the PDF.
-- `npm run seal:packs` opens every declared compendium pack with `classic-level` and forces a LevelDB compaction so all entries live in sealed SSTables (`.ldb`) rather than the write-ahead log. Run this any time a pack has been regenerated or edited via Foundry before committing — Foundry v13 reliably reads sealed SSTables, but its bundled LevelDB has silently produced empty packs from populated WALs written by older compile pipelines.
+- Parallel `build:weapon-prompts` / `build:mutation-prompts` / `build:robot-prompts` + matching `*-art` / `*-assets` commands drive the weapons, mutations, and robotic-unit asset pipelines the same way.
+- `npm run build:mutation-descriptions` parses `ref/rulebook-prose/06-Updated-Mutations.md` into `module/tables/mutation-descriptions.generated.mjs`, the runtime lookup `buildMutationItemSource` consults when chargen or a dice roll creates a new mutation item. Run after editing the homebrew markdown.
+- `npm run seal:packs` opens every declared compendium pack with `classic-level` and forces a LevelDB compaction so all entries live in sealed SSTables (`.ldb`) rather than the write-ahead log. Run this after any pack-side change — Foundry v13 reliably reads sealed SSTables, but its bundled LevelDB has silently produced empty packs from populated WALs written by older compile pipelines.
 - Named Ancient devices and weapons are normalized as artifacts on import and migration, so older worlds pick up the correct Analyze / Use workflows without hand-editing item data.
 - Bundled actors and monsters ship with configured prototype tokens, and newly created world actors inherit the same linked/friendly or hostile defaults automatically.
 
-## Transcribing the Rulebook
+## Authoring Pack Content
 
-The `Imported Rulebook` compendium is populated from owner-transcribed Markdown under `ref/rulebook-prose/`. The standard cycle:
+Pack content (mutations, equipment, sample actors, monsters, rulebook prose, system docs, encounter & roll tables, cryptic alliances, robot chassis) is authored in the **content studio** under `tools/content-studio/`. `tools/content-studio/content/*.json` is the source of truth; `tools/content-studio/scripts/build.mjs` compiles it into the repo-level `packs/` LevelDB that Foundry ships. See `tools/content-studio/README.md` for the full workflow (extract, edit, validate, publish).
 
-1. **Extract** — `npm run extract:rulebook-prose` OCRs `ref/gamma-world-core-rules.pdf` into nine chapter files (`01-introduction.md` through `09-experience.md`). The extractor inserts a sentinel comment at the top of each file; regeneration only overwrites files that still carry the sentinel, so hand-edited chapters are safe if you remove the comment before editing.
-2. **Proofread** — open each file and clean up OCR artifacts (OCRmyPDF + Tesseract produce the occasional garbled word). The importer supports a small Markdown subset: `## Section` → new page, `### Subheading` → `<h4>`, `**bold**`, `*italic*`, backtick `code`, bulleted / numbered lists, and pipe tables. Anything else passes through as plain text.
-3. **Import** — `npm run import:rulebook-prose` converts the Markdown into the `RULEBOOK_PROSE` overlay at `scripts/rulebook-prose.generated.mjs`.
-4. **Build** — `npm run build:compendia` rebuilds `packs/imported-rulebook/` from the overlay. No other pack is touched.
-
-For a full refresh in one shot: `npm run prose:refresh`.
-
-The new pack appears in Foundry's Compendium browser as **Imported Rulebook** alongside the existing **Rulebook Reference** pack (the paraphrased summary with factual tables). Both are JournalEntry packs; they do not conflict.
+The retired source-of-truth scripts (`build-compendia.mjs`, `compendium-content.mjs`, `monster-content.mjs`, `rulebook-content.mjs`) were removed in 0.11.x once the content studio covered every pack; tests and art-prompt builders now read the committed `packs/` directly via `classic-level`.
 
 ## Manual Validation
 
