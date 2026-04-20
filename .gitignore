@@ -37,3 +37,12 @@ packs/*/LOCK
 # committing them preserves a "this pack was in a bad state once"
 # signal that isn't useful to downstream consumers.
 packs/*/lost/
+
+# LevelDB operational trace logs. Human-readable audit of open/
+# compact/close events written every time any tool (Foundry, seal-
+# packs.mjs, classic-level) touches the DB. Content-free and rewritten
+# on every pass — keeping them out of git avoids a seal-churn diff
+# every time someone reseals. The numbered *.log files alongside (WAL)
+# DO carry pack content and stay tracked.
+packs/*/LOG
+packs/*/LOG.old
