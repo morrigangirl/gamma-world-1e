@@ -22,8 +22,16 @@ function clampAttribute(value, fallback = 10) {
   return Math.max(3, Math.min(18, Math.round(numeric)));
 }
 
+/**
+ * 0.11.0: metric move. `value` is already "meters per round" — the pre-
+ * 0.11 implementation multiplied by 10 to fit into the legacy 120-unit
+ * scale; that factor is gone now. Non-zero inputs floor at 1 m/round
+ * (same rule as `legacyToMeters` in module/movement-conversion.mjs).
+ */
 function move(value) {
-  return Math.max(10, Math.round(Number(value) * 10));
+  const n = Math.round(Number(value) || 0);
+  if (n === 0) return 0;
+  return Math.max(1, n);
 }
 
 function levelFromHitDice(hitDice = 1, hp = 0) {

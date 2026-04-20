@@ -130,18 +130,18 @@
         </label>
       </div>
       <div class="gamma-world__resource">
-        <label>{{localize "GAMMA_WORLD.Resource.Movement"}}
+        <label>{{localize "GAMMA_WORLD.Resource.Movement"}} (m)
           <input type="number" name="system.details.movement" value="{{system.details.movement}}" />
-          <span class="gamma-world__derived-note">{{derived.movement}} effective</span>
+          <span class="gamma-world__derived-note">{{derived.movement}} m effective</span>
         </label>
       </div>
       <div class="gamma-world__resource">
-        <label>{{localize "GAMMA_WORLD.Resource.Flight"}}
+        <label>{{localize "GAMMA_WORLD.Resource.Flight"}} (m)
           <input type="number" value="{{derived.flightSpeed}}" readonly />
         </label>
       </div>
       <div class="gamma-world__resource">
-        <label>{{localize "GAMMA_WORLD.Resource.Jump"}}
+        <label>{{localize "GAMMA_WORLD.Resource.Jump"}} (m)
           <input type="number" value="{{derived.jumpSpeed}}" readonly />
         </label>
       </div>
@@ -529,7 +529,7 @@
         <article class="gamma-world__summary-card">
           <h4>{{localize "GAMMA_WORLD.Resource.AC"}}</h4>
           <p class="gamma-world__summary-value">{{derived.ac}}</p>
-          <p class="gamma-world__summary-note">{{localize "GAMMA_WORLD.Resource.Movement"}} {{derived.movement}}</p>
+          <p class="gamma-world__summary-note">{{localize "GAMMA_WORLD.Resource.Movement"}} {{derived.movement}} m</p>
         </article>
         <article class="gamma-world__summary-card">
           <h4>{{localize "GAMMA_WORLD.Sheet.Protections"}}</h4>

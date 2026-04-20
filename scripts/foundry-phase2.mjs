@@ -158,7 +158,7 @@ try {
       name: `Phase2 Target ${runId}`,
       type: "character",
       system: {
-        details: { type: "humanoid", animalForm: "", level: 1, xp: 0, movement: 120, alliance: "", role: "target dummy", speech: "common", creatureClass: "" },
+        details: { type: "humanoid", animalForm: "", level: 1, xp: 0, movement: 10, alliance: "", role: "target dummy", speech: "common", creatureClass: "" },
         attributes: {
           ms: { value: 8, mod: 0, save: 0 },
           in: { value: 8, mod: 0, save: 0 },

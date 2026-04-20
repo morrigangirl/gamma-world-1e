@@ -4,6 +4,7 @@ import { getMutationRule } from "./mutation-rules.mjs";
 import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
 import { GammaWorldConfig } from "./apps/gm-automation-config.mjs";
+import { legacyToMeters } from "./movement-conversion.mjs";
 import {
   AMMO_GEAR_BY_TYPE,
   WEAPON_RENAMES_081,
@@ -348,7 +349,55 @@ function mutationUpdateData(item) {
   return update;
 }
 
-async function migrateItem(item) {
+/**
+ * 0.11.0 — convert an armor item's per-round distance mobility fields
+ * from legacy to metric. `mobility.flight` and `mobility.jump` are
+ * distances (legacy anchor 120 = 10 m/round, applied via
+ * `legacyToMeters`). `mobility.lift` is a tonnage / ratio and is
+ * explicitly left untouched. No-op for non-armor items.
+ *
+ * Safe for actor-owned items and loose world items. Caller is
+ * expected to gate on `storedVersion < 0.11.0` so the conversion
+ * runs exactly once per world.
+ */
+async function migrateArmorMobilityToMeters0110(item) {
+  if (item.type !== "armor") return;
+  const update = {};
+  const flight = Number(item.system?.mobility?.flight ?? 0);
+  if (flight > 0) {
+    const converted = legacyToMeters(flight);
+    if (converted !== flight) update["system.mobility.flight"] = converted;
+  }
+  const jump = Number(item.system?.mobility?.jump ?? 0);
+  if (jump > 0) {
+    const converted = legacyToMeters(jump);
+    if (converted !== jump) update["system.mobility.jump"] = converted;
+  }
+  if (Object.keys(update).length) {
+    await item.update(update, { gammaWorldSync: true });
+  }
+}
+
+/**
+ * 0.11.0 — convert an actor's base movement from legacy to metric.
+ * Operates on `system.details.movement` (the only movement-bearing
+ * field the character/monster schema exposes; armor mobility rides on
+ * owned items, swept separately via `migrateArmorMobilityToMeters0110`).
+ *
+ * Caller is expected to gate on `storedVersion < 0.11.0`.
+ */
+async function migrateActorMovementToMeters0110(actor) {
+  const current = Number(actor.system?.details?.movement ?? 0);
+  const converted = legacyToMeters(current);
+  if (converted !== current) {
+    await actor.update(
+      { "system.details.movement": converted },
+      { gammaWorldSync: true }
+    );
+  }
+}
+
+async function migrateItem(item, options = {}) {
   const update = equipmentMigrationUpdate(item);
 
   if (item.type === "weapon") {
@@ -403,6 +452,12 @@ async function migrateItem(item) {
 
   if (Object.keys(update).length) {
     await item.update(update, { gammaWorldSync: true });
+  }
+
+  // 0.11.0: armor mobility.flight / mobility.jump — legacy → metric.
+  // Gated by the caller; only fires on worlds upgrading from <0.11.0.
+  if (options.convertMovementToMeters) {
+    await migrateArmorMobilityToMeters0110(item);
   }
 }
 
@@ -515,7 +570,7 @@ async function removeLegacyBroadcastPowerItems() {
   }
 }
 
-async function migrateActor(actor) {
+async function migrateActor(actor, options = {}) {
   const update = {};
   const hpBase = Number(actor.system.resources?.hp?.base ?? 0);
   const hpMax = Number(actor.system.resources?.hp?.max ?? 0);
@@ -594,8 +649,16 @@ async function migrateActor(actor) {
     await actor.update(update, { gammaWorldSync: true });
   }
 
+  // 0.11.0: convert actor base movement legacy → metric. Gated by the
+  // caller; the item-level sweep below also propagates the option so
+  // every armor item gets its mobility.flight / mobility.jump swept in
+  // the same pass.
+  if (options.convertMovementToMeters) {
+    await migrateActorMovementToMeters0110(actor);
+  }
+
   for (const item of actor.items) {
-    await migrateItem(item);
+    await migrateItem(item, options);
   }
 
   // 0.5.0: convert inline ammo counters into ammo gear items.
@@ -831,12 +894,20 @@ export async function migrateWorld() {
   // when temp-effect migration converts legacy flag entries into AEs.
   globalThis.gammaWorldTempEffectsMigrated = 0;
 
+  // 0.11.0: one-shot legacy-to-metric movement conversion. Fires only on
+  // worlds upgrading from below 0.11.0; past the gate, storedVersion is
+  // bumped at the end of this function and subsequent loads skip.
+  const itemMigrationOptions = {
+    convertMovementToMeters: compareSemver(storedVersion, "0.11.0") < 0
+  };
+  const actorMigrationOptions = { ...itemMigrationOptions };
+
   for (const item of game.items.contents) {
-    await migrateItem(item);
+    await migrateItem(item, itemMigrationOptions);
   }
 
   for (const actor of game.actors.contents) {
-    await migrateActor(actor);
+    await migrateActor(actor, actorMigrationOptions);
   }
 
   // 0.5.0: remove the deprecated Broadcast Power Station item.

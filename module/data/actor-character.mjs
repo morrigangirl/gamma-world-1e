@@ -79,7 +79,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         animalForm: str({ initial: "" }),
         level:      int({ initial: 1, min: 1 }),
         xp:         int({ initial: 0, min: 0 }),
-        movement:   int({ initial: 120 }),
+        // 0.11.0: metric move. Default human 10 m/round (was 120 legacy).
+        movement:   int({ initial: 10 }),
         alliance:   str({ initial: "" }),
         role:       str({ initial: "adventurer" }),
         speech:     str({ initial: "common" }),

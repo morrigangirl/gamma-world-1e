@@ -245,8 +245,8 @@ function formatArmorItem(item) {
     ? unknownArtifactUseLabel()
     : compact(
     fieldMode !== "none" ? `${fieldMode} field ${item.system.field.capacity}` : "",
-    Number(item.system.mobility?.flight ?? 0) > 0 ? `flight ${item.system.mobility.flight}` : "",
-    Number(item.system.mobility?.jump ?? 0) > 0 ? `jump ${item.system.mobility.jump}` : "",
+    Number(item.system.mobility?.flight ?? 0) > 0 ? `flight ${item.system.mobility.flight}m` : "",
+    Number(item.system.mobility?.jump ?? 0) > 0 ? `jump ${item.system.mobility.jump}m` : "",
     Number(item.system.mobility?.lift ?? 0) > 0 ? `lift ${item.system.mobility.lift}` : "",
     item.system.offense?.punchDamage ? `punch ${item.system.offense.punchDamage}` : "",
     protections.length ? `protects vs ${protections.join(", ")}` : ""

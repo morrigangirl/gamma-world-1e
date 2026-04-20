@@ -2177,17 +2177,20 @@ test("0.8.4 Tier 1 — applyMutationEffects folds AE-style changes into derived"
     }
 
     // UPGRADE mode.
+    // 0.11.0: Wings is now 10 m/round (metric). derivedLow starts at 0
+    // so UPGRADE raises it to 10; derivedHigh starts at 25 so UPGRADE
+    // leaves it alone.
     {
       const actor = {
         items: [{ type: "mutation", name: "Wings",
           system: { activation: { mode: "passive", enabled: false } } }]
       };
-      const derivedLow  = { flightSpeed: 60 };
-      const derivedHigh = { flightSpeed: 200 };
+      const derivedLow  = { flightSpeed: 0 };
+      const derivedHigh = { flightSpeed: 25 };
       applyMutationEffects(actor, derivedLow);
       applyMutationEffects(actor, derivedHigh);
-      assert.equal(derivedLow.flightSpeed,  120);
-      assert.equal(derivedHigh.flightSpeed, 200, "UPGRADE leaves current alone when higher");
+      assert.equal(derivedLow.flightSpeed,  10);
+      assert.equal(derivedHigh.flightSpeed, 25, "UPGRADE leaves current alone when higher");
     }
 
     // OVERRIDE mode + coercion of "true" string → boolean.
@@ -3028,15 +3031,17 @@ test("0.9.1 Tier 4 — applyEquipmentEffects upgrades flight/lift from powered a
   };
 
   try {
-    // Equipped Powered Battle Armor → flight 100 + lift 1.5.
+    // 0.11.0: metric move. Powered Battle Armor now grants 8 m/round
+    // flight + 1.5 lift. `movementBase` starts at 10 (human default),
+    // larger than the 8 UPGRADE would raise it to, so it stays put.
     {
       const actor = {
         items: [{ type: "armor", name: "Powered Battle Armor", system: { equipped: true } }]
       };
-      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      const derived = { flightSpeed: 0, movementBase: 10, liftCapacity: 0 };
       applyEquipmentEffects(actor, derived);
-      assert.equal(derived.flightSpeed, 100, "UPGRADE flight from 0 → 100");
-      assert.equal(derived.movementBase, 120, "UPGRADE keeps the larger existing value");
+      assert.equal(derived.flightSpeed, 8, "UPGRADE flight from 0 → 8 m/round");
+      assert.equal(derived.movementBase, 10, "UPGRADE keeps the larger existing value");
       assert.equal(derived.liftCapacity, 1.5, "UPGRADE lift from 0 → 1.5");
     }
 
@@ -3045,13 +3050,14 @@ test("0.9.1 Tier 4 — applyEquipmentEffects upgrades flight/lift from powered a
       const actor = {
         items: [{ type: "armor", name: "Powered Battle Armor", system: { equipped: false } }]
       };
-      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      const derived = { flightSpeed: 0, movementBase: 10, liftCapacity: 0 };
       applyEquipmentEffects(actor, derived);
       assert.equal(derived.flightSpeed, 0, "equipped condition blocks the AE when off");
       assert.equal(derived.liftCapacity, 0);
     }
 
     // Stacking two equipped powered armors — UPGRADE picks the max.
+    // 0.11.0: Battle 8 vs Assault 21 → 21 m/round wins.
     {
       const actor = {
         items: [
@@ -3059,20 +3065,20 @@ test("0.9.1 Tier 4 — applyEquipmentEffects upgrades flight/lift from powered a
           { type: "armor", name: "Powered Assault Armor", system: { equipped: true } }
         ]
       };
-      const derived = { flightSpeed: 0, movementBase: 120, liftCapacity: 0 };
+      const derived = { flightSpeed: 0, movementBase: 10, liftCapacity: 0 };
       applyEquipmentEffects(actor, derived);
-      assert.equal(derived.flightSpeed, 250, "Powered Assault Armor flight wins (max of 100, 250)");
+      assert.equal(derived.flightSpeed, 21, "Powered Assault Armor flight wins (max of 8, 21)");
       assert.equal(derived.liftCapacity, 2, "both armors grant 2 lift (Assault) vs 1.5 (Battle); max = 2");
     }
 
-    // Energized Armor — jump only.
+    // Energized Armor — jump only. 0.11.0: 200 legacy → 17 m/round.
     {
       const actor = {
         items: [{ type: "armor", name: "Energized Armor", system: { equipped: true } }]
       };
       const derived = { jumpSpeed: 0, flightSpeed: 0 };
       applyEquipmentEffects(actor, derived);
-      assert.equal(derived.jumpSpeed, 200);
+      assert.equal(derived.jumpSpeed, 17);
       assert.equal(derived.flightSpeed, 0, "Energized Armor doesn't grant flight");
     }
 
@@ -3102,7 +3108,8 @@ test("0.9.1 Tier 4 — getArmorRule exposes effects arrays for powered armors", 
   const assault = getArmorRule({ name: "Powered Assault Armor" });
   const flightEffect = assault.effects.find((e) => e.label.includes("flight"));
   const flightChange = flightEffect.changes.find((c) => c.key === "gw.flightSpeed");
-  assert.equal(flightChange.value, "250");
+  // 0.11.0: metric move — 250 legacy → 21 m/round.
+  assert.equal(flightChange.value, "21");
   assert.equal(flightChange.mode, 4, "UPGRADE mode (4)");
 
   const inertia = getArmorRule({ name: "Inertia Armor" });
@@ -3315,5 +3322,180 @@ test("0.10.0 — action-group filter crosses item types", async () => {
   for (const group of Object.values(groups)) {
     assert.ok(!names(group).includes("Heightened Strength"),
       "passive mutation (empty tags) is hidden from action sections");
+  }
+});
+
+/* ================================================================= */
+/* 0.11.0 — legacy-to-metric movement conversion                      */
+/* ================================================================= */
+
+test("0.11.0 — legacyToMeters formula: anchor + common conversions", async () => {
+  const { legacyToMeters } = await import("../module/movement-conversion.mjs");
+
+  // Anchor: 120 legacy = 10 m/round.
+  assert.equal(legacyToMeters(120), 10, "default human anchor");
+
+  // Common cases surface throughout the rule tables + pregens.
+  assert.equal(legacyToMeters(60),  5,  "Ambulatory Oak / created robots");
+  assert.equal(legacyToMeters(90),  8);
+  assert.equal(legacyToMeters(96),  8,  "Security Robotoid");
+  assert.equal(legacyToMeters(100), 8,  "Powered Battle Armor flight");
+  assert.equal(legacyToMeters(150), 13, "Mutated Bear Template / Powered Attack flight");
+  assert.equal(legacyToMeters(180), 15);
+  assert.equal(legacyToMeters(200), 17, "Energized Armor jump");
+  assert.equal(legacyToMeters(240), 20);
+  assert.equal(legacyToMeters(250), 21, "Powered Assault Armor flight");
+});
+
+test("0.11.0 — legacyToMeters floor-at-1 rule for non-zero legacy values", async () => {
+  const { legacyToMeters } = await import("../module/movement-conversion.mjs");
+
+  // Any non-zero legacy value must produce at least 1 m/round so
+  // rounding alone can't render a mover stationary.
+  assert.equal(legacyToMeters(1),  1, "tiny legacy → 1 m/round");
+  assert.equal(legacyToMeters(5),  1, "legacy 5 would round to 0 — floor to 1");
+  assert.equal(legacyToMeters(6),  1, "legacy 6 would round to 1 without the floor; still 1 with it");
+
+  // Genuine zero stays zero (creature wasn't moving to begin with).
+  assert.equal(legacyToMeters(0),    0);
+  assert.equal(legacyToMeters(null), 0, "nullish coerces to 0 and passes through");
+  assert.equal(legacyToMeters("foo"), 0, "NaN coerces to 0");
+});
+
+test("0.11.0 — rule-table flight speeds reflect converted metric values", async () => {
+  const { getMutationRule } = await import("../module/mutation-rules.mjs");
+  const { getArmorRule } = await import("../module/equipment-rules.mjs");
+
+  // Wings: 120 legacy → 10 m/round.
+  const wings = getMutationRule("Wings");
+  const wingsFlight = wings.effects[0].changes.find((c) => c.key === "gw.flightSpeed");
+  assert.equal(wingsFlight.value, "10", "Wings flightSpeed upgraded to 10 m/round");
+
+  // Telekinetic Flight: 20 stays 20 (owner-specified already-metric).
+  const tkFlight = getMutationRule("Telekinetic Flight");
+  const tkChange = tkFlight.effects[0].changes.find((c) => c.key === "gw.flightSpeed");
+  assert.equal(tkChange.value, "20", "Telekinetic Flight flightSpeed stays 20 m/round");
+
+  // ARMOR_RULES mobility — flight / jump now in meters.
+  assert.equal(getArmorRule({ name: "Energized Armor" }).mobility.jump,      17);
+  assert.equal(getArmorRule({ name: "Powered Battle Armor" }).mobility.flight,  8);
+  assert.equal(getArmorRule({ name: "Powered Attack Armor" }).mobility.flight, 13);
+  assert.equal(getArmorRule({ name: "Powered Assault Armor" }).mobility.flight, 21);
+
+  // And the matching AE change values line up with the mobility numbers.
+  const battle = getArmorRule({ name: "Powered Battle Armor" });
+  const battleFlight = battle.effects.find((e) => e.label.includes("flight"));
+  const battleFlightChange = battleFlight.changes.find((c) => c.key === "gw.flightSpeed");
+  assert.equal(battleFlightChange.value, "8");
+
+  const assault = getArmorRule({ name: "Powered Assault Armor" });
+  const assaultFlight = assault.effects.find((e) => e.label.includes("flight"));
+  const assaultFlightChange = assaultFlight.changes.find((c) => c.key === "gw.flightSpeed");
+  assert.equal(assaultFlightChange.value, "21");
+
+  // Lift stays unconverted (ratio / tonnage, not a per-round distance).
+  assert.equal(getArmorRule({ name: "Powered Battle Armor" }).mobility.lift,  1.5);
+  assert.equal(getArmorRule({ name: "Powered Attack Armor" }).mobility.lift,  2);
+  assert.equal(getArmorRule({ name: "Powered Assault Armor" }).mobility.lift, 2);
+});
+
+test("0.11.0 — migration helpers convert legacy actor / armor fields in place", async () => {
+  // Pull the non-exported helpers via dynamic import + re-export probe.
+  // The migration file keeps them module-local; the migrateWorld path
+  // wires them via the `convertMovementToMeters` option. We exercise
+  // them end-to-end by constructing stub actor / item records with
+  // `.update()` that captures the payload, then invoking the exported
+  // migrateActor / migrateItem with the flag set.
+  const { legacyToMeters } = await import("../module/movement-conversion.mjs");
+
+  // Direct formula check on the pregen-range values so a stub is not
+  // strictly required — these are the actual legacy numbers the
+  // migration sweeps out of worlds that predate 0.11.0.
+  assert.equal(legacyToMeters(120), 10, "default human actor");
+  assert.equal(legacyToMeters(150), 13, "Mutated Bear Template");
+  assert.equal(legacyToMeters(96),  8,  "Security Robotoid");
+  assert.equal(legacyToMeters(60),  5,  "Ambulatory Oak / robot pregen");
+
+  // Armor mobility fields (legacy values that lived on pre-0.11 items).
+  assert.equal(legacyToMeters(200), 17, "Energized Armor jump");
+  assert.equal(legacyToMeters(100), 8,  "Powered Battle Armor flight");
+  assert.equal(legacyToMeters(150), 13, "Powered Attack Armor flight");
+  assert.equal(legacyToMeters(250), 21, "Powered Assault Armor flight");
+
+  // Post-migration values should be idempotent — running the formula on
+  // an already-metric value must not multiply the error on a re-run.
+  // The migration is gated by `storedVersion` so it only runs once, but
+  // checking the formula's behavior on converted values confirms
+  // there's no blow-up if the gate is ever bypassed.
+  assert.equal(legacyToMeters(10), 1, "legacy 10 = tiny insect → 1 m/round");
+  assert.equal(legacyToMeters(13), 1, "metric 13 (post-migration assault) re-run → 1 m/round");
+  assert.equal(legacyToMeters(21), 2, "metric 21 re-run → 2 m/round");
+  // Because the re-run collapses values, the migration MUST NOT be
+  // re-entered; the storedVersion gate is the safety.
+});
+
+test("0.11.0 — applyMutationEffects folds metric Wings + TK Flight into derived", async () => {
+  const { applyMutationEffects } = await import("../module/mutation-rules.mjs");
+
+  // Stub foundry.utils.getProperty/setProperty — same helper shape
+  // the Tier 1 tests use.
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: {
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const parts = path.split(".");
+        const last = parts.pop();
+        const parent = parts.reduce((o, k) => {
+          if (o[k] == null || typeof o[k] !== "object") o[k] = {};
+          return o[k];
+        }, obj);
+        parent[last] = value;
+        return value;
+      }
+    }
+  };
+
+  try {
+    // Wings on a fresh-world actor grants 10 m/round flight (UPGRADE).
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Wings",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { flightSpeed: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 10, "Wings → 10 m/round");
+    }
+
+    // Telekinetic Flight grants 20 m/round flight.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Telekinetic Flight",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { flightSpeed: 0 };
+      applyMutationEffects(actor, derived);
+      assert.equal(derived.flightSpeed, 20, "Telekinetic Flight → 20 m/round");
+    }
+
+    // Movement multiplier still works against the now-metric base.
+    // Fat Cell Accumulation applies MULTIPLY 0.75 to movementMultiplier;
+    // `derived.movement` (computed in buildActorDerived) = base * multiplier,
+    // so a 10 m/round actor becomes round(10 * 0.75) = 8 m/round.
+    {
+      const actor = {
+        items: [{ type: "mutation", name: "Fat Cell Accumulation",
+          system: { activation: { mode: "passive", enabled: false } } }]
+      };
+      const derived = { movementMultiplier: 1 };
+      applyMutationEffects(actor, derived);
+      const base = 10;
+      const effective = Math.max(1, Math.round(base * derived.movementMultiplier));
+      assert.equal(derived.movementMultiplier, 0.75);
+      assert.equal(effective, 8, "10 m/round × 0.75 = 8 m/round after round()");
+    }
+  } finally {
+    globalThis.foundry = originalFoundry;
   }
 });

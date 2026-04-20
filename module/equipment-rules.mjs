@@ -277,13 +277,14 @@ const grantedItemSyncs = new Map();
 
 const ARMOR_RULES = {
   "Energized Armor": {
-    mobility: { jump: 200 },
+    // 0.11.0: metric move. jump 200 legacy → 17 m/round (legacyToMeters).
+    mobility: { jump: 17 },
     field: { mode: "none", capacity: 0 },
     effects: [
       { label: "Energized Armor — jump",
         condition: "equipped",
         changes: [
-          { key: "gw.jumpSpeed", mode: AE_MODE.UPGRADE, value: "200", priority: 20 }
+          { key: "gw.jumpSpeed", mode: AE_MODE.UPGRADE, value: "17", priority: 20 }
         ] }
     ]
   },
@@ -301,14 +302,16 @@ const ARMOR_RULES = {
   },
   "Powered Battle Armor": {
     field: { mode: "full", capacity: 30 },
-    mobility: { flight: 100, lift: 1.5 },
+    // 0.11.0: metric move. flight 100 legacy → 8 m/round. Lift stays a
+    // tonnage/ratio (unchanged).
+    mobility: { flight: 8, lift: 1.5 },
     offense: { punchDamage: "8d6" },
     effects: [
       { label: "Powered Battle Armor — flight",
         condition: "equipped",
         changes: [
-          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "100", priority: 20 },
-          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "100", priority: 20 }
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "8", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "8", priority: 20 }
         ] },
       { label: "Powered Battle Armor — lift",
         condition: "equipped",
@@ -329,14 +332,15 @@ const ARMOR_RULES = {
   },
   "Powered Attack Armor": {
     field: { mode: "full", capacity: 40 },
-    mobility: { flight: 150, lift: 2 },
+    // 0.11.0: metric move. flight 150 legacy → 13 m/round.
+    mobility: { flight: 13, lift: 2 },
     offense: { punchDamage: "9d6" },
     effects: [
       { label: "Powered Attack Armor — flight",
         condition: "equipped",
         changes: [
-          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "150", priority: 20 },
-          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "150", priority: 20 }
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "13", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "13", priority: 20 }
         ] },
       { label: "Powered Attack Armor — lift",
         condition: "equipped",
@@ -392,14 +396,15 @@ const ARMOR_RULES = {
   },
   "Powered Assault Armor": {
     field: { mode: "full", capacity: 50 },
-    mobility: { flight: 250, lift: 2 },
+    // 0.11.0: metric move. flight 250 legacy → 21 m/round.
+    mobility: { flight: 21, lift: 2 },
     offense: { punchDamage: "9d6" },
     effects: [
       { label: "Powered Assault Armor — flight",
         condition: "equipped",
         changes: [
-          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "250", priority: 20 },
-          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "250", priority: 20 }
+          { key: "gw.flightSpeed",  mode: AE_MODE.UPGRADE, value: "21", priority: 20 },
+          { key: "gw.movementBase", mode: AE_MODE.UPGRADE, value: "21", priority: 20 }
         ] },
       { label: "Powered Assault Armor — lift",
         condition: "equipped",

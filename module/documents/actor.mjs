@@ -86,9 +86,10 @@ export function buildActorDerived(actor) {
     radiationResistance: clampResistance(system.attributes.cn.value),
     poisonResistance: clampResistance(system.attributes.cn.value),
     mentalAttackStrength: Math.round(Number(system.attributes.ms.value) || 0),
-    movementBase: roundMovement(system.details.movement ?? 120),
+    // 0.11.0: metric move — default human 10 m/round (was 120 legacy).
+    movementBase: roundMovement(system.details.movement ?? 10),
     movementMultiplier: 1,
-    movement: roundMovement(system.details.movement ?? 120),
+    movement: roundMovement(system.details.movement ?? 10),
     initiative: actorInitiativeModifier(actor),
     toHitBonus: baseBonuses.toHitBonus,
     meleeToHitBonus: baseBonuses.meleeToHitBonus ?? 0,
@@ -311,7 +312,8 @@ export class GammaWorldActor extends Actor {
 
     if (encumbered || overloaded) {
       const moveFactor = overloaded ? 0 : 0.5;
-      this.gw.movement = Math.round((this.gw.movement ?? system.details.movement ?? 120) * moveFactor);
+      // 0.11.0: metric move — default human 10 m/round (was 120 legacy).
+      this.gw.movement = Math.round((this.gw.movement ?? system.details.movement ?? 10) * moveFactor);
       this.gw.movementMultiplier = (this.gw.movementMultiplier ?? 1) * moveFactor;
       this.gw.toHitBonus = (this.gw.toHitBonus ?? 0) - 1;
       if (this.gw.dxAcBonus) this.gw.dxAcBonus = 0;

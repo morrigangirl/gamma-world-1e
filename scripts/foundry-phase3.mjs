@@ -97,7 +97,7 @@ try {
         animalForm: "Hound",
         level: 2,
         xp: 0,
-        movement: 120,
+        movement: 10,
         alliance: "",
         role: "encounter test",
         speech: "",

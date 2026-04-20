@@ -123,7 +123,7 @@ try {
 	      name: targetName,
 	      type: "character",
       system: {
-        details: { type: "humanoid", animalForm: "", level: 2, xp: 0, movement: 120, alliance: "" },
+        details: { type: "humanoid", animalForm: "", level: 2, xp: 0, movement: 10, alliance: "" },
         attributes: {
           ms: { value: 10, mod: 0, save: 0 },
           in: { value: 10, mod: 0, save: 0 },
@@ -148,7 +148,7 @@ try {
 	      name: `${targetName} Unlinked`,
 	      type: "character",
 	      system: {
-	        details: { type: "humanoid", animalForm: "", level: 1, xp: 0, movement: 120, alliance: "" },
+	        details: { type: "humanoid", animalForm: "", level: 1, xp: 0, movement: 10, alliance: "" },
 	        attributes: {
 	          ms: { value: 9, mod: 0, save: 0 },
 	          in: { value: 9, mod: 0, save: 0 },
@@ -173,7 +173,7 @@ try {
         name: `Smoke Test Robot ${runId}`,
         type: "character",
         system: {
-          details: { type: "robot", animalForm: "", level: 4, xp: 0, movement: 96, alliance: "Ancients", role: "security robot", speech: "command speech", creatureClass: "Robotic Unit" },
+          details: { type: "robot", animalForm: "", level: 4, xp: 0, movement: 8, alliance: "Ancients", role: "security robot", speech: "command speech", creatureClass: "Robotic Unit" },
           attributes: {
             ms: { value: 9, mod: 0, save: 0 },
             in: { value: 12, mod: 0, save: 0 },

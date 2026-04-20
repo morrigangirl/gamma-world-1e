@@ -699,8 +699,9 @@ export const MUTATION_RULES = {
     mode: "passive",
     actionTypes: ["movement"],
     effects: [
+      // 0.11.0: metric move. 120 legacy → 10 m/round (default human anchor).
       { label: "Wings — flight speed",
-        changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "120", priority: 20 }] }
+        changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "10", priority: 20 }] }
     ]
   },
   "Shorter": {
