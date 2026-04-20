@@ -5,28 +5,20 @@
     items      Array of embedded item docs to render.
     variant    One of "attack" | "defense" | "utility" | "movement" | "buff" | "heal"
                — used as a CSS modifier on the row so each section can style
-               differently (e.g. danger-red for attacks, green for heals).
+               differently.
 
-  Each row shows:
-    - item icon
-    - display name
-    - small metadata line (range / damage / cooldown as available)
-    - save / damage / heal badges based on the item's actionTypes
-    - Use button that calls `item.use()` via the sheet's existing
-      `useItem` action handler (polymorphic across item types).
+  Layout fits inside the existing 2-column `.gamma-world__item` grid
+  (body | actions). The icon lives INSIDE `.gamma-world__item-head` so
+  it doesn't break the grid; explicit width/height keeps Foundry's
+  512x512 default assets from rendering full-size.
 --}}
 <ul class="gamma-world__items gamma-world__action-list gamma-world__action-list--{{variant}}">
   {{#each items as |item|}}
     <li class="gamma-world__item draggable" data-item-id="{{item.id}}">
-      {{#if item.img}}<img class="gamma-world__item-icon" src="{{item.img}}" alt="" />{{/if}}
       <div class="gamma-world__item-body">
         <div class="gamma-world__item-head">
-          <span class="gamma-world__item-name">{{item.gwDisplayName}}{{#unless item.gwDisplayName}}{{item.name}}{{/unless}}</span>
-          <span class="gamma-world__item-type gamma-world__badge">{{item.type}}</span>
-          {{!-- Render each action-type tag as a badge EXCEPT the variant that
-               names the enclosing section (avoid redundancy: no "attack"
-               badge on an Attack row). Supplementary tags (save / damage /
-               heal) still surface for context. --}}
+          {{#if item.img}}<img src="{{item.img}}" alt="" width="20" height="20" style="flex: 0 0 20px; width: 20px; height: 20px; object-fit: contain;" />{{/if}}
+          <span class="gamma-world__item-name">{{#if item.gwDisplayName}}{{item.gwDisplayName}}{{else}}{{item.name}}{{/if}}</span>
           {{#each item.system.actionTypes as |tag|}}
             {{#unless (gwEq tag ../variant)}}
               <span class="gamma-world__badge gamma-world__badge--{{tag}}">{{tag}}</span>
@@ -36,13 +28,10 @@
         {{#if item.gwDetailLine}}
           <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
         {{/if}}
-        {{#if item.gwRuleLine}}
-          <div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>
-        {{/if}}
       </div>
       <span class="gamma-world__item-actions">
         <button type="button" data-action="useItem" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Button.Use"}}">
-          {{#if item.gwActionLabel}}{{item.gwActionLabel}}{{else}}{{localize "GAMMA_WORLD.Button.Use"}}{{/if}}
+          <i class="fas fa-bolt"></i>
         </button>
       </span>
     </li>
