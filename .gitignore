@@ -29,3 +29,11 @@ tmp/
 # control. A committed LOCK file can cause the pack to fail to open on
 # another machine.
 packs/*/LOCK
+
+# LevelDB recovery quarantine. When LevelDB opens a pack and can't
+# integrate some record, it moves it to packs/<name>/lost/ and
+# continues. The artifact is always cosmetic for a freshly-built pack
+# (we saw every lost/ folder hold a single 0-byte log file), but
+# committing them preserves a "this pack was in a bad state once"
+# signal that isn't useful to downstream consumers.
+packs/*/lost/
