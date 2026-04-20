@@ -97,6 +97,15 @@ Hooks.once("init", () => {
   registerAnimationHooks();
   registerSoundCueHooks();
   registerConditionTicker();
+
+  // 0.10.0 — preload / register Handlebars partials the character sheet
+  // embeds via {{> ... }}. Foundry's HandlebarsApplicationMixin loads
+  // top-level PARTS templates automatically; partials referenced inside
+  // those templates need explicit registration so renderTemplate can
+  // find them by path.
+  foundry.applications.handlebars.loadTemplates([
+    `systems/${SYSTEM_ID}/templates/actor/parts/action-list.hbs`
+  ]);
 });
 
 Hooks.once("ready", () => {
