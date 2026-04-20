@@ -256,7 +256,8 @@ export const MUTATION_RULES = {
     duration: "Up to 1 hour",
     usage: { limited: true, per: "day", uses: 1, max: 1 },
     effect: { formula: "5d6", saveType: "", notes: "Barrier surrounds the body and absorbs up to 5d6 damage." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["defense"]
   },
   "Gas Generation: Musk": {
     mode: "action",
@@ -297,7 +298,8 @@ export const MUTATION_RULES = {
     duration: "While active",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Become invisible, create darkness, or negate lasers." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["attack", "save", "utility"]
   },
   "Life Leech": {
     mode: "action",
@@ -339,6 +341,7 @@ export const MUTATION_RULES = {
     usage: { limited: true, per: "week", uses: 1, max: 1 },
     effect: { formula: "5d10", saveType: "", notes: "Doubles strength, dexterity, and speed during overwhelming danger." },
     action: "toggle",
+    actionTypes: ["buff"],
     // 0.8.6 — toggle-gated attribute-scaled bonuses.
     effects: [
       { label: "Mental Control Over Physical State — activated bonuses",
@@ -412,7 +415,8 @@ export const MUTATION_RULES = {
     duration: "Up to 18 rounds",
     usage: { limited: true, per: "day", uses: 1, max: 1 },
     effect: { formula: "", saveType: "", notes: "Begins by reflecting up to 3 dice of damage, increasing by 1 die per round of concentration." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["defense"]
   },
   "Repulsion Field": {
     mode: "toggle",
@@ -420,7 +424,8 @@ export const MUTATION_RULES = {
     duration: "Up to 1 hour",
     usage: { limited: true, per: "day", uses: 1, max: 1 },
     effect: { formula: "5d6", saveType: "", notes: "Improved force field that can enclose other beings." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["defense"]
   },
   "Shapechange": {
     mode: "toggle",
@@ -428,7 +433,8 @@ export const MUTATION_RULES = {
     duration: "While active",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Takes two rounds to assume a new shape." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["utility"]
   },
   "Sonic Attack Ability": {
     mode: "action",
@@ -472,6 +478,7 @@ export const MUTATION_RULES = {
     duration: "Always on",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Fly at up to 20 meters per second, carrying a normal load." },
+    actionTypes: ["movement"],
     effects: [
       { label: "Telekinetic Flight — flight speed",
         changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "20", priority: 20 }] }
@@ -528,6 +535,7 @@ export const MUTATION_RULES = {
     usage: { limited: true, per: "day", uses: 1, max: 1 },
     effect: { formula: "1d10", saveType: "", notes: "Choose one ability to double or gain +1 to hit while active." },
     action: "toggle",
+    actionTypes: ["buff"],
     effects: [
       { label: "Will Force — to-hit variant",
         condition: { all: [{ toggleEnabled: true }, { variantIs: "to-hit" }] },
@@ -589,7 +597,8 @@ export const MUTATION_RULES = {
     duration: "While active",
     usage: { limited: false, per: "at-will", uses: 0, max: 0 },
     effect: { formula: "", saveType: "", notes: "Blend into the environment; treat the mutant as invisible until revealed." },
-    action: "toggle"
+    action: "toggle",
+    actionTypes: ["utility", "buff"]
   },
 
   // 0.8.4 quick-win gap fixes (ported from the audit report).
@@ -687,6 +696,7 @@ export const MUTATION_RULES = {
   },
   "Wings": {
     mode: "passive",
+    actionTypes: ["movement"],
     effects: [
       { label: "Wings — flight speed",
         changes: [{ key: "gw.flightSpeed", mode: AE_MODE.UPGRADE, value: "120", priority: 20 }] }
@@ -1074,6 +1084,57 @@ export function getMutationRule(mutation) {
   return activeRule(name);
 }
 
+/**
+ * 0.10.0 — default inference map from `rule.action` to the canonical
+ * ACTION_TYPES tags. Covers the 16 observed `action` values in
+ * MUTATION_RULES; `"toggle"` has no default because the semantic is
+ * ambiguous (defense vs. buff vs. utility), so each toggle rule MUST
+ * carry an explicit `rule.actionTypes`.
+ *
+ * `null` means "no tags" — purely narrative or passive, never surfaces
+ * in any action section of the sheet.
+ */
+const MUTATION_ACTION_TYPE_DEFAULTS = Object.freeze({
+  "note":                     null,
+  "passive":                  null,
+  "ramping-damage":           ["attack", "damage"],
+  "death-field":              ["attack", "damage", "save"],
+  "mental-save":              ["attack", "save"],
+  "toggle-density":           ["buff"],
+  "density-control-others":   ["attack", "save"],
+  "damage":                   ["attack", "damage"],
+  // "toggle": per-rule override required (no entry here)
+  "light-generation":         ["attack", "save", "utility"],
+  "life-leech":               ["attack", "damage", "heal"],
+  "mental-control":           ["attack", "save"],
+  "mental-damage":            ["attack", "damage", "save"],
+  "area-damage":              ["attack", "damage", "save"],
+  "radiation-eyes":           ["attack", "damage"],
+  "full-heal":                ["heal"],
+  "guided":                   ["utility"],
+  "restrain":                 ["attack", "save"]
+});
+
+/**
+ * 0.10.0 — resolve the `actionTypes` tag set for a mutation rule.
+ * Precedence:
+ *   1. Explicit `rule.actionTypes: [...]` on the rule entry (wins).
+ *   2. Default inference from `rule.action` via the map above.
+ *   3. Empty array (no tags, no sheet section surface).
+ *
+ * Exported so `buildMutationItemSource` and the migration pass can
+ * share the same resolution. Returns a fresh array each call.
+ */
+export function resolveMutationActionTypes(rule) {
+  if (Array.isArray(rule?.actionTypes)) return [...rule.actionTypes];
+  const action = rule?.action;
+  if (action && action in MUTATION_ACTION_TYPE_DEFAULTS) {
+    const defaults = MUTATION_ACTION_TYPE_DEFAULTS[action];
+    return defaults ? [...defaults] : [];
+  }
+  return [];
+}
+
 export function mutationIsEnabled(item) {
   const mode = item?.system?.activation?.mode ?? getMutationRule(item).mode;
   if (mode === "passive") return true;
@@ -1222,6 +1283,11 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
         saveType: rule.effect?.saveType ?? "",
         notes: appendNote(notes, rule.effect?.notes ?? "")
       },
+      // 0.10.0 — canonical action-type tags. Explicit `rule.actionTypes`
+      // on the rule entry wins; otherwise derive from `rule.action` via
+      // the default-inference map. Passive / "note" actions that have
+      // no sheet-surface contribution return an empty array here.
+      actionTypes: resolveMutationActionTypes(rule),
       description: {
         value: `<p>${summary}</p>`
       }
@@ -1252,6 +1318,17 @@ export function enrichMutationSystemData(item) {
   if ((system.usage.max ?? 0) === 0 && Number(rule.usage?.max ?? 0) > 0) {
     system.usage.max = rule.usage.max;
     if ((system.usage.uses ?? 0) === 0) system.usage.uses = rule.usage.max;
+  }
+  // 0.10.0 — backfill actionTypes if the mutation item was created
+  // before the field existed. Resolves from the rule table so
+  // existing actors get the correct sheet-section classification on
+  // their next prep.
+  const hasActionTypes = system.actionTypes instanceof Set
+    ? system.actionTypes.size > 0
+    : Array.isArray(system.actionTypes) && system.actionTypes.length > 0;
+  if (!hasActionTypes) {
+    const tags = resolveMutationActionTypes(rule);
+    if (tags.length) system.actionTypes = new Set(tags);
   }
   if ((system.cooldown.max ?? 0) === 0 && Number(rule.cooldown?.max ?? 0) > 0) {
     system.cooldown.max = rule.cooldown.max;

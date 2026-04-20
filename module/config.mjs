@@ -57,6 +57,42 @@ export const DAMAGE_TYPE_LABELS = Object.freeze({
 });
 
 /**
+ * 0.10.0 — canonical action-type tag vocabulary for the sheet's
+ * Attack / Defense / Utility / Movement / Heal / Buff sections. Every
+ * item type (weapon / armor / gear / mutation) carries a
+ * `system.actionTypes` SetField whose values are drawn from this list.
+ * An item with no tags is considered passive from the sheet POV — it
+ * appears in its type-specific list (Mutations tab, Inventory, etc.)
+ * but doesn't surface in any cross-type action section.
+ *
+ * `save` and `damage` are adjunct tags — they usually pair with
+ * `attack` (e.g., a grenade is `["attack", "save", "damage"]`) but can
+ * stand alone (a direct-damage effect with no attack roll is
+ * `["damage"]`). The sheet reads them as badges on each Attack row.
+ */
+export const ACTION_TYPES = Object.freeze([
+  "attack",    // rolls an attack OR forces a hostile save
+  "save",      // target rolls a save (usually paired with attack/damage)
+  "damage",    // inflicts HP damage (with or without an attack roll)
+  "defense",   // grants protection / resistance while active
+  "heal",      // restores HP or removes conditions
+  "utility",   // non-combat action (tools, containers, narrative)
+  "movement",  // grants movement options (flight, jump, teleport, speed)
+  "buff"       // self-applied toggle or reactive self-enhancement
+]);
+
+export const ACTION_TYPE_LABELS = Object.freeze({
+  attack:   "GAMMA_WORLD.ActionType.Attack",
+  save:     "GAMMA_WORLD.ActionType.Save",
+  damage:   "GAMMA_WORLD.ActionType.Damage",
+  defense:  "GAMMA_WORLD.ActionType.Defense",
+  heal:     "GAMMA_WORLD.ActionType.Heal",
+  utility:  "GAMMA_WORLD.ActionType.Utility",
+  movement: "GAMMA_WORLD.ActionType.Movement",
+  buff:     "GAMMA_WORLD.ActionType.Buff"
+});
+
+/**
  * Nine canonical 1e cryptic alliances. The keys are stable enum values; the
  * values are i18n labels. A tenth "other" slot preserves free-text homebrew.
  */

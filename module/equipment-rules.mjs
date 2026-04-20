@@ -1328,6 +1328,77 @@ export function getWeaponRule(item) {
   return weaponRuleForName(item?.name ?? "");
 }
 
+/**
+ * 0.10.0 — default inference of armor `actionTypes` from its rule.
+ * Every armor entry gets `"defense"` (that's the whole point). Powered
+ * armors whose rule declares a non-zero `mobility.flight/jump/lift`
+ * also get `"movement"` so they surface in the Movement section of
+ * the sheet.
+ *
+ * Precedence: explicit `rule.actionTypes` wins over this default.
+ */
+export function inferArmorActionTypes(rule) {
+  if (Array.isArray(rule?.actionTypes)) return [...rule.actionTypes];
+  const tags = ["defense"];
+  const m = rule?.mobility ?? {};
+  if (Number(m.flight ?? 0) > 0 || Number(m.jump ?? 0) > 0 || Number(m.lift ?? 0) > 0) {
+    tags.push("movement");
+  }
+  return tags;
+}
+
+/**
+ * 0.10.0 — default inference of gear `actionTypes` from its rule.
+ * Branches on `rule.action.mode`:
+ *   - "damage" / "area-damage" → attack + damage (+ save if area/status)
+ *   - "heal"                   → heal
+ *   - anything else / "none"   → utility (containers, tools, rations, etc.)
+ *
+ * Explicit `rule.actionTypes` wins. Gear without a rule entry falls
+ * through to `["utility"]` unless the item's own `system.action.mode`
+ * carries more specific info (handled in `enrichEquipmentSystemData`).
+ */
+export function inferGearActionTypes(rule) {
+  if (Array.isArray(rule?.actionTypes)) return [...rule.actionTypes];
+  const mode = String(rule?.action?.mode ?? "").toLowerCase();
+  switch (mode) {
+    case "damage":           return ["attack", "damage"];
+    case "area-damage":      return ["attack", "damage", "save"];
+    case "heal":             return ["heal"];
+    case "ongoing":          return ["attack", "save"];
+    case "status":           return ["attack", "save"];
+    // 0.10.0 — cloud grenades: save-based cloud that persists; deals
+    // damage on failed saves in stun/poison flavors.
+    case "tear-gas-cloud":   return ["attack", "save"];
+    case "stun-cloud":       return ["attack", "save", "damage"];
+    case "poison-cloud":     return ["attack", "save", "damage"];
+    // Special ordnance — each either deals damage or forces a save.
+    case "mutation-bomb":    return ["attack", "save"];
+    case "photon":           return ["attack", "damage", "save"];
+    case "torc":             return ["attack", "damage", "save"];
+    case "negation":         return ["attack"];
+    case "none":
+    case "":
+    default:                 return ["utility"];
+  }
+}
+
+/**
+ * 0.10.0 — default inference of weapon `actionTypes` from its
+ * `system.effect.mode`. Every weapon is at minimum an attack; modes
+ * that trigger a save (poison, radiation, mental, stun, paralysis,
+ * death) add the `"save"` tag. Natural attacks and plain damage stay
+ * at `["attack"]`.
+ */
+export function inferWeaponActionTypes(effectMode = "damage") {
+  const mode = String(effectMode).toLowerCase();
+  const tags = ["attack"];
+  if (["poison", "radiation", "mental", "stun", "paralysis", "death"].includes(mode)) {
+    tags.push("save");
+  }
+  return tags;
+}
+
 function artifactDefaultsFor(item) {
   const defaults = clone(ARTIFACT_DEFAULTS);
   const table = item?.type === "weapon"
@@ -1518,6 +1589,10 @@ export function enrichEquipmentSystemData(item) {
     if (item.system.artifact?.isArtifact && !(Number(item.system.artifact?.functionChance) > 0)) {
       item.system.artifact.functionChance = artifactFunctionChance(item.system.artifact.condition);
     }
+    // 0.10.0 — backfill actionTypes if missing.
+    if (!item.system.actionTypes || item.system.actionTypes.size === 0) {
+      item.system.actionTypes = new Set(inferArmorActionTypes(rule));
+    }
   }
 
   if (item.type === "gear") {
@@ -1537,6 +1612,21 @@ export function enrichEquipmentSystemData(item) {
     if (!item.system.subtype || item.system.subtype === "misc") {
       item.system.subtype = inferGearSubtype(item);
     }
+    // 0.10.0 — backfill actionTypes if missing.
+    if (!item.system.actionTypes || item.system.actionTypes.size === 0) {
+      // Rule may carry explicit actionTypes; otherwise infer from
+      // rule.action.mode OR from the item's own action.mode (useful
+      // when gear is authored without a rule-table entry, e.g. the
+      // Built-in Micro Missile Rack granted by powered armor).
+      const inferredFromRule = inferGearActionTypes(rule);
+      if (inferredFromRule.length > 1 || (inferredFromRule[0] !== "utility")) {
+        item.system.actionTypes = new Set(inferredFromRule);
+      } else {
+        const itemMode = String(item.system?.action?.mode ?? "").toLowerCase();
+        const inferredFromItem = inferGearActionTypes({ action: { mode: itemMode } });
+        item.system.actionTypes = new Set(inferredFromItem);
+      }
+    }
   }
 
   if (item.type === "weapon") {
@@ -1555,6 +1645,10 @@ export function enrichEquipmentSystemData(item) {
     // value was never explicitly chosen — here we simply always reconcile).
     if (!item.system.category || item.system.category === "primitive") {
       item.system.category = inferWeaponCategory(item);
+    }
+    // 0.10.0 — backfill actionTypes from the weapon's effect.mode.
+    if (!item.system.actionTypes || item.system.actionTypes.size === 0) {
+      item.system.actionTypes = new Set(inferWeaponActionTypes(item.system.effect?.mode ?? "damage"));
     }
   }
 

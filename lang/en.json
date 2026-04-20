@@ -319,6 +319,24 @@
       "Electrical": "Electrical",
       "BlackRay":   "Black Ray"
     },
+    "ActionType": {
+      "Attack":   "Attack",
+      "Save":     "Save",
+      "Damage":   "Damage",
+      "Defense":  "Defense",
+      "Heal":     "Heal",
+      "Utility":  "Utility",
+      "Movement": "Movement",
+      "Buff":     "Buff"
+    },
+    "ActionSection": {
+      "Attack":   "Attacks",
+      "Defense":  "Defenses",
+      "Heal":     "Healing",
+      "Utility":  "Utility",
+      "Movement": "Movement",
+      "Buff":     "Buffs"
+    },
     "TraitsDamage": {
       "SectionLabel":       "Damage Traits",
       "ResistanceLabel":    "Resistance (half damage)",

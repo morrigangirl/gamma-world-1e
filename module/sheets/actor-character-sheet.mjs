@@ -661,6 +661,34 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       mutations: grouped.mutation.filter((item) => item.gwHasAction),
       gear: grouped.gear.filter((item) => item.gwHasAction)
     };
+
+    // 0.10.0 — cross-type action-section grouping. Any item with the
+    // matching action-type tag surfaces in its section; unequipped
+    // weapons still show on Attack (the GM may fire a stowed weapon by
+    // intent), but unequipped armor is filtered off the Defense
+    // section because unequipped armor grants nothing. Mutations are
+    // included regardless of activation state — passive mutations
+    // with `["defense"]` tag (e.g. Inertia Armor trait chains) need
+    // to surface; activation check belongs to `item.use()` not the
+    // visibility filter.
+    const hasTag = (item, tag) => {
+      const tags = item.system?.actionTypes;
+      if (tags instanceof Set) return tags.has(tag);
+      if (Array.isArray(tags)) return tags.includes(tag);
+      return false;
+    };
+    const actionGroupSource = actor.items.filter((item) => {
+      if (item.type === "armor" && item.system?.equipped === false) return false;
+      return true;
+    });
+    context.actionGroups = {
+      attack:   actionGroupSource.filter((i) => hasTag(i, "attack")),
+      defense:  actionGroupSource.filter((i) => hasTag(i, "defense")),
+      utility:  actionGroupSource.filter((i) => hasTag(i, "utility")),
+      movement: actionGroupSource.filter((i) => hasTag(i, "movement")),
+      buff:     actionGroupSource.filter((i) => hasTag(i, "buff")),
+      heal:     actionGroupSource.filter((i) => hasTag(i, "heal"))
+    };
     context.inventorySummary = {
       equippedWeapons: grouped.weapon.filter((item) => item.system.equipped).map((item) => item.gwDisplayName ?? item.name),
       equippedArmor: grouped.armor.filter((item) => item.system.equipped).map((item) => item.gwDisplayName ?? item.name),

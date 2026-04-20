@@ -3108,3 +3108,212 @@ test("0.9.1 Tier 4 — getArmorRule exposes effects arrays for powered armors", 
   const inertia = getArmorRule({ name: "Inertia Armor" });
   assert.equal(inertia.effects, undefined, "Inertia Armor has no effects — traits-only");
 });
+
+/* ================================================================= */
+/* 0.10.0 — actionTypes tagging + Attack/Defense/Utility sheet sections */
+/* ================================================================= */
+
+test("0.10.0 — ACTION_TYPES enum + labels are well-formed", async () => {
+  const { ACTION_TYPES, ACTION_TYPE_LABELS } = await import("../module/config.mjs");
+
+  assert.ok(Array.isArray(ACTION_TYPES));
+  assert.equal(ACTION_TYPES.length, 8, "eight canonical action tags");
+  const expected = ["attack", "save", "damage", "defense", "heal", "utility", "movement", "buff"];
+  for (const tag of expected) {
+    assert.ok(ACTION_TYPES.includes(tag), `ACTION_TYPES includes "${tag}"`);
+  }
+
+  // Every tag has a localization label key.
+  for (const tag of ACTION_TYPES) {
+    const labelKey = ACTION_TYPE_LABELS[tag];
+    assert.ok(labelKey, `ACTION_TYPE_LABELS has entry for "${tag}"`);
+    assert.ok(labelKey.startsWith("GAMMA_WORLD.ActionType."), `"${tag}" label uses the GAMMA_WORLD.ActionType.* namespace`);
+  }
+});
+
+test("0.10.0 — resolveMutationActionTypes default inference map", async () => {
+  const { resolveMutationActionTypes } = await import("../module/mutation-rules.mjs");
+
+  // Each default mapping produces the expected tag set.
+  assert.deepEqual(resolveMutationActionTypes({ action: "damage" }), ["attack", "damage"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "area-damage" }), ["attack", "damage", "save"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "mental-save" }), ["attack", "save"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "life-leech" }), ["attack", "damage", "heal"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "restrain" }), ["attack", "save"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "full-heal" }), ["heal"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "guided" }), ["utility"]);
+  assert.deepEqual(resolveMutationActionTypes({ action: "toggle-density" }), ["buff"]);
+
+  // Note and passive explicitly map to an empty set (no sheet surface).
+  assert.deepEqual(resolveMutationActionTypes({ action: "note" }), []);
+  assert.deepEqual(resolveMutationActionTypes({ action: "passive" }), []);
+
+  // `toggle` has NO default — requires explicit override.
+  assert.deepEqual(resolveMutationActionTypes({ action: "toggle" }), [],
+    "toggle with no override defaults to empty (per-rule override required)");
+
+  // Unknown actions fail closed to empty.
+  assert.deepEqual(resolveMutationActionTypes({ action: "frog-dance" }), []);
+  assert.deepEqual(resolveMutationActionTypes({}), []);
+  assert.deepEqual(resolveMutationActionTypes(null), []);
+});
+
+test("0.10.0 — explicit rule.actionTypes overrides the default inference", async () => {
+  const { resolveMutationActionTypes } = await import("../module/mutation-rules.mjs");
+
+  // Toggle mutations with explicit defense / buff tags resolve correctly.
+  assert.deepEqual(
+    resolveMutationActionTypes({ action: "toggle", actionTypes: ["defense"] }),
+    ["defense"],
+    "Force Field Generation shape"
+  );
+  assert.deepEqual(
+    resolveMutationActionTypes({ action: "toggle", actionTypes: ["buff"] }),
+    ["buff"],
+    "Will Force shape"
+  );
+  assert.deepEqual(
+    resolveMutationActionTypes({ action: "toggle", actionTypes: ["utility", "buff"] }),
+    ["utility", "buff"],
+    "Chameleon Powers shape"
+  );
+
+  // Explicit override wins even when the default inference would produce something.
+  assert.deepEqual(
+    resolveMutationActionTypes({ action: "damage", actionTypes: ["buff"] }),
+    ["buff"],
+    "override wins over default"
+  );
+});
+
+test("0.10.0 — toggle mutations in MUTATION_RULES carry explicit actionTypes", async () => {
+  // Sanity check: the six mutations we flagged in the plan each resolve
+  // correctly. This catches a regression if someone removes an override
+  // and re-introduces an ambiguous toggle with no tag.
+  const { getMutationRule, resolveMutationActionTypes } = await import("../module/mutation-rules.mjs");
+
+  const cases = [
+    { name: "Force Field Generation",             expect: ["defense"] },
+    { name: "Repulsion Field",                    expect: ["defense"] },
+    { name: "Reflection",                         expect: ["defense"] },
+    { name: "Shapechange",                        expect: ["utility"] },
+    { name: "Chameleon Powers",                   expect: ["utility", "buff"] },
+    { name: "Mental Control Over Physical State", expect: ["buff"] },
+    { name: "Will Force",                         expect: ["buff"] },
+    { name: "Light Wave Manipulation",            expect: ["attack", "save", "utility"] },
+    { name: "Telekinetic Flight",                 expect: ["movement"] },
+    { name: "Wings",                              expect: ["movement"] }
+  ];
+
+  for (const c of cases) {
+    const rule = getMutationRule(c.name);
+    const tags = resolveMutationActionTypes(rule);
+    assert.deepEqual(tags, c.expect, `${c.name} → [${c.expect.join(", ")}]`);
+  }
+});
+
+test("0.10.0 — armor / gear / weapon inference helpers", async () => {
+  const { inferArmorActionTypes, inferGearActionTypes, inferWeaponActionTypes, getArmorRule } =
+    await import("../module/equipment-rules.mjs");
+
+  // Armor: every armor gets "defense"; powered armors add "movement".
+  assert.deepEqual(inferArmorActionTypes({}), ["defense"], "baseline armor");
+  assert.deepEqual(
+    inferArmorActionTypes({ mobility: { flight: 100 } }),
+    ["defense", "movement"],
+    "powered armor with flight"
+  );
+  assert.deepEqual(
+    inferArmorActionTypes({ mobility: { jump: 200 } }),
+    ["defense", "movement"],
+    "Energized Armor shape (jump)"
+  );
+  assert.deepEqual(
+    inferArmorActionTypes({ mobility: { lift: 1.5 } }),
+    ["defense", "movement"],
+    "armor with lift-only"
+  );
+
+  // Live armor rule lookups.
+  assert.deepEqual(inferArmorActionTypes(getArmorRule({ name: "Inertia Armor" })), ["defense"]);
+  assert.deepEqual(
+    inferArmorActionTypes(getArmorRule({ name: "Powered Battle Armor" })),
+    ["defense", "movement"]
+  );
+
+  // Gear: mode-based mapping.
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "damage" } }), ["attack", "damage"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "area-damage" } }), ["attack", "damage", "save"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "heal" } }), ["heal"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "tear-gas-cloud" } }), ["attack", "save"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "poison-cloud" } }), ["attack", "save", "damage"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "stun-cloud" } }), ["attack", "save", "damage"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "negation" } }), ["attack"]);
+  assert.deepEqual(inferGearActionTypes({ action: { mode: "none" } }), ["utility"]);
+  assert.deepEqual(inferGearActionTypes({}), ["utility"], "empty rule → utility");
+
+  // Weapons: every weapon gets "attack"; save-inducing effect modes add "save".
+  assert.deepEqual(inferWeaponActionTypes("damage"), ["attack"]);
+  assert.deepEqual(inferWeaponActionTypes("note"), ["attack"]);
+  assert.deepEqual(inferWeaponActionTypes("poison"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes("radiation"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes("mental"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes("stun"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes("paralysis"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes("death"), ["attack", "save"]);
+  assert.deepEqual(inferWeaponActionTypes(), ["attack"], "default to damage mode");
+});
+
+test("0.10.0 — action-group filter crosses item types", async () => {
+  // Simulate the sheet's `context.actionGroups` filter. Uses actor.items as
+  // an Array with `system.actionTypes` sets. Confirms that heterogeneous
+  // items (a weapon + a gear + a mutation) can all land in the same
+  // actionGroup when they share a tag.
+  const hasTag = (item, tag) => {
+    const tags = item.system?.actionTypes;
+    if (tags instanceof Set) return tags.has(tag);
+    if (Array.isArray(tags)) return tags.includes(tag);
+    return false;
+  };
+
+  const items = [
+    { id: "w1", type: "weapon",   name: "Laser Pistol",              system: { actionTypes: new Set(["attack"]) } },
+    { id: "g1", type: "gear",     name: "Fragmentation Grenade",     system: { actionTypes: new Set(["attack", "damage", "save"]) } },
+    { id: "m1", type: "mutation", name: "Tangle Vines",              system: { actionTypes: new Set(["attack", "save"]) } },
+    { id: "m2", type: "mutation", name: "Force Field Generation",    system: { actionTypes: new Set(["defense"]) } },
+    { id: "m3", type: "mutation", name: "Heightened Strength",       system: { actionTypes: new Set() } },
+    { id: "m4", type: "mutation", name: "Will Force",                system: { actionTypes: new Set(["buff"]) } },
+    { id: "a1", type: "armor",    name: "Powered Battle Armor",      system: { equipped: true, actionTypes: new Set(["defense", "movement"]) } },
+    { id: "a2", type: "armor",    name: "Inertia Armor",             system: { equipped: false, actionTypes: new Set(["defense"]) } }
+  ];
+
+  // Unequipped armor is filtered off the "defense" section per sheet rules.
+  const sourceList = items.filter((i) => !(i.type === "armor" && i.system.equipped === false));
+
+  const groups = {
+    attack:   sourceList.filter((i) => hasTag(i, "attack")),
+    defense:  sourceList.filter((i) => hasTag(i, "defense")),
+    movement: sourceList.filter((i) => hasTag(i, "movement")),
+    buff:     sourceList.filter((i) => hasTag(i, "buff")),
+    heal:     sourceList.filter((i) => hasTag(i, "heal")),
+    utility:  sourceList.filter((i) => hasTag(i, "utility"))
+  };
+
+  const names = (arr) => arr.map((i) => i.name);
+  assert.deepEqual(names(groups.attack).sort(),
+    ["Fragmentation Grenade", "Laser Pistol", "Tangle Vines"],
+    "weapon + gear + mutation all surface in Attack");
+  assert.deepEqual(names(groups.defense).sort(),
+    ["Force Field Generation", "Powered Battle Armor"],
+    "equipped armor + mutation in Defense; un-equipped armor filtered");
+  assert.deepEqual(names(groups.movement), ["Powered Battle Armor"]);
+  assert.deepEqual(names(groups.buff), ["Will Force"]);
+  assert.equal(groups.heal.length, 0, "no healing items in this fixture");
+  assert.equal(groups.utility.length, 0, "no utility items in this fixture");
+
+  // Passive mutation with empty tag set stays out of every group.
+  for (const group of Object.values(groups)) {
+    assert.ok(!names(group).includes("Heightened Strength"),
+      "passive mutation (empty tags) is hidden from action sections");
+  }
+});

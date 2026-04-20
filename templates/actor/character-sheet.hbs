@@ -216,6 +216,64 @@
       </section>
     {{/if}}
 
+    {{!-- 0.10.0 — cross-type action sections. Items filtered by their
+         `system.actionTypes` tag are grouped here regardless of type
+         (weapon / mutation / gear / armor). `item.use()` is polymorphic
+         so each row dispatches correctly for its own item type. --}}
+    {{#if actionGroups.attack.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--attack">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Attack"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.attack variant="attack"}}
+      </section>
+    {{/if}}
+
+    {{#if actionGroups.defense.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--defense">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Defense"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.defense variant="defense"}}
+      </section>
+    {{/if}}
+
+    {{#if actionGroups.movement.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--movement">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Movement"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.movement variant="movement"}}
+      </section>
+    {{/if}}
+
+    {{#if actionGroups.buff.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--buff">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Buff"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.buff variant="buff"}}
+      </section>
+    {{/if}}
+
+    {{#if actionGroups.heal.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--heal">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Heal"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.heal variant="heal"}}
+      </section>
+    {{/if}}
+
+    {{#if actionGroups.utility.length}}
+      <section class="gamma-world__panel gamma-world__action-group gamma-world__action-group--utility">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActionSection.Utility"}}</h3>
+        </header>
+        {{> "systems/gamma-world-1e/templates/actor/parts/action-list.hbs" items=actionGroups.utility variant="utility"}}
+      </section>
+    {{/if}}
+
     <section class="gamma-world__panel">
       <header class="gamma-world__list-header">
         <h3>{{localize "GAMMA_WORLD.Sheet.QuickActions"}}</h3>

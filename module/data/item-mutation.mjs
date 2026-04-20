@@ -1,6 +1,8 @@
 /** MutationData — Item.type === "mutation". */
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField } =
+import { ACTION_TYPES } from "../config.mjs";
+
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -60,6 +62,19 @@ export class MutationData extends foundry.abstract.TypeDataModel {
         saveType: str({ initial: "" }),   // "mental" | "radiation" | "poison" | ""
         notes:    str({ initial: "" })
       }),
+
+      /**
+       * 0.10.0 — canonical action-type tags (ACTION_TYPES in config.mjs).
+       * Emitted onto the item source at mutation-creation time via
+       * `buildMutationItemSource`; the rule table is authoritative.
+       * Explicit `rule.actionTypes` on a MUTATION_RULES entry wins over
+       * the default inference from `rule.action`.
+       */
+      actionTypes: new SetField(new StringField({
+        required: false,
+        blank: false,
+        choices: () => [...ACTION_TYPES]
+      })),
 
       description: new SchemaField({
         value: new HTMLField()

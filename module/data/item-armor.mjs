@@ -1,6 +1,6 @@
 /** ArmorData — Item.type === "armor". */
 
-import { DAMAGE_TYPES } from "../config.mjs";
+import { ACTION_TYPES, DAMAGE_TYPES } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
   foundry.data.fields;
@@ -72,6 +72,17 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
         grantsImmunity:      damageTraitField(),
         grantsVulnerability: damageTraitField()
       }),
+
+      /**
+       * 0.10.0 — canonical action-type tags (ACTION_TYPES in config.mjs).
+       * Default set to `["defense"]` at enrichment time; powered armors
+       * add `"movement"` based on their rule's mobility payload.
+       */
+      actionTypes: new SetField(new StringField({
+        required: false,
+        blank: false,
+        choices: () => [...ACTION_TYPES]
+      })),
 
       equipped: new BooleanField({ initial: false }),
       quantity: int({ initial: 1, min: 0 }),

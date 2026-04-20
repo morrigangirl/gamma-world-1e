@@ -627,6 +627,11 @@ async function migrateActor(actor) {
     globalThis.gammaWorldTempEffectsMigrated = (globalThis.gammaWorldTempEffectsMigrated ?? 0) + tempCount;
   }
 
+  // 0.10.0: populate `system.actionTypes` on every item from the rule
+  // tables. Idempotent — items that already carry a non-empty set are
+  // skipped.
+  await migrateActionTypes0100(actor);
+
   await actor.refreshDerivedResources({ adjustCurrent: false });
 }
 
@@ -681,6 +686,56 @@ async function migrateGeniusCapability086(actor) {
       await old.delete({ gammaWorldSync: true });
     } catch (error) {
       console.warn(`${SYSTEM_ID} | failed to replace Genius Capability on ${actor.name} with ${replacementName}`, error);
+    }
+  }
+}
+
+/**
+ * 0.10.0 — backfill `system.actionTypes` on every item an actor owns.
+ * Inferred from the rule tables:
+ *   - Mutation → resolveMutationActionTypes(rule)
+ *   - Armor    → inferArmorActionTypes(rule)
+ *   - Gear     → inferGearActionTypes(rule) with fallback to item.action.mode
+ *   - Weapon   → inferWeaponActionTypes(item.system.effect?.mode ?? "damage")
+ *
+ * Idempotent: items that already carry a non-empty actionTypes set are
+ * skipped. Runs after the 0.9.0 temp-effects migration inside
+ * `migrateActor`.
+ */
+async function migrateActionTypes0100(actor) {
+  const { resolveMutationActionTypes, getMutationRule } = await import("./mutation-rules.mjs");
+  const { getArmorRule, getGearRule, inferArmorActionTypes, inferGearActionTypes, inferWeaponActionTypes } = await import("./equipment-rules.mjs");
+
+  for (const item of actor.items) {
+    const current = item.system?.actionTypes;
+    const hasAny = current instanceof Set ? current.size > 0 : (Array.isArray(current) && current.length > 0);
+    if (hasAny) continue;
+
+    let tags = [];
+    if (item.type === "mutation") {
+      tags = resolveMutationActionTypes(getMutationRule(item));
+    } else if (item.type === "armor") {
+      tags = inferArmorActionTypes(getArmorRule(item));
+    } else if (item.type === "gear") {
+      const rule = getGearRule(item);
+      const fromRule = inferGearActionTypes(rule);
+      // When the rule returns the generic utility fallback but the
+      // item's own action.mode is richer, re-infer from the item.
+      if (fromRule.length === 1 && fromRule[0] === "utility") {
+        const itemMode = String(item.system?.action?.mode ?? "").toLowerCase();
+        tags = inferGearActionTypes({ action: { mode: itemMode } });
+      } else {
+        tags = fromRule;
+      }
+    } else if (item.type === "weapon") {
+      tags = inferWeaponActionTypes(item.system?.effect?.mode ?? "damage");
+    }
+
+    if (!tags.length) continue;
+    try {
+      await item.update({ "system.actionTypes": tags }, { gammaWorldSync: true });
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | migrateActionTypes0100: failed to tag ${item.type} "${item.name}"`, error);
     }
   }
 }

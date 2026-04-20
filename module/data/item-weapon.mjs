@@ -1,5 +1,7 @@
 /** WeaponData — Item.type === "weapon". */
 
+import { ACTION_TYPES } from "../config.mjs";
+
 const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
   foundry.data.fields;
 
@@ -86,6 +88,18 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
         requiresNoForceField: new BooleanField({ initial: false }),
         nonlethal:            new BooleanField({ initial: false })
       }),
+
+      /**
+       * 0.10.0 — canonical action-type tags (ACTION_TYPES in config.mjs).
+       * Populated at pack build via weaponSource; can be edited on a
+       * per-item basis to reclassify homebrew weapons. Empty set means
+       * the weapon won't surface on any action section of the sheet.
+       */
+      actionTypes: new SetField(new StringField({
+        required: false,
+        blank: false,
+        choices: () => [...ACTION_TYPES]
+      })),
 
       quantity: int({ initial: 1, min: 0 }),
       weight:   num({ initial: 0, min: 0 }),

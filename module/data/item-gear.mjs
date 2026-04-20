@@ -1,6 +1,8 @@
 /** GearData — Item.type === "gear". Generic equipment / mundane items. */
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField } =
+import { ACTION_TYPES } from "../config.mjs";
+
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, ArrayField, SetField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -79,6 +81,19 @@ export class GearData extends foundry.abstract.TypeDataModel {
         onFailStatus:     str({ initial: "" }),
         halfDamageOnSave: new BooleanField({ initial: false })
       }),
+
+      /**
+       * 0.10.0 — canonical action-type tags (ACTION_TYPES in config.mjs).
+       * Populated at enrichment time from `rule.actionTypes` on the
+       * gear rule, or inferred from `action.mode` when the rule omits
+       * it. Containers, rations, and trade-goods default to
+       * `["utility"]`; grenades to `["attack", "save", "damage"]`.
+       */
+      actionTypes: new SetField(new StringField({
+        required: false,
+        blank: false,
+        choices: () => [...ACTION_TYPES]
+      })),
 
       artifact: new SchemaField({
         isArtifact: new BooleanField({ initial: false }),

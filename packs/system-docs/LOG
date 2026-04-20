@@ -1,8 +1,8 @@
-2026/04/19-18:10:57.517149 1743db000 Recovering log #4
-2026/04/19-18:10:57.517434 1743db000 Delete type=0 #4
-2026/04/19-18:10:57.517454 1743db000 Delete type=3 #2
-2026/04/19-18:10:57.517809 174467000 Level-0 table #9: started
-2026/04/19-18:10:57.517817 174467000 Level-0 table #9: 0 bytes OK
-2026/04/19-18:10:57.517876 174467000 Delete type=0 #7
-2026/04/19-18:10:57.517902 174467000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
-2026/04/19-18:10:57.517915 174467000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/19-20:34:03.870501 172e23000 Recovering log #4
+2026/04/19-20:34:03.870758 172e23000 Delete type=0 #4
+2026/04/19-20:34:03.870780 172e23000 Delete type=3 #2
+2026/04/19-20:34:03.871074 1746d3000 Level-0 table #9: started
+2026/04/19-20:34:03.871081 1746d3000 Level-0 table #9: 0 bytes OK
+2026/04/19-20:34:03.871133 1746d3000 Delete type=0 #7
+2026/04/19-20:34:03.871160 1746d3000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/19-20:34:03.871169 1746d3000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
