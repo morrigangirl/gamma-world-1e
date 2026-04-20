@@ -1,5 +1,4 @@
-2026/04/19-21:03:23.586248 170b83000 Delete type=3 #1
-2026/04/19-21:03:23.587575 171c27000 Level-0 table #5: started
-2026/04/19-21:03:23.589044 171c27000 Level-0 table #5: 240551 bytes OK
-2026/04/19-21:03:23.589123 171c27000 Delete type=0 #3
-2026/04/19-21:03:23.589196 171c27000 Manual compaction at level-0 from '!journal!1iR9cm89stiRWEcD' @ 72057594037927935 : 1 .. '!journal.pages!vroHxxL29nXIntWx.SB1k5yzch6yN2iQp' @ 0 : 0; will stop at (end)
+2026/04/19-21:23:56.239295 172173000 Log #20: 0 ops saved to Table #23 OK
+2026/04/19-21:23:56.239367 172173000 Archiving /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/rulebook/000020.log: OK
+2026/04/19-21:23:56.239695 172173000 Table #22: 211 entries OK
+2026/04/19-21:23:56.239920 172173000 **** Repaired leveldb /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/rulebook; recovered 1 files; 249011 bytes. Some data may have been lost. ****

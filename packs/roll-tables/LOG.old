@@ -1,5 +1,4 @@
-2026/04/19-21:03:23.572027 170b83000 Delete type=3 #1
-2026/04/19-21:03:23.572693 171c27000 Level-0 table #5: started
-2026/04/19-21:03:23.573088 171c27000 Level-0 table #5: 58292 bytes OK
-2026/04/19-21:03:23.573137 171c27000 Delete type=0 #3
-2026/04/19-21:03:23.573178 171c27000 Manual compaction at level-0 from '!tables!472c8emfqXgVUl4K' @ 72057594037927935 : 1 .. '!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN' @ 0 : 0; will stop at (end)
+2026/04/19-21:23:56.232063 17115b000 Log #20: 0 ops saved to Table #23 OK
+2026/04/19-21:23:56.232164 17115b000 Archiving /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/roll-tables/000020.log: OK
+2026/04/19-21:23:56.232259 17115b000 Table #22: 300 entries OK
+2026/04/19-21:23:56.232521 17115b000 **** Repaired leveldb /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/roll-tables; recovered 1 files; 55530 bytes. Some data may have been lost. ****

@@ -1,5 +1,4 @@
-2026/04/19-21:03:23.578477 170b83000 Delete type=3 #1
-2026/04/19-21:03:23.578854 171c27000 Level-0 table #5: started
-2026/04/19-21:03:23.579015 171c27000 Level-0 table #5: 7750 bytes OK
-2026/04/19-21:03:23.579067 171c27000 Delete type=0 #3
-2026/04/19-21:03:23.579103 171c27000 Manual compaction at level-0 from '!journal!2qK8gRyW0yr45O0B' @ 72057594037927935 : 1 .. '!journal.pages!xp8TZc9c6kTq5XiX.P8hGGcpQwJIlufdA' @ 0 : 0; will stop at (end)
+2026/04/19-21:23:56.237241 172173000 Log #20: 0 ops saved to Table #23 OK
+2026/04/19-21:23:56.237317 172173000 Archiving /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/robot-chassis/000020.log: OK
+2026/04/19-21:23:56.237356 172173000 Table #22: 36 entries OK
+2026/04/19-21:23:56.237598 172173000 **** Repaired leveldb /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/robot-chassis; recovered 1 files; 8743 bytes. Some data may have been lost. ****
