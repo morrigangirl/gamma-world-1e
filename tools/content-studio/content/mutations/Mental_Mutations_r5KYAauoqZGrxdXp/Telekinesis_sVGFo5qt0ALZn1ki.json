@@ -1,0 +1,61 @@
+{
+  "name": "Telekinesis",
+  "type": "mutation",
+  "system": {
+    "code": 40,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "15 m",
+    "duration": "5 rounds on, 5 rounds off",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "mental",
+      "notes": "On a failed mental save, a living target can be lifted / moved (same weight the user can normally lift) for 5 rounds on, 5 rounds off. Inert objects auto-fail the save."
+    },
+    "actionTypes": [
+      "attack",
+      "save"
+    ],
+    "description": {
+      "value": "<p>The mutant can lift and move objects through force of mind, though never itself. The maximum weight is whatever the mutant could physically lift, and it must strain as though it were carrying the load by hand. Only objects within 15 meters may be lifted, and they can stay aloft for only 5 melee turns before the mutant must rest for 5 more melee turns. If the target is a living creature, or an object held by a living creature, resolve the attempt first as a mental attack against that being.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/telekinesis.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "sVGFo5qt0ALZn1ki",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!sVGFo5qt0ALZn1ki"
+}

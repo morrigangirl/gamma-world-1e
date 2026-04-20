@@ -1,0 +1,58 @@
+{
+  "name": "Attraction Odor",
+  "type": "mutation",
+  "system": {
+    "code": 1,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "You attract carnivores.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant constantly gives off a scent that draws carnivores.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/attraction-odor.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "rVX6oWnw6gbtAyF6",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!rVX6oWnw6gbtAyF6"
+}

@@ -1,0 +1,98 @@
+{
+  "name": "Shorter",
+  "type": "mutation",
+  "system": {
+    "code": 40,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "D%+D% centimeters tall; reduce damage, but very hard to hit.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>To determine the mutant&#39;s height, roll percentile dice twice, treating 00 as 0 rather than 100, and add the two results together. The sum is the mutant&#39;s height in centimeters. This reduced size lowers metabolic rate and noticeably cuts physical combat damage, but also makes the mutant much harder to hit. The referee determines the exact effects.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Shorter — stat adjustments",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.ac",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        },
+        {
+          "key": "gw.damageReductionMultiplier",
+          "mode": 1,
+          "value": "0.75",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "imLvwnFAqovzh9IC",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!6Md6d2kPFbmVPYak.imLvwnFAqovzh9IC"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/shorter.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "6Md6d2kPFbmVPYak",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!6Md6d2kPFbmVPYak"
+}

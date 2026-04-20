@@ -1,0 +1,61 @@
+{
+  "name": "Heat Generation",
+  "type": "mutation",
+  "system": {
+    "code": 10,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Beams of heat up to 15 meters that do 4d6 every 3 turns.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "15 m",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 3
+    },
+    "effect": {
+      "formula": "4d6",
+      "saveType": "",
+      "notes": "Emit a beam of heat once every 3 rounds."
+    },
+    "actionTypes": [
+      "attack",
+      "damage"
+    ],
+    "description": {
+      "value": "<p>The mutant can project beams of searing heat from its hands, paws, tentacles, or similar organs. Each blast inflicts 4d6 damage, has a maximum range of 15 meters, and may be used once every 3 melee turns.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/heat-generation.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "BL5IefUqQ3lz9l3H",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!BL5IefUqQ3lz9l3H"
+}

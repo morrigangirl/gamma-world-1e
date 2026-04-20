@@ -1,0 +1,58 @@
+{
+  "name": "Molecular Disruption",
+  "type": "mutation",
+  "system": {
+    "code": 29,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Every d6 days, attempt molecular disruption at great cost, see page 14.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "30 m",
+    "duration": "Instant",
+    "usage": {
+      "limited": true,
+      "per": "week",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Success chance depends on material; user drops to 1 HP and half movement for 1 day."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This mutation is powerful and dangerous, and it can only be used rarely. Whether the attempt succeeds or fails, the mutant is left at 1 hit point and half normal movement for 1 full day. Success chance depends on the target: 3% per point of Mental Strength for metal and other dense material, 4% per point for stone and other non-living matter, and 5% per point for living organisms. Up to 50 kilograms of contiguous matter within 30 meters may be destroyed this way. After each use, the referee secretly rolls 1d6 to determine how many days must pass before the mutation has any chance to work again.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/molecular-disruption.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "TIprfghZFqLVBsNC",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!TIprfghZFqLVBsNC"
+}

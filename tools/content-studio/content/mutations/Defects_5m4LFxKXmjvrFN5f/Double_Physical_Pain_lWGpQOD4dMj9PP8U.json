@@ -1,0 +1,92 @@
+{
+  "name": "Double Physical Pain",
+  "type": "mutation",
+  "system": {
+    "code": 6,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Sustain double damage.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant is so sensitive to pain that all physical damage it suffers is doubled.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Double Physical Pain — double damage taken",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.damageTakenMultiplier",
+          "mode": 1,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "P43yrRGCHie61LzI",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!lWGpQOD4dMj9PP8U.P43yrRGCHie61LzI"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/double-physical-pain.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "lWGpQOD4dMj9PP8U",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!lWGpQOD4dMj9PP8U"
+}

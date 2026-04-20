@@ -1,0 +1,75 @@
+{
+  "name": "Neutron Bomb",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "vi",
+    "action": {
+      "mode": "photon",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 500,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 1,
+      "ongoing": false,
+      "notes": "100 damage to fields; unshielded living targets die instantly."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 500,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "radiation",
+      "onFailStatus": "",
+      "halfDamageOnSave": true
+    },
+    "description": {
+      "value": "<p>500 meter blast radius. Inflicts 100 damage to force fields and kills most unshielded living targets.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "bomb",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "explosive",
+    "actionTypes": {}
+  },
+  "_id": "CybNzlyq0ZrWU2WI",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!CybNzlyq0ZrWU2WI"
+}

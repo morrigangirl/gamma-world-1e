@@ -1,0 +1,381 @@
+{
+  "name": "Rakox",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/rakox.png",
+  "prototypeToken": {
+    "name": "Rakox",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/rakox.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Ox",
+      "level": 20,
+      "xp": 0,
+      "movement": 90,
+      "alliance": "",
+      "role": "horned draft beast",
+      "speech": "",
+      "creatureClass": "Mutated Ox"
+    },
+    "attributes": {
+      "ms": {
+        "value": 4,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 3,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 4,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 120,
+        "value": 120,
+        "max": 120,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 4,
+      "radResistance": 18,
+      "poisonResistance": 18
+    },
+    "biography": {
+      "value": "<p>A huge ox with a partial carapace and a forward frill of long horns.</p><p>Charging rakoxes do double damage and can carry immense loads.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Partial Carapace",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 4,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Heavy partial shell and enormous bulk."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "wcQqFjdgnfRkZMQf",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZVREVr9uOK79LO0V.wcQqFjdgnfRkZMQf"
+    },
+    {
+      "name": "Horn Gore",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "note",
+          "formula": "",
+          "status": "",
+          "notes": "A charging rakox does double damage."
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A typical man-sized victim is usually caught by one to three horns."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "9jm51Vwj8cVjwA3d",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZVREVr9uOK79LO0V.9jm51Vwj8cVjwA3d"
+    }
+  ],
+  "_id": "ZVREVr9uOK79LO0V",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!ZVREVr9uOK79LO0V"
+}

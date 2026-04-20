@@ -1,0 +1,81 @@
+{
+  "name": "Bubble Car",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "vi",
+    "action": {
+      "mode": "guided",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "anti-grav",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Elite solar-powered vessel for deep sea and deep space travel."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Ultimate solar-powered luxury vehicle for deep sea and deep space travel.</p><p>Rechargeable solar cells handle the main drive, while an atomic backup cell powers the shield and emergency systems for about 24 hours.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "vehicle",
+      "chart": "c",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "solar",
+      "power": {
+        "requirement": "cells",
+        "installedType": "solar",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "solar",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 24,
+        "max": 24
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "vehicle",
+    "actionTypes": {}
+  },
+  "_id": "49ZplbNX8nTUnXc9",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!49ZplbNX8nTUnXc9"
+}

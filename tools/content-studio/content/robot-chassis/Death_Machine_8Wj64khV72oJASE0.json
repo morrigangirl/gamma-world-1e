@@ -1,0 +1,55 @@
+{
+  "name": "Death Machine",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 1. <strong>Hit Points:</strong> 180.</p><p><strong>Armament:</strong> Black ray gun (save vs death), twin fusion cannons (10d6).</p><p><strong>Sensors:</strong> Full military suite.</p><p><strong>Controls:</strong> Independent + override codes.</p><p>The worst thing in the wasteland. Virtually unkillable without a fusion bomb or coordinated high-tech assault.</p>"
+      },
+      "_id": "ZRAEAemHLwX5Umvd",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!8Wj64khV72oJASE0.ZRAEAemHLwX5Umvd"
+    }
+  ],
+  "_id": "8Wj64khV72oJASE0",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!8Wj64khV72oJASE0"
+}

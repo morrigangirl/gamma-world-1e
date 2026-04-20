@@ -1,0 +1,55 @@
+{
+  "name": "Large Cargo Transport",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 5. <strong>Hit Points:</strong> 90.</p><p><strong>Armament:</strong> Defensive minigun (2d6, 40m).</p><p><strong>Sensors:</strong> Radar, vision, sonar.</p><p><strong>Controls:</strong> Autopilot + remote.</p><p>Convoy-class autonomous truck. Armed against wasteland raiders.</p>"
+      },
+      "_id": "qqx0ya6K1m1np5Do",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!X4bpdIoIC4gC9oea.qqx0ya6K1m1np5Do"
+    }
+  ],
+  "_id": "X4bpdIoIC4gC9oea",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!X4bpdIoIC4gC9oea"
+}

@@ -1,0 +1,497 @@
+{
+  "name": "Ranks-of-the-Fit Militant",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Ranks-of-the-Fit Militant",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "psh",
+      "animalForm": "",
+      "level": 4,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "ranks-of-the-fit",
+      "role": "purity militant",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 11,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 5,
+      "naturalAttack": {
+        "name": "Rifle Butt",
+        "damage": "1d4"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 38,
+        "value": 38,
+        "max": 38,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 5,
+      "mentalResistance": 11,
+      "radResistance": 14,
+      "poisonResistance": 14
+    },
+    "biography": {
+      "value": "<p>A militant of the Ranks who hunts mutants. Armed with a stun rifle and inertia armor.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "Ancient signage",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Stun Rifle",
+      "type": "weapon",
+      "img": "systems/gamma-world-1e/assets/weapons/stun-rifle.png",
+      "system": {
+        "weaponClass": 12,
+        "category": "artifact",
+        "ammoType": [
+          "stun-cell"
+        ],
+        "damage": {
+          "formula": "0",
+          "type": "energy"
+        },
+        "range": {
+          "short": 100,
+          "medium": 0,
+          "long": 200
+        },
+        "attackType": "energy",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "stun",
+          "formula": "20",
+          "status": "unconscious",
+          "notes": "Victim is stunned for up to 20 minutes, less one minute per point of Constitution."
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": false,
+        "description": {
+          "value": "<p>Long-ranged stunning rifle.</p>"
+        },
+        "traits": {
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false,
+          "tag": "stun"
+        },
+        "artifact": {
+          "isArtifact": true,
+          "category": "rifle",
+          "chart": "a",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "solar",
+          "power": {
+            "requirement": "cells",
+            "installedType": "solar",
+            "ambientSource": "none",
+            "ambientAvailable": false,
+            "compatibleCells": "solar",
+            "cellSlots": 1,
+            "cellsInstalled": 1
+          },
+          "charges": {
+            "current": 5,
+            "max": 5
+          },
+          "functionChance": 40,
+          "harmCallback": ""
+        },
+        "actionTypes": {}
+      },
+      "_id": "TGQrkgMav4RjiuZk",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!VnfHPeNtGduA8xzs.TGQrkgMav4RjiuZk"
+    },
+    {
+      "name": "Stun Rifle Cell (10 shots)",
+      "type": "gear",
+      "img": "icons/weapons/ammunition/arrow-simple.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 0.1,
+        "subtype": "ammunition",
+        "equipped": false,
+        "ammo": {
+          "type": "stun-cell",
+          "rounds": 10
+        },
+        "description": {
+          "value": "Replacement energy cell for stun ray pistols and stun rifles."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "NExpW9u5W0ce0sx2",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!VnfHPeNtGduA8xzs.NExpW9u5W0ce0sx2"
+    },
+    {
+      "name": "Large Backpack",
+      "type": "gear",
+      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 3.5,
+        "subtype": "container",
+        "equipped": false,
+        "container": {
+          "capacity": 100,
+          "stored": []
+        },
+        "description": {
+          "value": "An oversized expedition pack with an internal frame."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "KGgBIGdOFPmwgEFt",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!VnfHPeNtGduA8xzs.KGgBIGdOFPmwgEFt"
+    },
+    {
+      "name": "Iron Rations (1 week)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 7,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Pre-war processed food bars preserved in foil. One-week supply.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "ration",
+        "actionTypes": {}
+      },
+      "_id": "VtkQIutCL476T4sX",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!VnfHPeNtGduA8xzs.VtkQIutCL476T4sX"
+    }
+  ],
+  "_id": "VnfHPeNtGduA8xzs",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!VnfHPeNtGduA8xzs"
+}

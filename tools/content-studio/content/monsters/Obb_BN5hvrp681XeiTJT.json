@@ -1,0 +1,528 @@
+{
+  "name": "Obb",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/obb.png",
+  "prototypeToken": {
+    "name": "Obb",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/obb.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Fungus",
+      "level": 12,
+      "xp": 0,
+      "movement": 10,
+      "alliance": "",
+      "role": "flying fungal hunter",
+      "speech": "obb speech",
+      "creatureClass": "Mutated Fungus"
+    },
+    "attributes": {
+      "ms": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 5,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 72,
+        "value": 72,
+        "max": 72,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 12,
+      "radResistance": 14,
+      "poisonResistance": 14
+    },
+    "biography": {
+      "value": "<p>An intelligent bat-like fungus that dives from the air, blasting prey with radiation before striking with stunning claws.</p><p>Obbs are immune to radiation and all laser, light, and heat attacks.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "obb speech",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Fungal Membrane",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 10,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 150,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": true,
+          "poisonImmune": false,
+          "laserImmune": true,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "An oddly resilient fungal body."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "ENAhPbtqBNBjL0vR",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!BN5hvrp681XeiTJT.ENAhPbtqBNBjL0vR"
+    },
+    {
+      "name": "Left Stunning Claw",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "3d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": true
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A stunning claw-strike."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "8W7w3hNJvY0wQpUg",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!BN5hvrp681XeiTJT.8W7w3hNJvY0wQpUg"
+    },
+    {
+      "name": "Right Stunning Claw",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "3d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": true
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A stunning claw-strike."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "In44RT5BXoq7G75F",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!BN5hvrp681XeiTJT.In44RT5BXoq7G75F"
+    },
+    {
+      "name": "Radiated Eyes",
+      "type": "mutation",
+      "system": {
+        "code": 37,
+        "subtype": "physical",
+        "category": "beneficial",
+        "summary": "Blasts of radiation up to 10 meters that do 3d6 every 4 turns.",
+        "reference": {
+          "table": "physical",
+          "page": 10,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 4
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "radiation",
+          "notes": "Roll intensity and resolve the target's radiation exposure."
+        },
+        "actionTypes": [
+          "attack",
+          "damage"
+        ],
+        "description": {
+          "value": "<p>Blasts of radiation up to 10 meters that do 3d6 every 4 turns.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "YKytIrNuk0tojQup",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!BN5hvrp681XeiTJT.YKytIrNuk0tojQup"
+    }
+  ],
+  "_id": "BN5hvrp681XeiTJT",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!BN5hvrp681XeiTJT"
+}

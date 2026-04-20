@@ -1,0 +1,501 @@
+{
+  "name": "Centisteed",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/centisteed.png",
+  "prototypeToken": {
+    "name": "Centisteed",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/centisteed.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Horse",
+      "level": 7,
+      "xp": 0,
+      "movement": 300,
+      "alliance": "",
+      "role": "swift many-legged mount",
+      "speech": "",
+      "creatureClass": "Sixteen-Legged Mount"
+    },
+    "attributes": {
+      "ms": {
+        "value": 6,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 4,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 6,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 42,
+        "value": 42,
+        "max": 42,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 6,
+      "radResistance": 12,
+      "poisonResistance": 12
+    },
+    "biography": {
+      "value": "<p>A long-bodied former horse whose sixteen legs and immense metabolism make it a remarkable mount.</p><p>Centisteeds are totally immune to mental attack and can generate force fields.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Segmented Hide",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 9,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": true
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Layered hide and dense nerve net."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "sidzqBs2sQStNSKT",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!NAtJuXSkOns7G1fm.sidzqBs2sQStNSKT"
+    },
+    {
+      "name": "Trampling Rush",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A charging body and many kicking legs."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "HUMTLVZkapWwdic5",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!NAtJuXSkOns7G1fm.HUMTLVZkapWwdic5"
+    },
+    {
+      "name": "Force Field Generation",
+      "type": "mutation",
+      "system": {
+        "code": 13,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Up to 1 hour",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "5d6",
+          "saveType": "",
+          "notes": "Barrier surrounds the body and absorbs up to 5d6 damage."
+        },
+        "actionTypes": [
+          "defense"
+        ],
+        "description": {
+          "value": "<p>Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "VvMi79Ue2KtaJpa3",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!NAtJuXSkOns7G1fm.VvMi79Ue2KtaJpa3"
+    },
+    {
+      "name": "Increased Metabolism",
+      "type": "mutation",
+      "system": {
+        "code": 22,
+        "subtype": "defect",
+        "category": "defect",
+        "summary": "Eat every 5th round or lose 1STR and 2HP / turn.",
+        "reference": {
+          "table": "physical",
+          "page": 10,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Eat every 5th round or lose 1STR and 2HP / turn.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "JDLt8BKsTuFboOI5",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!NAtJuXSkOns7G1fm.JDLt8BKsTuFboOI5"
+    }
+  ],
+  "_id": "NAtJuXSkOns7G1fm",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!NAtJuXSkOns7G1fm"
+}

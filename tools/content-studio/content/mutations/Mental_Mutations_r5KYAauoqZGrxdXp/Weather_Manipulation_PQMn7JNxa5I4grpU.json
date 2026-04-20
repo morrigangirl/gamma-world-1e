@@ -1,0 +1,58 @@
+{
+  "name": "Weather Manipulation",
+  "type": "mutation",
+  "system": {
+    "code": 48,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Prevailing Conditions.",
+    "reference": {
+      "table": "mental",
+      "page": 0,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 km radius",
+    "duration": "Concentration",
+    "usage": {
+      "limited": true,
+      "per": "day",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Concentrate 6 rounds to begin the shift and 12 more to complete it."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can alter local weather conditions in the area around it. The new weather persists only while the mutant keeps concentrating. If the mutant is struck in combat, concentration is broken. It must first concentrate for 1 full minute, or 6 melee turns, before the weather starts to shift, and then spend another 2 minutes, or 12 melee turns, to complete the change. The affected area has a radius of 10 kilometers.</p><p>The mutation cannot create a wildly impossible shift, such as turning below-zero conditions directly into a 100 degree heat wave. The possible changes depend on the current weather:</p><table class=\"gw-mutation__table\"><thead><tr><th>Aspect</th><th>Prevailing Condition</th><th>Possible Change</th></tr></thead><tbody><tr><td>Cloud cover / precipitation</td><td>Clear</td><td>Very clear; partly cloudy or hazy</td></tr><tr><td>Cloud cover / precipitation</td><td>Partly cloudy</td><td>Clear; cloudy</td></tr><tr><td>Cloud cover / precipitation</td><td>Cloudy</td><td>Partly cloudy; misty, light rain, light snow, sleet, or small hail</td></tr><tr><td>Cloud cover / precipitation</td><td>Deep clouds</td><td>Fog, heavy rain, heavy snow, driving sleet, or large hail</td></tr><tr><td>Temperature</td><td>Hot</td><td>Sweltering heat; warm</td></tr><tr><td>Temperature</td><td>Warm</td><td>Hot; cool</td></tr><tr><td>Temperature</td><td>Cool</td><td>Warm; cold</td></tr><tr><td>Temperature</td><td>Cold</td><td>Cool; arctic cold</td></tr><tr><td>Wind</td><td>Calm</td><td>Dead calm; light wind</td></tr><tr><td>Wind</td><td>Light wind</td><td>Calm; strong wind</td></tr><tr><td>Wind</td><td>Strong wind</td><td>Light wind; gale</td></tr><tr><td>Wind</td><td>Gale</td><td>Strong wind; storm</td></tr><tr><td>Wind</td><td>Storm</td><td>Gale; hurricane or typhoon</td></tr></tbody></table><p>All three aspects may be manipulated, but only within the limits shown above. Contradictory combinations, such as fog and strong wind together, are not allowed.</p><p>The base chance to cause one of the listed changes is 90%. If the mutant wants a result one step farther away from current conditions, such as clear weather becoming light rain, the chance drops to 50% and the required concentration and completion times are both doubled. If the mutant wants a result two steps away, such as warm weather becoming arctic cold, the chance falls to 10% and the required times are tripled.</p><p>Roll percentile dice after the initial concentration is complete, but the new conditions do not fully take effect until the weather change has finished. If the attempt fails, either because the roll fails or because the mutant is interrupted after the initial concentration, the mutant must rest for a full week before trying again. This mutation can be used at most once per day.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/weather-manipulation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "PQMn7JNxa5I4grpU",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!PQMn7JNxa5I4grpU"
+}

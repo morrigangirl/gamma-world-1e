@@ -1,0 +1,58 @@
+{
+  "name": "Mass Mind",
+  "type": "mutation",
+  "system": {
+    "code": 23,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Empathize with same type / same power... increase effectiveness.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can empathically join with creatures of the same type or with creatures that share a similar power, such as telepathy, mental blast, or mental control, to increase the effectiveness of its own abilities. The increase is directly proportional to the number of minds participating. For example, two creatures who both have Mental Blast could combine to produce a blast at double strength and twice normal range.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/mass-mind.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "4vLHryxeyJzbSI2B",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!4vLHryxeyJzbSI2B"
+}

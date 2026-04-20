@@ -1,0 +1,92 @@
+{
+  "name": "Heightened Precision",
+  "type": "mutation",
+  "system": {
+    "code": 15,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "+2 damage dice with any weapon.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can spot weak points in enemies and structural flaws in objects. Any weapon it uses inflicts 2 extra dice of damage beyond its normal amount.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Precision — extra damage dice",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.weaponExtraDice",
+          "mode": 2,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "6zUBfkVzKuWMiEY8",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!JtBamkRT9V4P852p.6zUBfkVzKuWMiEY8"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-precision.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "JtBamkRT9V4P852p",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!JtBamkRT9V4P852p"
+}

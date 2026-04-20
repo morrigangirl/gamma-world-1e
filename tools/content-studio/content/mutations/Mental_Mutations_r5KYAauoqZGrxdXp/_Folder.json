@@ -1,0 +1,21 @@
+{
+  "_id": "r5KYAauoqZGrxdXp",
+  "name": "Mental Mutations",
+  "type": "Item",
+  "folder": null,
+  "sorting": "a",
+  "color": "#6b5b95",
+  "description": "",
+  "flags": {},
+  "sort": 0,
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!folders!r5KYAauoqZGrxdXp"
+}

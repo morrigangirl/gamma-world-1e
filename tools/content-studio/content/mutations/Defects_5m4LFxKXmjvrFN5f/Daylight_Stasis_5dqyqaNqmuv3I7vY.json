@@ -1,0 +1,58 @@
+{
+  "name": "Daylight Stasis",
+  "type": "mutation",
+  "system": {
+    "code": 61,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Becomes inert and inactive during daylight hours.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This defect forces the plant into total inactivity during full daylight. By contrast, other plants normally become inactive during darkness, though they may still grow and heal while dark conditions continue.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/daylight-stasis.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "5dqyqaNqmuv3I7vY",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!5dqyqaNqmuv3I7vY"
+}

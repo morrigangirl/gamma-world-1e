@@ -1,0 +1,58 @@
+{
+  "name": "Absorption",
+  "type": "mutation",
+  "system": {
+    "code": 1,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Withstand additional damage for _______ up to current HP.",
+    "reference": {
+      "table": "mental",
+      "page": 11,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "Until depleted",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Choose the mutation's stored energy type and track the absorbed damage pool manually if the source is unusual."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can absorb one specific form of damage, chosen randomly, up to an additional amount equal to its current hit point total. Roll 1d6 to determine the protected form: 1 = cold, 2 = heat, 3 = light, 4 = paralysis rays, 5 = radiation, 6 = mental blasts.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/absorption.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "GD6sca6yTskNQqDx",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!GD6sca6yTskNQqDx"
+}

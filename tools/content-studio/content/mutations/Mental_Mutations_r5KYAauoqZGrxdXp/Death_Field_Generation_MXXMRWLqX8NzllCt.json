@@ -1,0 +1,62 @@
+{
+  "name": "Death Field Generation",
+  "type": "mutation",
+  "system": {
+    "code": 5,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Drain all but one HP from all beings within 20m; unconscious for d20 turns.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "20 m radius",
+    "duration": "Instant",
+    "usage": {
+      "limited": true,
+      "per": "encounter",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "All affected creatures drop to 1 HP. User is nearly unconscious for 1d20 rounds."
+    },
+    "actionTypes": [
+      "attack",
+      "damage",
+      "save"
+    ],
+    "description": {
+      "value": "<p>In a single melee turn, this mutation drains all but 1 hit point from every being within 20 meters. The mutant is not harmed by the field, but after using it can do nothing else for 1-20 melee turns while lying nearly unconscious.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/death-field-generation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "MXXMRWLqX8NzllCt",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!MXXMRWLqX8NzllCt"
+}

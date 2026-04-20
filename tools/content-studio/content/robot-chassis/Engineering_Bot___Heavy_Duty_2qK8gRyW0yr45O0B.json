@@ -1,0 +1,55 @@
+{
+  "name": "Engineering Bot — Heavy Duty",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 5. <strong>Hit Points:</strong> 65.</p><p><strong>Armament:</strong> Cutting laser (2d6, 10m).</p><p><strong>Sensors:</strong> Vision, IR, sonar.</p><p><strong>Controls:</strong> Voice + remote + autopilot.</p><p>Demolition and heavy construction; often mistaken for a warbot.</p>"
+      },
+      "_id": "isCVD3McUENLKoeR",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!2qK8gRyW0yr45O0B.isCVD3McUENLKoeR"
+    }
+  ],
+  "_id": "2qK8gRyW0yr45O0B",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!2qK8gRyW0yr45O0B"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Planar Travel",
+  "type": "mutation",
+  "system": {
+    "code": 32,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Once / week, open 3m x 3m door that lasts 3 rounds to another plane.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Touch",
+    "duration": "3 rounds",
+    "usage": {
+      "limited": true,
+      "per": "week",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Opens a 3 m by 3 m doorway to another plane."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can open a doorway to an alternate plane of existence. The opening is 3 by 3 meters and lasts up to 3 full melee turns, at the mutant&#39;s discretion. The destination plane may or may not be inhabited. Once something enters, it cannot leave again unless the mutant opens another doorway, which makes this a useful power for exile. Only one such door may be opened each week.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/planar-travel.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "iBlvjrcb770WsAqA",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!iBlvjrcb770WsAqA"
+}

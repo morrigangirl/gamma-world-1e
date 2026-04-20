@@ -1,0 +1,58 @@
+{
+  "name": "Divisional Body Segments",
+  "type": "mutation",
+  "system": {
+    "code": 63,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Can detach a segment as a mobile duplicate with 1/4 HP for up to 1 hour.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The plant&#39;s trunk, vines, branches, stalks, limbs, or similar structures are segmented like the body or legs of an insect. This grants the plant mobility.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/divisional-body-segments.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "rdVPWaYH4tMJQot1",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!rdVPWaYH4tMJQot1"
+}

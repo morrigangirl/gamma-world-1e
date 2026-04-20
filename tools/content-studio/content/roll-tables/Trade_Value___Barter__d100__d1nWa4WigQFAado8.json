@@ -1,0 +1,267 @@
+{
+  "name": "Trade Value / Barter (d100)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Common scavenger goods and their trade value in domars (pre-war coinage).</p>",
+  "formula": "1d100",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Potable water (1 liter)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 1 domar or 1 day's rations.",
+      "weight": 1,
+      "range": [
+        1,
+        10
+      ],
+      "drawn": false,
+      "_id": "CEr0sOGaVax4r25i",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.CEr0sOGaVax4r25i"
+    },
+    {
+      "type": "text",
+      "name": "Preserved rations",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 1 domar per day's rations.",
+      "weight": 1,
+      "range": [
+        11,
+        20
+      ],
+      "drawn": false,
+      "_id": "Hr8645HXNvUSZy6l",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.Hr8645HXNvUSZy6l"
+    },
+    {
+      "type": "text",
+      "name": "Flint and steel",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 5 domars or a simple blade.",
+      "weight": 1,
+      "range": [
+        21,
+        30
+      ],
+      "drawn": false,
+      "_id": "JpXl7tmrP1zafnol",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.JpXl7tmrP1zafnol"
+    },
+    {
+      "type": "text",
+      "name": "Pre-war glass bottle",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 2 domars; 10 if intact with cap.",
+      "weight": 1,
+      "range": [
+        31,
+        40
+      ],
+      "drawn": false,
+      "_id": "cXZFKbbBtnFSdVzd",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.cXZFKbbBtnFSdVzd"
+    },
+    {
+      "type": "text",
+      "name": "Functional flashlight",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 25 domars or an Ancient power cell.",
+      "weight": 1,
+      "range": [
+        41,
+        50
+      ],
+      "drawn": false,
+      "_id": "YIZrcmQOR3fRDPUD",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.YIZrcmQOR3fRDPUD"
+    },
+    {
+      "type": "text",
+      "name": "Working clockwork",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 40 domars.",
+      "weight": 1,
+      "range": [
+        51,
+        60
+      ],
+      "drawn": false,
+      "_id": "h39K0EH2fv9m8oBx",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.h39K0EH2fv9m8oBx"
+    },
+    {
+      "type": "text",
+      "name": "Pre-war ammunition",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 1 domar per slug.",
+      "weight": 1,
+      "range": [
+        61,
+        70
+      ],
+      "drawn": false,
+      "_id": "ksUivjfiURFoe7qE",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.ksUivjfiURFoe7qE"
+    },
+    {
+      "type": "text",
+      "name": "Power cell (spent)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 5 domars (hydrogen), 15 (solar), 50 (nuclear).",
+      "weight": 1,
+      "range": [
+        71,
+        80
+      ],
+      "drawn": false,
+      "_id": "TNqMj9SEE9RbwIuD",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.TNqMj9SEE9RbwIuD"
+    },
+    {
+      "type": "text",
+      "name": "Power cell (fresh)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 50 (chemical) to 500 (nuclear) domars.",
+      "weight": 1,
+      "range": [
+        81,
+        90
+      ],
+      "drawn": false,
+      "_id": "9ZLcpa3w1qjSqHAl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.9ZLcpa3w1qjSqHAl"
+    },
+    {
+      "type": "text",
+      "name": "Pre-war book",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 10 domars; 100+ to an Archivist.",
+      "weight": 1,
+      "range": [
+        91,
+        98
+      ],
+      "drawn": false,
+      "_id": "pyA6HvCbJgFtaasO",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.pyA6HvCbJgFtaasO"
+    },
+    {
+      "type": "text",
+      "name": "Unknown Ancient artifact",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Trade value: 100+ domars, subject to Archivist/Seeker appraisal.",
+      "weight": 1,
+      "range": [
+        99,
+        100
+      ],
+      "drawn": false,
+      "_id": "fzL3q1SYaW32eh6T",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!d1nWa4WigQFAado8.fzL3q1SYaW32eh6T"
+    }
+  ],
+  "_id": "d1nWa4WigQFAado8",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!d1nWa4WigQFAado8"
+}

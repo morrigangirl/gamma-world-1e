@@ -1,0 +1,58 @@
+{
+  "name": "Skin Structure Change",
+  "type": "mutation",
+  "system": {
+    "code": 41,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Skin defect causes _______.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant&#39;s skin changes for the worse. Possibilities include thin skin that adds 1 point to each die of damage taken, water-soluble skin that suffers 1 die of damage per melee turn of contact with water, phosphorescent skin that glows enough to reveal position but not enough to illuminate surroundings, or light-sensitive skin that burns for 1-3 dice of damage in bright light.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/skin-structure-change.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "CvkoTJ60dk34n5J7",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!CvkoTJ60dk34n5J7"
+}

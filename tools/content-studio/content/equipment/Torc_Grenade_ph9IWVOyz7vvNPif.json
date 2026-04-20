@@ -1,0 +1,75 @@
+{
+  "name": "Torc Grenade",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "v",
+    "action": {
+      "mode": "torc",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 15,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 1,
+      "ongoing": false,
+      "notes": "Disintegrates unshielded matter and creatures in the blast area."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 15,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>15 meter blast radius. Disintegrates all matter not protected by force fields or energy shields.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "grenade",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "explosive",
+    "actionTypes": {}
+  },
+  "_id": "ph9IWVOyz7vvNPif",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!ph9IWVOyz7vvNPif"
+}

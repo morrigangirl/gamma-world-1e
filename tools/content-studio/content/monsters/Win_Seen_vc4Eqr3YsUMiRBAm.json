@@ -1,0 +1,549 @@
+{
+  "name": "Win Seen",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/win-seen.png",
+  "prototypeToken": {
+    "name": "Win Seen",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/win-seen.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Plant",
+      "level": 13,
+      "xp": 0,
+      "movement": 10,
+      "alliance": "",
+      "role": "creeping poison vine",
+      "speech": "",
+      "creatureClass": "Mutant Vine Colony"
+    },
+    "attributes": {
+      "ms": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 4,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 5,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 3,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 78,
+        "value": 78,
+        "max": 78,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 8,
+      "radResistance": 14,
+      "poisonResistance": 14
+    },
+    "biography": {
+      "value": "<p>A sprawling connected colony of mutant vines found in both aquatic and land forms.</p><p>The aquatic variety carries contact poison and sonic retaliation; the land variety can force ferrous objects to the ground with crude magnetic control.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Interwoven Vines",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 9,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "A loose but persistent mass of creepers."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "DK8LGd83OqRq2SCj",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!vc4Eqr3YsUMiRBAm.DK8LGd83OqRq2SCj"
+    },
+    {
+      "name": "Magnetic Control",
+      "type": "mutation",
+      "system": {
+        "code": 22,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Once / 24 hours, control iron object (25rds, 100m) (MR 12 to succeed).",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "100 m",
+        "duration": "25 rounds",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "mental",
+          "notes": "On a failed mental save (ferrous objects resist as MR 12), the target is controlled for up to 25 rounds."
+        },
+        "actionTypes": [
+          "attack",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Once / 24 hours, control iron object (25rds, 100m) (MR 12 to succeed).</p>"
+        }
+      },
+      "effects": [],
+      "_id": "FFw7symc0sW2TVT1",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!vc4Eqr3YsUMiRBAm.FFw7symc0sW2TVT1"
+    },
+    {
+      "name": "Sonic Attack Ability",
+      "type": "mutation",
+      "system": {
+        "code": 83,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m radius",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 4
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "",
+          "notes": "Damages every other creature within 10 meters."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "njqA4HlDUSY1jYpT",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!vc4Eqr3YsUMiRBAm.njqA4HlDUSY1jYpT"
+    },
+    {
+      "name": "Contact Poison",
+      "type": "gear",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "none",
+        "action": {
+          "mode": "guided",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "The aquatic win seen is covered with intensity 14 contact poison."
+        },
+        "description": {
+          "value": "<p>The aquatic win seen is covered with intensity 14 contact poison.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "misc",
+        "actionTypes": {}
+      },
+      "_id": "dVQuLt2H9twS3cc8",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!vc4Eqr3YsUMiRBAm.dVQuLt2H9twS3cc8"
+    },
+    {
+      "name": "Attraction Colony",
+      "type": "gear",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "none",
+        "action": {
+          "mode": "guided",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "Land win seen cultivates nearby carnivores with attraction odors and crude magnetic control."
+        },
+        "description": {
+          "value": "<p>Land win seen cultivates nearby carnivores with attraction odors and crude magnetic control.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "misc",
+        "actionTypes": {}
+      },
+      "_id": "5C2PpzRO6GzagGEt",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!vc4Eqr3YsUMiRBAm.5C2PpzRO6GzagGEt"
+    }
+  ],
+  "_id": "vc4Eqr3YsUMiRBAm",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!vc4Eqr3YsUMiRBAm"
+}

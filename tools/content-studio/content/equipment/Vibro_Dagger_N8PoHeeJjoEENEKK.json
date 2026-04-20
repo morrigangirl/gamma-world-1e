@@ -1,0 +1,88 @@
+{
+  "name": "Vibro Dagger",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/vibro-dagger.png",
+  "system": {
+    "weaponClass": 4,
+    "category": "artifact",
+    "ammoType": [],
+    "damage": {
+      "formula": "10",
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "attackType": "melee",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "damage",
+      "formula": "",
+      "status": "",
+      "notes": ""
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Force-field dagger. Cuts anything except another force field.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false,
+      "tag": "force"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "energyWeapon",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "hydrogen",
+      "power": {
+        "requirement": "cells",
+        "installedType": "hydrogen",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "hydrogen",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 30,
+        "max": 30
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "N8PoHeeJjoEENEKK",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!N8PoHeeJjoEENEKK"
+}

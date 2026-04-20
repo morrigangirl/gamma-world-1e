@@ -1,0 +1,245 @@
+{
+  "name": "Artifact Category (d100)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>When a random Ancient artifact is recovered, roll to determine its category.</p>",
+  "formula": "1d100",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Pistol",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Slug thrower, needler, stun ray, laser, Mark V, black ray.",
+      "weight": 1,
+      "range": [
+        1,
+        10
+      ],
+      "drawn": false,
+      "_id": "4ziVVEtu2R4Htj34",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.4ziVVEtu2R4Htj34"
+    },
+    {
+      "type": "text",
+      "name": "Rifle",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Stun rifle, laser rifle, Mark VII, fusion rifle.",
+      "weight": 1,
+      "range": [
+        11,
+        20
+      ],
+      "drawn": false,
+      "_id": "tVcqTa2x64OHaCch",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.tVcqTa2x64OHaCch"
+    },
+    {
+      "type": "text",
+      "name": "Energy Weapon",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Vibro blade, energy mace, stun whip, force pike.",
+      "weight": 1,
+      "range": [
+        21,
+        30
+      ],
+      "drawn": false,
+      "_id": "vAVDGimLNZfdn4QY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.vAVDGimLNZfdn4QY"
+    },
+    {
+      "type": "text",
+      "name": "Grenade",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gas, chemical explosive, fragmentation, energy, photon, torc.",
+      "weight": 1,
+      "range": [
+        31,
+        40
+      ],
+      "drawn": false,
+      "_id": "Fxo8FwXHoIqVVDQo",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.Fxo8FwXHoIqVVDQo"
+    },
+    {
+      "type": "text",
+      "name": "Bomb / Missile",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Micro missile, fission bomb, concussion, negation, neutron, trek, mutation.",
+      "weight": 1,
+      "range": [
+        41,
+        50
+      ],
+      "drawn": false,
+      "_id": "38Hdad9cxUfQUplV",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.38Hdad9cxUfQUplV"
+    },
+    {
+      "type": "text",
+      "name": "Armor",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Powered plate, inertia, energised, powered scout/battle/attack/assault.",
+      "weight": 1,
+      "range": [
+        51,
+        55
+      ],
+      "drawn": false,
+      "_id": "wpYNPGc4Ope3sq3t",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.wpYNPGc4Ope3sq3t"
+    },
+    {
+      "type": "text",
+      "name": "Vehicle",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Turbine car, hover car, flit car, bubble car, cargo hauler, helicopter.",
+      "weight": 1,
+      "range": [
+        56,
+        65
+      ],
+      "drawn": false,
+      "_id": "serLLf0TthrvBjsK",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.serLLf0TthrvBjsK"
+    },
+    {
+      "type": "text",
+      "name": "Energy Device",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Force field generator, portent, energy cloak, accelera-dose, medi-kit, life ray.",
+      "weight": 1,
+      "range": [
+        66,
+        80
+      ],
+      "drawn": false,
+      "_id": "Glz26YRwZtvsditr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.Glz26YRwZtvsditr"
+    },
+    {
+      "type": "text",
+      "name": "Robotic Unit",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Household, medical, security, borg, warbot — see the Robotic Units pack.",
+      "weight": 1,
+      "range": [
+        81,
+        90
+      ],
+      "drawn": false,
+      "_id": "bxTa8qcxegyZpXOy",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.bxTa8qcxegyZpXOy"
+    },
+    {
+      "type": "text",
+      "name": "Medical",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Stim dose, cur-in dose, anti-radiation serum, pain reducer, rejuv chamber, life ray.",
+      "weight": 1,
+      "range": [
+        91,
+        100
+      ],
+      "drawn": false,
+      "_id": "fzjRXXbdIULZwfb2",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Jx0VxkDvVPhqJU8V.fzjRXXbdIULZwfb2"
+    }
+  ],
+  "_id": "Jx0VxkDvVPhqJU8V",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!Jx0VxkDvVPhqJU8V"
+}

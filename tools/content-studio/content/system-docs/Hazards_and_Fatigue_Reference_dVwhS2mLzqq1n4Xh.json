@@ -1,0 +1,123 @@
+{
+  "name": "Hazards and Fatigue Reference",
+  "pages": [
+    {
+      "name": "Fatigue Rules",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>During extended combat, fatigue begins to matter somewhere between the 11th and 18th melee turn depending on weapon, armor, and strength.</p><p>A combatant’s fatigue factor is subtracted from the attacker’s weapon class when using the physical attack matrix.</p><p>Each melee turn spent resting reduces the fatigue factor by 1, and each point of Physical Strength over 15 also reduces it by 1.</p><p>If fatigue drops the effective weapon class to 0, the combatant cannot make an effective damaging attack until enough rest brings it back to at least 1.</p><p>Powered energy weapons, powered blade weapons, and powered offensive armor do not accumulate fatigue under the core rules. Powered defensive armor still carries fatigue costs.</p>"
+      },
+      "_id": "SOt0MzgIKFwgNxwB",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!dVwhS2mLzqq1n4Xh.SOt0MzgIKFwgNxwB"
+    },
+    {
+      "name": "Poison Matrix (RAW reference)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Reference only — not used by the live save pipeline.</strong> This system replaces the poison matrix with a d20 + CN save; see Chapter 11 \"Poison Homebrew\" in the Rulebook Reference pack for the active rules. The RAW matrix below is preserved for lookup and for any GM who wants to run the original save-or-die resolution.</p><p>Constitution runs down the left side; Poison Strength runs across the top.</p><p>\"*\" means no effect.</p><p>A number means that many d6 of poison damage.</p><p>\"D\" means death unless the correct antidote is administered within two melee rounds.</p><p><em>Under the live homebrew: roll 1d20 + CN modifier vs. poison difficulty. Success = half damage, failure = full damage, never death on one cell.</em></p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>Constitution</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th></tr></thead>\n        <tbody><tr><th scope=\"row\">18</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td></tr><tr><th scope=\"row\">17</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">16</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">15</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">14</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">13</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">12</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">11</th><td>*</td><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">10</th><td>*</td><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">9</th><td>*</td><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">8</th><td>*</td><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">7</th><td>*</td><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">6</th><td>1</td><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">5</th><td>2</td><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">4</th><td>3</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">3</th><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "P4wgcwUenzPPwAFZ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!dVwhS2mLzqq1n4Xh.P4wgcwUenzPPwAFZ"
+    },
+    {
+      "name": "Radiation Matrix (RAW reference)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Reference only — not used by the live save pipeline.</strong> This system replaces the radiation matrix with a d20 + CN save banded by margin of failure; see Chapter 11 \"Radiation Homebrew\" in the Rulebook Reference pack for the live rules (thresholds, Radiation Sickness conditions, and the Catastrophic Exposure spiral). The RAW matrix below is preserved for reference.</p><p>Constitution runs down the left side; Radiation Intensity runs across the top.</p><p>A number means that many d6 of radiation damage.</p><p>\"M\" means a new mutation manifests in one week.</p><p>\"D\" means a 20% chance of mutational defect and an 80% chance of death. There is no antidote for radiation.</p><p><em>Under the live homebrew: intensity &lt; 10 has no effect; otherwise roll 1d20 + CN modifier vs. intensity. Miss by 1–3 = Radiation Sickness (mild), 4–6 = Sickness (severe) + mutation, 7+ = Catastrophic Exposure (−10% max HP/hour starting tomorrow).</em></p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>Constitution</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th></tr></thead>\n        <tbody><tr><th scope=\"row\">18</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td></tr><tr><th scope=\"row\">17</th><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">16</th><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">15</th><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">14</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">13</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">12</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">11</th><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">10</th><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">9</th><td>5</td><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">8</th><td>6</td><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">7</th><td>7</td><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">6</th><td>8</td><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">5</th><td>M</td><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">4</th><td>M</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr><tr><th scope=\"row\">3</th><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td><td>D</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "qoE3hVeQsCbRN7gN",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!dVwhS2mLzqq1n4Xh.qoE3hVeQsCbRN7gN"
+    }
+  ],
+  "_id": "dVwhS2mLzqq1n4Xh",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!dVwhS2mLzqq1n4Xh"
+}

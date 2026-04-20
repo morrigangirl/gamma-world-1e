@@ -1,0 +1,470 @@
+{
+  "name": "Android Warrior",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/android-warrior.png",
+  "prototypeToken": {
+    "name": "Android Warrior",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/android-warrior.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "robot",
+      "animalForm": "",
+      "level": 13,
+      "xp": 0,
+      "movement": 150,
+      "alliance": "",
+      "role": "synthetic war machine",
+      "speech": "common, machine codes",
+      "creatureClass": "Android"
+    },
+    "attributes": {
+      "ms": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 75,
+        "value": 75,
+        "max": 75,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 10,
+      "radResistance": 18,
+      "poisonResistance": 18
+    },
+    "biography": {
+      "value": "<p>Combat-model android with military reflexes and a built-in hatred of humans.</p><p>Warrior androids normally appear with full battlefield loadouts; this sample carries a rifle.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "common, machine codes",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": true,
+      "mode": "programmed",
+      "chassis": "Android Warrior",
+      "identifier": "AT-WR",
+      "controller": "",
+      "powerSource": "broadcast",
+      "powerCurrent": 38,
+      "powerMax": 38,
+      "broadcastCapable": true,
+      "backupHours": 12,
+      "repairDifficulty": 14,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Android Combat Frame",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 4,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": true,
+          "poisonImmune": true,
+          "laserImmune": false,
+          "mentalImmune": true
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Duralloy combat shell."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "b1wPaKfP9OviA8TL",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!tOotZq9DuveZKAXt.b1wPaKfP9OviA8TL"
+    },
+    {
+      "name": "Laser Rifle",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {},
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "6d6",
+          "type": "energy"
+        },
+        "range": {
+          "short": 300,
+          "medium": 0,
+          "long": 600
+        },
+        "attackType": "energy",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "laser",
+          "deflectAc2Hits": 1,
+          "deflectAc1Hits": 2,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Common warrior-model rifle."
+        },
+        "artifact": {
+          "isArtifact": true,
+          "category": "rifle",
+          "chart": "a",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "hydrogen",
+          "power": {
+            "requirement": "cells",
+            "installedType": "hydrogen",
+            "ambientSource": "none",
+            "ambientAvailable": false,
+            "compatibleCells": "hydrogen",
+            "cellSlots": 1,
+            "cellsInstalled": 1
+          },
+          "charges": {
+            "current": 5,
+            "max": 5
+          },
+          "functionChance": 40,
+          "harmCallback": ""
+        },
+        "category": "artifact",
+        "actionTypes": {}
+      },
+      "_id": "xObpKNguE4xauNpd",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!tOotZq9DuveZKAXt.xObpKNguE4xauNpd"
+    },
+    {
+      "name": "Reinforced Fist",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "1d10",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A heavy combat punch."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "qWxDymRLD63cv9NW",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!tOotZq9DuveZKAXt.qWxDymRLD63cv9NW"
+    }
+  ],
+  "_id": "tOotZq9DuveZKAXt",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!tOotZq9DuveZKAXt"
+}

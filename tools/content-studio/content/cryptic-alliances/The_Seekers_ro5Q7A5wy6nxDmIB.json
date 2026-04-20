@@ -1,0 +1,55 @@
+{
+  "name": "The Seekers",
+  "pages": [
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Purpose:</strong> Hunt down Ancient artifacts and the lost secrets of their creators.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal.</p><p><strong>Allies:</strong> Brotherhood of Thought, Restorationists.</p><p><strong>Enemies:</strong> Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +1.</p>"
+      },
+      "_id": "4yfJCOo84o40U6Q0",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!ro5Q7A5wy6nxDmIB.4yfJCOo84o40U6Q0"
+    }
+  ],
+  "_id": "ro5Q7A5wy6nxDmIB",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!ro5Q7A5wy6nxDmIB"
+}

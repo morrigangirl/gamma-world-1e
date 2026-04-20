@@ -1,0 +1,55 @@
+{
+  "name": "Artifacts and Robots",
+  "pages": [
+    {
+      "name": "Artifacts and Robots",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Ancient items now track artifact condition, function chance, analysis progress, known operation, power source, and charges directly on the item.</p><p>Artifact identification now runs through a shared Chart A / B / C flowchart panel. The whole table can watch the graph, only the operator can roll it forward, and the GM keeps the hidden functionality and mishap checks.</p><p>Once an artifact is understood, normal use still checks power, can short out or explode on failed function checks, and charged devices spend a power step whenever they work.</p><p>Broadcast power is handled as ambient availability on the item, not as an installable power cell, so the referee can decide when Ancient infrastructure is online.</p><p>Robots use the shared character sheet with a Robotics panel for power, control mode, identifier, malfunction notes, and repair actions.</p>"
+      },
+      "_id": "gPOXSzMkgcEZrFxW",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!AJmALm9pvF5ZRoTv.gPOXSzMkgcEZrFxW"
+    }
+  ],
+  "_id": "AJmALm9pvF5ZRoTv",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!AJmALm9pvF5ZRoTv"
+}

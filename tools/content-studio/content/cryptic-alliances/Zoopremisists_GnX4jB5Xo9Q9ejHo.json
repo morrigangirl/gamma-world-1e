@@ -1,0 +1,55 @@
+{
+  "name": "Zoopremisists",
+  "pages": [
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Purpose:</strong> Hold that mutated animals are the rightful heirs of the world.</p><p><strong>Welcomes:</strong> mutated-animal.</p><p><strong>Allies:</strong> Ranks of the Fit.</p><p><strong>Enemies:</strong> Restorationists, Ranks of the Fit.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+      },
+      "_id": "Et6dsY27iHY2dWVO",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!GnX4jB5Xo9Q9ejHo.Et6dsY27iHY2dWVO"
+    }
+  ],
+  "_id": "GnX4jB5Xo9Q9ejHo",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!GnX4jB5Xo9Q9ejHo"
+}

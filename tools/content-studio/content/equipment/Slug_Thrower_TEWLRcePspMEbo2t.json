@@ -1,0 +1,81 @@
+{
+  "name": "Slug Thrower",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/slug-thrower.png",
+  "system": {
+    "weaponClass": 10,
+    "category": "modern",
+    "ammoType": [
+      "slug"
+    ],
+    "damage": {
+      "formula": "2d6",
+      "type": "physical"
+    },
+    "range": {
+      "short": 20,
+      "medium": 0,
+      "long": 40
+    },
+    "attackType": "ranged",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "damage",
+      "formula": "",
+      "status": "",
+      "notes": ""
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Police riot-control sidearm firing stunning slugs.</p><p>Track unconsciousness when stun damage reaches half the target's original hit points.</p><p>Powered by a hydrogen energy cell good for about five clips.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "TEWLRcePspMEbo2t",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!TEWLRcePspMEbo2t"
+}

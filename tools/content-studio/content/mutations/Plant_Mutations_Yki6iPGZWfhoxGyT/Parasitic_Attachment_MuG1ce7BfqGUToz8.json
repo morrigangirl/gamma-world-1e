@@ -1,0 +1,58 @@
+{
+  "name": "Parasitic Attachment",
+  "type": "mutation",
+  "system": {
+    "code": 73,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Attach to a host (1d4 damage/day); the plant gains nutrients and mobility.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The plant can connect to another creature&#39;s nervous system and control its body. It must first hit the victim with an appendage such as a tendril, vine, or segmented limb, then maintain contact for 3 melee turns. Once control is established, an unintelligent plant usually uses the victim to defend the plant or serve as food, while an intelligent plant may have more elaborate plans. If contact is broken, control ends immediately.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/parasitic-attachment.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "MuG1ce7BfqGUToz8",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!MuG1ce7BfqGUToz8"
+}

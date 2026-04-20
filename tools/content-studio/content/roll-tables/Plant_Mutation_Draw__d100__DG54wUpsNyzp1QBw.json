@@ -1,0 +1,927 @@
+{
+  "name": "Plant Mutation Draw (d100)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Roll on the mutated plant chart.</p>",
+  "formula": "1d100",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Adaptation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Adapt once per day to a hostile environment (heat, cold, radiation, vacuum) for up to 24 hours.",
+      "weight": 1,
+      "range": [
+        1,
+        3
+      ],
+      "drawn": false,
+      "_id": "tXQjfMSdKUHxdzRT",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.tXQjfMSdKUHxdzRT"
+    },
+    {
+      "type": "text",
+      "name": "Aromatic Powers",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Release a scent that attracts or repels specific creatures within 15m.",
+      "weight": 1,
+      "range": [
+        4,
+        6
+      ],
+      "drawn": false,
+      "_id": "khs6reXy1u5zjvYA",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.khs6reXy1u5zjvYA"
+    },
+    {
+      "type": "text",
+      "name": "Attraction Odor",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Emit a scent that draws carnivores — attackers gain +2 to hit.",
+      "weight": 1,
+      "range": [
+        7,
+        8
+      ],
+      "drawn": false,
+      "_id": "urBBz7m26tGzKOcY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.urBBz7m26tGzKOcY"
+    },
+    {
+      "type": "text",
+      "name": "Bacterial Symbiosis",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Internal bacteria grant +3 to radiation and poison saves.",
+      "weight": 1,
+      "range": [
+        9,
+        11
+      ],
+      "drawn": false,
+      "_id": "Iohx5UYLkIkkTzgW",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.Iohx5UYLkIkkTzgW"
+    },
+    {
+      "type": "text",
+      "name": "Barbed Leaves",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Anyone striking in melee suffers 1d3 puncture damage per attack.",
+      "weight": 1,
+      "range": [
+        12,
+        14
+      ],
+      "drawn": false,
+      "_id": "ZjRDic0uq1tESMyl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.ZjRDic0uq1tESMyl"
+    },
+    {
+      "type": "text",
+      "name": "Berries (effects)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Bears 2d6 berries per day; fruit causes a random beneficial or mild harmful effect if ingested.",
+      "weight": 1,
+      "range": [
+        15,
+        17
+      ],
+      "drawn": false,
+      "_id": "0YCWTohuc7DGMtkY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.0YCWTohuc7DGMtkY"
+    },
+    {
+      "type": "text",
+      "name": "Boring Tendrils",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Drill into soil, stone, or flesh at 1m/round; tendrils deal 1d6 damage to gripped victims.",
+      "weight": 1,
+      "range": [
+        18,
+        20
+      ],
+      "drawn": false,
+      "_id": "az5Gd1iE2qvXtI5i",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.az5Gd1iE2qvXtI5i"
+    },
+    {
+      "type": "text",
+      "name": "Carnivorous Jaws",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Hinged snapping jaws inflict 2d6 bite damage within 2m.",
+      "weight": 1,
+      "range": [
+        21,
+        23
+      ],
+      "drawn": false,
+      "_id": "RmOg4JNw2EsdXrAp",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.RmOg4JNw2EsdXrAp"
+    },
+    {
+      "type": "text",
+      "name": "Color Sensitivity",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Mimic colors of surroundings; +4 on stealth and observation rolls.",
+      "weight": 1,
+      "range": [
+        24,
+        25
+      ],
+      "drawn": false,
+      "_id": "iYcNutS7tshUmOJT",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.iYcNutS7tshUmOJT"
+    },
+    {
+      "type": "text",
+      "name": "Contact Poison Sap",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Exudes intensity 12 contact poison; anyone touching bare plant must save.",
+      "weight": 1,
+      "range": [
+        26,
+        28
+      ],
+      "drawn": false,
+      "_id": "M3YDF0wVmEiavMsu",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.M3YDF0wVmEiavMsu"
+    },
+    {
+      "type": "text",
+      "name": "Daylight Stasis",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Becomes inert and inactive during daylight hours.",
+      "weight": 1,
+      "range": [
+        29,
+        30
+      ],
+      "drawn": false,
+      "_id": "iHnDmlVUzVaXHp7H",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.iHnDmlVUzVaXHp7H"
+    },
+    {
+      "type": "text",
+      "name": "Dissolving Juices",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Digestive fluids dissolve gripped organic matter for 2d6 damage per round.",
+      "weight": 1,
+      "range": [
+        31,
+        33
+      ],
+      "drawn": false,
+      "_id": "aj7zqMMzPxISu8rJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.aj7zqMMzPxISu8rJ"
+    },
+    {
+      "type": "text",
+      "name": "Divisional Body Segments",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Can detach a segment as a mobile duplicate with 1/4 HP for up to 1 hour.",
+      "weight": 1,
+      "range": [
+        34,
+        36
+      ],
+      "drawn": false,
+      "_id": "2WBxFqCAS1CAj65o",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.2WBxFqCAS1CAj65o"
+    },
+    {
+      "type": "text",
+      "name": "Electrical Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Discharge 3d6 electrical damage within 5m once per melee turn.",
+      "weight": 1,
+      "range": [
+        37,
+        39
+      ],
+      "drawn": false,
+      "_id": "5Aac9dDwwQnplWeI",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.5Aac9dDwwQnplWeI"
+    },
+    {
+      "type": "text",
+      "name": "Explosive Fruit",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Fruit detonates for 2d6 damage in a 5m radius when disturbed or thrown.",
+      "weight": 1,
+      "range": [
+        40,
+        42
+      ],
+      "drawn": false,
+      "_id": "rBTfMWBGmezFk55C",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.rBTfMWBGmezFk55C"
+    },
+    {
+      "type": "text",
+      "name": "Heat Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Radiates heat; 1d6 damage per round within 3m to unprotected creatures.",
+      "weight": 1,
+      "range": [
+        43,
+        44
+      ],
+      "drawn": false,
+      "_id": "ogKkhE4YlJhj8OQX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.ogKkhE4YlJhj8OQX"
+    },
+    {
+      "type": "text",
+      "name": "Increased Senses",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Sense movement, heat, and vibration within 20m; +4 to detect intruders.",
+      "weight": 1,
+      "range": [
+        45,
+        47
+      ],
+      "drawn": false,
+      "_id": "er7yzHfVQmkdGMW8",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.er7yzHfVQmkdGMW8"
+    },
+    {
+      "type": "text",
+      "name": "Low Fertility",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Only 10% of seeds germinate; cannot propagate normally.",
+      "weight": 1,
+      "range": [
+        48,
+        49
+      ],
+      "drawn": false,
+      "_id": "zlJfGkYtZxizU9Ro",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.zlJfGkYtZxizU9Ro"
+    },
+    {
+      "type": "text",
+      "name": "Manipulation Vines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "1d4 prehensile vines wield items and weapons as if with hands.",
+      "weight": 1,
+      "range": [
+        50,
+        52
+      ],
+      "drawn": false,
+      "_id": "b0MWAcYHH9SIRXgi",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.b0MWAcYHH9SIRXgi"
+    },
+    {
+      "type": "text",
+      "name": "Mobility",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Move on root-legs at 6m per turn.",
+      "weight": 1,
+      "range": [
+        53,
+        55
+      ],
+      "drawn": false,
+      "_id": "w8GhQqRb5HkvNEPH",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.w8GhQqRb5HkvNEPH"
+    },
+    {
+      "type": "text",
+      "name": "New Plant Parts",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain an additional organ (extra jaw, vine cluster, fruit type) chosen by the referee.",
+      "weight": 1,
+      "range": [
+        56,
+        58
+      ],
+      "drawn": false,
+      "_id": "WfjGaj97JlvxJz3Q",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.WfjGaj97JlvxJz3Q"
+    },
+    {
+      "type": "text",
+      "name": "New Senses",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain a new sense such as infravision, sonar, or radiation sense.",
+      "weight": 1,
+      "range": [
+        59,
+        61
+      ],
+      "drawn": false,
+      "_id": "Nsu4iEr9aPEcrPA0",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.Nsu4iEr9aPEcrPA0"
+    },
+    {
+      "type": "text",
+      "name": "Parasitic Attachment",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Attach to a host (1d4 damage/day); the plant gains nutrients and mobility.",
+      "weight": 1,
+      "range": [
+        62,
+        63
+      ],
+      "drawn": false,
+      "_id": "NIIuNfdge7QYzfpR",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.NIIuNfdge7QYzfpR"
+    },
+    {
+      "type": "text",
+      "name": "Physical Reflection",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "50% chance to reflect a physical attack back on the attacker.",
+      "weight": 1,
+      "range": [
+        64,
+        66
+      ],
+      "drawn": false,
+      "_id": "DkGiJrNGInKCWOkQ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.DkGiJrNGInKCWOkQ"
+    },
+    {
+      "type": "text",
+      "name": "Poison Throwing Thorns",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Launch 1d6 thorns up to 10m; each does 1d4 damage + intensity 10 poison save.",
+      "weight": 1,
+      "range": [
+        67,
+        69
+      ],
+      "drawn": false,
+      "_id": "spcLSiiWgBO1vATl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.spcLSiiWgBO1vATl"
+    },
+    {
+      "type": "text",
+      "name": "Poison Vines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Vine contact causes intensity 12 poison save plus 1d6 damage.",
+      "weight": 1,
+      "range": [
+        70,
+        72
+      ],
+      "drawn": false,
+      "_id": "vvDnprcbtVzMdelJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.vvDnprcbtVzMdelJ"
+    },
+    {
+      "type": "text",
+      "name": "Radiating Plant Fiber",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Fibers emit intensity 6 radiation in a 3m radius.",
+      "weight": 1,
+      "range": [
+        73,
+        74
+      ],
+      "drawn": false,
+      "_id": "LfA8ObrNvTdXraAl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.LfA8ObrNvTdXraAl"
+    },
+    {
+      "type": "text",
+      "name": "Razor-edged Leaves",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Leaves inflict 1d6 slashing damage on contact or brushing pass.",
+      "weight": 1,
+      "range": [
+        75,
+        77
+      ],
+      "drawn": false,
+      "_id": "Z8q3kPOl7OGmUsUh",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.Z8q3kPOl7OGmUsUh"
+    },
+    {
+      "type": "text",
+      "name": "Saw-edged Leaves",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Leaves saw through ropes, vines, and soft material; 1d4 damage per turn of contact.",
+      "weight": 1,
+      "range": [
+        78,
+        80
+      ],
+      "drawn": false,
+      "_id": "X0PcOQUzB27nwwcB",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.X0PcOQUzB27nwwcB"
+    },
+    {
+      "type": "text",
+      "name": "Seed Mobility",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Seeds travel up to 50m and plant themselves autonomously.",
+      "weight": 1,
+      "range": [
+        81,
+        82
+      ],
+      "drawn": false,
+      "_id": "7HQyi94ucLcyymHX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.7HQyi94ucLcyymHX"
+    },
+    {
+      "type": "text",
+      "name": "Size Decrease",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Half normal plant size; all damage dice lowered by one step.",
+      "weight": 1,
+      "range": [
+        83,
+        84
+      ],
+      "drawn": false,
+      "_id": "fyIMYFrTs4l0GPs5",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.fyIMYFrTs4l0GPs5"
+    },
+    {
+      "type": "text",
+      "name": "Size Increase",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Double normal plant size; HP and melee damage increased by +50%.",
+      "weight": 1,
+      "range": [
+        85,
+        86
+      ],
+      "drawn": false,
+      "_id": "hGRC4GO9eEvdMU6V",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.hGRC4GO9eEvdMU6V"
+    },
+    {
+      "type": "text",
+      "name": "Sonic Attack Ability",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.",
+      "weight": 1,
+      "range": [
+        87,
+        88
+      ],
+      "drawn": false,
+      "_id": "1Sc9JpguwKzyxJJz",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.1Sc9JpguwKzyxJJz"
+    },
+    {
+      "type": "text",
+      "name": "Squeeze Vines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Constricting vines deal 2d6 damage per round to gripped targets.",
+      "weight": 1,
+      "range": [
+        89,
+        90
+      ],
+      "drawn": false,
+      "_id": "Ad0crfb0n6CJFjTa",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.Ad0crfb0n6CJFjTa"
+    },
+    {
+      "type": "text",
+      "name": "Spore Cloud",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Releases a cloud of reproductive or poison spores in a 4m radius.",
+      "weight": 1,
+      "range": [
+        91,
+        92
+      ],
+      "drawn": false,
+      "_id": "jLTlll41AmYh7cBl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.jLTlll41AmYh7cBl"
+    },
+    {
+      "type": "text",
+      "name": "Sucker Vines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Drain 1d4 HP per round from gripped victims; HP is transferred to the plant.",
+      "weight": 1,
+      "range": [
+        93,
+        94
+      ],
+      "drawn": false,
+      "_id": "ZhGGuqiQBfgfywdV",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.ZhGGuqiQBfgfywdV"
+    },
+    {
+      "type": "text",
+      "name": "Tangle Vines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Vines entangle victims within 3m; Strength save vs 18 to break free.",
+      "weight": 1,
+      "range": [
+        95,
+        95
+      ],
+      "drawn": false,
+      "_id": "ojmBiyyjARCvdrnO",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.ojmBiyyjARCvdrnO"
+    },
+    {
+      "type": "text",
+      "name": "Temperature Sensitivity",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Wilts at temperatures below 5°C or above 35°C; -50% movement.",
+      "weight": 1,
+      "range": [
+        96,
+        96
+      ],
+      "drawn": false,
+      "_id": "syU1AyuI7Woc4yvr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.syU1AyuI7Woc4yvr"
+    },
+    {
+      "type": "text",
+      "name": "Throwing Thorns",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Launch thorns up to 10m; 1d6 damage each, up to three per round.",
+      "weight": 1,
+      "range": [
+        97,
+        97
+      ],
+      "drawn": false,
+      "_id": "LkiJRZZbngtrBW7S",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.LkiJRZZbngtrBW7S"
+    },
+    {
+      "type": "text",
+      "name": "Winged Seeds",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Seeds travel up to 200m on air currents; spread across wide areas.",
+      "weight": 1,
+      "range": [
+        98,
+        98
+      ],
+      "drawn": false,
+      "_id": "EH1QQ7ZbSHLjHu1b",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.EH1QQ7ZbSHLjHu1b"
+    },
+    {
+      "type": "text",
+      "name": "Pick Any Mutation (Plant)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Select any other plant mutation from the list.",
+      "weight": 1,
+      "range": [
+        99,
+        100
+      ],
+      "drawn": false,
+      "_id": "GjT5Vvc2TpZNtvzc",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!DG54wUpsNyzp1QBw.GjT5Vvc2TpZNtvzc"
+    }
+  ],
+  "_id": "DG54wUpsNyzp1QBw",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!DG54wUpsNyzp1QBw"
+}

@@ -1,0 +1,92 @@
+{
+  "name": "Heightened Intelligence",
+  "type": "mutation",
+  "system": {
+    "code": 16,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "+4 mental resistance (max 18), -2 to figure out artifact.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>Add 4 points to the mutant&#39;s mental resistance rating, to a maximum of 18. Also subtract 2 points from die rolls made to figure out artifacts.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Intelligence — mental resistance",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.mentalResistance",
+          "mode": 2,
+          "value": "4",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "ZJaP18lbeFQbvQhb",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!LqJIBBAVw4qTt1fY.ZJaP18lbeFQbvQhb"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-intelligence.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "LqJIBBAVw4qTt1fY",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!LqJIBBAVw4qTt1fY"
+}

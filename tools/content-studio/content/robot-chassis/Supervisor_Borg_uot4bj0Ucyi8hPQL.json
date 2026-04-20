@@ -1,0 +1,55 @@
+{
+  "name": "Supervisor Borg",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 3. <strong>Hit Points:</strong> 80.</p><p><strong>Armament:</strong> Laser rifle (4d6, 60/120/240m).</p><p><strong>Sensors:</strong> Full suite incl. psionic.</p><p><strong>Controls:</strong> Independent + command net.</p><p>Commands other robots of a facility. Retains pre-war authority protocols.</p>"
+      },
+      "_id": "1x0m7owZxYpFdz4t",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!uot4bj0Ucyi8hPQL.1x0m7owZxYpFdz4t"
+    }
+  ],
+  "_id": "uot4bj0Ucyi8hPQL",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!uot4bj0Ucyi8hPQL"
+}

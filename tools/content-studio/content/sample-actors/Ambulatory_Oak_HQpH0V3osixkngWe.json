@@ -1,0 +1,454 @@
+{
+  "name": "Ambulatory Oak",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Ambulatory Oak",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-plant",
+      "animalForm": "Oak",
+      "level": 4,
+      "xp": 0,
+      "movement": 60,
+      "alliance": "",
+      "role": "sentient sapling",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 9,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 6,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 17,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 5,
+      "naturalAttack": {
+        "name": "Branch Slam",
+        "damage": "2d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 38,
+        "value": 38,
+        "max": 38,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 5,
+      "mentalResistance": 13,
+      "radResistance": 16,
+      "poisonResistance": 16
+    },
+    "biography": {
+      "value": "<p>An awakened oak sapling rooted in a ruined orchard. Moves slowly but communicates through subtle rustling and root-vibration.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Satchel",
+      "type": "gear",
+      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "subtype": "container",
+        "equipped": false,
+        "container": {
+          "capacity": 25,
+          "stored": []
+        },
+        "description": {
+          "value": "A shoulder bag for light loads."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "r6KeEDVYNRJUkUMC",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!HQpH0V3osixkngWe.r6KeEDVYNRJUkUMC"
+    },
+    {
+      "name": "New Plant Parts",
+      "type": "mutation",
+      "system": {
+        "code": 71,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "Gain an additional organ (extra jaw, vine cluster, fruit type) chosen by the referee.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Gain an additional organ (extra jaw, vine cluster, fruit type) chosen by the referee.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "P5eylrxvD4UuqqiJ",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!HQpH0V3osixkngWe.P5eylrxvD4UuqqiJ"
+    },
+    {
+      "name": "Manipulation Vines",
+      "type": "mutation",
+      "system": {
+        "code": 69,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "1d4 prehensile vines wield items and weapons as if with hands.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>1d4 prehensile vines wield items and weapons as if with hands.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "OUQaFg2v1dLTWRDL",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!HQpH0V3osixkngWe.OUQaFg2v1dLTWRDL"
+    },
+    {
+      "name": "Increased Senses",
+      "type": "mutation",
+      "system": {
+        "code": 67,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "Sense movement, heat, and vibration within 20m; +4 to detect intruders.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Sense movement, heat, and vibration within 20m; +4 to detect intruders.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "02CQtXwVhufvjakW",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!HQpH0V3osixkngWe.02CQtXwVhufvjakW"
+    }
+  ],
+  "_id": "HQpH0V3osixkngWe",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!HQpH0V3osixkngWe"
+}

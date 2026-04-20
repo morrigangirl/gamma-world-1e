@@ -1,0 +1,55 @@
+{
+  "name": "Defense Borg",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 2. <strong>Hit Points:</strong> 95.</p><p><strong>Armament:</strong> Mk V blaster (5d6), missile launcher (3 micro-missiles).</p><p><strong>Sensors:</strong> Full suite.</p><p><strong>Controls:</strong> Independent.</p><p>Fixed-position defence platform. Will pursue briefly but does not leave its patrol zone.</p>"
+      },
+      "_id": "c3er76oURCJlmcpL",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!B87BNP8yMS3cYRII.c3er76oURCJlmcpL"
+    }
+  ],
+  "_id": "B87BNP8yMS3cYRII",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!B87BNP8yMS3cYRII"
+}

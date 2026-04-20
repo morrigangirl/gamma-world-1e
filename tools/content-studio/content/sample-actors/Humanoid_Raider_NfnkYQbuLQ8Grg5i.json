@@ -1,0 +1,566 @@
+{
+  "name": "Humanoid Raider",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Humanoid Raider",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "",
+      "level": 3,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "Friends of Entropy",
+      "role": "adventurer",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 9,
+      "naturalAttack": {
+        "name": "Claws",
+        "damage": "1d4"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 31,
+        "value": 31,
+        "max": 31,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 9,
+      "mentalResistance": 14,
+      "radResistance": 10,
+      "poisonResistance": 10
+    },
+    "biography": {
+      "value": "",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Spear",
+      "type": "weapon",
+      "img": "systems/gamma-world-1e/assets/weapons/spear.png",
+      "system": {
+        "weaponClass": 1,
+        "category": "primitive",
+        "ammoType": [],
+        "damage": {
+          "formula": "1d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 20,
+          "medium": 0,
+          "long": 40
+        },
+        "attackType": "thrown",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": false,
+        "description": {
+          "value": "<p>Standard spear for melee or thrown use.</p><p>Damage against larger opponents: 1d8.</p>"
+        },
+        "traits": {
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "4fUqVoSpkfBpSyYV",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!NfnkYQbuLQ8Grg5i.4fUqVoSpkfBpSyYV"
+    },
+    {
+      "name": "Laser Pistol",
+      "type": "weapon",
+      "img": "systems/gamma-world-1e/assets/weapons/laser-pistol.png",
+      "system": {
+        "weaponClass": 13,
+        "category": "artifact",
+        "ammoType": [
+          "energy-clip"
+        ],
+        "damage": {
+          "formula": "5d6",
+          "type": "energy"
+        },
+        "range": {
+          "short": 100,
+          "medium": 0,
+          "long": 200
+        },
+        "attackType": "energy",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": false,
+        "description": {
+          "value": "<p>Hydrogen-cell laser sidearm.</p><p>Class 2 armor deflects the first hit; class 1 armor deflects the first two hits.</p>"
+        },
+        "traits": {
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false,
+          "tag": "laser",
+          "deflectAc2Hits": 1,
+          "deflectAc1Hits": 2
+        },
+        "artifact": {
+          "isArtifact": true,
+          "category": "pistol",
+          "chart": "a",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "hydrogen",
+          "power": {
+            "requirement": "cells",
+            "installedType": "hydrogen",
+            "ambientSource": "none",
+            "ambientAvailable": false,
+            "compatibleCells": "hydrogen",
+            "cellSlots": 1,
+            "cellsInstalled": 1
+          },
+          "charges": {
+            "current": 10,
+            "max": 10
+          },
+          "functionChance": 40,
+          "harmCallback": ""
+        },
+        "actionTypes": {}
+      },
+      "_id": "gBLavvP7wClEoY6k",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!NfnkYQbuLQ8Grg5i.gBLavvP7wClEoY6k"
+    },
+    {
+      "name": "Mental Blast",
+      "type": "mutation",
+      "system": {
+        "code": 24,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every other turn, do 3d6 mental damage within 15 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 2
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "mental",
+          "notes": "Launch a mental assault once every other round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Every other turn, do 3d6 mental damage within 15 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "7XaTl3dVIB3EvaMN",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!NfnkYQbuLQ8Grg5i.7XaTl3dVIB3EvaMN"
+    },
+    {
+      "name": "Intuition",
+      "type": "mutation",
+      "system": {
+        "code": 19,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "+1 to hit, +3 damage per dice, cannot be used with other powers.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>+1 to hit, +3 damage per dice, cannot be used with other powers.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Intuition — combat + surprise bonuses",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.toHitBonus",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            },
+            {
+              "key": "gw.damagePerDie",
+              "mode": 2,
+              "value": "3",
+              "priority": 20
+            },
+            {
+              "key": "gw.cannotBeSurprised",
+              "mode": 5,
+              "value": "true",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "61IokEWBStvwU1aM",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!NfnkYQbuLQ8Grg5i.pkTBCzUhks7yxS37.61IokEWBStvwU1aM"
+        }
+      ],
+      "_id": "pkTBCzUhks7yxS37",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!NfnkYQbuLQ8Grg5i.pkTBCzUhks7yxS37"
+    }
+  ],
+  "_id": "NfnkYQbuLQ8Grg5i",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!NfnkYQbuLQ8Grg5i"
+}

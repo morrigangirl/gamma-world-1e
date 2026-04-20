@@ -1,0 +1,61 @@
+{
+  "name": "Cryokinesis",
+  "type": "mutation",
+  "system": {
+    "code": 4,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.",
+    "reference": {
+      "table": "mental",
+      "page": 11,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "25 m",
+    "duration": "Concentration, up to 10 rounds",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "1d6",
+      "saveType": "",
+      "notes": "Choose 1-10 rounds of concentration; damage increases by 1d6 per round."
+    },
+    "actionTypes": [
+      "attack",
+      "damage"
+    ],
+    "description": {
+      "value": "<p>The mutant can freeze living tissue, water, or anything else capable of freezing, possibly turning it solid at the referee&#39;s discretion. On the first melee turn it inflicts 1d6 cold damage. With uninterrupted concentration, the damage increases by 1d6 per turn until it reaches 10d6 on the 10th melee turn. Range is 25 meters.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/cryokinesis.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "83zWEhF1r1YiWZTi",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!83zWEhF1r1YiWZTi"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Sound Imitation",
+  "type": "mutation",
+  "system": {
+    "code": 39,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Reflect sonic attack (still take effects) or mimic sounds.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This mutation resembles Thought Imitation, but applies to sound. The mutant can reproduce noises it hears and can immediately hurl back a sonic attack after hearing and surviving it. It cannot memorize the sound for later use; it only repeats what it has just heard.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/sound-imitation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "bskc4ChtWF8KaV8p",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!bskc4ChtWF8KaV8p"
+}

@@ -1,0 +1,1687 @@
+{
+  "name": "5. Play of the Game",
+  "pages": [
+    {
+      "name": "Combat Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 18-21</em></p><p>Combat proceeds in melee turns (10 seconds each).</p><p><strong>Initiative</strong>: this system uses 5e-style 1d20 + DX mod per combatant. RAW 1e uses side-based initiative — see the <em>House Rules</em> journal for the departure.</p><p><strong>Attacks</strong>: physical attacks use Physical Attack Matrix I (weapons) or II (natural attacks). Mental attacks use the Mental Attack Matrix.</p><p><strong>Damage</strong>: each weapon has a small-target and large-target damage roll. On hit, the attacker rolls; the referee applies HP loss manually via the <em>Apply Damage</em> chat card button.</p>"
+      },
+      "_id": "oTobLKW2KD1ujimu",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.oTobLKW2KD1ujimu"
+    },
+    {
+      "name": "Surprise and Initiative",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 21</em></p><p>Each side rolls 1d6 for surprise; rolls of 1-2 indicate that side is surprised and loses the first melee turn.</p><p>After surprise, initiative is rolled per combatant (5e-style 1d20 + DX mod) in this system; in RAW 1e, each side rolls 1d10 and higher goes first.</p><p>See the <strong>Roll Tables</strong> pack for importable Reaction / Morale / Surprise tables.</p>"
+      },
+      "_id": "6Jh3oZtXBvH8q95b",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.6Jh3oZtXBvH8q95b"
+    },
+    {
+      "name": "Fatigue",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 21</em></p><p>Extended combat fatigues combatants. Starting as early as the 11th melee turn, weapon class drops (making hits harder to land) based on weapon weight.</p><p>Wearing armor adds its own fatigue penalty starting at the 15th melee turn.</p><p>See the <strong>System Documentation</strong> Hazards and Fatigue Reference journal for the full matrices; they are wired automatically into the attack flow.</p>"
+      },
+      "_id": "OqWvuV7r0zD40CR0",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.OqWvuV7r0zD40CR0"
+    },
+    {
+      "name": "Morale",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 21</em></p><p>When casualties mount or the tactical situation turns, the referee calls a morale check.</p><p>Roll 1d10: non-intelligent creatures need 5+ to hold; intelligent creatures need 3+.</p><p>Once failed, the creature flees combat; the check repeats each melee turn until conditions change.</p><p>Use the Morale (1d10) roll table in the <strong>Roll Tables</strong> pack.</p>"
+      },
+      "_id": "oJ9uaCX9Xdg1U0Je",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.oJ9uaCX9Xdg1U0Je"
+    },
+    {
+      "name": "Encounters",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 22</em></p><p>Roll the terrain-specific 1d20 encounter table (see the <strong>Encounter Tables</strong> pack) when the party enters a new zone or after a significant rest.</p><p>On an encounter, roll 2d6 on the Reaction table (modified by the party's apparent Charisma and the group type). See the <strong>Roll Tables</strong> pack's Reaction table for canonical bands.</p>"
+      },
+      "_id": "tf5xlZMjHcqpW7cc",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.tf5xlZMjHcqpW7cc"
+    },
+    {
+      "name": "Saving Throws: Radiation and Poison",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 28 (homebrew)</em></p><p><strong>This system replaces the RAW 1e poison and radiation matrices with a save-vs-intensity homebrew.</strong> See Chapter 11, \"Homebrew &amp; Departures\", for the mechanical details of both saves, including the radiation fail-margin bands and the new Radiation Sickness and Catastrophic Exposure conditions.</p><p>Short form: roll <strong>1d20 + Constitution modifier</strong> and compare to the hazard's intensity (poison difficulty or radiation intensity). Poison deals damage on either outcome — half on a success, full on a failure — and no longer kills outright on a single bad roll.</p><p>The RAW matrices are preserved as reference material in the <strong>System Documentation</strong> pack's Poison Matrix and Radiation Matrix journals, but the live save pipeline no longer consults them.</p>"
+      },
+      "_id": "5TPGc3mpIq281d85",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.5TPGc3mpIq281d85"
+    },
+    {
+      "name": "Healing",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 28</em></p><p>Natural healing: 1 HP per full day of rest.</p><p>Medical devices (see the <strong>Armory and Gear</strong> pack's Medical subtype): pain reducer, stim dose, anti-radiation serum, cur-in dose, accelera dose, rejuv chamber, life ray, medi-kit.</p><p>Use the <em>Rest</em> button on the character sheet to apply daily healing.</p>"
+      },
+      "_id": "VPb6zxEZdhI1acUi",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.VPb6zxEZdhI1acUi"
+    },
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>&lt;!-- GENERATED BY extract-rulebook-prose.mjs --&gt; &lt;!-- Auto-OCR'd from ref/gamma-world-core-rules.pdf. Proofread before importing. --&gt;</p>"
+      },
+      "_id": "xfcNUqB2NuM6B0wy",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.xfcNUqB2NuM6B0wy"
+    },
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>CREATING NON-PLAYER CREATURE MUTATIONS</p><p>The referee will need to populate his GAMMA WORLD with many non-player creatures and plants. This may be done by simply selecting mutations from the preceding lists and adding them to a basic creature or plant type. The following method may be used to create random non-player mutants:</p><ol><li>Choose a basic animal or plant type.</li></ol><ol><li>The creature will mutate from 1-10 generations.</li></ol><ol><li>For each generation of an animal mutant, roll once on this percentile table:</li></ol><p>01- 50% Roll one physical mutation</p><p>51- 80% Roll one mental mutation</p><p>B1- 85% Roll one physical and one mental</p><p>mutation</p><p>86-100% Heightened Intelligence</p><ol><li>For each generation that a plant mutates, simply rofl one mutation on the PLANT/VEGETABLE MUTATIONS TABLE.</li></ol><ol><li>If the creature mutates in a defective manner for the first two or three generations, it will not be able to survive, so choose another creature and start over.</li></ol><p>acnandy</p>"
+      },
+      "_id": "4RZNYA5zPr1Sn3Rr",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.4RZNYA5zPr1Sn3Rr"
+    },
+    {
+      "name": "Time, Movement, and Turn Length",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The time scale of a turn in GAMMA WORLD varies according to what the players are doing. Turns consist of either</p><p>route moves, search moves, or combat melee rounds (melee turns). Route movement is used when the players wish to cover great distances rapidly. Search movement is used when the players are conducting a careful investigation of an area. Combat melee turns are generally used when players encounter hostile beings.</p>"
+      },
+      "_id": "E7lIa2gRViNr5MP7",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.E7lIa2gRViNr5MP7"
+    },
+    {
+      "name": "Route Movement",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>One such move represents about four hours’ action in the game (game time, not real time). It is possible, by use of a large number of these moves, to play weeks, even months, of GAMMA WORLD in a single session of the game. The amount of ground covered by walking during a turn of route movement will vary from one to ten kilometers, depending on terrain and character movement speed. The referee should keep these rates in mind when deciding on the scale of his detaited maps. The referee will make the decision on the rate of travel. On average, one kilometer per turn over swampy or mountainous terrain to eight kilometers per turn over clear terrain is suggested. These rates may seem slow when one considers the average man on foot can walk at a pace of five kilometers per hour, but the suggested rates take into account the fact that adventurers in a campaign will be traveling slower as they search carefully for signs of the Ancients and, more importantly, the wild and dangerous creatures of GAMMA WORLD. Of course, should the adventurers announce their intentions to travel at a faster rate, the referee can readily accommodate them, by allowing them to walk past valuable artifacts or into the lair of some deadly creature with little or no warning.</p><p>Route movement will generally be used when covering large distances of “uninteresting” or previously explored ground. Should the adventurers enter an area of interest, they may decide to change to search moves (a slower, more detailed rate of movement) and investigate, or continue past at route movement rate.</p><p>Also, since route moves represent such a long length of time, a game-day will pass very quickly. Most characters will have to rest at least two of the six route turns that represent a day (in other words, sleep!) or suffer a double fatigue toss during combat and reduce travel rates by half until rest is taken. In any case, rest must be taken after two days of exertion. The referee may have to enforce this rule by declaring the players unconscious.</p>"
+      },
+      "_id": "gX0nXujF7krc4jFt",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.gX0nXujF7krc4jFt"
+    },
+    {
+      "name": "Search Movement",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>When a party comes close enough to non-player creatures, plants, or any situation that may lead to combat, the referee must switch the players over to search movement. A search move represents ten seconds of game time. The average movement rate for walking men is 6 meters per search turn outdoors, 1 meter per search turn indoors. This may seem like a slow pace, but it includes time for a thorough examination of the players’ surroundings. Of course, should the players be forced to flee from some danger, they may move at a much faster rate (up to 72 meters per search turn for an unencumbered, unarmored man). Should a character be armored or encumbered by any load (artifacts, equipment, etc.) his movement rate will be halved or less. He may, however, cast off his load for greater movement, if he feels it necessary. Search movement must be used when examining any ruins or buildings, or whenever the characters encounter any other beings (humans or creatures).</p>"
+      },
+      "_id": "sBJzK7lJRJczyxzd",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.sBJzK7lJRJczyxzd"
+    },
+    {
+      "name": "Combat Melee Round",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Each round of combat melee also lasts ten seconds. Movernent during combat is generally not a factor of importance. The ability to perform small movements, both offensively and defensively, during hand-to-hand combat is determined by a character’s experience and dexterity. This is subsumed in the combat matrices by giving bonuses added to or subtracted from the player's “to hit” dice roils during combat resolution. Special situations calling for movement during combat (charging on horseback, for example) are left to the referee’s judgment. He will determine the range between combatants after each ten second melee round, the allowable movement of the defenders during that time, and so on.</p><p>As a guideline, the normal movement rate for a man with only normal encumbrance (clothing and light-weight weapons) is 12 meters per ten-second turn. A charge move is double that — 24 meters — and a trot is two-thirds of a charge move — 16 meters. (NOTE: Missile weapons, eneroy weapons, and the like may not be fired while trotting or charging.) The movement rates listed in the CREATURES section are the normal movement rates. Maximum</p><p>speed may be found by multiplying the normal move by five. Rates of movement in between may be found as above. Movement for ROBOTIC UNITS is given in kilometers per hour (kph). This can be converted to meters per melee turn by multiplying the speed by 2.8. For example, a unit which moves at 30 kph moves 30 x 2.8 or 84 meters per melee turn.</p>"
+      },
+      "_id": "IcjXNgZfkz0pVUNq",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.IcjXNgZfkz0pVUNq"
+    },
+    {
+      "name": "Combat",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Combat is the general term used in GAMMA WORLD to describe physical and/or mental conflict — from the instinctive reaction of some creatures and plants to premeditated actions of force by characters to gain a particular objective. The game mechanics of combat are perhaps the most complex aspect of these rules, but they reflect the many important variables that occur in combat situations.</p>"
+      },
+      "_id": "Sm4NpWbNrDd8yRJu",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.Sm4NpWbNrDd8yRJu"
+    },
+    {
+      "name": "The Decision for Combat",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Potential combat situations occur whenever player characters encounter non-player characters, creatures, or automatons of GAMMA WORLD, and can vary from one-on-one confrontations to army-sized engagements. Many times the type of encounter is such that combat must take place (see ENCOUNTERS). If this is the case, the rules for combat melee are followed immediately. If the encounter is such that combat is nor automatic, those involved in the encounter (after considering all the variables applicable to both sides) are free to attempt a retreat, negotiate, call for help, or whatever action seems appropriate — including engaging in combat melee anyway!</p>"
+      },
+      "_id": "okVEx67pqKsN778G",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.okVEx67pqKsN778G"
+    },
+    {
+      "name": "Combat Melee",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>As explained in the previous section, combat melee represents a series of small segments of time, with each segment or round allowing one attack and counter-attack occurring during each round. Melee must be imagined as if it were occurring in slow motion so that the referee can work out the effects of each action. When a group of player characters is attacked by several creatures, all may be involved in the melee, but each participant’s actions (player and non-player alike) must be announced and the effects calculated one at a time, and the results then imagined as if everything were happening at once.</p><p>Once the referee has determined who starts the combat melee (see SURPRISE/FIRST STRIKE), the attackers (those with the first strike option) announce their attacks. This announcement is made by each individual player, or, if non-player characters or creatures are the attackers, this announcement is made by the referee (in some instances, the referee may determine a creature’s or nonplayer character’s choice of targets by dice roll). In all cases, attackers must declare who or what they are attacking, the type of attack (either physical or mental), the weapons being empioyed, any bonuses or penalties applicable to the combat. and any other factors that may affect the combat. The referee then performs the appropriate dice rolls and calculations to determine the results of the attacks. This concludes the first half of the melee round. The defenders then announce any counter-attacks in the same manner as the attackers, the results are determined, and the first round of combat melee is over. An initiative roll is then made for each side (see SURPRISE/FIRST STRIKE) and the second round begins.</p><p>In some rare instances (such as the use of an extremely powerful weapon or mental force) combat will last only one-half of a melee round — that is, simply one attack and its results. For example, a Mark V blaster can conceivably hit a target for 30 points of damage. A creature that can withstand only eight points of damage before death would be disintegrated by a 30 point hit. On the other hand, if the blaster did only 10 points of damage when it hit, the creature would still die, but it would also be allowed a ‘dying stroke” (remember this is simultaneous) and would complete the melee round with its final counterstroke before it dies. It is up to the referee to determine if a dying stroke is allowed, but a good rule of thumb is: if the hit that killed the target did so with an ‘‘overkill” of fess than half the hit points the target had left, a dying attack is allowed if the combatants are at. close range.</p><p>Each round of combat melee should be noted by the referee, for in extended physical combat (combat melee lasting for more than ten rounds), fatigue will become a factor. Fatigue, as will be explained below, decreases the ability of a combatant to hit a target, and also lessens the damage done by a physical blow (as from a sword, spear, fist). »</p><p>SURPRISE/FIRST STRIKE</p><p>A condition of surprise may exist when player characters and non-player characters or beings were unaware of each other's presence prior to the encounter. If the possibility of surprise exists when, for example, a group of player characters breaks open a door</p><p>to a room and discovers potentially hostile occupants, the referee</p><p>rolls a single six-sided die twice, once for the player characters and</p><p>once for the beings encountered. A roll of 1 or 2 indicates surprise.</p><p>If the two die rolls indicate both sides are surprised, or if neither</p><p>side was surprised, the side that had the higher die roll has the</p><p>option of first strike. If there is a tie, roll again; the higher roll has</p><p>the first strike option. If only one side is surprised, the other side, of</p><p>course, will have the option of first strike.</p><p>lf the encounter is such that combat must occur, the side with</p><p>the first strike option announces its attacks and starts the combat</p><p>melee. If combat is not automatic, the side with the first strike</p><p>option may exercise the option and attack, or take this opportunity</p><p>to retreat, negotiate, or whatever seems feasible at the time.</p><p>It is important to remember that some mental mutational powers</p><p>negate the possibility of surprise. For example, one member of a</p><p>party with the mental mutation of intuition can never be surprised</p><p>and may also warn other members of the party when other beings</p><p>approach. As noted below, dexterity can also affect surprise/first</p><p>strike capability, and is further explained under the description of</p><p>that attribute under CREATING CHARACTERS.</p><p>At the beginning of each round of combat melee after the first, a</p><p>single die (d6) is rolled for each side. The higher roll has first strike</p><p>option that round. If there is a tie, combat is simultaneous (it would</p><p>thus be possible for two combatants to kill each other at the same</p><p>time). This is the initiative die roll. {f one side has a combatant with</p><p>a dexterity of 17 or 18, 1 point is added to their die roll. (Only ong</p><p>point is added to the roil, even if two or more combatants on the</p><p>same side have a dexterity of greater than 17.)</p>"
+      },
+      "_id": "xNNDR3ACamWX3x2q",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.xNNDR3ACamWX3x2q"
+    },
+    {
+      "name": "Physical Combat",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Physical combat refers to all combat not involving mental</p><p>mutational powers. Striking with a sword or knife, firing a pistol,</p><p>throwing a grenade, launching a missile, using quills or spines,</p><p>making a sonic attack, using fangs, claws, and so on, are all</p><p>examples of physical attacks. Encounters with poison or radiation,</p><p>either by themselves or in conjunction with physical combat (for</p><p>example, a poison-tipped fang, claw, or arrow) are physical in their</p><p>nature, but their effects are determined somewhat differentiy than</p><p>physical combat, as explained tater under HAZARDS. If a player</p><p>announces an intended physical attack he may not use a mental</p><p>attack at the same time.</p><p>The results of each half melee round of physical combat in</p><p>GAMMA WORLD are determined by two dice rolls — one to</p><p>determine if the target is hit, and one (if the target was hit) to</p><p>determine the damage done. In a physical combat situation, the</p><p>referee first consults the appropriate ATTACK MATRIX and cross-</p><p>indexes the attacker’s weapon and the defender's armor class. The</p><p>number indicated is the number needed by the roll of a single 20-</p><p>sided die, adjusted for any bonuses or penalties due to combat</p><p>variables such as dexterity, experience level, fatigue, etc., to score</p><p>a hit on the defender. If the attack is successful, a second die roll is</p><p>made to determine the amount of damage done. Tha number and</p><p>type of dice used in this roll depend on the type of weapon used,</p><p>and this roll, too, may be adjusted for any bonuses or penalties due</p><p>to combat variables. The sum of ail the damage dice is then</p><p>subtracted from the defender’s hit point total, as“explained under</p><p>COMBAT DAMAGE. This completes one-half ot a combat melee</p><p>round. Assuming the defender is still alive, or has a “dying strike”,</p><p>he then has the option of counter-attacking in the same manner,</p><p>fleeing from combat, or surrendering. After the appropriate action</p><p>has been taken by the defender, the combat melee round is over. If</p><p>both combatants are still alive and neither has fled or surrendered,</p><p>another combat melee round starts.</p><p>Most combat, of course, occurs between more than two combatants. When several beings are involved on each side of a combat situation, combatants must first be given specific opponents. Combat is then resolved for each attacker, one at a time, as detailed above. if the two opposing sides are equal in number, the referee can simply pair them off randomly. If the two sides are unequal in number, the referee has two options. He can pair them off randomly as above, making sure that everyone is attacking someone. If miniature figures (or simply paper markers) are being used to “set the scene” of the combat situation, the referee can allow combatants to attack whoever is closest. In either case, two important points should be recognized about unequal combat. First, unless a combatant can attack more than once (such as a many-limbed being able to attack with each of its limbs every round), some combatants will not be attacked. Second, when one is attacking two or more defenders, there is no choice as to who gets hit — that is determined randomly.</p>"
+      },
+      "_id": "5gwSqOVaAXAu34QQ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.5gwSqOVaAXAu34QQ"
+    },
+    {
+      "name": "Mental Combat",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Mental combat is much the same as physical combat, except that mental forces (mental mutations) are used instead of physical strength and weapons. After the first strike capability has been determined, the attacker announces his intentions to the referee and states the type of attack. He must not only state that he is making a mental attack, but also which mental mutation he is using. The referee cross-indexes the attacker's mental strength against the defender’s mental strength on the MENTAL ATTACK MATRIX and determines the dice roll needed for the attack to be successful, very much like determining the number needed to hit a target in physical combat. A 20-sided die is rolled. If the number rolled is equal to or larger than the number indicated on the matrix, the mental attack is successful. The results of the attack (as defined under MENTAL MUTATIONS) are immediately applied.</p><p>The mental defense (the mental strength of the defender) is. always present. This defense is independent of all actions by the individual, such as making a physical attack or sleeping. It is also present even when making a mental attack. The only restriction on mental attacks is that they must be made separate from physical attacks. One may not make both a mental and a physical attack in the same melee round. Damage sustained as the result of a mental attack is figured in the same manner as in physical combat.</p><p>It is important to remember that each mental power is different from all others, and selection of such a power for combat purposes should be made very carefully. Some powers are indiscriminate, affecting all within range, some have limited duration, and so forth. Also, some mental mutations will entirely negate the effects of other mental mutations.</p><p>Successful use of mental powers in a combat situation also works towards increasing a being’s mental strength in the following manner: for every five successful mental attacks (those which cause damage), the attacker’s mental strength increases by one point. The same increase works in a like manner for defense: for every five successful mental defenses (those attacks which do not cause damage) the defender's mental strength increases by one point. The rationale behind these increases is that as the being’s mental capacities grow more proficient in offensive and/or defensive operation, the mind develops new channels for projecting its powers.</p><p>SPECIAL COMBAT RULES FOR CREATURES (PLANT AND ANIMAL MUTATIONS)</p><p>Animals and non-intelligent creatures will not generally fight to the death unless they are controlled in some manner by another force, backed into a corner, defending a lair, and so on. Except in such situations, when reduced to less than half of their hit points, they must make a morale throw (see MORALE). If defending a lair, add three points to the morale throw of non-intelligent creatures, two points to the throw of semi-intelligent creatures, and one point to that of intelligent creatures. If the Jair contains young, double the number of points added. Predator lairs have a 40% chance of having a rear exit. Herbivores will usually fight only when provoked, cornered, controlled, or insane. A creature euch as the rhinoceros, though, needs little provocation to invite an attack. Treat plant mutations (unless they are specifically given an intelligence) as unintelligent creatures. Creatures are under the same limitations as players with regard to physical and mental combat.</p>"
+      },
+      "_id": "bousG30JSAXp49mi",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.bousG30JSAXp49mi"
+    },
+    {
+      "name": "Combat With Robotic Units",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Robotic units are armed with a variety of technological devices that may be used as weapons (i.e. a laser drill could be quite effective at close range against an unarmored or lightly armored man), and many are designed specifically for combat. In physical combat, robots are treated in a manner similar to creatures. Robots</p><p>have one advantage in that they may both move up to their maximum speed and fire weapons in the same melee round. Only one type of weapon (lasers, missiles, black ray cannon, etc.) may fire in any one melee turn. Robots may not, of course, initiate mental combat.</p>"
+      },
+      "_id": "fSIFtqt9DA6SUafe",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.fSIFtqt9DA6SUafe"
+    },
+    {
+      "name": "Armor Class",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Armor class is a number representing the ability of an object or creature to withstand physical attacks. Everyone and everything has an armor class (in some cases, the referee must determine the armor class). Because so much technology was lost during the Black Years, most armor will be crude, made from readily available materials. Some mutations will provide stronger armor class to the mutant. Also, in rare instances, players will come across ancient armor that is extramely high in armor class. The more common types of armor are listed on the following table.</p>"
+      },
+      "_id": "r1nqQzQJskfVfSOg",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.r1nqQzQJskfVfSOg"
+    },
+    {
+      "name": "Armor Class Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Class Description</p><p>10 No protection</p><p>9 Shield only</p><p>8 Furs or skins</p><p>7 Furs or skins and shield</p><p>6 Cured hide or plant fiber armor, partial carapace</p><p>5 Cured hide or plant fiber armor and shield</p><p>4 Sheath* and piece metal armors. total carapace</p><p>3 Powered plate and plastic armors*</p><p>2 Powered alloy, energized, inertia, powered scout</p><p>&amp; battle armors*</p><p>1 Powered attack &amp; assault armors*</p><p>“For adescription see ARTIFACTS AND EQUIPMENT section.</p><p>To the beginner it may seem a little confusing, but the lower the number the better the armor class. When you “increase” the armor class you lower the number. For example, you increase your armor class from 6 to 5 by getting a shield to use with your cured hide armor.</p><p>The creatures of GAMMA WORLD are also given an armor class rating. Unlike men, the armor class of a creature is Inherent in the hide or skin of the creature, its size, speed, and agility. All of these factors are included in the armor class rating.</p><p>Certain factors (such as some mutations) may raise or lower the normal armor class rating. An armor class of less than 10 is treated as armor class 10; an armor class of greater than 1 is treated as armor class 1.</p>"
+      },
+      "_id": "zHIyZHLuU6UW5yXB",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.zHIyZHLuU6UW5yXB"
+    },
+    {
+      "name": "Weapon Class",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Weapon class is similar to armor class. It is a numerical representation of the ability of the weapon to hit an opponent. The weapon class does not reflect the amount of damage the weapon might do if it hits, only the chance of hitting. High-technology weapons, though, usually both score a hit easier and do more damage when they hit. Most of the inhabitants of GAMMA WORLD will be armed with the low-technology weapons. Ancient, powered weapons will be very rare and highly prized (and coveted). The more common weapons are listed on the following table.</p>"
+      },
+      "_id": "qF1W9RL2nDCzAKyD",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.qF1W9RL2nDCzAKyD"
+    },
+    {
+      "name": "Weapon Class Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Class Description</p><p>1 Clubs, hammers, lances, maces, Spears</p><p>2 Axes, daggers, flails, morning stars</p><p>3 Pole arms, swords</p><p>4 Vibro dagger</p><p>5 Vibro blade, energy mace</p><p>6 Stun whip</p><p>7 Robotic tentacles</p><p>8 Grenades, javelins</p><p>9 Arrows, crossbow bolts, sling projectiles</p><p>10 Pistol slugs ,</p><p>11 Needler</p><p>12 Stun ray pistols and rifles</p><p>13 Laser pistols and rifles</p><p>14 Mk V Blaster and Mk Vi rifle</p><p>16 Black ray pistol</p><p>16 Fusion rifle, micro missile, mini-missile</p>"
+      },
+      "_id": "tiOt2a6DKqjbdLxX",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.tiOt2a6DKqjbdLxX"
+    },
+    {
+      "name": "Use of the Attack Matrices",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The matrices which follow are used to determine whether a physical or mental attack is successful. On PHYSICAL ATTACK MATRIX | cross-index the weapon class of the attacker with the</p><p>armor class of the target. The result is the number the attacker</p><p>must equal or exceed on the roll of a 20-sided die in order to hit the</p><p>target. For example, a man with a sword (weapon class 3) attacking</p><p>a man with only a shield (armor class 9) needs a 10 or above to</p><p>successfully hit the defender.</p><p>PHYSICAL ATTACK MATRIX I: Attacks by Weapons</p><p>Target’s Attacker’s Weapon Class</p><p>Armor</p><p>Class 12 3 4 5 6 7 8 9 1011 12 13 14 15 16</p><p>= @ = NO = we = NS = o = oO oO</p><p>Qo 13 12 11 11 15 08 10 13 114</p><p>= CWOAaANGNAWD</p><p>When monsters or mutations without weapons attack, use</p><p>PHYSICAL ATTACK MATRIX II. On this matrix, cross the attacker’s</p><p>number of hit dice with the defender’s armor class. Results are then</p><p>determined as above. This spares the referee the agony of trying to</p><p>decide the weapon class of a clawed paw with the full weight of a</p><p>three-quarter ton mutated bear behind it. If the monster or mutation</p><p>uses weapons, then roll the attack on the first matrix.</p><p>PHYSICAL ATTACK MATRIX I: Attacks by Plant or Animal</p><p>Mutations Without Weapons</p><p>Target's Attacker’s Number of Hit Dice</p><p>Class 1 23 #45 68 910 11-14 15&amp;up</p><p>8 12 «11 10 O98 08 07 06</p><p>9 W 10 O98 O08 O07 06 05</p><p>10 10 O98 08 07 06 05 04</p><p>Thrown, hurled, or fired weapons have two ranges. The effective</p><p>range is the one considered on the PHYSICAL ATTACK MATRICES.</p><p>Maximum range is equal to twice the effective range and is subject</p><p>to a penalty of 5 points, which must be subtracted from the</p><p>attacker’s ‘to hit” die roll.</p><p>On the MENTAL ATTACK MATRIX, the mental strength of the</p><p>attacker is cross indexed with the mental strength of the defender.</p><p>As on the physical matrices, the result is the number the attacker</p><p>must equal or exceed on the roll of a 20-sided die in order to score a</p><p>successful mental attack.</p>"
+      },
+      "_id": "9y1LJakWm9bqaaNK",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.9y1LJakWm9bqaaNK"
+    },
+    {
+      "name": "Mental Attack Matrix",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Defender's Attacker’s Mental Strength</p><p>Mental</p><p>Strencth 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18</p><p>3 10 09 08 07 0605 0403 02 A AAA AAA</p><p>4 1110 09 08 07 06 05 04 03 02 A AAAAA</p><p>5 12 11 10 09 08 0706 05 040302 A AAAA</p><p>6 13:12 11 10 09 08 07 06 05 0403 02 A A A A</p><p>7 1413 12 11 10 09 08 07 06 05 04.0302 A A A</p><p>8 15 14 13 12 11 10 09 08 07 06 05 04 03 02 A A</p><p>9 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 A</p><p>1 18 17 16 15 14 13 12 11 10 09 08 07 06 OK 4 2</p><p>14 NE 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06</p><p>15 NE NE 20 19 18 17 16 15 14 13 12 11 10 09 08 07</p><p>16 NE NENE</p><p>17 NENENENE 20 19 18 17 16 15 14 13 12 11 10 09</p><p>18 NENENENENE2O 19 1817 16 15 14 13 12 11 10</p><p>A = Attack is automatically successful; no roll is needed.</p><p>NE = No effect; attack is impossible.</p><p>oe ee</p>"
+      },
+      "_id": "1ZMq1eQUTxCbYBGA",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.1ZMq1eQUTxCbYBGA"
+    },
+    {
+      "name": "Combat Damage",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>When the attacker is successful in combat, the resulting damage must be calculated. Every weapon has a damage potential. The damage potential for ‘conventional’ weapons such as swords, spears, and so forth, is listed in the following table. The damage potential of the more sophisticated weapons left over from the Shadow Years is listed with the description of each weapon (see ARTIFACTS AND EQUIPMENT). The amount of damage a creature may inflict is given in the description of the creature or its mutations. The damage inflicted by a mental mutation is listed with that mutation.</p><p>The damage done by most weapons is variable and is either listed as a range of hit points or as hit dice. The referee determines the exact amount of damage done by rolling a die (or dice) that gives a result within the range indicated for the weapon. For instance, a sword used against a man-sized opponent does 1-8 (1d8) points of damage. If a hit is indicated, the referee would roll an eight-sided die to determine the exact amount of damage done and subtract the result from the defender’s total remaining hit points. A direct hit from a laser pistol does 5-30 (5d6) points of damage. The referee would roll five 6-sided dice to determine the damage (up to 30 hit points with this weapon) and subtract the result as above. In this case, a hit could be fatal.</p><p>The majority of the weapons used by the common men and creatures of GAMMA WORLD are of a simple nature, easily constructed by a low-technology culture. This does not reflect on their skill in the use of these weapons. Several well-aimed sword thrusts can kill quicker than a blaster a player doesn't know how to use effectively. These common weapons and their damage potentials are listed on the following table.</p>"
+      },
+      "_id": "JGCVGkAGhO6PffQm",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.JGCVGkAGhO6PffQm"
+    },
+    {
+      "name": "Weapons Damage Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Damage Potential</p><p>Effective Range</p><p>Man-sized or in Maters</p><p>Weapon Smaller Larger (Missile Weapons</p><p>Type Opponents Opponents Only) Arrow 1-6 1-6 100 Axe, Battle 1-8 1-8 Axe, Hand</p><p>or Throwing 1-6 1-4 20 Club 1-6 1-3 10 Crossbow</p><p>Bolt 1-4 1-4 120 Dagger 1-4 1-3 20 Flail 2-7 2-8 Javelin 1-6 1-6 40 Lance,</p><p>Mounted 1-6 1-10 Mace 2-7 1-6 Morning Star 2-8 2-7 Pole Arms 1-8 1-12 Sling Bullet 25 2-7 100 Sling Stone 1-4 1-4 80 Spear 1-6 1-8 20 Sword, Long 1-8 1-12 Sword, Short 1-6 1-8 Sword, Two- 1-10 3-18</p><p>handed</p><p>“Use the appropriate dice for determining damage as described (i.¢., 6 for 1-6, d4 + 1 for 2-5, 3d6 for 3-18, etc.).</p><p>Different weapons are more effective than others depending on target size; also, certain weapons have restrictions on their use in tight quarters. All energy weapons or devices that cause damage have no relation to the above chart, even if the weapon is similar in design or use. As stated above, damage potentials of such weapons are listed with the description of the weapons under ARTIFACTS AND EQUIPMENT.</p>"
+      },
+      "_id": "S2wWESfivzWQCGc3",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.S2wWESfivzWQCGc3"
+    },
+    {
+      "name": "Fatigue",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>During extended combat the players and referee must consider fatigue. Depending on the weapons, armor, and strength of the combatants, fatigue may become noticeable as early as the eleventh melee turn, or as late as the eighteenth. The following table cross-indexes the weapon and armor with the length of fighting time (In melee turns). The results are called the tatigue factor, and are subtracted from the attacker's weapon class when using the attack matrix. As a bonus for resting or having above</p><p>average strength, the fatigue factor is lessened by one for each melee turn the combatant rests from battle, and also lessened by one for each point of strength over 15. For example, a man wielding a short sword would be OK until the 14th melee turn, then his weapon class would drop from 3 to 2. If he had a 16 strength, it would not drop until the 15th melee turn. (This assumes, of course, that he is wearing no armor!) If the weapon class drops to 0, the combatant is unable to attack until he withdraws from combat long enough to bring the weapon class back up to at least 1. This doesn’t mean the combatant is so tired that he can’t hold the weapon, just that he can’t use it effectively enough to do any damage. All weapons not specifically listed here, such as powered energy weapons (including powered blade weapons), cost nothing in terms of fatigue to use. Note that powered offensive armor is not listed — there is no fatigue acquired when using such armor. Powered defensive armor does have a fatigue factor.</p>"
+      },
+      "_id": "BSGqHqy6dH8TFqdq",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.BSGqHqy6dH8TFqdq"
+    },
+    {
+      "name": "Fatigue Factors Matrices",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Melee Turn</p><p>Weapons 11612 #13 #214 «15 «#616 17 18 «19 Any Axe : 1 2 3 4 5 4 Any Bow 1 2 3 4 #4 Club 7A -2 3 4 5</p><p>Dagger 1-2 Fiail -1 -2 3 -4 Se) 6 7 8 Javelin 4 2 3 4 Lance, Mounted “4 2 3 4 5 6 Mace -1 2 3 “4 5 6 Morning Star 1 2 3 “4 5 6 -7 Pole Arms 1 2 3 4 5 6 7 #8 Sling 1-2 Spear “1 -2 “3 “4 Sword, Long or Short “4 “2 3 -4 ie] 6 Sword, Two-handed 1-2 3 4 5 6 7 8 9</p><p>ARMOR Melee Turn</p><p>Armor</p><p>Class 16 16 17 18 19 20</p><p>10 no effect</p>"
+      },
+      "_id": "JGm8e8cGDLNm75us",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.JGm8e8cGDLNm75us"
+    },
+    {
+      "name": "Morale",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Certain circumstances during combat require a check for morale. The only check required by the rules pertains to combat with or between creatures and animals, but players may request (or the referee may require) checks for morale during special circumstances, such as an attack by an overwhelming force, an extremely poor position, sustaining large numbers of casualties, and so forth. !f players request a morale check of their opponents, the referee will judge if such a check is necessary, and if so, roll a single 10-sided die. Animals and non-intelligent creatures require at least a roll of 5 or more to continue combat. Intelligent creatures and beings need only a roll of 3 or better to continue combat, if they (the referee) so desire. Any time a combatant fails to meet a morale check roll, he/she/it immediately flees from combat. Once morale has been checked, it must continue to be checked each melee turn until the combat is resolved or the situation which necessitated the check in the first place changes. The referee may make a morale check any time he feels the combat situation makes it necessary.</p><p>Generally, non-intelligent creatures will have a very low morale if combat is going against them, and intelligent creatures will have a high morale, even in adverse situations. (Of course, the referee may feel free to create a few cowardly creatures or bands of spineless mercenaries if he so desires.) Player characters never check morale dice, though they may choose to flee at any time. Non-player characters who are followers of players or who are hired by players must check morale.</p>"
+      },
+      "_id": "9Betat0q5bPuDosd",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.9Betat0q5bPuDosd"
+    },
+    {
+      "name": "Encounters",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>When player characters enter areas keyed on the referee's detailed map as containing beings or any plant that is likely to respond to their presence, there will be an encounter. Results of the encounter will depend upon what is encountered and the referee's discretion. For example: if an exploring party runs into an Ark (a fearsome intelligent creature of mutated canine stock), it will nearly always attack — more out of principle than anything else. On the other hand, a sleeth (a giant mutated lizard) will probably watch the same party pass by and never even move (unless the party accosts it) An encounter with other men witl usually result in some conversation with a friendly, indifferent, or hostile outcome. The referee plays the personae of the intelligent or semi-intelligent nonplayer characters and creatures, handles the actions of unintelligent (but dangerous) plants, and, of course, is in charge of the weather. :</p><p>When player characters are travelling through large areas of uncharted terrain at route movement, the referee must check for random encounters once each day and night. He does this by roiling a single six-sided die: a roll of six indicates an encounter. Since encounters of this nature occur randomly, they can happen at any time during the day or night. If the adventurers are on the move and covering a certain distance during the time period when an encounter occurs, an appropriate die should be cast to determing at what time this happens. Then the exact location can be determined and the terrain at the location indicates the chart to be consulted. After the roll of a six, the referee then rolls a 20-sided die and checks the result on the ENCOUNTER TABLE (according to the terrain) to determine what has been encountered. The referee then determines how many creatures or plants have been encountered.</p><p>The important job of the referee is to play the roles of the creatures encountered in such a way as to challenge the ingenuity of the players.</p>"
+      },
+      "_id": "GbiPMENzVEgR4R39",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.GbiPMENzVEgR4R39"
+    },
+    {
+      "name": "Encounte",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Terrain</p><p>Die</p><p>Roll Clear Mountains Forest De</p><p>1 Yexil Podog Win Seen O</p><p>2 Horl Choo Kep Kai Lin Se</p><p>3 Centisteed Zeethh Horl Choo H</p><p>4 Perth Ert Gren So</p><p>5 Zeethh Hoop Herp St</p><p>6 Hoop Arn Obb Pa</p><p>7 Sleeth Yexil Hisser Po</p><p>8 Brutorz Blight Ert Telden Ye</p><p>9 Zarn Crep Plant Robotic Unit B</p><p>10 Hopper Android Arn K</p><p>\"1 Robotic Unit Cal Then Soul Besh K</p><p>12 Badder Parn Centisteed Pe</p><p>13 Arn Robotic Unit Blaash Se</p><p>14 Herp Orlen Pineto Tr</p><p>16 Blaash Tribesmen Ark A</p><p>16 Rakox Hisser Perth R</p><p>17 Android Herp Sep C</p><p>18 Tribesmen Zarn Serf B</p><p>19 Podog Sep Badder Za</p><p>20 Cryptic Cryptic Cryptic C</p><p>Alliance Alliance Alliance</p><p>Tribesmen will be a wandering band of 1-100 (2d10) Pure Strain Humans</p><p>Cryptic Alliance encountered will be per the referee’s map (see CRYPTIC</p><p>Note: This table lists only those things covered in the GAMMA WORLD game boo</p><p>and other “‘creatures”’ will want to expand further in developing tables of his own w</p>"
+      },
+      "_id": "LNhP0YZjASR4FWoL",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.LNhP0YZjASR4FWoL"
+    },
+    {
+      "name": "The Creatures",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>(For an explanation of armor class and movement, see the</p><p>appropriate sections. Hit dice are 6-sided.)</p><p>ANDROIDS: Thinker Worker Warrior</p><p>No. Appearing: 1-6 1-6 1-6</p><p>Armor Class: 6 5 4</p><p>Movement: 12 12 15</p><p>Hit Dice: 50 Hit 40 Hit 75 Hit</p><p>Points Points Points</p><p>Androids jook like Pure Strain Humans. All have the basic</p><p>attributes: mental strength, intelligence, dexterity, charisma,</p><p>constitution, and physical strength...all to be determined by the</p><p>referee randomly except for the following: The thinker has an 18</p><p>mental strength and intelligence, the worker has an 18 physical</p><p>strength and constitution, and the warrior has an 18 in ail</p><p>categories save mental strength. Androids consider humans to be a</p><p>threat to their existence, travel heavily armed, and will always fight</p><p>to the death.</p><p>ARK;</p><p>No. Appearing: 1-4</p><p>Armor Class: 4</p><p>Movement: 15</p><p>Hit Dice: 8</p><p>The intelligent dog man stands just short of 3 meters tall and</p><p>always walks on its well-developed hind legs. It has a mental</p><p>strength and radiation resistance of 10. All arks have the following</p><p>mutations: te/exinesis, weather manipulation, and fife leech. Arks</p><p>fear large winged creatures and carry wicker shields and large clubs</p><p>as weapons. They consider human hands to be a great delicacy.</p><p>ARN:</p><p>No. Appearing: 1-6</p><p>Armor Class: 9</p><p>Movement: 3/16</p><p>Hit Dice: 8</p><p>This 1.3 meter long mutated insect is often domesticated by small</p><p>humanoids and used as a riding mount or beast of burden. Arns</p><p>cannot fly with more than 2 kilograms on their backs and must be</p><p>caught and trained while young to be of any use. The arn has large</p><p>mandibles which can bite, doing 2 dice of damage.</p><p>BADDER:</p><p>No. Appearing: 3-18</p><p>Armor Class: 4</p><p>Movement: 12</p><p>Hit Dice: 6</p><p>This highly intelligent mutated badgeroid species inhabits cool</p><p>temperate zones. They are approximately 1.5 meters tall. The</p><p>badders are organized into a society approximately equal to that of</p><p>he</p>"
+      },
+      "_id": "dZYJrIkUxYPmyzS6",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.dZYJrIkUxYPmyzS6"
+    },
+    {
+      "name": "Ers Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>esert Water Areas Ruins foe Obb Crep Plant Badder Sert ep Seroon Lou Arn Blight Hisser Ber Lep Serf Hisser oul Besh Win Seen Yexil Android teeth Narl Ep Orlen Blaash arn Terl Ark Zarn odog Menarl Android Robotic Unit exil Fleshin Robotic Unit Tribesmen Blaash Cren Tosh Hoop Parn Kep Barl Nep Tribesmen Cryptic Kai Lin Ert Telden Sleeth Altiance erth Fen i erf Keeshin onpptie oe No Encounter ribesmen Herkel No Encounter Android Ert Robotic Unit Android Cal Then Badder Blight Robotic Unit arn Tribesmen Cryptic Cryptic</p><p>Alliance Alliance s or humanoids. C ALLIANCES).</p><p>oklet. A referee who creates an expansive assortment of mutated plants, animals, which are unique to his own campaign “world”.</p><p>the medieval period in human history. They are basically of evil</p><p>disposition and will destroy other intelligent life forms if given the</p><p>chance. Badders live in earth burrow complexes, although they will</p><p>sometimes be found inhabiting a ruined town of the Ancients. They</p><p>have manipulative forepaws and walk erect. Badders are</p><p>exceptionally quick of movement in combat (18 dexterity), and they</p><p>commonly employ simple armor, shields, and all sorts of weapons</p><p>(each is only 10% likely to have an Artifact weapon). They can also</p><p>deliver a vicious bite for 1 die (d6) of damage. Badders communicate</p><p>in their own form of snarling/growling language but can</p><p>approximate some limited trade speech. They are hard of hearing,</p><p>but have a keen sense of smell. Badders have a mental strength of</p><p>16 and possess empathy. If a burrow is discovered, there will be</p><p>females equal in number to the males, and young equal to 50% of</p><p>the pemales. The burrow will be ruled by a very large male and 1-4</p><p>“nobles”.</p><p>BARL NEP:</p><p>No. Appearing: 1</p><p>Armor Class: 3</p><p>Movement: 20</p><p>Hit Dice: 20</p><p>The bar! nep is a totally black fish that can attain a length of up to 1</p><p>meter. If attacked, it will secrete a radioactive oil (intansity 18) that</p><p>covers an area 10 meters in diameter. This radioactive oil will last up</p><p>to 10 minutes in calm lake or pond water. If caught and killed,</p><p>enough oil to make a 10 minute radioactive oil slick (intensity 12)</p><p>may be extracted from its body.</p><p>BER LEP:</p><p>No. Appearing: 1-8</p><p>Armor Class: 6</p><p>Movement: N/A</p><p>Hit Dice: 15</p><p>The ber lep Is a large (two meters across) free-floating aquatic</p><p>plant which grows (akin to the lily pad) as an enormous sheet on the</p><p>surface of the water. A sweet smelling acid exuded by the plant</p><p>serves to attract, kill, and then dissolve small animals and insects</p><p>which land on it. The ber lep is thick anough to support the weight</p><p>of ahuman and the acid is relatively slow acting. If injured, however,</p><p>the plant will teleport itself to a point 5-30 meters distant.</p><p>BLAASH:</p><p>No. Appearing: 1-10</p><p>Armor Class: 8</p><p>Movement: 6/15</p><p>Hit Dice: 15</p><p>This mutated moth-creature is often over 1 meter jong with a</p><p>wingspread of 2 meters. The blaash is fearless and quite</p><p>carnivorous. It glows brightly when it attacks, because of the</p><p>intensity 18 radiation it emits from its abdomen. This radiation is</p><p>harmful within a 5 meter radius, but will not damage the blaash or</p><p>others of its kind. Once the blaash has killed its prey, it stops and</p><p>eats voraciously.</p><p>BLIGHT: No. Appearing: 1-4 Armor Class: 9 Movement: 2/10 Hit Dice: 12</p><p>This 3 meter long carnivorous winged worm can have a wing span of up to 10 meters. It may become /nvisibie at will, and when it swoops down from the sky onto its prey, its first attack upon becoming visible will be a flash of light that will blind for 1-4 melee turns any creature who looked at it. Although it can bite, doing 3d6 of damage, its preferred mode of attack is constriction. When it is coiled around a victim it does 5d6 of damage per melee turn. The blight is completely resistant to radiation, heat, and sonic attacks.</p><p>BRUTORZ: No. Appearing: 1 (2-12 in wild herds) Armor Class: 7 Movement: 18 Hit Dice: 14</p><p>Standing well over 2 meters high at the shoulder, a Brutorz is powerfully muscled and very broad. These neo-Percherons (mutated horses) are quite intelligent (with a mental strength of 12) and are particularly partial to PSH individuals. In addition to their great size, strength, and intelligence, the Brutorz species is remarkably agile for their bulk (1000 kilograms), and all nave precognition. in combat, these creatures can deliver stunning kicks — 2 dice of damage (2d6) per forehoof — or a vicious bite for 3 dice (3d6) of damage. Well fed and treated with respect, the Brutorz is quite willing to serve as amount for humans and humanoids.</p><p>CAL THEN: No. Appearing: 1 Armor Class: 9 Movement: 4/12 Hit Dice:6</p><p>This intelligent (mental strength 18) flying insect can attain a length of 2.5 meters. It has huge mandibles that can do 10 dice of damage and, given time, crush even duralloy. It is attracted to bones, which are its favorite food. !t carelessly rips the flesh off living creatures merely to devour their bones. The cal then is completely resistant to all heat and cold attacks.</p><p>CENTISTEED: No. Appearing: 1 Armor Class: 9 Movement: 30 Hit Dice: 7</p><p>This long-bodied mammal was once a horse, but the mutations it has undergone have given it an almost insect-like appearance. A centisteed can trot at full speed on its 16 legs carrying two humansized riders. Although not intelligent by human standards, the centisteed is totally immune to all forms of mental attack and possesses force field generation. While they make desirable mounts, these beasts also require enormous quantities of fodder because of their increased metabolism. In a combat situation, the centisteed is almost more trouble than it is worth, as one of its riders must devote all of his efforts towards keeping the centisteed under control.</p><p>CREN TOSH: No. Appearing: 1 Armor Class: 3 Movement: 12 Hit Dice: 16</p><p>This lizard/fish prefers to live as a 2 meter long fish. It can, however, transform itself into any type of lizard, complete with any mutations (see Sleeth), for up to 24 hours. In fish form, the cren tosh burrows long wide tunnels into the banks of rivers and lakes, where it makes its nest. It eats only plants, but loves to collect and line its nest with shiny objects.</p><p>CREP PLANT: No. Appearing: 1-10 Armor Glass: 3 Movement: 1 Hit Dice: 15</p><p>There are two varieties of the crep plant. The water crep is pink, and lives completely submerged, in the bottoms of lakes and rivers. The land crep is red, and may be found in any area with a reasonable amount of rainfall. All crep plants, though unintelligent, have the following mental mutations, which are used when attacked: death field generation, molecular disruption, and life leech (which is how it feeds). Additionally, they have the following vegetable mutations: mobility, 1-4 manipulative vines, and parasitic attachment. The</p><p>plant reproduces with large leaf-like structures that it uses to make</p><p>parasitic attachments. After attaching, the structures drain victims’</p><p>blood (at a rate of 10 hit points per melee round). Once the victim is</p><p>dead, these structures drop off the crep, and burrow into the</p><p>ground to start a new plant.</p><p>ERT:</p><p>No. Appearing: 1</p><p>Armor Class: 9</p><p>Movement: 8</p><p>Hit Dice: 3</p><p>This innocuous looking fish, which can be up to 1 meter long,</p><p>lives in swift flowing mountain streams. It has an awesome defense</p><p>mechanism. Any creature it manages to bite has a chance of being</p><p>turned to granite-like rock. (Treat as a poison attack of intensity 12.</p><p>A\"D” result turns the victim to stone.)</p><p>ERT TELDEN:</p><p>No. Appearing: 1-6</p><p>Armor Class: 6</p><p>Movement: 9</p><p>Hit Dice: 12</p><p>The ert telden is a fish just over 1 meter long, which lives in</p><p>backwaters, marshes and swamps. It has a unique self-destructive</p><p>defense mechanism. When removed from water, it starts to burn</p><p>with such intense heat that all creatures within 30 meters of the fish</p><p>sustain 5 dice (d6) of heat damage on the first melee turn. On the</p><p>second melee turn out of water, the ert telden explodes in flames,</p><p>doing 10 dice of damage to al! beings in range. It is sometimes</p><p>captured and used as a weapon by certain tribes, who keep the ert</p><p>telden in holding pools inside their walled village, and fling them</p><p>over the walls with catapults at would-be attackers.</p><p>FEN:</p><p>No. Appearing: 1-10</p><p>Armor Class: 7</p><p>Movement: 12 (water)/3 (land)/8 (flying)</p><p>Hit Dice: 10</p><p>The fen is an intelligent, man-sized fish, which walks about on 2</p><p>stubby fins when on land. It has both lungs and gills and may</p><p>remain out of water for up to 24 hours. Its translucent skin makes</p><p>the fen invisible when under water. Fens collect and use all manner</p><p>of weapons and may also use their tail as a club which does 6 dice</p><p>(d6) of damage if it hits. They are completely resistant to radiation,</p><p>have a poison resistance of 18, reflact heat and light (laser) attacks</p><p>for 5 melee rounds before taking damage, and can shapechange</p><p>Into a large bird and fly away if the going gets rough.</p><p>FLESHIN:</p><p>No. Appearing: 1</p><p>Armor Class: 8</p><p>Movement: 9 (water)/5 (flying)</p><p>Hit Dice:8</p><p>The fleshin is a 2 meter long fish that inhabits large lakes. It</p><p>swims at high speed along the surface until it launches Itself into</p><p>the air, where its broad pectoral fins enable it to glide on wind</p><p>currents for hours on end. It feeds on water birds and other small</p><p>animals, but has been known to attack humans when hunting is</p><p>bad. Its dorsal fin is covered with intensity 15 poison spines. If</p><p>seriously threatened, it will shapechange and fight as a sleeth (with</p><p>all that creature’s powers).</p><p>GRENS:</p><p>No. Appearing: 1-6</p><p>Armor Class: 4</p><p>Movement: 12</p><p>Hit Dice: 20</p><p>Grens appear to be completely normal Pure Strain Humane...</p><p>except for their deep green skin! They are intelligent and tive</p><p>secluded lives in harmony with nature. They inhabit only deep</p><p>forests, where they cannot be seen or sensed by any creature until</p><p>they reveal themselves. They will not use ancient technology and</p><p>stubbornly refuse to learn any of the knowledge of the Ancients.</p><p>Most tribes shun outsiders, although in some instances (30%),</p><p>grens may cooperate with Pure Strain Humans if approached in a</p><p>non-hostile manner. ;</p><p>HERKEL:</p><p>No. Appearing: 1-10</p><p>Armor Class: 9</p><p>Movement: 8</p><p>Hit Dice: 4</p><p>These relatively small (.6 meters long) fish are every bit as vicious</p><p>as the piranha, with a bite that inflicts 6 dice of damage per melee turn. Their scales are covered with a thin filrn of intensity 18 contact poison. The appetite of a herkel knows no bounds, and they will eat anything they can get into their jaws.</p><p>HERP: No. Appearing: 1 Armor Class: 3 Movement: 10 Hit Dice: 20</p><p>This is a 3.5 meter long, carnivorous mutated beetle, protected by a thick wing case (the herp is flightless) which reflects sonic attacks. To kill its prey, it squirts a stream of powerful acid up to 30 meters. This does 15 dice (15d6) of damage if it hits and will eat through 1/2 cm of duralloy in three melee turns. The herp is a diligent and skillful hunter, able to track its prey (smatl animals) in all kinds of weather.</p><p>HISSER: No. Appearing: 1-10 Armor Class: 3 Movement: 12 Hit Dice: 18</p><p>This 3-meter long half-man-half-snake inhabits the more arid regions of GAMMA WORLD, often settling near an oasis or well. All hissers are telepathic, with a mental strength of 12 and mass mind, sonic attack ability, and one other (random) mental mutation. Their scaly skin is completely resistant to laser and sonic attacks. Their society is matriarchal, one female leading a group of 70 or so males and young. She, like a queen bee, lays all the eggs for each settlement, and all of them hatch as males. When a community grows to about 70 individuals, the matriarch will hatch another female. In a few years, the colony will divide and the new matriarch will lead an assortment of male hissers off to find a new place to live. Although intelligent, hissers do not have any written or spoken language, as all information is exchanged telepathically. They utilize selected items of Ancient technology which they uncover in search expeditions among the ruins of the Ancients.</p><p>HOOP: No. Appearing: 1-20 Armor Class: 9 Movement: 18 Hit Dice: 15</p><p>Hoops are actually 2.6 meters tall, mutated rabbitoid creatures that stand erect on their hind legs, and are able to leap over objects as high as 8 meters. They are intelligent (mental strength 3-18), telepathic, and have mass mind. A mutation peculiar to the hoops is their ability to transmute metal objects into rubber. The hoop must touch the metal abject to be transmuted. Al! metal within 1 meter of that point turns into rubber (must al! be in contact). Hoops have manipulative forepaws. They appreciate the power of Ancient weapons, and seek to obtain and use them. The referee must determine what effect the change to rubber wiil have on various Metal objects, such as armor, pistols, robots, etc.</p><p>HOPPER: No. Appearing: 1 (1-20 in the wild) Armor Class: 9 Movement: 12 (hop at 24) Hit Dice: 3</p><p>Resembling giant, weird-looking hares, hoppers are commonly used as riding beasts, as each is able to carry 100kg burdens with little or no effort. Riding a hopper, however, is no easy task. They require a special saddle and harness, for, while their route gait is a not-too-jerky series of lippity-lops, their full run consists of great leaps, interspersed with rapid hops. Any rider who is not properly fastened to the saddle will surely be dismounted. Those riding a hopper for the first time are 75% likely to sustain 1-6 dice of damage (and be thrown from the hopper’s back). These creatures are rather stupid (hoops regard them as we do chimpanzees), but their speed and chameleon powers enable them to survive. An unburdened hopper can easily make 12 meter leaps, and clear objects 8 meters high.</p><p>HORL CHOO: No. Appearing: 1 Armor Class: 5 ° Movement: 6 Hit Dice: 18</p><p>This is a strange black plant which, when viewed from a distance, looks like a lumpy porcupine with extremely long quills. The “quills” are actually 3 meter iong spear-like stems which it flings at</p><p>any being that approaches within 90 meters. There are from 6-30</p><p>(5d6) of these and they are tipped with intensity 9 poison in addition</p><p>to doing 3 dice of damage if they hit. The spear-stems are attached</p><p>to the plant by strong vines. These retrieve any spear that misses its</p><p>target, and drag impaled prey back to the base of the plant where</p><p>dissolving juices break the victim’s body down into food. The horl</p><p>choo has a limited form of mobility, which it only uses to move to</p><p>better hunting grounds.</p><p>KAI LIN:</p><p>No. Appearing: 1-4</p><p>Armor Class: 6</p><p>Movement: 10</p><p>Hit Dice: 12</p><p>This deceptively reptilian-looking creature is actually a 3 to 4</p><p>meter long plant. It runs along the ground on two strong stalks that</p><p>end in thorny pads (resembling clawed feet), trailing its long root</p><p>structures behind like a tail. It is covered with radiation resistant</p><p>green bark which resembles scales. Although the kai lin is a</p><p>scavenger, it is not above attracting and killing fresh food. Kai lin</p><p>wander about in small groups in search of carrion, which they</p><p>assimilate by entwining their tail/roots around the dead animal. It</p><p>has a limited inteiligence (mental strength 5) and the following</p><p>mutations: electrical generation, attraction odor, and radiated eyes.</p><p>KEESHIN:</p><p>No. Appearing: 1</p><p>Armor Class: 3</p><p>Movement: Telekinetic flight</p><p>Hit Dice:7</p><p>This small white mutated amphibian lives in bodies of water. It is</p><p>highly intelligent (intelligence 18, mental strength 16), possessing</p><p>the foltowing mental mutations: telekinetic flight, telekinesis,</p><p>telekinetic arm, force field generation, life leech, de-evolution,</p><p>mental blast, cryokinesis, and reflection. It may utilize any 2 of</p><p>these mutations per melee turn. The ruthless keeshin is a solitary</p><p>creature, who spends most of its life gathering devices of the</p><p>Ancients. It is very greedy and will readily kill to obtain what it</p><p>wants. It stores its treasures in an underwater stone dwelling,</p><p>which it builds telekinetically and keeps filled with a pocket of fresh</p><p>air,</p><p>KEP:</p><p>No. Appearing: 1</p><p>Armor Class: 2</p><p>Movement: N/A</p><p>Hit Dice: 20</p><p>The kep is a hideous carnivorous piant which prefers sandy soil,</p><p>grows completely underground, and permits no other plants to</p><p>grow above it. Just beneath the surface, it builds an elaborate net of</p><p>squeeze roots (some 30 meters in diameter) with pressure sensitive</p><p>filaments. When a creature walks over this area, the network of</p><p>squeeze roots springs out of the ground to ensnare it. The squeeze</p><p>roots do 5 dice (5d6) of constrictive damage each melee turn to all</p><p>creatures unfortunate enough to get caught. If a kep takes damage</p><p>equal to more than half of its total hit points, it will release its</p><p>captives and retreat below ground. If its prey ceases to struggle, the</p><p>roots secrete dissolving juices which break it down into food for the</p><p>kep. After each maal, the plant produces one mobile seed. It</p><p>tunnels to the surface and scurries away in search of a home.</p><p>MENARL:</p><p>No. Appearing: 1-4</p><p>Armor Class: 6</p><p>Movement: 6</p><p>Hit Dice: 7</p><p>The menarl is an impressive 10 meter long intelligent water</p><p>snake. It has 10 very usable arms equipped with human-shaped</p><p>hands. It has heightened strength (17) and a mental strength of 12.</p><p>Its favorite food is birds, and it goes into a mad frenzy when any are</p><p>near. The menar! is relatively friendly towards humanoids and, if</p><p>shown how, will use ancient devices and weapons.</p><p>NARL EP:</p><p>No. Appearing: 1</p><p>Armor Class: 3</p><p>Movement: N/A -</p><p>Hit Dice: 20 .</p><p>This enormous white mutated tree grows over 50 meters tall. It</p><p>lives in bodies of water, projecting its pale green leafy top and its 5-</p><p>30 squeeze vines above the surface of the water. The squeeze vines</p><p>are used in defense, and, during spring, are covered with seed pods,</p><p>which it flings to the winds when ripe. When these pods are</p><p>cracked open (usually a sharp blow will do), 2-12 (2d6) seeds fly out, along with a sonic blast that will do 3 dice (8d6) of damage to all beings within 10 meters.</p><p>OBB: No. Appearing: 1 Armor Class: 10 Movement: 1/15 Hit Dice: 12</p><p>The obb is an intelligent (mental strength 12) mutated fungus which resembles a 1 meter long bat. Nearly immobile on the ground, it is as swift and deadly as a hawk when in the air. It swoops down from the sky using its one large black eye to deliver a blast of intensity 16 radiation. It then strikes stunning blows with its two clawed appendages doing 3 dice (3d6) of damage with each. Once its prey is killed, the obb devours half of the body and plants its spores in what remains. In just one day 1-6 (d6) young obbs will emerge and fly off. The obb is completely resistant to radiation, and all laser, light, and heat attacks. It has been known to associate peacefully and even team up with other intelligent beings. but only the referee knows exactly when or why. The obb has an intelligence of its own, and its logic is totally unrelated to anything generally known to man.</p><p>ORLEN: No. Appearing: 1 Armor Class: 7 Movement: 15 Hit Dice: 15</p><p>These two-headed, 2.5 meter tall, humanoid mutants have four arms ... each 2 under the control of a separate brain. They are all telepathic, with telekinesis, and will force available in both brains. Some 25% of them also have 2 random mutations (one on each side), which usually include poison claws (random intensity) on two hands, and a mental mutation, de-evolution, on the other side. Orlens will barter peacefully to obtain technological devices, and have made many of their own — specially adapted for use with four arms.</p><p>PARN: No. Appearing: 1-4 Armor Class: 6 (see also below) Movement: 6/16 Hit Dice: 10 plus antennae (see below)</p><p>The parn is a 3 meter long mutated beetle. Its back is covered with 4-24 (4d6) 1.3 meter long barbed spines, which it uses defensively. These it may shoot, 2 per melee round, up to a distance of 50 meters and each will do 2 dice (d6) of damage if it hits. Although not particularly intelligent, the parn is a ruthless carnivore, and it kills its prey with 4 sharp sword-like structures at the ends of its 3 meter long antennae. Each of these does 3 dice of damage (d6) if they hit, and the parn uses them so effectively that the armor class of any opponent(s) is adversely affected by 3 classes when in close combat with the parn. Each antenna has an armor class of 5 and will take 18 points of damage (this is in addition to the basic 10 hit dice of the creature) before it is severed. The parn never retreats and fights tenaciously to the death.</p><p>PERTH: No. Appearing: 1-10 Armor Class: 4 Movement: N/A Hit Dice: 8</p><p>This mutated palm-like bush is topped with a large (1 meter tall) flower-like structure. If disturbed, the flower will begin to glow all shades of the rainbow and on the next melee round emit radiation of random intensity (3d6) that affects all beings within a 15 meter radius. Each melee round, it changes color and emits radiation of a different intensity (again random). If the perth is damaged, it will glow 1 to 4 colors at once (d4), emitting that many blasts of radiation of different intensities. The petals of the flower-structure can be sun-dried and crumbled into a powder, which, when ingested, will heal one lost hit point for each gram of powder consumed, One flower will yield 20 grams of powder and the drying process requires 3 full days of sunlight. If dried more rapidly by artificial means, the powder will be only half as effective.</p><p>PINETO: No. Appearing: 1 (1-8 in wild) Armor Class: 4 Movement: 18 Hit Dice: 2</p><p>These oddly mutated plants have a horizontal trunk and movable</p><p>branches, adapted to rapid locomotion. A large clump of roots, and keen visual and olfactory appendages at the base of its trunk vaguely resembles a shaggy horse's head. It feeds on nutrimental matter, which its tendrils thrust into the trunk cavity where it is absorbed by thousands of tiny rootlets. The pineto takes on moisture much like an animal, by dipping its ‘head’ (root clump) into a stream or pond. Pinetos move about quickly in order to avoid predators. When captured, the pineto can be ridden or used as a beast of burden (carrying up to 800kg on their backs). Control is by means of a sharp goad which is jammed into the pineto, just behind the root clump. Using this device, the creature can be made to move, run, turn, and stop at a rider’s command. Note, however, that the pineto is covered with a dense growth of sharp needles, and the tail (tree top) lashes for 1 die of damage (to armor class 8 or less) on command. Riders without saddles, or other proper protection, also take 1 point of damage per melee round while astride the pineto.</p><p>PODOG: No. Appearing: 1 (2-12 in wild packs) Armor Class: 5 (8 if ridden) Movement: 15 Hit Dice: 4</p><p>Podogs are fairly clever, very large, mutated mongreis. They understand simple commands and are large enough to ride and strong enough to carry most humans at a good pace all day. They are not friendly in their wild state. Podogs are carnivorous pack hunters, and only the young can be trained to serve as steeds. If a podog is attacked, it will bite and slash with its teeth causing 2 dice (d6) of damage. All podogs are totally immune to any form of poison, Prized podogs have dual brains and communicate with their masters via telepathy (such creatures are one in a hundred and are rarely for sale). When excited, a podog bays out a cry which perfectly imitates that of its preylopponent, throwing it into confusion and giving the podog the initiative to attack or flee. Packs of podogs will normally consist of a mated pair and one or two of their full and partially grown litters.</p><p>RAKOX: No. Appearing: 1 (5-30 in wild herds) Armor Class: 4/6 Movement: 9 Hit Dice: 20</p><p>These rather slow but powerful oxen sport a partial carapace, surmounted by a forward pointing frill of 8 long horns. Any opponent gored by these weapons will suffer 1 die of damage (d6) per horn — typically, a man-sized opponent can be struck by 1-3 horns. They will have a tendency to charge when frightened, especially if encountered in the wild. A charging rakox does double damage. Although stupid, and very skittish, their tough hide, endurance, and great strength (able to carry up to 1000kg) make them desirable as beasts of burden and draft animals.</p><p>SEP: No. Appearing: 1-6 Armor Class: 5 Movement: 10 Hit Dice: 17</p><p>The sep is actually a mutated version of the shark that has adapted to life on land. A powerful organ in its head (somewhat resembling a brain) enables the sep to force even packed sand out of its way telekinetically, as it plows along beneath the surface of deserts in search of prey. The sep is able to detect creatures up to 50 meters away. When it springs unexpectedly from the ground and attacks, its massive jaws (in an adult) bite for 9 dice (d6) of damage. It quickly burrows back under the sand after striking and maneuvers underground for one or two melee rounds before making its next attack from a different direction. Once killed, prey is dragged beneath the sand and eaten.</p><p>SERF: No. Appearing: 1-4 Armor Class: 6 Movement: 12 Hit Dice: 10</p><p>Serfs are mutated humanoids with heightened strength, a partial carapace, and poison claws (intensity 8) instead of fingernails. They are very intelligent (mental strength 15) and possess the following mental mutations: light wave manipulation, density control (others), life leech, death field generation, mental blast, and telepathy. Serfs are semi-nomadic and organize themselves into quasi-military “brigades”, dressing in old military or police uniforms recovered from the Tombs of the Ancients. The “general” of each brigade holds his power by means of an ancient weapon, although serfs</p><p>prefer to fight only with their mental mutations, and any given one is 90% likely to do so.</p><p>SEROON LOU: No. Appearing: 3-18 Armor Ciass: 8 Movement: 3 Hit Dice: 8</p><p>This deep green carnivorous aquatic plant can reach a length of up to 30 meters. It is semi-intelligent and the top of its stalk projects as much as 3 meters above the water, while its mobile roots allow it to walk slowly about the bottom. At the top of the stalk is a large eye, shaded by several! jeaves. The eye directs the use of its 11-20 manipulation vines. The seroon lou will attack just about anything, grasping rocks and clubs with its vines and bludgeoning its victims to death. It drags its prey to the bottom to be assimilated by its roots. The seroon lou often hides among the more peaceful nari ep, and, except for its darker color, looks much the same.</p><p>SLEETH: No. Appearing: 1-10 Armor Class: 5 Movement: 12 Hit Dice: 18</p><p>The sleeth is a 3 meter tall mutated lizard. It is very intelligent (intelligence and mental strength 17) with the following mental mutations: telepathy, precognition, and the special ability to negate any force field within 30 meters. They are completely resistant to illusions and have a poison resistance of 18. In any given group of 10, one wilt have an additional good mutation (choose randomly). Sleeths are a quiet, peaceful race, living in smal! communities or villages. They befriend all manner of mutants and delight in discussions of philosophy and religion. They can use ali kinds of weapons.</p><p>SOUL BESH: No. Appearing: 1 Armor Class: 8 Movement: 9 Hit Dice: 10</p><p>This is a flightless, mutated mosquito with chameleon powers. It often attains a length of over 1.3 meters and inhabits swamps, marshes, grasslands, and forests, where its powers of concealment enable it to ambush prey. It has a 2 meter long coiled proboscis, which it inserts (preferably into a steeping victim) causing an immediate die (d6) of damage, and, in the same melee round, injects intensity 18 paralytic poison. On the next melee round, the soul besh begins sucking blood at a rate of 12 hit points per melee turn. The exoskeleton of the soul besh, when bailed down in a large cauldron, will yield 150 cc of syrupy antidote to intensity 18 poison. 10 cc is the required dose for humans.</p><p>TERL: No. Appearing: 1-4 Armor Class: 5 Movement: Telekinetic Flight Hit Dice: 9</p><p>This 2 meter long mutated barracuda is covered with brightly coiored feathers instead of scales. Consequently, it mates and hatches its young in water, but spends most of the rest of its life living in trees. It is able to breathe both in water and air and travels by means of telekinetic flight. It is not particularly intelligent, but is a dangerous predator, using both cryogenesis and its sonic attack ability simultaneously to kill its prey. If these two methods of attack fail, it can bite for 2 dice (d6) of damage, but will usually retreat to find an easier kill. Its feathers reflect heat and laser attacks, and it is able to detect and avoid areas of radiation.</p><p>WIN SEEN: No. Appearing: 2-7 Armor Class: 9 Movement: N/A Hit Dice: 13</p><p>The win seen is a creeping tangle of vines whose runners can spread over a very large area (up to 20 meters in diameter). It is difficult to tell where one pliant ends and tne next one begins, as all plants in a colony are connected to one another. The yellow-green aquatic variety floats freely around the surface of lakes and ponds, emits a sonic attack whenever it is touched, and is covered with intensity 14 contact poison. The blue-green land win seen has the above defenses plus an attraction odor that encourages carnivores to live nearby (referee should pick a few likely ones). Although not</p><p>intelligent, the land variety exhibits a crude form of magnetic control, forcing all ferrous objects (of up to 50 kg wt) within 50 meters of the plant to the ground for up to 25 melee turns. The plant must be damaged before it will utilize this power. A single win seen, chopped, and cooked down in a large pot for several days, will yield about 100ces of antidote for intensity 14 poison, with 10 ccs being the required dose for a human.</p><p>YEXIL: No. Appearing: 1-4 Armor Class: 6 Movement: 4/15 Hit Dice: 10</p><p>This flying creature, of indeterminate origin, has a wing span of 8 meters and stands 3 meters tall. It is a slow-witted but friendly beast which ambles around the ground on 2 long hairy legs, but is a magnificent sight in the air with its beautiful orange fur-lined wings outstretched. At the end of each wing is a well shaped hand. Atop its long neck rests a lion-like head with large eyes and large mandibles. In combat, the yexil can bite for 3 dice of damage, or shoot a laser beam through its eyes that does 5 dice (d6) of damage out to 25 meters. Its body is also covered with orange (and black) fur which is resistant to very little (but is resistant to cold attacks). The yexil is omnivorous, but its most favorite foods (it is a gourmet) are manufactured clothing — cotton, synthetics, leather, etc. The snappier the outfit, the better it tastes. The yexii will often trade what it considers worthless items of technology (such as pistols, bombs, or grenades) for good clothes to eat.</p><p>ZARN: No. Appearing: 1 Armor Class: 7 Movement: Teleportation (up to 200 meters) Hit Dice: 4</p><p>The zarn is a dangerous little orange parasitic beetle that, when full grown, attains a length of only 10 centimeters. It will attack any living creature, regardless of size. On one meiee turn it spits intensity 16 paralytic contact poison, up to a maximum range of 5 meters. On the next melee turn, although only semi-intelligent, it teleports to a different location (maximum range 200 meters). After teleporting, it will spit poison again, continuing this routine until a victim has been paralyzed. Note: the spittle is so toxic that the saving throw for poison must be made each melee turn for each area of spittle that is not washed off the victim’s skin. Once its victim is paralyzed the zarn bores through the skull and lays 4-24 e995 in its brain. Paralysis lasts one full week. The eggs will hatch in four days, consume the brain, and emerge on the fifth day as little zarn. Zarn eggs may only be removed surgically.</p><p>ZEETHH: No. Appearing: 1-100 Armor Class: 10 Movement: None (teleporting seeds) Hit Dice:1</p><p>Each Zeethh is a sturdy blade of mutated purple grass which grows to a height of 1.5 meters. Its tassles (which grow continuously all summer long) are filled with 1-6 spiked seeds. Each melee round that warm blooded creatures are within 20 meters of zeethhs, the plants will attempt to teleport one-quarter of their seeds /nto those creatures. Here's how to handle large scale zeethh combat:</p><ol><li>Multiply the number of zeethhs present by 3...this yields the total number of seeds available.</li></ol><ol><li>One fourth of the original total of seeds will be teleported each melee turn.</li></ol><ol><li>The number of seeds to be teleported is divided by the number of targets (warm-blooded creatures within 20 meters). The quotient is the number of seeds which attack aach target.</li></ol><ol><li>Treat the zeethhs as having a mental strength of 12. Rolla mental attack (see the MENTAL ATTACK MATRIX) for each seed. ;</li></ol><p>Seeds which do not get into a body simply vaporize. Each seed teleported into a body does 2 dice (d6) of damage to its new host. While inside a creature, these seeds secrete a dissolving juice that does an additional point of damage per day per seed for up to 7 days. If by then the creature is not dead, the seeds die. All damage caused by these seeds will not heal until the seeds die or are</p><p>removed surgically (see Rejuy Chamber under ARTIFACTS &amp; EQUIPMENT). If a host (full of viable seeds) dies, the seeds inside it will sprout in less than an hour, and grow large enough to have a tassel in three days. All adult zeethhs replace teleported seeds at a rate of one per day.</p><p>ol) ny =</p><p>Sae</p>"
+      },
+      "_id": "TLk3EEYPRCapYGbL",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.TLk3EEYPRCapYGbL"
+    },
+    {
+      "name": "Cryptic Alliances",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>As if the monsters and creatures of GAMMA WORLD weren't fearsome enough, many of them have banded together into secret or semi-secret organizations called CRYPTIC ALLIANCES. Some are remnants of organizations that existed in the Shadow Years... some are of very recent origin. All such groups should be based in specific areas of the map and any adventurers approaching within a certain radius (established by the referee) should have a 75% chance per day of encountering representatives of that particular group. This chance is in addition to the basic encounter chance listed on the ENCOUNTER TABLE. Societies of very advanced or powerful individuals should be limited in size so that the adventurers will have at least some small chance against them. The possibilities for cryptic alliances are many and varied, limited only by the referee’s imagination. A suggested list of basic groups follows. The referee should feel free to add or change them as he sees fit. Even changing the names and some of the characteristics of some of these groups will keep the players guessing...</p>"
+      },
+      "_id": "tLzWt0HvAytTwrHl",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.tLzWt0HvAytTwrHl"
+    },
+    {
+      "name": "Brotherhood of Thought",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This group was founded by a biochemist who survived the holocaust and was amazed to find that non-human mutations often had brains of a quality equal to or greater than humans. He gathered a small group of followers, and their goals were to unify all intelligent creatures in a world of enlightened coexistence and freedom of choice (noble old thoughts!). They have some ties with other cryptic alliances, such as the “Seekers”, and oppose the aims of both the “Purists” and the “Friends of Entropy”. The Brotherhood of Thought may be found in forests, mountains, and hills, usually in tiny villages. They maintain a very low profile, traveling In groups of thres — one human, one humangid, and one mutated animal, to better spread the word of their cause. In dangerous or populated areas, they use a secret sign to contact each other. This sign is a tracing of the infinity symbol across the forehead as though casually brushing hair.</p>"
+      },
+      "_id": "71CbKjQoeuAJIEBd",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.71CbKjQoeuAJIEBd"
+    },
+    {
+      "name": "Seekers",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The Seekers are a group of humans and mutants that all appear completely human. They travel and work in large populated areas, trying to get humans and mutants of all types to work together. They consider mutated animals to be inferior, but don’t. press the</p><p>Pag)</p><p>rin</p><p>J ti p</p><p>ty</p><p>i in</p><p>=eed</p><p>issue, and sometimes even accept their help. They are filled with an</p><p>all-consuming hatred of the technology that brought about the</p><p>destruction of civilization and seek to eradicate all traces of it from</p><p>the face of the earth. They can be found among other human</p><p>factions, or by themselves. The membership is usually very rich, in</p><p>terms of the local means of exchange (they do not hate domars).</p><p>Their secret sign consists of scanning the horizon using both</p><p>hands to shade the eyes.</p>"
+      },
+      "_id": "s9C98RXWclPaWp4F",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.s9C98RXWclPaWp4F"
+    },
+    {
+      "name": "Knights of Genetic Purity",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>“Purists” are Pure Strain Humans who wish to destroy all</p><p>mutated humans. Unaccountably (or fortunately), they do not</p><p>realize that animal and vegetable mutants are not “pure” either.</p><p>“Purists” usually fight with sword and lance, on any available</p><p>mount. A large number of them also have ancient energy weapons.</p><p>They are very open about their hatred and wear a bright red square,</p><p>printed, painted, or emblazoned in some way on the fronts of their</p><p>garments or armor. Large groups of “Purists” have been known to</p><p>hire out as mercenaries — as long as the job involves the slaughter</p><p>of humanoid mutants.</p><p>FRIENDS OF ENTROPY</p><p>Calling themselves the “Red Death,” their goal is to bring about</p><p>the extinction of all life and the cessation of all mechanical</p><p>Operations. They are especially interested in destroying all</p><p>equipment of robotic nature. Theirs is a nomadic society (since</p><p>nobody wants them around), and they travel in small groups, spying</p><p>out populated areas to raid or attack. Whenever possible, they steal</p><p>babies of both humans and mutants and bring them up as the next</p><p>generation of the “Red Death”. Their secret signal consists of the</p><p>Cleaning Of tne Diade ot a dagger with a red cloth, followed by</p><p>thrusting the dagger through that cloth.</p>"
+      },
+      "_id": "9RonsvMis1eEE6yA",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.9RonsvMis1eEE6yA"
+    },
+    {
+      "name": "The Iron Society",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a group of human mutants bent on the destruction</p><p>of all</p><p>non-mutated Pure Strain Humans. Its groups are scattered about</p><p>GAMMA WORLD, especially near radiated areas. The Iron Society Is</p><p>very powerful in battle because its members use both mutated</p><p>powers and ancient weapons of all sorts. They obviously will not</p><p>mingle with humans, but can be found in societies of other</p><p>mutants.</p>"
+      },
+      "_id": "pAzV9qba9pwNScxG",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.pAzV9qba9pwNScxG"
+    },
+    {
+      "name": "Zoopremisists",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This group consists of non-humanoid, thinking mutant animais, who believe that the time has come for the “beasts” to rule the world. They have a secret police of highly trained, dangerous mutants that terrorize any who oppose. them. Fortunately, Zoopremisists attract only a lunatic fringe of the thinking mutant animals, and their power is not yet very great. They can be found secreted in any large mass of mutants. Their agents are all telepathic and signal each other in that manner.</p>"
+      },
+      "_id": "JfpIEgFbVA7OpLjq",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.JfpIEgFbVA7OpLjq"
+    },
+    {
+      "name": "Healers",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a quasi-monastic order, founded by a medical technician during the Shadow Years. They wander continually, caring for the sick and wounded without regard for race, creed, or biological origins. The membership is both human and mutated and all have a mysterious ability to approach and befriend non-intelligent creatures. They use many medical devices of the Ancients, as well as any number of natural herbs and medicines. Healers are so respacted by all (except the “Red Death”), that they are rarely attacked, even by the most bloodthirsty creatures.</p>"
+      },
+      "_id": "cLsBh9IqRHyKQqTR",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.cLsBh9IqRHyKQqTR"
+    },
+    {
+      "name": "Restorationists",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>These are a group of primarily human and humanoid mutants who have recovered jarge amounts of information about the past and are seeking to rebuild the lost civilization. Restorationists are usually armed with weapons from the past and frequently have robotic units working with them. They shun the other moderate cryptic alliances and work single-mindedly towards their goal.</p>"
+      },
+      "_id": "XTArdLNjOUIgYRdB",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.XTArdLNjOUIgYRdB"
+    },
+    {
+      "name": "The Followers of the Voice",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>These are beings of all types who worship computers, betieving that machines created the world and can again restore peace and order. They are always encountered near installations that have computers whose logic circuits agree, at least in part, with their philosophies. In some instances, the large computers, such as the think tank, have taken over their followers, and rule with dictatorial powers. Roving bands of the Followers of the Voice are occasionally encountered as they roam vast areas in search of computers and similar machinery to use as “shrines” for their strange religious rituals.</p>"
+      },
+      "_id": "kfiLvTapQJ1LqNcS",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.kfiLvTapQJ1LqNcS"
+    },
+    {
+      "name": "The Ranks of the Fit",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a military-religious order, bent on controlling the world. Any means to this end is acceptable. It was founded by an enormous mutated bear, who wrote the organization’s guidelines after reading certain history books, and possibly Mein Kampf, Animal Farm, and several biographies of Napoleon Bonaparte. All forms of life may join, but only mutated intelligent animals may hold positions of power. Seeking to establish a form of “Code Napoleon” throughout the world, “The Ranks of the Fit” have brought large groups of people and several cities under their well organized military fist. Although their armies are equipped mostly with crossbows and spears, no independent corps is allowed to operate without some very heavy weapons of the past, and the members will fight to obtain more. Their banner is the Tricolor with a gammadion superimposed.</p>"
+      },
+      "_id": "LWCbvRLym6rFG03o",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.LWCbvRLym6rFG03o"
+    },
+    {
+      "name": "The Archivists",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This group is generally made up of various small humanoids who believe that all artifacts are sacred. These they store away in deep caves, where the artifacts are polished and worshipped. The members usually possess strong attack and defense mutations and will not appear in groups of less than 10. They will seek to buy items that they consider valuable, but are not above stealing if the price is too high. They especiaily like robots, which they deactivate and mount as statues of gods to protect their underground temples.</p>"
+      },
+      "_id": "VophkgpPYwaaGYKV",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.VophkgpPYwaaGYKV"
+    },
+    {
+      "name": "The Radioactivists",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>These are worshippers of a radiation god which they reverently call the “Radiant Devine Glory’. These cultists are those with high radiation resistance and many are mutated, as initiation requires that they spend a week in a radioactive area. Racinactivists are often seen traveling the desolate areas of GAMMA WORLD, searching for new “holy lands”.</p>"
+      },
+      "_id": "7vfQtcTVjR4Ty5OP",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.7vfQtcTVjR4Ty5OP"
+    },
+    {
+      "name": "The Created",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a Special cult, open only to androids. Its members believe that only machine-created ‘life’, such as computers, cyborgs, robots, and androids are worthy of continued survival. Of course they believe that androids should be the ruling class, even in the world of machines. Androids often pass as humans in human and humanoid societies, subverting their efforts and stealing technological devices for the ‘‘Created.”</p>"
+      },
+      "_id": "Qg8tKJd8HIyRkM6L",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.Qg8tKJd8HIyRkM6L"
+    },
+    {
+      "name": "Hazards",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Two principal threats to continued life on GAMMA WORLD are poison and radiation. Both may be encountered naturally, or in combat with other creatures. Both are measured in terms of “intensity” which may range from 3 to 18 points.</p><p>Poison: Several types of poison are mentioned in these rules. Unless otherwise specified, the poison must somehow get into the bloodstream of a being in order to take effect (i.e. via puncture, cut, injection, ingestion, etc). Contact poison works merely upon touching exposed skin. When a being is poisoned, cross-index the intensity of the poison with the constitution of the individual on the following matrix:</p>"
+      },
+      "_id": "WTqasXs13jHC5S5Q",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.WTqasXs13jHC5S5Q"
+    },
+    {
+      "name": "Poison Matrix",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Strength of Polson</p><p>1 * * F * eH eH ee HH 4g 38g</p><p>7W* * * * # # # * * * <em>£ 49 3D D Cc16</em> * * * * * * * * * 429 30D DOD</p><p>O15 * - - 7 + + + * + 4 23 DOOD Ni4e or te te + + 423DDDOD Si3<strong> * * </strong> * 423DDD0D00O Ti2* * * * * * 423D000ODOD fit* * * * * 4 2 DDDDOODDBOD T10* * * * 123 0000O0ODOOO ug* * * 123 0DDODODODODOODO T8* * 123od000O0ODODOODBDODD 17* 123 0nDOODOODODDOD 906123 00000DODODODOD SD OD N523 DDDDDDDOOODODODD 43 0DD0DDBODDOodDDoODDDODODOD 3DD0DDDDDDDDDDDODODODO</p><p>The number obtained indicates how many dice of damage the poison victim sustains. *indicates no effect. D indicates that the victim dies (or is paralyzed if the poison is paralytic), no matter how many hit points it possessed.</p><p>Each numerical intensity poison has its own specific antidote, i.e.: antidote for intensity 14 poison, etc. If this is administered to the victim within 2 melee rounds after obtaining aD” result, he will survive, sustaining only 2 dice (d6) of damage. If another type of antidote is used (different intensity antidote for a different poison), the chance of it working is a base 50%, modified by 10% plus or minus for each intensity level it differs from the specific poison. For example, if a character is poisoned by a weapon with poison intensity 16 and suffers a “‘D” on the chart, an antidote may save him. If the antidote is for level 16 this is certain, since it is the antidote for that particular poison. If the antidote is for poison intensity 14, then there is a 30% chance it will work; if the antidote was for poison intensity 18, there is a 70% chance it will be effective.</p><p>Because of the large number of poisonous creatures in GAMMA WORLD, most inhabitants will wear light body armor of some sort, and often carry poison tipped weapons. When a player carries a poisoned weapon, it is necessary for him to take measures to insure that he is not poisoned by his own weapon, such as wearing heavy gloves, or carrying poison darts in special pouches, etc.</p><p>Radiation: There are many ways to encounter radiation in GAMMA WORLD. Large areas of the referee’s map should be coded as having residual radiation of various intensities. In some places, only metal objects contain radiation. Many creatures use blasts of radiation (either directed in beams or with area effect) as a mode of attack or defense, The effects of radiation are figured in terms of exposure for one melee round. The referee must be sure that creatures suffering the effects are within the effective range limitations of the radiation source. Cross-index the intensity of the radiation with the constitution of the victim on the following matrix:</p>"
+      },
+      "_id": "CfGm863xCY8pZTe8",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!NCQIOBfcevbJbAqr.CfGm863xCY8pZTe8"
+    }
+  ],
+  "_id": "NCQIOBfcevbJbAqr",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!NCQIOBfcevbJbAqr"
+}

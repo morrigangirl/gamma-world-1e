@@ -1,0 +1,708 @@
+{
+  "name": "Brotherhood Scholar",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Brotherhood Scholar",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "",
+      "level": 2,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "brotherhood",
+      "role": "brotherhood of thought scholar",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 17,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 11,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 9,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 9,
+      "naturalAttack": {
+        "name": "Staff",
+        "damage": "1d4"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 18,
+        "value": 18,
+        "max": 18,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 9,
+      "mentalResistance": 16,
+      "radResistance": 10,
+      "poisonResistance": 10
+    },
+    "biography": {
+      "value": "<p>A scholar devoted to preserving pre-war knowledge and extending its benefits to all sentient life.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Pre-war Book",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Hardbound pre-war book. Archivists will pay well.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "trade-good",
+        "actionTypes": {}
+      },
+      "_id": "M1auKBdv4UQwukND",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.M1auKBdv4UQwukND"
+    },
+    {
+      "name": "Satchel",
+      "type": "gear",
+      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "subtype": "container",
+        "equipped": false,
+        "container": {
+          "capacity": 25,
+          "stored": []
+        },
+        "description": {
+          "value": "A shoulder bag for light loads."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "1ccOJkeJrYE5mssv",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.1ccOJkeJrYE5mssv"
+    },
+    {
+      "name": "Canteen (full)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>One-liter steel canteen. Holds a day's water for one person.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "ration",
+        "actionTypes": {}
+      },
+      "_id": "ad8pRXFHWXiV0haQ",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.ad8pRXFHWXiV0haQ"
+    },
+    {
+      "name": "Trail Rations (3 days)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 3,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Dried meat, grain biscuit, and dried fruit. Three-day supply.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "ration",
+        "actionTypes": {}
+      },
+      "_id": "9txPJHcb8oOsMUJk",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.9txPJHcb8oOsMUJk"
+    },
+    {
+      "name": "Mental Defense Shield",
+      "type": "mutation",
+      "system": {
+        "code": 28,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Sense beings with mental powers in 30m; +4 to mental resistance (max 18).",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Sense beings with mental powers in 30m; +4 to mental resistance (max 18).</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Mental Defense Shield — mental resistance",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.mentalResistance",
+              "mode": 2,
+              "value": "4",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "VwwhrmyCuFkvjtT1",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!cUDw0iz5YmiHGK3z.WwS03MLiKOydJUeF.VwwhrmyCuFkvjtT1"
+        }
+      ],
+      "_id": "WwS03MLiKOydJUeF",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.WwS03MLiKOydJUeF"
+    },
+    {
+      "name": "Intuition",
+      "type": "mutation",
+      "system": {
+        "code": 19,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "+1 to hit, +3 damage per dice, cannot be used with other powers.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>+1 to hit, +3 damage per dice, cannot be used with other powers.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Intuition — combat + surprise bonuses",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.toHitBonus",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            },
+            {
+              "key": "gw.damagePerDie",
+              "mode": 2,
+              "value": "3",
+              "priority": 20
+            },
+            {
+              "key": "gw.cannotBeSurprised",
+              "mode": 5,
+              "value": "true",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "QfV4zm5HsFxIj4pE",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!cUDw0iz5YmiHGK3z.rtFDdIZHiGCLmyhC.QfV4zm5HsFxIj4pE"
+        }
+      ],
+      "_id": "rtFDdIZHiGCLmyhC",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!cUDw0iz5YmiHGK3z.rtFDdIZHiGCLmyhC"
+    }
+  ],
+  "_id": "cUDw0iz5YmiHGK3z",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!cUDw0iz5YmiHGK3z"
+}

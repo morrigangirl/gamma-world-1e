@@ -1,0 +1,894 @@
+{
+  "name": "Keeshin",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/keeshin.png",
+  "prototypeToken": {
+    "name": "Keeshin",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/keeshin.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Amphibian",
+      "level": 7,
+      "xp": 0,
+      "movement": 30,
+      "alliance": "",
+      "role": "solitary treasure-hoarder",
+      "speech": "telepathy",
+      "creatureClass": "Psychic Amphibian"
+    },
+    "attributes": {
+      "ms": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 6,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 11,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 6,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 42,
+        "value": 42,
+        "max": 42,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 16,
+      "radResistance": 11,
+      "poisonResistance": 11
+    },
+    "biography": {
+      "value": "<p>A tiny white amphibian that hoards Ancient devices in underwater lairs and kills readily to keep them.</p><p>It may use any two of its many mental mutations each melee turn.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "telepathy",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Psychic Shell",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 3,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Small body protected by potent mental defenses."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "G98BxQfh1Et1F2jQ",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.G98BxQfh1Et1F2jQ"
+    },
+    {
+      "name": "Telekinetic Flight",
+      "type": "mutation",
+      "system": {
+        "code": 42,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Fly up to 20 meters per second, carry as much as usual.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Always on",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Fly at up to 20 meters per second, carrying a normal load."
+        },
+        "actionTypes": [
+          "movement"
+        ],
+        "description": {
+          "value": "<p>Fly up to 20 meters per second, carry as much as usual.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Telekinetic Flight — flight speed",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.flightSpeed",
+              "mode": 4,
+              "value": "20",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "NlMwNEM7hNhd2Wa7",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!XUBZx4aqIw2nhSrX.6nQjkQPG9fikAJSA.NlMwNEM7hNhd2Wa7"
+        }
+      ],
+      "_id": "6nQjkQPG9fikAJSA",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.6nQjkQPG9fikAJSA"
+    },
+    {
+      "name": "Telekinesis",
+      "type": "mutation",
+      "system": {
+        "code": 40,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "5 rounds on, 5 rounds off",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "mental",
+          "notes": "On a failed mental save, a living target can be lifted / moved (same weight the user can normally lift) for 5 rounds on, 5 rounds off. Inert objects auto-fail the save."
+        },
+        "actionTypes": [
+          "attack",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "MXWEnAywg7TRoDsF",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.MXWEnAywg7TRoDsF"
+    },
+    {
+      "name": "Telekinetic Arm",
+      "type": "mutation",
+      "system": {
+        "code": 41,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "20 meter telekinetic arm with 18 STR; powered weapons damage if hit arm.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "20 m",
+        "duration": "While visible",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "1d6",
+          "saveType": "",
+          "notes": "Acts as a telekinetic arm with Strength 18."
+        },
+        "actionTypes": [
+          "attack",
+          "damage"
+        ],
+        "description": {
+          "value": "<p>20 meter telekinetic arm with 18 STR; powered weapons damage if hit arm.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "h2Ak8yhPr2NpMCk2",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.h2Ak8yhPr2NpMCk2"
+    },
+    {
+      "name": "Force Field Generation",
+      "type": "mutation",
+      "system": {
+        "code": 13,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Up to 1 hour",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "5d6",
+          "saveType": "",
+          "notes": "Barrier surrounds the body and absorbs up to 5d6 damage."
+        },
+        "actionTypes": [
+          "defense"
+        ],
+        "description": {
+          "value": "<p>Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "oybcXUClfrNbXbrV",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.oybcXUClfrNbXbrV"
+    },
+    {
+      "name": "Life Leech",
+      "type": "mutation",
+      "system": {
+        "code": 20,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m radius +3 m per 4 MS",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "6",
+          "saveType": "",
+          "notes": "Drains 6 HP from each valid target and heals the mutant by the same amount."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "heal"
+        ],
+        "description": {
+          "value": "<p>Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).</p>"
+        }
+      },
+      "effects": [],
+      "_id": "SUPwZOcl7xv5hkNe",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.SUPwZOcl7xv5hkNe"
+    },
+    {
+      "name": "De-Evolution",
+      "type": "mutation",
+      "system": {
+        "code": 6,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Once per week, within 30m, strip abilities from mutant opponent.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "30 m",
+        "duration": "One combat",
+        "usage": {
+          "limited": true,
+          "per": "week",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "mental",
+          "notes": "On a failed mental save, strip the target's greatest mutation (GM picks which) for the rest of this combat."
+        },
+        "actionTypes": [
+          "attack",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Once per week, within 30m, strip abilities from mutant opponent.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "WHzpGs37jBncjKfk",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.WHzpGs37jBncjKfk"
+    },
+    {
+      "name": "Mental Blast",
+      "type": "mutation",
+      "system": {
+        "code": 24,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every other turn, do 3d6 mental damage within 15 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 2
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "mental",
+          "notes": "Launch a mental assault once every other round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Every other turn, do 3d6 mental damage within 15 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "XAkX4pJX5XdoQjlt",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.XAkX4pJX5XdoQjlt"
+    },
+    {
+      "name": "Cryokinesis",
+      "type": "mutation",
+      "system": {
+        "code": 4,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.",
+        "reference": {
+          "table": "mental",
+          "page": 11,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "25 m",
+        "duration": "Concentration, up to 10 rounds",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "1d6",
+          "saveType": "",
+          "notes": "Choose 1-10 rounds of concentration; damage increases by 1d6 per round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage"
+        ],
+        "description": {
+          "value": "<p>Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "f6HgGlAwU0jHezUw",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.f6HgGlAwU0jHezUw"
+    },
+    {
+      "name": "Reflection",
+      "type": "mutation",
+      "system": {
+        "code": 37,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Up to 18 rounds",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Begins by reflecting up to 3 dice of damage, increasing by 1 die per round of concentration."
+        },
+        "actionTypes": [
+          "defense"
+        ],
+        "description": {
+          "value": "<p>Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "cLlcdMF59wFOufEX",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XUBZx4aqIw2nhSrX.cLlcdMF59wFOufEX"
+    }
+  ],
+  "_id": "XUBZx4aqIw2nhSrX",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!XUBZx4aqIw2nhSrX"
+}

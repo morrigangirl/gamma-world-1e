@@ -1,0 +1,81 @@
+{
+  "name": "Energy Cloak",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "v",
+    "action": {
+      "mode": "guided",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "laser-immune",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "When powered, the cloak renders the wearer immune to laser fire."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Powered cloak and cowl. When active, it is completely resistant to laser beams.</p><p>One chemical energy cell powers it for about 12 hours.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "energyDevice",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "chemical",
+      "power": {
+        "requirement": "cells",
+        "installedType": "chemical",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "chemical",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 12,
+        "max": 12
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "misc",
+    "actionTypes": {}
+  },
+  "_id": "3Jxc7auUzG5jI3ke",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!3Jxc7auUzG5jI3ke"
+}

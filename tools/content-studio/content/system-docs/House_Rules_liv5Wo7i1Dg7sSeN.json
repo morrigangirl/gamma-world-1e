@@ -1,0 +1,89 @@
+{
+  "name": "House Rules",
+  "pages": [
+    {
+      "name": "PSH Technology Reliability (Homebrew)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Homebrew rule (enabled by default): once a Pure Strain Human has figured out an Ancient artifact (operation known), further uses by that PSH actor bypass the condition and malfunction rolls. The artifact simply works.</p><p>Non-PSH actors, and PSH actors using an unanalysed artifact, still follow the RAW function-chance and malfunction workflow.</p><p>Toggle this via the world setting <em>PSH technology always works once figured out</em>. A chat line is posted whenever the rule fires so the referee can see it trigger.</p>"
+      },
+      "_id": "phFTUlPL7bml409H",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!liv5Wo7i1Dg7sSeN.phFTUlPL7bml409H"
+    },
+    {
+      "name": "Initiative (departure from RAW)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This system uses 5e-style individual initiative (1d20 + DX mod) per combatant, not the 1e side-based procedure. The choice is intentional for Foundry's Combat Tracker to work cleanly. Referees who want RAW 1e initiative can simply roll it manually and set each combatant's initiative with the tracker's input field.</p>"
+      },
+      "_id": "08ibX4lj4FGLkQC9",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!liv5Wo7i1Dg7sSeN.08ibX4lj4FGLkQC9"
+    }
+  ],
+  "_id": "liv5Wo7i1Dg7sSeN",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!liv5Wo7i1Dg7sSeN"
+}

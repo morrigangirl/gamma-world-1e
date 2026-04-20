@@ -1,0 +1,58 @@
+{
+  "name": "Time Field Manipulation",
+  "type": "mutation",
+  "system": {
+    "code": 46,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "PERCENT CHANCE OF SUCCESS:.",
+    "reference": {
+      "table": "mental",
+      "page": 0,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Touch",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "See the mutation text for time-distance percentages and the heavy personal cost."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This is the power to move through time or to send objects through it. The mutant must have both an Intelligence of 18 and the Heightened Intelligence mutation to possess this ability; otherwise roll another mutation instead. The subject travels through time while remaining in the same physical location on Gamma World.</p><p>Whether the attempt works or not, the energy drain removes one-half of the mutant&#39;s hit points for 1-8 days and cuts its speed in half for 1-12 days. The mutant must be touching whatever it sends through time.</p><p>The following table gives the chance of success for the mutant itself or for any inanimate object that does not belong to another being when sending it into the past:</p><table class=\"gw-mutation__table\"><thead><tr><th>Distance Traveled in Time</th><th>Chance of Success</th></tr></thead><tbody><tr><td>1 week</td><td>1-95%</td></tr><tr><td>25 weeks</td><td>41-86%</td></tr><tr><td>1 year</td><td>1-80%</td></tr><tr><td>5 years</td><td>1-75%</td></tr><tr><td>10 years</td><td>1-60%</td></tr><tr><td>25 years</td><td>1-50%</td></tr><tr><td>50 years</td><td>1-30%</td></tr><tr><td>100 years</td><td>1-20%</td></tr><tr><td>250 years</td><td>1-10%</td></tr></tbody></table><p>Material that is part of another being, or belongs to another being, is harder to send. Subtract 10% for metal or powered items, 15% for stone and other inorganic matter, and 20% for biological material such as another creature. To send anything into the future instead of the past, subtract 25% from each entry on the table above. The energy drain still occurs even if the attempt fails.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/time-field-manipulation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "hg7rt669t1w7CxkQ",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!hg7rt669t1w7CxkQ"
+}

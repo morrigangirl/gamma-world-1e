@@ -1,0 +1,104 @@
+{
+  "name": "Total Carapace",
+  "type": "mutation",
+  "system": {
+    "code": 45,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Reduce damage to 1/2 and raise AC to 4 but reduce movement by 25%.",
+    "reference": {
+      "table": "physical",
+      "page": 11,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>A thick shell covers the mutant&#39;s entire body. All damage against it is halved, and its armor class becomes 4. The shell is cumbersome and reduces movement by one-fourth.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Total Carapace — heavy armor bundle",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.baseAc",
+          "mode": 3,
+          "value": "4",
+          "priority": 20
+        },
+        {
+          "key": "gw.damageReductionMultiplier",
+          "mode": 1,
+          "value": "0.5",
+          "priority": 20
+        },
+        {
+          "key": "gw.movementMultiplier",
+          "mode": 1,
+          "value": "0.75",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "8xrBRMO5zzmoJezk",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!CXYRVZaHPormydZw.8xrBRMO5zzmoJezk"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/total-carapace.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "CXYRVZaHPormydZw",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!CXYRVZaHPormydZw"
+}

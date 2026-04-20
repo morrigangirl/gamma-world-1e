@@ -1,0 +1,1143 @@
+{
+  "name": "6. Artifacts and Equipment",
+  "pages": [
+    {
+      "name": "Artifact Discovery",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 29-30</em></p><p>Roll on the Artifact Category (d100) table to determine the kind of Ancient artifact found. Then roll the Artifact Condition (2d6) table for its functional state.</p><p>Condition sets the base function chance: Broken (0%), Poor (30%), Fair (50%), Good (70%), Excellent (85%), Perfect (95%).</p><p>Both tables are importable from the <strong>Roll Tables</strong> pack.</p>"
+      },
+      "_id": "mBBQz3cNbnOrsLBz",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.mBBQz3cNbnOrsLBz"
+    },
+    {
+      "name": "Artifact Analysis Flowchart",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 29-30</em></p><p>Unknown artifacts follow the Chart A / B / C flowchart. Operators roll on the chart; results advance, loop, return, or complete the analysis.</p><p>The system ships a live flowchart app: open an unknown artifact's item sheet and click <em>Analyze</em> to start a shared session.</p><p>Intelligence, Heightened Intelligence, Dual Brain, Scientific Genius, and related mutations modify the roll; Heightened Brain Talent triples the analysis rate; Molecular Understanding auto-solves Chart A.</p>"
+      },
+      "_id": "ycZllRATHDVsqGVf",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.ycZllRATHDVsqGVf"
+    },
+    {
+      "name": "Power and Charges",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 29</em></p><p>Ancient devices draw power from installed cells (chemical, solar, hydrogen, nuclear) or ambient sources (line power, broadcast power).</p><p><strong>Broadcast power</strong> is not a portable item — it is a feature of surviving Ancient infrastructure. Its availability is set by the referee.</p><p>Charged devices consume a power step whenever they fire successfully.</p>"
+      },
+      "_id": "W2EdF59lIMKeL1W0",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.W2EdF59lIMKeL1W0"
+    },
+    {
+      "name": "Weapons (Overview)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 20, 30-34</em></p><p>Weapons span 16 classes on the Weapon Class Table, from simple clubs and spears (Class 1) to Fusion Rifle and micro-missile (Class 16).</p><p>Primitive weapons (Classes 1-9) rely on muscle and mechanical advantage. Modern weapons (Classes 10-14) use slug-throwers, needlers, stun rays, and lasers. Classes 15-16 are high-tech Ancient weapons.</p><p>See the <strong>Armory and Gear</strong> pack's Weapon folders for the full catalogue.</p>"
+      },
+      "_id": "vJ1Kl0wG3RTDFR1J",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.vJ1Kl0wG3RTDFR1J"
+    },
+    {
+      "name": "Ammunition",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 20, 30-34</em></p><p>Ranged weapons require matching ammunition. Each ammo type is a stackable gear item (Arrows, Crossbow Bolts, Sling Stones, Sling Bullets, Slug-Thrower Rounds, Needler Darts, Stun Rifle Cells, Javelins, Gyrojet Slugs).</p><p>A ranged weapon's <em>Ammo Type</em> field is matched against the actor's ammo gear on fire; the corresponding gear item decrements by one. If no matching ammo is present, the attack is refused.</p>"
+      },
+      "_id": "NUwSttf5zV8VaHeP",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.NUwSttf5zV8VaHeP"
+    },
+    {
+      "name": "Armor and Shields",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 19</em></p><p>Armor class is descending: AC 10 is no protection, AC 1-2 is powered/energized armor.</p><p>Some Ancient armors grant immunities — black-ray, laser, radiation, poison, mental attacks. See the <strong>Armory and Gear</strong> pack for the full list.</p><table class=\"gw-rulebook__table\"><caption>Armor Class Reference</caption><thead><tr><th>Class</th><th>Description</th></tr></thead><tbody><tr><td>10</td><td>No protection</td></tr><tr><td>9</td><td>Shield only</td></tr><tr><td>8</td><td>Furs or skins</td></tr><tr><td>7</td><td>Furs or skins + shield</td></tr><tr><td>6</td><td>Cured hide / plant-fiber armor, partial carapace</td></tr><tr><td>5</td><td>Cured hide or plant-fiber + shield</td></tr><tr><td>4</td><td>Sheath, riot-control, total carapace</td></tr><tr><td>3</td><td>Powered plate and plastic armors</td></tr><tr><td>2</td><td>Powered alloy, energized, inertia, powered scout/battle armor</td></tr><tr><td>1</td><td>Powered attack and assault armor</td></tr></tbody></table>"
+      },
+      "_id": "FPD0uBkV5SVSDi9x",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.FPD0uBkV5SVSDi9x"
+    },
+    {
+      "name": "Containers and Encumbrance",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 36-37</em></p><p>Carry capacity in this system is PS × 10 kilograms, plus the capacity of any equipped container (belt pouch, satchel, backpack, ruck sack, saddlebag, large backpack, cargo hamper).</p><p>Strict encumbrance: at over-cap, DX AC bonus zeros, movement halves, and attacks take -1. At 2× cap, the character cannot move, attack, or activate mutations.</p><p>See the Encumbrance summary card on the Bio tab.</p>"
+      },
+      "_id": "6YLIVJqJA7TMS3Vv",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.6YLIVJqJA7TMS3Vv"
+    },
+    {
+      "name": "Explosives, Bombs, and Missiles",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 31-33</em></p><p>Grenades, bombs, and missiles are thrown or launched area attacks. See the <strong>Armory and Gear</strong> pack's Explosive folder.</p><p>Gas clouds (tear, poison, stun) create ongoing area effects; the system ticks these every melee round as long as the combat is active.</p>"
+      },
+      "_id": "8cAjVGQOnhVeQ8dC",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.8cAjVGQOnhVeQ8dC"
+    },
+    {
+      "name": "Medical Devices",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 34-35</em></p><p>Use the <em>Use</em> action on any medical item to apply its effect via the healing module.</p><p>Canonical items: Pain Reducer, Stim Dose, Accelera Dose, Anti-Radiation Serum, Cur-in Dose, Intera Shot, Sustenance Dose, Rejuv Chamber, Stasis Chamber, Life Ray, Medi-kit.</p><p>See the <strong>Armory and Gear</strong> pack's Medical folder.</p>"
+      },
+      "_id": "rmqdkJ6wS9Tj2va6",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.rmqdkJ6wS9Tj2va6"
+    },
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>&lt;!-- GENERATED BY extract-rulebook-prose.mjs --&gt; &lt;!-- Auto-OCR'd from ref/gamma-world-core-rules.pdf. Proofread before importing. --&gt;</p>"
+      },
+      "_id": "7uLo54j6Yvp9x9ek",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.7uLo54j6Yvp9x9ek"
+    },
+    {
+      "name": "Radiation Matrix",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Radiation Intensity Level</p><p>3.4 5 6 7 B 9 10 11 12 13 14 15 16 17 18</p><p>0001 678 MMOD</p><p>45 678MMOOD C16000%123</p><p>45 6 78MNM4OO OD</p><p>45 6 7 8MMODOD D N14</p><p>8WMTM’ONTMMOODODO OD §13123 48565678MNM’OODOOOD D T1223 45 678MNMODODDDOD ODO 11143 45678MMOODODDODODOD OD T1045 67 8BMMODODDDDODDD</p><p>Db UV 95 678MMODODODDDDDODD T 8678MMODODODODODDODDODODDDSD ! 77 8MMODODBODBODDDODODDDODD O68MMODOODDODBODDDDADDDD N5MMTMMODOOODODODODODDDOOD</p><p>4MDODODODDBODDODODDDODODODA</p><p>3DDDDBDDODDODDODPD DODD</p><p>The number obtained indicates how many dice (d6) of damage the radiation victim sustains. M indicates that the victim has received a new mutation (roll for one randomly on either the physical or mental mutations chart). D indicates that the victim has a 20% chance of receiving a mutational defect (determine randomly) and an 80% chance of death. Any new mutation will manifest itself in one week of game time. There is no known antidote for radiation.</p><p>DRrr</p><p>eas SEN</p><p>igSan</p><p>Various artifacts and equipment from the past, in differing states</p><p>of repair, will be found among the ruins of the former civilization of</p><p>GAMMA WORLD. Because the Shadow Years were devoted to</p><p>wholesale destruction, weapons and items of a military nature are</p><p>found in great numbers. This is not to say that players won't find</p><p>non-military items. The referee is encouraged to give the players a</p><p>healthy mix of the 24th century version of such items as: toasters,</p><p>typewriters, lawn mowers, powered hand tools, erector sets,</p><p>portable radios and TVs, smoke detectors, hair dryers, eyeglasses,</p><p>cigarette lighters and so on. Remember that the characters that the</p><p>players represent probably have no idea what most of these items</p><p>are, or what they can do. When player-characters find any artifact,</p><p>the referee should carefully word his description of the object, or</p><p>give them a sketch (if the object is unidentifiabla to their 20th</p><p>century minds), bearing in mind their ignorance of the technology</p><p>of the past.</p><p>The referee may select and place all artifacts in his “Ancient</p><p>Areas,” or he may use the following tables to randomly determine</p><p>what artifacts to put Into play. Percentile dice (2010) are first rolled</p><p>to determine the general category of the artifact. Then proceed to</p><p>the specified table and roll the appropriate die to find the specific</p><p>artifact to be put in the game. Robotic units are described in a</p><p>separate section (see ROBOTIC UNITS). .</p><p>Most descriptions of artifacts are general in nature. In some</p><p>instances, it is up to the referee to define exact sizes for the</p><p>artifacts of his own “world” — as well as provide descriptions for</p><p>other such items not mentioned in this booklet.</p>"
+      },
+      "_id": "5lX3J7Wh0ozOSIDg",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.5lX3J7Wh0ozOSIDg"
+    },
+    {
+      "name": "Artifact",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>CATEGORY:</p><p>01-10% Pistol</p><p>41-20% Rifle</p><p>21-30% Other Energy Weapon</p><p>31-40% Grenade</p><p>41-50% Bomb or Missile</p><p>51-60% Armor</p><p>61-70% Vehicle</p><p>71-80% Miscellaneous Energy Device</p><p>81-90% Robotic Unit</p><p>91-100% Medical Equipment</p><p>Pistols (1d6)</p><ol><li>Slug Thrower</li></ol><ol><li>Needier</li></ol><ol><li>Stun Ray</li></ol><ol><li>Laser Pistol</li></ol><ol><li>Mark V Blaster</li></ol><ol><li>Black Ray Gun</li></ol><p>Rifles (14)</p><ol><li>Stun Rifle</li></ol><ol><li>Laser Rifle</li></ol><ol><li>Mark VH Rifle</li></ol><p>4, Fusion Rifle</p><p>Energy Weapons: (104)</p><ol><li>Vibro Dagger</li></ol><ol><li>Vibro Blade</li></ol><ol><li>Energy Mace</li></ol><ol><li>Stun Whip</li></ol><p>Grenades: (106)</p><p>. Gas</p><p>. Chemical Explosive</p><p>. Fragmentation</p><p>. Energy</p><p>. Photon</p><p>OnRon— Tore</p><p>Bombs or Missiles: (208)*</p><p>. Smal! Damage Pack</p><p>. Concentrated Damage Pack</p><p>. Fission Bomb</p><p>. Fusion Bomb</p><p>Concussion Bomb .</p>"
+      },
+      "_id": "DGwJlirwTdaxFmkj",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.DGwJlirwTdaxFmkj"
+    },
+    {
+      "name": "Omron",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Matter Bomb -</p><p>. Negation Bomb</p><p>Neutron Bomb</p><p>. Trek Bomb</p><p>. Mutation Bomb</p>"
+      },
+      "_id": "s9JLWjajDkq7db02",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.s9JLWjajDkq7db02"
+    },
+    {
+      "name": "Booodn",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>. Micro-Missile</p><ol><li>Mini-Missile 13. Surface Missile 14. Neutron Missile 15. Negation Missile 16. Fission Missile</li></ol><p>Miscellaneous Energy Devices: (1d12)</p><p>= Portent</p><p>. Energy Cloak</p><p>. Control Baton</p><p>Communication Sender</p><p>Medi-kit</p>"
+      },
+      "_id": "S1o1ozKsWrulb5o3",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.S1o1ozKsWrulb5o3"
+    },
+    {
+      "name": "Omawn",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>. Anti-grav Sled</p><p>. Ultra-violet and Infra-red Goggles</p><p>. Chemical Energy Cells</p><p>. Solar Energy Cells</p>"
+      },
+      "_id": "6fOLoV9973DbOOMe",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.6fOLoV9973DbOOMe"
+    },
+    {
+      "name": "Con",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ol><li>Hydrogen Energy Celi 11. Atomic Energy Cells 12. Energy Cell Charger</li></ol><p>Medical Equipment: (1012)</p><p>. Pain Reducer</p><p>Mind Boosters</p><p>. Sustenance Dose</p><p>. Interra Shot</p><p>Stim Dose</p><p>Cur-in Dose</p><p>. Suggestion Change</p><p>. Accelera Dose</p><p>. Anti-radiation Serum = . Rejuv-chamber</p>"
+      },
+      "_id": "082PCNBgA7Sox3Y1",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.082PCNBgA7Sox3Y1"
+    },
+    {
+      "name": "Scomnmdmewona",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ul><li>. Stasis Chamber — np . Life Ray</li></ul><p>Armor: (1010)</p><p>. Sheath Armor</p><p>. Powered Plate Armor</p><p>. Powered Alloyed Plate Armor</p>"
+      },
+      "_id": "Y6FchlSCr4IjFpQY",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.Y6FchlSCr4IjFpQY"
+    },
+    {
+      "name": "Sona",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>. Plastic Armor (unpowered)</p><p>. Energized Armor</p><p>Inertia Armor</p><p>Powered Scout Armor</p><p>. Powered Battle Armor</p><p>. Powered Attack Armor = DOONAN . Powered Assault Armor</p><p>Vehicles: (1d8)</p><p>. Civilian Internal Combustion</p><p>. Military Alcohol Combustion</p><p>. Turbine Car</p><p>. Hover Car</p><p>Flit Car</p><p>. Environmental Car</p><p>. Bubble Car</p><p>. Others</p><p>Robotic Units: (2d6)**</p><ol><li>Light Cargo Lifter</li></ol><ol><li>Heavy Cargo Lifter</li></ol><ol><li>Small Cargo Transport</li></ol><ol><li>Large Cargo Transport</li></ol><ol><li>Ecology Bot (Agricultural)</li></ol><ol><li>Ecology Bot (Wilderness)</li></ol><ol><li>Engineering Bot (Standard)</li></ol><ol><li>Engineering Bot (Light Duty)</li></ol><ol><li>Engineering Bot (Heavy Duty) 10. Medical Robotoid 11. General Household Robotoid 12. Security Robotoid 13. Supervisory Borg 14. Defense/Attack Borg 15. Warbot 16. Death Machine 17. Permanent Cybernetic Installation 18, Think Tank</li></ol><p>*The first d8 indicates the base 1-8. On the second 48, if 1-4 is rolled the first die is read normally; if 5-8 is rolled add 8 to the number rolled on the first die.</p><p>**The first d6 indicates the base 1-6. On the second d6, if 1 or 2 is rolled the first die is read normally; if 3 or 4 is rolied add 6 to the</p><p>number rolled; and if 5 or 6 is rolled add 12 to the number roiled on</p><p>the first die.</p><p>ARTIFACT CONDITION: Artifacts of the Ancients will be found in</p><p>various conditions, due to their disuse or exposure to the elements.</p><p>When players find an artifact. the referee should immediately</p><p>determine its condition (though not necessarily tell the players the</p><p>result) by rolling two dice (2d6) and consulting the following table:</p><p>Chance of</p><p>Die Roll Condition of Artitact Functioning</p><p>2-5 Obviously Broken 0%</p><p>6-7 Poor 20%</p><p>8-9 Fair 40%</p><p>16 Good 60%</p><p>11 Excellent 80%</p><p>12 Perfect 100%</p><p>The percentage chance of functioning for each artifact need not be</p><p>determined until the players do something to the artifact that might</p><p>cause it to function.</p><p>ARTIFACT USE AND OPERATION: Once players have found an</p><p>artifact, they will nol automatically know what it is for, or how it</p><p>works. It is quite possible that one will fiddle with an artifact for</p><p>weeks and never determine what it is, or, in the other extreme,</p><p>detonate a bomb, eliminating everything within 100 meters. The</p><p>three following charts are used to simulate experimentation with</p><p>artifacts.</p><p>Place a marker on the space marked “S”. Generate a number</p><p>between 1 and 10, and move the marker to the next space indicated.</p><p>When the marker has been successfully moved to the space marked</p><p>“PF, tne player has determined what the artifact Is for, and how to</p><p>use it. Moving to a space marked with a skull and crossbones</p><p>means that the player has hurt himself or one or more of his</p><p>companions (if it is possible to harm anyone with the item). He has,</p><p>in any case, failed to determine how to work the artifact and must</p><p>start again at-‘S”.</p><p>Five rolls on any of the above charts requires that the player do</p><p>nothing else but concentrate on and manipulate the artifact for one</p><p>hour (each additional player concentrating adds one die rol! per</p><p>hour). Players may spend as much time as they wish trying to figure</p><p>out artifacts, but if a session is interrupted, or stopped for some</p><p>reason, the player must begin again at start. Players with very high</p><p>or low intelligence, and certain mutations, are given minuses or</p><p>allowed plusses on the die rolls.</p><p>If a result calls for harm, or if a player discovers the use of an</p><p>artifact and tries it out, the referee must roll percentile dice,</p><p>according to the artifact’s chance of functioning, to see whether</p><p>anything happens. It is possible to determine the use of an artifact,</p><p>even if it does not work (because of its condition). The referee must</p><p>roll percentile dice again: if it is possible for the artifact to short</p><p>out, or explode, it does so on aresuit of 1-10, causing damage (to be</p><p>determined by referee), otherwise no harm comes to anyone.</p><p>Chart A is for simple items such as pistols, bombs, and other</p><p>items with only a few simple switches or operating mechanisms.</p><p>Chart B is for medical machinery, robotic devices, and other</p><p>equiprnent with multiple controls and indicators. Chart C is for very</p><p>complex devices, such as computers, think tariks, or portions of a</p><p>space ship. .</p><p>Bear in mind the fact that most inoperative artifacts only require</p><p>new or recharged batteries to make them work. (Equipment was</p><p>well made in the 24th century). Experience is awarded for figuring</p><p>out how to work artifacts, regardless of whether or not they actually</p><p>do work. Experience is also awarded for a robotic unit for mastering</p><p>it or for defeating it in combat.</p>"
+      },
+      "_id": "wJrmYreHZeNLJauf",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.wJrmYreHZeNLJauf"
+    },
+    {
+      "name": "Chart a",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>pistols</p><p>rifles</p><p>energy weapons</p><p>8~10 s J=1_»| 4</p><p>grenades</p><p>bombs</p><p>missiles</p><p>defensive armor</p><p>portent 3-4 1-</p><p>energy cloak</p><p>control baton communication sender</p><p>anti-grav sled</p><p>uviir goggtes 5-10</p><p>etc.</p><p>S. 193 3G</p>"
+      },
+      "_id": "RiSwxjUBzSpajtsc",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.RiSwxjUBzSpajtsc"
+    },
+    {
+      "name": "Chart B",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>offensive armor combustion vehicles</p><p>1o/ dh &amp;? [&gt;</p><p>turbine car</p><p>hover car</p><p>flit car &gt;</p><p>medi-kit</p><p>energy cell charger</p><p>robotic units</p><p>rejuy-chamber</p><p>stasis chamber</p><p>etc.</p><p>Jes 4-7</p><p>Return to</p><p>C.</p><p>Square</p><p>/ v</p>"
+      },
+      "_id": "MoDrFDbQYpedIb9B",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.MoDrFDbQYpedIb9B"
+    },
+    {
+      "name": "Chart C",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>environmental car</p><p>bubble car permanent cyb. inst.</p><p>think tank</p><p>life ray main building computer broadcast power station</p><p>etc.</p><p>Return to</p><p>Square A.</p><p>4 1-§ 5 I-3 y] -</p><p>C1 6-7 8-10 -2 av 1</p><p>Return</p><p>to</p><p>—jT? Square A</p><p>Q-t5</p><p>SquareB.</p><p>Return to</p><p>~10 NS Aka10 ‘SQ</p><p>i &amp;</p><p>&gt; 1+) F</p><p>&lt;—S21 2-5</p><p>-3\\, / er</p><p>Oc— ~~» | Return</p><p>to</p><p>&gt;&lt; 8-10 4-7 | Square</p><p>A.</p><p>sn’ 9-KG</p><p>A Square</p><p>Return toC. vos {oe</p><p>a =)</p><p>Return to</p><p>Square B.</p>"
+      },
+      "_id": "VWBjWMXEmMD0DROP",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.VWBjWMXEmMD0DROP"
+    },
+    {
+      "name": "Pistols",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ol><li>SLUG THROWER</li></ol><p>Maximum Range: 20, 40, or 60 meters</p><p>Effective Range: 10, 20, or 30 meters</p><p>Projectile: Rubber Slugs (15-50 in clips)</p><p>Damage Inflicted: 1, 2, or 3 dice (d6) (stunning damage)</p><p>Power Source: Hydrogen Energy Cell</p><p>Battery Life: 5 clips (may fire only 1 slug per melee turn)</p><p>These weapons were used by the various police forces in riot</p><p>suppression and crowd control. When cumulativ</p><p>e stunning</p><p>damage reaches one-haif of the target's original total hit points,</p><p>the victim falls unconscious for 1-6 minutes. When the victim</p><p>awakens, any stunning damage taken is added back on to his</p><p>hit point total.</p><p>Slug throwers come in three calibers (hence the various</p><p>Statistics above), ranging from the tiny .17 derringer,</p><p>to the</p><p>huge .75 prison special (with a .38 caliber in between). The</p><p>referee determines what size the players have found, and if</p><p>there is any ammunition present.</p><p>. NEEDLER</p><p>Maximum Range: 100 meters</p><p>Effective Range: 50 meters</p><p>Projectile: Poison or Paralysis Darts (in clips of 10)</p><p>Damage Inflicted: Paralysis (int. 12) or Poison (int. 17)</p><p>Power Source: Chemical Energy Cell</p><p>Battery Life: 3 clips (may fire 1 dart per melee turn)</p><p>This soundless weapon can fire either poison or paralysis</p><p>darts. If paralysis takes effect the victim can do nothing</p><p>but</p><p>breathe for up to 20 minutes, less one minute for each point of</p><p>the victim’s constitution.</p><p>. STUN RAY</p><p>Maximum Range: 50 meters</p><p>Effective Range: 25 meters</p><p>Projectile: Ray</p><p>Damage Inflicted: Stun (see below)</p><p>Power Source: Solar Gell</p><p>Battery Life: 10 shots</p><p>If this ray hits, the target will be stunned for 20 minutes less</p><p>one minute for each point of the victim’s constitution. While</p><p>stunned, only the victim’s involuntary muscles (heart,</p><p>lungs,</p><p>etc.) will function.</p><p>. LASER PISTOL</p><p>Maximum Range: 200 meters</p><p>Effective Range: 100 meters</p><p>Projectile: Beam</p><p>Damage Inflicted: 5 dice (d6)</p><p>Power Source: Hydrogen Energy Cell</p><p>Battery Life: 10 shots</p><p>Class 2 armor will automatically deflect (do not roll any hit</p><p>dice) the first hit with this weapon. Class 1 armor will</p><p>automatically deflect the first two hits in this manner.</p><p>Subsequent hits, however, will do full damage.</p><p>. MARK V BLASTER</p><p>Maximum Range: 150 meters</p><p>Effective Range: 75 meters Projectile: Disrupting Ray Damage Inflicted: 7 dice (d6) (makes 10 cm hole when applicable) Power Source: Hydrogen Energy Cell Battery Life: 5 shots</p><p>This pistol makes a 10 cm diameter hole out to its maximum range in whatever it hits, provided the target is killed, does not have a force shield, or is inanimate (such as a wall). It does not cause 10 cm holes in living creatures untit they are no longer living.</p><p>LOS ee tee</p><ol><li>BLACK RAY GUN</li></ol><p>Maximum Range: 50 meters</p><p>Effective Range: 25 meters</p><p>Projectile: Death Ray</p><p>Damage Inflicted: instant death to living</p><p>targets not protected</p><p>by force field/otherwise no effect</p><p>Power Source: Chemical Energy Cell</p><p>Battery Life: 4 shots</p><p>This is the ultimate hand-held weapon. It does no</p><p>damage to</p><p>inanimate (non-living) targets.</p>"
+      },
+      "_id": "nyiMuLAhLAiqPnXx",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.nyiMuLAhLAiqPnXx"
+    },
+    {
+      "name": "Rifles",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ol><li>STUN RIFLE</li></ol><p>Maximum Range: 200 meters</p><p>Effective Range: 100 meters</p><p>Projectile: Ray</p><p>Damage Inflicted: Stun (see below)</p><p>Power Source: Solar Cell</p><p>Battery Life: 5 shots</p><p>If this rifle hits, the target will be stunned for</p><p>20 minutes tess</p><p>one minute for each point of the victim’s</p><p>constitution. While</p><p>stunned, only the victim's involuntary muscles</p><p>(heart, lungs,</p><p>etc.) will function.</p><p>. LASER RIFLE</p><p>Maximum Range: 600 meters</p><p>Effective Range: 300 meters</p><p>Projectile: High intensity light beam</p><p>Damage Inflicted: 6 dice (dé)</p><p>Power Source: Hydrogen Energy Cell</p><p>Battery Life: 5 shots</p><p>Class 2 armor will automatically deflect the first</p><p>hit with this</p><p>weapon. Class 1 armor will automatically deflect the</p><p>first two</p><p>hits. Subsequent hits will do full damage.</p><p>» MARK VII BLASTER RIFLE</p><p>Maximum Range: 450 meters</p><p>Effective Range: 225 meters</p><p>Projectile; Disrupting Ray</p><p>Damage Inflicted: 8 dice (d6) (makes 10cm hole when</p><p>applicable)</p><p>Power Source: 2 Hydrogen energy cells</p><p>Battery Life: 5 shots</p><p>This rifle makes a 10cm diameter hole out</p><p>to Its maximum</p><p>range in whatever it hits, provided the target</p><p>is killed, does not</p><p>have a force shield, or is inanimate (such</p><p>as a wall or door). It</p><p>does not cause 10 cm holes in living creature</p><p>s until they are no</p><p>longer living.</p><p>. FUSION RIFLE</p><p>Maximum Range: 700 meters</p><p>Effective Range: 350 meters</p><p>Projectiie: 2 beams of intensity 18 radiation</p><p>Damage Inflicted: As determined on Radiation Hazard Matrix</p><p>Power Source: Atomic Energy Cell</p><p>Battery Life: 10 shots</p><p>This rifle must be connected to a converter by a</p><p>1.5 meter</p><p>cable. The converter and the atomic energy cell are both</p><p>carried</p><p>in a special pack which fits on the user’s (provided</p><p>he is</p><p>reasonably human in shape) back.</p>"
+      },
+      "_id": "U6QpBjbNsdAA3xox",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.U6QpBjbNsdAA3xox"
+    },
+    {
+      "name": "Energy Weapons",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Note that these are hand-held weapons, and their</p><p>range is limited to the reach of the user.</p><ol><li>VIBRO DAGGER</li></ol><p>Damage Inflicted: 10 points</p><p>Power Source: Hydrogen Energy Cell</p><p>Battery Life: 30 minutes</p><p>This weapon is, in fact, a force field in the shape of a 20 cm</p><p>long knife. It will cut anything except another force field,</p><p>. VIBRO BLADE</p><p>Damage Inflicted: 25 points</p><p>Power Source: Hydrogen Energy Cell</p><p>Battary Life: 20 minutes</p><p>Much like the vibro dagger, the blade Is a force</p><p>field in the</p><p>shape of a sword, and will cut anything except</p><p>another force</p><p>ield.</p><p>. ENERGY MACE</p><p>Damage Inflicted: 30 points</p><p>Power Source: Chemical Energy Cell</p><p>Battery Life: 15 minutes</p><p>This is basically an energized club. It cannot damage targets</p><p>protected by energy shields.</p><p>4, STUN WHIP</p><p>Damage inflicted: Stun</p><p>Power Source: Chemical Energy Cell</p><p>Battery Life: 30 minutes</p><p>If this 3 meter long energized whip hits, the target will be</p><p>stunned for 20 minutes, less one minute for each point of the</p><p>victim’s constitution. While stunned, only the victim’s</p><p>involuntary muscles (heart, lungs, etc.) will function.</p>"
+      },
+      "_id": "nokCsvvooESdE2Lq",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.nokCsvvooESdE2Lq"
+    },
+    {
+      "name": "Grenades",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Tnere are several different types of grenades, but all will explode on the melee round after being activated (by pulling the pin). A grenade may be thrown 3 meters for every point of physical strength possessed by the thrower. The referee should keep in mind that the chance of functioning for a grenade (see ARTIFACT CONDITION) is not determined until it is activated. In other words, it could be a dud.</p><ol><li>TEAR GAS GRENADE</li></ol><p>Area of effect: 10 meter radius</p><p>Cloud duration: 1-6 minutes (depends on wind)</p><p>All beings breathing this cloud are debilitated. Each melee</p><p>turn spent in tear gas reduces a being’s armor class by one</p><p>point, and adds 2 points to that character’s “to hit” dice rolls.</p><p>For every 3 melee turns spent out of the tear gas cloud, a victim</p><p>recovers his abilities in the above increments.</p>"
+      },
+      "_id": "wmDdna8cOJfVzukQ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.wmDdna8cOJfVzukQ"
+    },
+    {
+      "name": "Stun Grenade",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Area of effect: 10 meter radius</p><p>Cloud duration: 1-4 minutes (depends on wind)</p><p>Each character in the gas cloud during a melee turn must</p><p>make a poison saving throw (against a random intensity attack</p><p>generated by the referee). A “‘D” result indicates that the victim</p><p>will be stunned for 20 minutes, less one minute for each point</p><p>of his constitution. While stunned, only a victim’s involuntary</p><p>muscles (heart, lungs, etc.) will function.</p>"
+      },
+      "_id": "RJ71IDIunM4Kr97M",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.RJ71IDIunM4Kr97M"
+    },
+    {
+      "name": "Poisonous Gas Grenade",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Area of effect: 10 meter radius</p><p>Cloud duration: 1-6 minutes (depends on wind)</p><p>All beings must roll poison saving throws each melee turn</p><p>they spend in the poison gas cloud. The referee determines the</p><p>intensity of the poison each melee turn by roiling 3d6.</p><p>2, CHEMICAL EXPLOSIVE GRENADE</p><p>Area of effect: 10 meter radius</p><p>Damage Inflicted: 10 dice (d6) per target in blast area</p><ol><li>FRAGMENTATION GRENADE</li></ol><p>Area of effect: 10 meter radius</p><p>Damage inflicted: 5 dice (d6) per target in blast area</p><ol><li>ENERGY GRENADE</li></ol><p>Area of effect: 10 meter radius</p><p>Damage inflicted: 12 dice (d6) per target in blast area</p><p>This grenade does only half damage to armor classes Band9,</p><ol><li>PHOTON GRENADE</li></ol><p>Area of effect: 10 meter radius</p><p>Damage inflicted: Instant death to all beings not protected by</p><p>force fields or energy shields.</p><ol><li>TORC GRENADE</li></ol><p>Area of effect: 15 meter radius</p><p>Damage inflicted: Disintegrates everything (leaving a hole in the</p><p>ground) not protected by force fields or energy shields.</p><p>BOMBS &amp; MISSILES</p><p>The following list of bombs and missiles consists almost entirely</p><p>of tactical weapons. Strategic bombs and missiies, such as an</p><p>ICBM, cruise missile, or jets, rockets, satellite launchers and their</p><p>bombs are virtually nonexistent. They were ail either used, or were</p><p>primary targete during the Shadow Years. Although they are pratty</p><p>much beyond the scope of this garne, the referee should feel free to</p><p>devise and include any strategic weapons he wants.</p><p>Bombs and missiles wil! have various fusing devices (proximity,</p><p>impact, heat seeking, time delay, etc.) as chosen by the referee.</p><p>Missiles, of course, may or may not be found along with the</p><p>required launch and guidance equipment.</p><ol><li>SMALL DAMAGE PACK</li></ol><p>Description: Small canvas bag of plastic explosive, wt. 5 kg.</p><p>Area of effect: 10 meter radius</p><p>Damage inflicted: 6 dice (d6) per target in blast area</p><ol><li>CONCENTRATED DAMAGE PACK</li></ol><p>Description: Large canvas pack (fits on the back of a human) of</p><p>plastic explosive, wt. 20 or 40 kg.</p><p>Area of effect: small-30 meter radius, large-50 meter</p><p>radius</p><p>Damage inflicted: small-10 dice (d6), large-12 dice (d6) per</p><p>target in blast area.</p><ol><li>FISSION BOMB</li></ol><p>Description: Various. Most common — black steel sphere, 50</p><p>cm in diameter</p><p>Area of Effect: 1 kilometer radius</p><p>Damage inflicted: Clean bomb — 200 points to all targets in</p><p>blast area. Dirty bomb — 300 points to all targets in blast</p><p>area, plus a blast intensity 15 radiation which requires 3</p><p>saving throws per target within that area.</p><p>4, FUSION BOMB</p><p>Description: A small, hand-sized, disc-shaped metal can.</p><p>Area of Effect: 50 meter radius</p><p>Damage inflicted: 75 points to all targets in blast area.</p><ol><li>CONCUSSION BOMB</li></ol><p>Description: A small cannister, fitted with hooks for mounting</p><p>on any of several delivery systems.</p><p>Area of effect: 50 meter radius gas cloud...lasts 2-12 minutes</p><p>Damage inflicted: Stunning</p><p>Each character in the gas cloud must make a poison saving</p><p>throw (against intensity 15 poison). A “OD” result indicates that</p><p>the victim will be stunned for 20 minutes, less one minute for</p><p>each point of his constitution. While stunned, only a victim’s</p><p>involuntary muscles (heart, lungs, etc) will function.</p><ol><li>MATTER BOMB</li></ol><p>Description: Disc-shaped, various sizes (determined by referee)</p><p>Area of effect: 10 meter radius</p><p>Damage inflicted: 75 points to all targets in blast area</p><p>These bombs come in all sizes, and the referee may devise</p><p>statistics for larger ones (like the kind that do 1000 points of</p><p>damage).</p><ol><li>NEGATION BOMB</li></ol><p>Description: 10cm aluminum sphere</p><p>Area of effect: 30 meter radius</p><p>Damage inflicted: Energy drain</p><p>All energy sources in the blast area are completely drained,</p><p>unless protected by force fields. All force fields in the blast area</p><p>are reduced by one half their current value. Note: this bomb will</p><p>even stop a robot operating on broadcast power (if it nad no</p><p>energy shield) for 4-24 minutes. It does not affect living matter.</p><ol><li>NEUTRON BOMB</li></ol><p>Description: 60 cm duralloy spheres, usually resting in a</p><p>wheeled cradle to facilitate loading into aircraft or spacecraft.</p><p>Area of effect: 500 meter radius</p><p>Damage inflicted: 100 points to all targets in blast area and</p><p>death to mest living things.</p><p>Any living creature without a force field, or whose force field</p><p>is destroyed by the blast (100 pts.) is instantly killed, if in blast</p><p>area.</p><ol><li>TREK BOMB</li></ol><p>Description: 25 cm biack plastic box, wt. 25kg</p><p>Area of effect: 30 meter radius</p><p>Damage inflicted: Disintegration</p><p>Everything In the blast area not protected by a force field is</p><p>disintegrated. All force fields in blast area sustain 30 points of</p><p>damage.</p><ol><li>MUTATION BOMB</li></ol><p>Description: Pear-shaped red plastic case, wt. 10kg.</p><p>Area of effect: 30 meter radius</p><p>Damage inflicted: Mutations</p><p>Percentile dice must be rolled for each living creature not</p><p>protected by a force fleld in the blast area: 01-60% = receive</p><p>one random mutational defect, 61-100% = receive a blast of</p><p>intensity 12 radiation.</p><p>11, MICRO MISSILE</p><p>Description: 10 cm long, streamlined cylinder, fitted into a</p><p>plastic handgripfauncher.</p><p>Maximum Range: 1 kilometer</p><p>Effective Range: 500 meters (visual sighting)</p><p>Area of effect: 10 meter radius</p><p>Damage inflicted: 7 dice (d6) per target in blast area</p><ol><li>MINI MISSILE</li></ol><p>Description: 35 cm long, streamlined cylinder. Requires</p><p>shoulder held, bazooka-type launcher.</p><p>Maximum Range: 2 kilometers</p><p>Effective Range: 1 kilometer (visual sighting)</p><p>Area of effect: 20 meter radius</p><p>Damage inflicted: 50 points per target in blast area</p><p>13, SURFACE MISSILE</p><p>Description: 3 meter long, streamlined cylinder.</p><p>Maximum range: 80 kilometers (may be fired at aerial target)</p><p>Effective range: 40 kilometers</p><p>Area of Effect: 100 meter radius</p><p>Damage inflicted: 150 points per target in blast area</p><p>This missile must. be launched from an electronic turret,</p><p>either affixed to a military installation, or vehicle, and directed</p><p>by computers and radar at the launch site.</p><ol><li>NEUTRON MISSILE</li></ol><p>This is simply a surface missile with a neutron bomb for a</p><p>warhead.</p><ol><li>NEGATION MISSILE</li></ol><p>This is a surface missile with a negation bomb for a warhead.</p><ol><li>FISSION MISSILE</li></ol><p>This is a surface missile with a fission bomb for a warhead.</p><p>NOTE: If any missile fails to hit what it was aimed at, it will still explode (if it functions at all) somewhere nearby. Referee is to determine where a miss will explode.</p>"
+      },
+      "_id": "xVaUPUsSreZ3tyat",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.xVaUPUsSreZ3tyat"
+    },
+    {
+      "name": "Armor",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>All armor of the Ancients was made for Pure Strain Humans. Creatures, or player characters with any mutations altering the basic human body-shape will probably not be able to wear such armor. Certain mutants and cryptic alliances have the capability to manufacture specialized armor for mutants, but this is rare and is left for the referee to devise and include in the game as he sees fit.</p>"
+      },
+      "_id": "gTpU6q1Sag4B4cCY",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.gTpU6q1Sag4B4cCY"
+    },
+    {
+      "name": "Defensive Armor",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ol><li>SHEATH ARMOR</li></ol><p>Armor Class when worn: 4</p><p>Force field: None</p><p>Locomotion provided: None</p><p>Power source: None</p><p>Battery life: N/A</p><p>This is basically police riot control armor, consisting of a well</p><p>padded breast plate, helmet, gloves, thigh and shin guards. It</p><p>provides reasonable protection against primitive weapons.</p><ol><li>POWERED PLATE</li></ol><p>Armor class when worn: 3</p><p>Force field: None</p><p>Locomotion provided: 20 meters per melee turn</p><p>Power source: Atomic energy cell</p><p>Battery life: 50 hours constant use</p><p>This is the earliest form of powered armor and was quite</p><p>obsolete by the time of the destruction of the Apocalypse.</p><ol><li>POWERED ALLOYED PLATE</li></ol><p>Armor class when worn: 2</p><p>Force field: None</p><p>Locomotion provided: 30 meters per melee turn</p><p>Power source: Atomic energy cell</p><p>Battery life: 45 hours of constant use</p><ol><li>PLASTIC ARMOR</li></ol><p>Armor class when worn: 3</p><p>Force field: None</p><p>Locomotion provided: None, but does not encumber wearer</p><p>Power source: None</p><p>Battery life: N/A</p><p>Made to provide inexpensive protection against beam</p><p>weapons, plastic armor has proved tough enough to stand up</p><p>against most forms of attack.</p><ol><li>ENERGIZED ARMOR</li></ol><p>Armor class when worn: 2</p><p>Force field: None</p><p>Locomotion provided: Jet assisted jumps of up to 200 meters</p><p>per meiee turn</p><p>Power source: Atomic energy cell</p><p>Battery life: 40 hours of constant use</p><ol><li>INERTIA ARMOR</li></ol><p>Armor class when worn: 2</p><p>Force field: Partial (see below)</p><p>Locomotion provided: Jet assisted jumps of up to 200 meters</p><p>per melee turn</p><p>Power source: 2 Atomic energy cells</p><p>Battery life: Requires both calls for 60 hours of constant usa</p><p>The partial force field generated in this unit will protect the</p><p>wearer from black rays, radiation, poison gases, etc. but</p><p>absorbs only one half of all damage sustained (up to 25 hit</p><p>points maximum absorption per melee turn).</p>"
+      },
+      "_id": "0wxPpOnazAVAPuDT",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.0wxPpOnazAVAPuDT"
+    },
+    {
+      "name": "Offensive Armor",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Offensive armor was the culmination of the science of battle armor, and as such, is usually the most complicated equipment the player characters will encounter. Each suit is more like a space capsule into which the wearer must crawl. All types are equipped with various sophisticated sub-systems which must be activated before the suit is fully operational, that include: 2 way radios (part of a world-wide satellite communications network); complete life support systems with a 72 hour oxygen supply (the air circulating and conditioning unit may function independently without draining the battery); a medi-kit (see MISCELLANEOUS ENERGY DEVICES), sound, ultra-violet, and infra-red sensors; and a self-destruct mechanism, activated by the death of the wearer.</p><ol><li>POWERED SCOUT ARMOR</li></ol><p>Armor class when worn: 2</p><p>Force field: Absorbs up to 20 hit points each melee turn</p><p>Locomotion provided: Anti-grav flight at 250 meters per melee</p><p>turn</p><p>Power source: 2 atomic energy cells</p><p>Battery life: 54 hours of constant use</p><ol><li>POWERED BATTLE ARMOR</li></ol><p>Armor class when worn: 2</p><p>Force field: Absorbs first 30 hit points sustained each melee</p><p>turn</p><p>Power source: 2 atomic energy cells</p><p>Battery life: 48 hours of constant use</p><p>Locomotion provided: Anti-grav flight at 100 meters per melee</p><p>turn</p><p>The hydraulic system of this suit allows the wearer to lift up</p><p>to 1.5 metric tons and still be able to leap a distance of 25</p><p>meters per melee turn. A sunday punch delivered by the fist of</p><p>this unit inflicts 8 dice of damage (d6)</p><ol><li>POWERED ATTACK ARMOR</li></ol><p>Armor class when worn: 1</p><p>Force field: Absorbs first 40 hit points sustained each melee</p><p>turn</p><p>Locomotion provided: Anti-grav flight at 150 meters per melee</p><p>turn</p><p>Power source: 2 atomic energy cells</p><p>Battery life: 42 hours of constant use</p><p>The hydraulic system of this suit allows the wearer to lift up</p><p>to 2 metric tons and still be able to leap a distance of 25 meters</p><p>in a melee turn. There is a laser pistol built into the forefinger of</p><p>each hand (powered independently, see /aser pistol). a micro</p><p>missile launcher and a clip of 20 missiles buiit into the helmet,</p><p>and a grenade launcher with a bolt of 15 (referee decides type)</p><p>grenades, attached to the left shoulder. A punch delivered by</p><p>the fist of this unit does 9 dice (d6) of damage to its target.</p><ol><li>POWERED ASSAULT ARMOR</li></ol><p>Armor class when worn: 1 ;</p><p>Force field: Absorbs the first 50 hits points sustained per melee</p><p>turn -</p><p>Locomotion provided: Anti-grav flight at 200 meters per melee</p><p>turn</p><p>Power source: 3 atomic energy cells</p><p>Battery life: 48 hours of constant use</p><p>Except for the changes noted above, this armor contains all</p><p>equipment listed under powered attack armor.</p>"
+      },
+      "_id": "72cVibhLhO359b2o",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.72cVibhLhO359b2o"
+    },
+    {
+      "name": "Vehicles",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The list of vehicles given here only begins to describe the great variety available to the Ancients, and the referee is encouraged to devise many more.</p><ol><li>CIVILIAN INTERNAL COMBUSTION</li></ol><p>Much like the cars and trucks of today, these vehicles run on alcohol or fossil fuel. When in good working order they will all be extremely fuel efficient. Usually a separate fuel source will be required, as any left in the tanks wil! long since have evaporated.</p><ol><li>MILITARY ALCOHOL COMBUSTION</li></ol><p>This category includes the 24th century version of the jeeps, trucks, armored personnel, and cargo carriers used by the military. Some will be wheeled, others tracked, and many utilize a limited anti-grav devioe which keeps them just above the surface. The purity of the alcohol available determines the speed of these vehicles (along with the referee).</p><ol><li>TURBINE CARS</li></ol><p>These holdovers from the 23rd century were still in limited use. They are all wheeled, and powered by an efficient turbine which burns fossil fuels. A solar cell on the roof powers the lights, radar, and climate control systems.</p><ol><li>HOVER CAR</li></ol><p>The most common passenger vehicle of the 24th century rides on a cushion of air and travels at speeds up to 300 kilometers per hour. It utilizes’a steam turbine powered by an atomic energy cell. It wilt travel up to 600 kilometers on 50 liters of water, and the atomic cell will last up to 20,000 kilometers.</p><ol><li>FLITCAR</li></ol><p>This combination air/ground vehicle utilizes anti-grav circuits and an atomic energy cell. In hover mode (just above the ground) it can travel up to 200 kilometers per hour. In flight mode, it can travel up to 400 kilometers per hour with a service ceiling of 16 kilometers. The battery will power it for 200 hours on the ground or 100 hours of light.</p><ol><li>ENVIRONMENTAL CAR</li></ol><p>Use of this vehicle was restricted to only a few government agencies and they will be rare in GAMMA WORLD. Able to fly, travel on the ground, move over and under water, and in outer space (good T for one round trip to the moon), the environmental car is powered by its own nuclear reactor and anti-grav circuits. Each fuel cylinder will power it for 4 weeks of earth use or 1 week in outer space. Airspeed: 500 kpn; Groundspeed: 150 kph; Underwater speed: 75 kph.</p><ol><li>BUBBLE CAR This ultimate transportation vehicle was affordable by only the world’s richest governments and is extremely rare in GAMMA WORLD. Powered by solar cells, and utilizing an anti-grav circuit that is extremely energy efficient, bubble cars can carry up to 20 passengers, or 3 metric tons of cargo into deep space or the darkest depths of the oceans. They recharge themselves as long as at least 10 hours out of each 72 are spent in direct sunlight (earth orbit or less). They are equipped with an energy field that will absorb the first 25 hit points of damage sustained each melee round. The energy shield and backup power are provided by an atomic energy s cell which will last for 24 hours of constant use. Air speed: ten times the speed of sound!</li></ol><ol><li>OTHER</li></ol><p>Anything the referee desires, such as railroad transports, cargo ships (water), helicopters, police vehicles, and so on may be included in the game where appropriate.</p>"
+      },
+      "_id": "Xjnje6xaNeIZIfUf",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.Xjnje6xaNeIZIfUf"
+    },
+    {
+      "name": "Miscellaneous Energy Devices",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<ol><li>PORTENT</li></ol><p>This is a backpack-sized unit which generates a 4 man energy shield, used to keep out the elements, powered by 2 solar cells. The cells hold enough charge for 24 hours constant use and may be recharged during day while the bearer is marching. If attacked, the energy shield will absorb 5 points of damage and then burn out. t</p><ol><li>ENERGY CLOAK This powered cloak and cow! can completely cover the wearer. M Designed for wear at social events, it is a blaze of scintillating colors when in operation. The unexpected side effect is that the f cloak (when powered) is completely resistant to lasar beams. It is t powered by a chemical energy ceil that will last through 12 hours of s constant use. w</li></ol><ol><li>CONTROL BATON</li></ol><p>A 4th or 5th stage military command item (see I.D. DEVICES), this baton can, at a touch, completely activate or deactivate any powered suit of armor. It can also (through use of a directional antenna) lead the user to any suit of powered armor within a radius of 1 kilometer. It identifies the user to any robotic unit as command personnel, allowing the user to command units at a specific location such as a military base or government building.</p><ol><li>COMMUNICATIONS SENDER</li></ol><p>These are short range two-way radios or TVs with ranges up to 100 kilometers. They are powered by chemical and solar energy cells. Hundreds of varieties, military and civilian, can stil! be found.</p><ol><li>MEDI-KIT</li></ol><p>This portable unit, small enough to hang on a belt, allows even a novice to give himself, or others, major first-aid and medical treatment. A small but sophisticated computer, coupled with several microwave sensors, analyzes and treats all manner of medical problems. To use the medi-kit, merely place the device over the wounded area, touching the flesh. The unit will take a blood sample, inject any antidotes, antibiotics, or antitoxins necessary (and contained in the kit), suture any wounds, give verbal instructions on how to perform any operations beyond its capabilities (such as setting broken bones), and finally spray on an antiseptic dressing that promotes healing.</p><p>Powered by a chemical energy cell, it will function about as long as there are supplies inside the unit (there are about 4 treatments therein for any given problem). The medi-kit was very common and any military installation of the Ancients is likely to have a large supply of them.</p><p>Keep in mind the fact that medi-kits were designed and programmed by and for numan beings. The tarther away from Pure Strain Human stock the patient, the less likely his chances of successful treatment by a medi-kit.</p><ol><li>ANTI-GRAV SLED</li></ol><p>A platform approximately 2 meters wide by 3 meters long, the anti-grav sled is powered by an atomic energy cell good for up to 100 hours of continuous operation. It can support loads up to 25 metric tons as it floats roughly 50 centimeters above the ground. The sled may be pushed manually when supporting light loads, but inertia is such a problem that a separate powered, towing or pushing device must be used for cargoes over 2 metric tons.</p><p>7, ULTRA-VIOLET &amp; INFRA-RED GOGGLES</p><p>These goggles enable the wearer to detect heat and light sources normally invisible to the naked eye.</p><ol><li>CHEMICAL ENERGY GELL These rechargeable batteries come in many sizes and power all manner of devices. They will lose their charge after 1-6 years of disuse.</li></ol><ol><li>SOLAR ENERGY CELL</li></ol><p>These are chemical energy cells equipped with, or attached to, a solar panel that recharges them when exposed to bright light.</p><ol><li>HYDROGEN ENERGY CELL</li></ol><p>These are rechargeable batteries, less common, and more expensive than chemical energy cells. They do not lose their charge through disuse.</p><ol><li>ATOMIC ENERGY CELL</li></ol><p>Although bulky because of its shielding, this 12 kilogram nuclear battery will hold its charge for up to 1000 years if not used. It is used to provide the power for many devices, both civilian and military. It may only be recharged by replacing its fuel cylinder.</p><ol><li>ENERGY CELL CHARGER .</li></ol><p>When connected to the appropriate power source (line of broadcasp, this smail unit will recharge practically any chemical or hydrogen energy cell. Although no times are specified, it takes twice as long to recharge hydrogen energy cells as it does to recharge chemical energy cells.</p>"
+      },
+      "_id": "emaTduChRZUfLA8i",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.emaTduChRZUfLA8i"
+    },
+    {
+      "name": "Medical Supplies and Equipment",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The various medical supplies of the 24th century can still be found in an occasional ruined hospital, military aid station, or trauma center. The following list is just a brief summary of the more standard items in the military first aid kit. They will be identified with universal symbols, as well as detailed instructions, so that,</p>"
+      },
+      "_id": "MU07LaxIuzjOTlSO",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!CVjlvJZpXNzb2tTs.MU07LaxIuzjOTlSO"
+    }
+  ],
+  "_id": "CVjlvJZpXNzb2tTs",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!CVjlvJZpXNzb2tTs"
+}

@@ -1,0 +1,104 @@
+{
+  "name": "Intuition",
+  "type": "mutation",
+  "system": {
+    "code": 19,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "+1 to hit, +3 damage per dice, cannot be used with other powers.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant is subconsciously aware of what an opponent intends to do. This grants +1 on attack rolls with any weapon and adds 3 points to each die of damage inflicted. The mutation cannot be used while any other mental power is being used.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Intuition — combat + surprise bonuses",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "gw.damagePerDie",
+          "mode": 2,
+          "value": "3",
+          "priority": 20
+        },
+        {
+          "key": "gw.cannotBeSurprised",
+          "mode": 5,
+          "value": "true",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "xpLkyCzyturYtyww",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!La2xaZg3dbgTGWvk.xpLkyCzyturYtyww"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/intuition.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "La2xaZg3dbgTGWvk",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!La2xaZg3dbgTGWvk"
+}

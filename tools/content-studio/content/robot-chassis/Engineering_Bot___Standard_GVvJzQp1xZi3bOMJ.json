@@ -1,0 +1,55 @@
+{
+  "name": "Engineering Bot — Standard",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> chemical.</p><p><strong>Armor Class:</strong> 7. <strong>Hit Points:</strong> 35.</p><p><strong>Armament:</strong> Welder (1d6 fire).</p><p><strong>Sensors:</strong> Vision, IR, ultrasonic.</p><p><strong>Controls:</strong> Voice + remote.</p><p>Repairs and constructs. Tools concealed in chassis compartments.</p>"
+      },
+      "_id": "gxlJRsN1K3aKrMvT",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!GVvJzQp1xZi3bOMJ.gxlJRsN1K3aKrMvT"
+    }
+  ],
+  "_id": "GVvJzQp1xZi3bOMJ",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!GVvJzQp1xZi3bOMJ"
+}

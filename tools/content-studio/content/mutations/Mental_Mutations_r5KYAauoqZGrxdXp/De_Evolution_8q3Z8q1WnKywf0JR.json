@@ -1,0 +1,61 @@
+{
+  "name": "De-Evolution",
+  "type": "mutation",
+  "system": {
+    "code": 6,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Once per week, within 30m, strip abilities from mutant opponent.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "30 m",
+    "duration": "One combat",
+    "usage": {
+      "limited": true,
+      "per": "week",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "mental",
+      "notes": "On a failed mental save, strip the target's greatest mutation (GM picks which) for the rest of this combat."
+    },
+    "actionTypes": [
+      "attack",
+      "save"
+    ],
+    "description": {
+      "value": "<p>This power regresses a mutant opponent along its ancestral line. Treat it as a mental attack. If it succeeds, the target permanently loses its greatest special ability first, chosen by the referee. On each later melee turn, another special ability is stripped away until the victim is reduced to its original stock. The effect lasts for one combat situation, however long that lasts, has a range of 30 meters, and may be used once per week.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/de-evolution.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "8q3Z8q1WnKywf0JR",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!8q3Z8q1WnKywf0JR"
+}

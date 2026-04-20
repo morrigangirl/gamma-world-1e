@@ -1,0 +1,625 @@
+{
+  "name": "Hisser",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/hisser.png",
+  "prototypeToken": {
+    "name": "Hisser",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/hisser.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "Snake",
+      "level": 18,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "",
+      "role": "desert matriarchal psychic",
+      "speech": "telepathy",
+      "creatureClass": "Snake Humanoid"
+    },
+    "attributes": {
+      "ms": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 9,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 108,
+        "value": 108,
+        "max": 108,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 12,
+      "radResistance": 16,
+      "poisonResistance": 16
+    },
+    "biography": {
+      "value": "<p>A half-man half-snake psychic society that communicates entirely by telepathy.</p><p>All hissers have telepathy, mass mind, sonic attack, and one additional random mental mutation; their scales resist laser and sonic attacks.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "telepathy",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Scaly Hide",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 3,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": true,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Laser-resistant scales and muscular coils."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "tvvl76CTN27qWO2p",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!XgAJhv8bvyOCprop.tvvl76CTN27qWO2p"
+    },
+    {
+      "name": "Fanged Strike",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A quick snapping bite."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "T4zw4w6VodPMYStL",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!XgAJhv8bvyOCprop.T4zw4w6VodPMYStL"
+    },
+    {
+      "name": "Telepathy",
+      "type": "mutation",
+      "system": {
+        "code": 43,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Read/send thoughts/emotions up to 10 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m",
+        "duration": "Concentration",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Read and project thoughts or emotions."
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Read/send thoughts/emotions up to 10 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "JmhAGvAVgOU22n1E",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XgAJhv8bvyOCprop.JmhAGvAVgOU22n1E"
+    },
+    {
+      "name": "Mass Mind",
+      "type": "mutation",
+      "system": {
+        "code": 23,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Empathize with same type / same power... increase effectiveness.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Empathize with same type / same power... increase effectiveness.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "Lp7DHOo84zqdyGW3",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XgAJhv8bvyOCprop.Lp7DHOo84zqdyGW3"
+    },
+    {
+      "name": "Sonic Attack Ability",
+      "type": "mutation",
+      "system": {
+        "code": 83,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m radius",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 4
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "",
+          "notes": "Damages every other creature within 10 meters."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "wg4m8DdYtMQxfHJb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XgAJhv8bvyOCprop.wg4m8DdYtMQxfHJb"
+    },
+    {
+      "name": "Mental Blast",
+      "type": "mutation",
+      "system": {
+        "code": 24,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every other turn, do 3d6 mental damage within 15 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 2
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "mental",
+          "notes": "Launch a mental assault once every other round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Every other turn, do 3d6 mental damage within 15 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "4u35VFncl4xnPE9Y",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!XgAJhv8bvyOCprop.4u35VFncl4xnPE9Y"
+    }
+  ],
+  "_id": "XgAJhv8bvyOCprop",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!XgAJhv8bvyOCprop"
+}

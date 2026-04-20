@@ -1,0 +1,79 @@
+{
+  "name": "Force Field Generator",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/force-field-generator.png",
+  "system": {
+    "weaponClass": 1,
+    "category": "primitive",
+    "ammoType": [],
+    "damage": {
+      "formula": "0",
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "attackType": "melee",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "note",
+      "formula": "",
+      "status": "",
+      "notes": "Activates a personal force field providing AC 2, immunity to slugs, arrows, and melee. Drains 1 charge per hour; 24 charges per hydrogen cell, 96 per nuclear cell."
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Belt-mounted Ancient shield projector. Generates a full-body force field for the wearer only. Force fields block incoming fire but not outgoing attacks.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "UgptmobSnbbU6XVg",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!UgptmobSnbbU6XVg"
+}

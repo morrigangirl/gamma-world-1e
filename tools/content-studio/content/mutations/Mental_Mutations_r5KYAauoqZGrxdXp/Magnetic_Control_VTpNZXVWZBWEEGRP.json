@@ -1,0 +1,61 @@
+{
+  "name": "Magnetic Control",
+  "type": "mutation",
+  "system": {
+    "code": 22,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Once / 24 hours, control iron object (25rds, 100m) (MR 12 to succeed).",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "100 m",
+    "duration": "25 rounds",
+    "usage": {
+      "limited": true,
+      "per": "day",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "mental",
+      "notes": "On a failed mental save (ferrous objects resist as MR 12), the target is controlled for up to 25 rounds."
+    },
+    "actionTypes": [
+      "attack",
+      "save"
+    ],
+    "description": {
+      "value": "<p>By manipulating magnetic fields, the mutant can attract, repel, or otherwise control any inanimate ferrous object. The referee determines effects on powered devices. To see whether control is established, treat the target object as if it had a mental resistance of 12. There is no weight limit. Range is 100 meters, duration is up to 25 melee turns, and the mutation may be used once every 24 hours.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/magnetic-control.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "VTpNZXVWZBWEEGRP",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!VTpNZXVWZBWEEGRP"
+}

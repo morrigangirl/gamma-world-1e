@@ -1,0 +1,648 @@
+{
+  "name": "Fen",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/fen.png",
+  "prototypeToken": {
+    "name": "Fen",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/fen.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Fish",
+      "level": 10,
+      "xp": 0,
+      "movement": 30,
+      "alliance": "",
+      "role": "armed amphibious fish-folk",
+      "speech": "fen speech, common",
+      "creatureClass": "Amphibious Fish-Humanoid"
+    },
+    "attributes": {
+      "ms": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 7,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 60,
+        "value": 60,
+        "max": 60,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 12,
+      "radResistance": 18,
+      "poisonResistance": 18
+    },
+    "biography": {
+      "value": "<p>A man-sized intelligent fish with lungs, gills, and translucent skin that makes it invisible underwater.</p><p>Fens use weapons, club with their tails, resist poison and radiation, and can shapechange into large birds.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "fen speech, common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Translucent Skin",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 7,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": true,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Semi-invisible underwater skin and resilient body."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "Kd6Cbqhkn3mWG2Gv",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.Kd6Cbqhkn3mWG2Gv"
+    },
+    {
+      "name": "Tail Club",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "6d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A brutal sweeping tail strike."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "oJrXemryQYhytdLp",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.oJrXemryQYhytdLp"
+    },
+    {
+      "name": "Shapechange",
+      "type": "mutation",
+      "system": {
+        "code": 39,
+        "subtype": "physical",
+        "category": "beneficial",
+        "summary": "In 2 melee turns, mimic animal, but without abilities.",
+        "reference": {
+          "table": "physical",
+          "page": 10,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "While active",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Takes two rounds to assume a new shape."
+        },
+        "actionTypes": [
+          "utility"
+        ],
+        "description": {
+          "value": "<p>In 2 melee turns, mimic animal, but without abilities.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "7eofwYMBwvw05FZR",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.7eofwYMBwvw05FZR"
+    },
+    {
+      "name": "Reflection",
+      "type": "mutation",
+      "system": {
+        "code": 37,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Up to 18 rounds",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Begins by reflecting up to 3 dice of damage, increasing by 1 die per round of concentration."
+        },
+        "actionTypes": [
+          "defense"
+        ],
+        "description": {
+          "value": "<p>Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "k0kX8qCXRhniamQN",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.k0kX8qCXRhniamQN"
+    },
+    {
+      "name": "Underwater Invisibility",
+      "type": "gear",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "none",
+        "action": {
+          "mode": "guided",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "The fen is invisible while submerged."
+        },
+        "description": {
+          "value": "<p>The fen is invisible while submerged.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "misc",
+        "actionTypes": {}
+      },
+      "_id": "TUvJTQHaLrXcMOuJ",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.TUvJTQHaLrXcMOuJ"
+    },
+    {
+      "name": "Scavenged Spear",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {},
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "1d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Fens commonly use recovered weapons."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "primitive",
+        "actionTypes": {}
+      },
+      "_id": "vCIBYBeyoX8bvcqG",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!06qmtyHFjoPPwuHn.vCIBYBeyoX8bvcqG"
+    }
+  ],
+  "_id": "06qmtyHFjoPPwuHn",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!06qmtyHFjoPPwuHn"
+}

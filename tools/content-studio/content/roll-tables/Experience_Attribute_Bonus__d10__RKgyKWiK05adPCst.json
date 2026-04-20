@@ -1,0 +1,245 @@
+{
+  "name": "Experience Attribute Bonus (d10)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Rolled on level-up for PSH and humanoid characters. The resulting attribute receives +1 up to the natural cap of 21.</p><p>Level thresholds: 0, 3000, 6000, 12000, 24000, 48000, 96000, 200000, 400000, 1000000 XP.</p>",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "+1 MS",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to MS.",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "6sbLuzKZnBFyUfzG",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.6sbLuzKZnBFyUfzG"
+    },
+    {
+      "type": "text",
+      "name": "+1 IN",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to IN.",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "Ud6MzUiF5VaTZlyS",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.Ud6MzUiF5VaTZlyS"
+    },
+    {
+      "type": "text",
+      "name": "+1 DX",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to DX.",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "wwzQVMyoetWsw4rZ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.wwzQVMyoetWsw4rZ"
+    },
+    {
+      "type": "text",
+      "name": "+1 CH",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to CH.",
+      "weight": 1,
+      "range": [
+        4,
+        4
+      ],
+      "drawn": false,
+      "_id": "oZxd2MgExdoU7Md3",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.oZxd2MgExdoU7Md3"
+    },
+    {
+      "type": "text",
+      "name": "+1 CN",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to CN.",
+      "weight": 1,
+      "range": [
+        5,
+        5
+      ],
+      "drawn": false,
+      "_id": "GvwQZ1boYB2t2UHU",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.GvwQZ1boYB2t2UHU"
+    },
+    {
+      "type": "text",
+      "name": "+1 PS",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to PS.",
+      "weight": 1,
+      "range": [
+        6,
+        6
+      ],
+      "drawn": false,
+      "_id": "7KYONXJDXq6Z2TKD",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.7KYONXJDXq6Z2TKD"
+    },
+    {
+      "type": "text",
+      "name": "+1 MS",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to MS.",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "L7WLLMhMvryEh8v3",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.L7WLLMhMvryEh8v3"
+    },
+    {
+      "type": "text",
+      "name": "+1 CN",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to CN.",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "6RjEfAOk0m3PsL4O",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.6RjEfAOk0m3PsL4O"
+    },
+    {
+      "type": "text",
+      "name": "+1 DX",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to DX.",
+      "weight": 1,
+      "range": [
+        9,
+        9
+      ],
+      "drawn": false,
+      "_id": "q3Hvct58ux9Tog4W",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.q3Hvct58ux9Tog4W"
+    },
+    {
+      "type": "text",
+      "name": "+1 PS",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Gain +1 to PS.",
+      "weight": 1,
+      "range": [
+        10,
+        10
+      ],
+      "drawn": false,
+      "_id": "mWLVGgwotMJLyJn0",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!RKgyKWiK05adPCst.mWLVGgwotMJLyJn0"
+    }
+  ],
+  "_id": "RKgyKWiK05adPCst",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!RKgyKWiK05adPCst"
+}

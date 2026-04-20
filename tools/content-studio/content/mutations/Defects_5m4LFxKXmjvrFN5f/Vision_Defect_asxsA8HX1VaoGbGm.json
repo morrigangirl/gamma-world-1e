@@ -1,0 +1,92 @@
+{
+  "name": "Vision Defect",
+  "type": "mutation",
+  "system": {
+    "code": 47,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "-4 to hit, difficulty seeing objects more than 15m away.",
+    "reference": {
+      "table": "physical",
+      "page": 11,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant suffers from a serious visual problem such as myopia or astigmatism, though not blindness. It takes a 4 point penalty on attack rolls in combat and has difficulty seeing objects beyond 15 meters.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Vision Defect — to-hit penalty",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "-4",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "rmBsPSomFvW6ni5Q",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!asxsA8HX1VaoGbGm.rmBsPSomFvW6ni5Q"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/vision-defect.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "asxsA8HX1VaoGbGm",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!asxsA8HX1VaoGbGm"
+}

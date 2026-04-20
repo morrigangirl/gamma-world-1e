@@ -1,0 +1,55 @@
+{
+  "name": "Encounter Procedures",
+  "pages": [
+    {
+      "name": "Encounter Procedures",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Reaction rolls use the original 2d6 table plus charisma and type adjustments. Surprise rolls use the original 1d6 procedure and award first strike from surprise or the higher initiative roll.</p><p>Monster and NPC sheets include morale, reaction, and route encounter controls for referee-facing encounter work.</p><p>Random encounters are provided as bundled roll tables, one per terrain type, in the Encounter Tables compendium pack.</p><p>Ongoing morale checks persist as actor state and can keep rolling each combat round until the referee clears them or the creature breaks.</p><p>Use the monster sheet or the encounter roll tables for quick encounter procedures, then proceed into attacks, saves, or guided mutation and artifact workflows as needed.</p><p>Drag gear, armor, weapons, and mutations directly from the bundled packs onto a character. Named Ancient items will auto-fill their automation profile.</p>"
+      },
+      "_id": "cRZMPo3Jv9iGqKAc",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!U7WYH0S3UCX3grGz.cRZMPo3Jv9iGqKAc"
+    }
+  ],
+  "_id": "U7WYH0S3UCX3grGz",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!U7WYH0S3UCX3grGz"
+}

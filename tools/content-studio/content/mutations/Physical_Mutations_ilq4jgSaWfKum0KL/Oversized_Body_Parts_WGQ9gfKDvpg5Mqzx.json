@@ -1,0 +1,58 @@
+{
+  "name": "Oversized Body Parts",
+  "type": "mutation",
+  "system": {
+    "code": 31,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Beneficial/effective increase in size of one body part.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>One body part is enlarged in a beneficial way, and that part gains a matching boost in performance. Larger eyes might improve sight, for example, or longer legs might increase speed. Only one body part can be affected in this way.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/oversized-body-parts.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "WGQ9gfKDvpg5Mqzx",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!WGQ9gfKDvpg5Mqzx"
+}

@@ -1,0 +1,135 @@
+{
+  "name": "Reaction (2d6)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Modified reaction roll for NPC and creature initial attitude.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Immediate Attack",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The encountered group attacks immediately with surprise if possible.",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "aneZHTtzebJOsnPi",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!emNkAgt0SZX9DGIz.aneZHTtzebJOsnPi"
+    },
+    {
+      "type": "text",
+      "name": "Hostile",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The group is actively hostile and will fight if threatened or given opportunity.",
+      "weight": 1,
+      "range": [
+        3,
+        5
+      ],
+      "drawn": false,
+      "_id": "s4H5AdYbIIsKVHYm",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!emNkAgt0SZX9DGIz.s4H5AdYbIIsKVHYm"
+    },
+    {
+      "type": "text",
+      "name": "Uncertain",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The group is wary and will talk, flee, or fight depending on approach.",
+      "weight": 1,
+      "range": [
+        6,
+        8
+      ],
+      "drawn": false,
+      "_id": "HDvg6AF18g6QfrV9",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!emNkAgt0SZX9DGIz.HDvg6AF18g6QfrV9"
+    },
+    {
+      "type": "text",
+      "name": "Indifferent",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The group ignores the party unless provoked or offered something of value.",
+      "weight": 1,
+      "range": [
+        9,
+        11
+      ],
+      "drawn": false,
+      "_id": "4kshvlspKKe5wens",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!emNkAgt0SZX9DGIz.4kshvlspKKe5wens"
+    },
+    {
+      "type": "text",
+      "name": "Friendly",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The group is openly friendly and may assist, trade, or share information.",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "WmBiG2xeEqvZhhnl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!emNkAgt0SZX9DGIz.WmBiG2xeEqvZhhnl"
+    }
+  ],
+  "_id": "emNkAgt0SZX9DGIz",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!emNkAgt0SZX9DGIz"
+}

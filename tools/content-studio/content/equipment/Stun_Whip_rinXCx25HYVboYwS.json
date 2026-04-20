@@ -1,0 +1,88 @@
+{
+  "name": "Stun Whip",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/stun-whip.png",
+  "system": {
+    "weaponClass": 6,
+    "category": "artifact",
+    "ammoType": [],
+    "damage": {
+      "formula": "0",
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "attackType": "melee",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "stun",
+      "formula": "20",
+      "status": "unconscious",
+      "notes": "Victim is stunned for up to 20 minutes, less one minute per point of Constitution."
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Three-meter energized whip that inflicts stun.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false,
+      "tag": "stun"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "energyWeapon",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "chemical",
+      "power": {
+        "requirement": "cells",
+        "installedType": "chemical",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "chemical",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 30,
+        "max": 30
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "rinXCx25HYVboYwS",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!rinXCx25HYVboYwS"
+}

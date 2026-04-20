@@ -1,0 +1,58 @@
+{
+  "name": "Heightened Brain Talent",
+  "type": "mutation",
+  "system": {
+    "code": 15,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Figure out artificat in 1/3 time; 2 mental saves; detect all lies.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can figure out the workings of any artifact in one-third the usual time, so 10 die rolls on the artifact charts take 40 minutes instead of 2 hours. It also gets two saving throws against mental attacks. If the mutant also has Dual Brain, it does not receive four mental saves. It is impossible to tell this mutant an undetected lie.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-brain-talent.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "LnyQxUs7av21Kohw",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!LnyQxUs7av21Kohw"
+}

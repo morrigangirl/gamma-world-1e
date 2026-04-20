@@ -1,0 +1,60 @@
+{
+  "name": "Adaptation",
+  "type": "mutation",
+  "system": {
+    "code": 51,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Adapt once per day to a hostile environment (heat, cold, radiation, vacuum) for up to 24 hours.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Adapt once per day to a hostile environment (heat, cold, radiation, vacuum) for up to 24 hours."
+    },
+    "actionTypes": [
+      "utility"
+    ],
+    "description": {
+      "value": "<p>Once the plant survives a particular attack mode, it becomes permanently immune to that mode. A plant that lives through a laser attack, for example, takes no damage from later laser attacks. This adaptation does not help against physical severing, so swords and axes can still chop off limbs or stalks.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/adaptation.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "TfW8jK4QLJTYule7",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!TfW8jK4QLJTYule7"
+}

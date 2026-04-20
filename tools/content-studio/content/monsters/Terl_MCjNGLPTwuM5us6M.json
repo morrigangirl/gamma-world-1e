@@ -1,0 +1,608 @@
+{
+  "name": "Terl",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/terl.png",
+  "prototypeToken": {
+    "name": "Terl",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/terl.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Barracuda",
+      "level": 9,
+      "xp": 0,
+      "movement": 30,
+      "alliance": "",
+      "role": "telekinetic fish-bird",
+      "speech": "",
+      "creatureClass": "Feathered Barracuda"
+    },
+    "attributes": {
+      "ms": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 5,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 3,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 54,
+        "value": 54,
+        "max": 54,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 8,
+      "radResistance": 13,
+      "poisonResistance": 13
+    },
+    "biography": {
+      "value": "<p>A brilliantly feathered barracuda that flies by telekinesis, kills with sonic attack and cryogenesis, and reflects heat and laser attacks.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Reflective Plumage",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 5,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 120,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": true,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Heat- and laser-reflective feathers."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "BQjzRgj3KGco5kYg",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!MCjNGLPTwuM5us6M.BQjzRgj3KGco5kYg"
+    },
+    {
+      "name": "Bite",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "A slashing barracuda bite."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "WWR1Fs7UfAiELHW5",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!MCjNGLPTwuM5us6M.WWR1Fs7UfAiELHW5"
+    },
+    {
+      "name": "Telekinetic Flight",
+      "type": "mutation",
+      "system": {
+        "code": 42,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Fly up to 20 meters per second, carry as much as usual.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Always on",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Fly at up to 20 meters per second, carrying a normal load."
+        },
+        "actionTypes": [
+          "movement"
+        ],
+        "description": {
+          "value": "<p>Fly up to 20 meters per second, carry as much as usual.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Telekinetic Flight — flight speed",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.flightSpeed",
+              "mode": 4,
+              "value": "20",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "JrmgdwMf8T8ggtoC",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!MCjNGLPTwuM5us6M.RtPjpYzT1bwPDsQb.JrmgdwMf8T8ggtoC"
+        }
+      ],
+      "_id": "RtPjpYzT1bwPDsQb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!MCjNGLPTwuM5us6M.RtPjpYzT1bwPDsQb"
+    },
+    {
+      "name": "Sonic Attack Ability",
+      "type": "mutation",
+      "system": {
+        "code": 83,
+        "subtype": "plant",
+        "category": "beneficial",
+        "summary": "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.",
+        "reference": {
+          "table": "plant",
+          "page": 15,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m radius",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 4
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "",
+          "notes": "Damages every other creature within 10 meters."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "MHZZLNJcSVj8uV6q",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!MCjNGLPTwuM5us6M.MHZZLNJcSVj8uV6q"
+    },
+    {
+      "name": "Cryokinesis",
+      "type": "mutation",
+      "system": {
+        "code": 4,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.",
+        "reference": {
+          "table": "mental",
+          "page": 11,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "25 m",
+        "duration": "Concentration, up to 10 rounds",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "1d6",
+          "saveType": "",
+          "notes": "Choose 1-10 rounds of concentration; damage increases by 1d6 per round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage"
+        ],
+        "description": {
+          "value": "<p>Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "B98jxtiqxhS2P9Ed",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!MCjNGLPTwuM5us6M.B98jxtiqxhS2P9Ed"
+    }
+  ],
+  "_id": "MCjNGLPTwuM5us6M",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!MCjNGLPTwuM5us6M"
+}

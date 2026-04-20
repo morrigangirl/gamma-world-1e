@@ -1,0 +1,21 @@
+{
+  "_id": "Yki6iPGZWfhoxGyT",
+  "name": "Plant Mutations",
+  "type": "Item",
+  "folder": null,
+  "sorting": "a",
+  "color": "#4a7a2e",
+  "description": "",
+  "flags": {},
+  "sort": 0,
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!folders!Yki6iPGZWfhoxGyT"
+}

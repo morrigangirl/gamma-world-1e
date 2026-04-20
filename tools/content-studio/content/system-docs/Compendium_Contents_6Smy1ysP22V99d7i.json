@@ -1,0 +1,55 @@
+{
+  "name": "Compendium Contents",
+  "pages": [
+    {
+      "name": "Compendium Contents",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Mutation Index contains the full humanoid and mutated-animal mutation lists with summaries, references, and ready-to-use activation data.</p><p>Armory and Gear contains primitive weapons, Ancient firearms and energy weapons, armor, and expedition staples.</p><p>Sample Actors contains a few ready-to-import examples for human, humanoid, and mutated-animal play.</p><p>Monsters and Beasts contains the creatures from the Gamma World core book as Monster actors with natural attacks, innate defenses, mutations, and guided special abilities.</p>"
+      },
+      "_id": "yJ6fItYOgQujPQ6x",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!6Smy1ysP22V99d7i.yJ6fItYOgQujPQ6x"
+    }
+  ],
+  "_id": "6Smy1ysP22V99d7i",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!6Smy1ysP22V99d7i"
+}

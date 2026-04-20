@@ -1,0 +1,60 @@
+{
+  "name": "Force Field Generation",
+  "type": "mutation",
+  "system": {
+    "code": 13,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "Up to 1 hour",
+    "usage": {
+      "limited": true,
+      "per": "day",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "5d6",
+      "saveType": "",
+      "notes": "Barrier surrounds the body and absorbs up to 5d6 damage."
+    },
+    "actionTypes": [
+      "defense"
+    ],
+    "description": {
+      "value": "<p>The mutant can create an invisible barrier around its own body, roughly 15 centimeters out from the skin, through which physical objects cannot pass. The field can absorb 5 dice of cumulative damage before collapsing. Once raised, it requires no effort to maintain and lasts up to 1 hour unless destroyed first. Only one force field may be generated every 24 hours.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/force-field-generation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "86R0Z9gZPTzHGN4r",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!86R0Z9gZPTzHGN4r"
+}

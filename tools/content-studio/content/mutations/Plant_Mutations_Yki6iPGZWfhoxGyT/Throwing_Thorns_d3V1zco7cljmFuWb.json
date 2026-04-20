@@ -1,0 +1,58 @@
+{
+  "name": "Throwing Thorns",
+  "type": "mutation",
+  "system": {
+    "code": 89,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Launch thorns up to 10m; 1d6 damage each, up to three per round.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The plant has 1-100 dart-like thorns that it can fire to a distance of up to 10 meters, depending on its sensory awareness. Each thorn inflicts dagger damage if it hits. Replacements take at least 1 week to grow.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/throwing-thorns.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "d3V1zco7cljmFuWb",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!d3V1zco7cljmFuWb"
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Cargo Hamper",
+  "type": "gear",
+  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "system": {
+    "quantity": 1,
+    "weight": 6,
+    "subtype": "container",
+    "equipped": false,
+    "container": {
+      "capacity": 150,
+      "stored": []
+    },
+    "description": {
+      "value": "A vehicle-mounted cargo basket. Not meant to be carried by foot."
+    },
+    "action": {
+      "mode": "none"
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "7gYUJvL2xE5H3Zci",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!7gYUJvL2xE5H3Zci"
+}

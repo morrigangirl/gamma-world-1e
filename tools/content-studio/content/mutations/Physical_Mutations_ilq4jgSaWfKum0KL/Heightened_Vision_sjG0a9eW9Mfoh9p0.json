@@ -1,0 +1,92 @@
+{
+  "name": "Heightened Vision",
+  "type": "mutation",
+  "system": {
+    "code": 20,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "See clearly at 3 kilometers, see infrared and ultraviolet.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can see clearly and identify objects at distances of up to 3 kilometers. It can also see into both the infrared and ultraviolet spectra and is not troubled by full daylight.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Vision — surprise modifier",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.surpriseModifier",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "lB9T5XzrT6QgtfNZ",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!sjG0a9eW9Mfoh9p0.lB9T5XzrT6QgtfNZ"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-vision.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "sjG0a9eW9Mfoh9p0",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!sjG0a9eW9Mfoh9p0"
+}

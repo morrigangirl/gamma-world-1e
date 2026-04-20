@@ -1,0 +1,429 @@
+{
+  "name": "11. Homebrew & Departures",
+  "pages": [
+    {
+      "name": "PSH Technology Reliability",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>House rule.</strong> Once a Pure Strain Human has figured out an Ancient artifact (operation known), further uses by that PSH actor bypass the condition and malfunction rolls. The artifact simply works.</p><p>Toggle via the world setting <em>PSH technology always works once figured out</em>. Non-PSH actors and unanalyzed artifacts follow RAW.</p>"
+      },
+      "_id": "BUDQR9voLhE4EAAq",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.BUDQR9voLhE4EAAq"
+    },
+    {
+      "name": "Initiative (5e-Style)",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p>This system uses 5e-style individual initiative (1d20 + DX mod per combatant) instead of 1e's side-based procedure, so the Foundry combat tracker behaves consistently.</p><p>For RAW 1e initiative, roll it manually and set each combatant's value in the tracker.</p>"
+      },
+      "_id": "Rfeturl4S45do7hL",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.Rfeturl4S45do7hL"
+    },
+    {
+      "name": "Containers & Strict Encumbrance",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p>Containers (backpacks, pouches, satchels) are not strictly RAW — they are added for usable inventory management.</p><p>Strict encumbrance: carried weight over cap halves movement and zeroes DX AC bonus; over 2× cap disables movement, attacks, and mutations.</p>"
+      },
+      "_id": "2eLBmAefVIkc7p9K",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.2eLBmAefVIkc7p9K"
+    },
+    {
+      "name": "Radiation Homebrew",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>House rule.</strong> RAW radiation uses a Constitution × Intensity matrix whose \"D\" cells kill the victim outright and whose \"M\" cells force an immediate new mutation. In ongoing play this is a character grinder — the rules below replace the matrix with a save-vs-intensity roll and four graded outcomes.</p><p><strong>Baseline resistance.</strong> Radiation zones of intensity <strong>less than 10</strong> have no mechanical effect. No save is required and no damage accumulates. The Foundry system short-circuits these exposures to \"Below threshold — no effect\" on the save card.</p><p><strong>The save.</strong> At intensity 10 or higher, roll <code>1d20 + CN modifier</code> and compare to the radiation intensity. CN modifier uses the same 6–15 neutral band the rest of the system uses (PS 8 = +0, PS 18 = +3, PS 4 = −2).</p><p><strong>Outcome bands.</strong></p><p><strong>Pass (total ≥ intensity)</strong> — No immediate effect. Recheck after one hour if still exposed.</p><p><strong>Miss by 1–3 — Radiation Sickness (Mild)</strong>. The character is immediately treated as <em>fully fatigued</em> (every weapon / armor fatigue penalty applies at maximum) for <strong>1d3 days</strong>.</p><p><strong>Miss by 4–6 — Radiation Sickness (Severe)</strong>. Fully fatigued for <strong>1d4+2 days</strong>, and a random new mutation manifests immediately (the existing \"M\" outcome). The mutation grant fires automatically on the chat card.</p><p><strong>Miss by 7 or more — Catastrophic Exposure</strong>. The character appears fine for now. <strong>Beginning the next day</strong>, the body deteriorates at <strong>−10% of maximum HP per hour</strong>. The only thing that halts the spiral is Ancient radiation treatment (rejuv chamber, anti-radiation serum, GM-fiat equivalent); without it, the character dies.</p><p><strong>Mutation alternate effects.</strong></p><p><strong>Heightened Constitution</strong> now grants <strong>+3</strong> to radiation saves <em>and</em> caps radiation severity at \"severe\" — a Heightened Constitution character cannot take Catastrophic Exposure from a single roll.</p><p><strong>Bacterial Symbiosis</strong> (plant mutation) grants <strong>+3</strong> to both radiation and poison saves.</p><p><strong>Automation.</strong> The character sheet's fatigue klaxon overlays a ☢ mark and flips to the appropriate sickness or catastrophic state. The world-time hook auto-expires sickness when its duration elapses and auto-drips catastrophic HP loss every in-game hour. The <code>game.gammaWorld.clearCatastrophicRadiation(actor)</code> macro cancels the catastrophic spiral when the party finds an ancient treatment device.</p>"
+      },
+      "_id": "lpZ143kGcOHTK0tW",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.lpZ143kGcOHTK0tW"
+    },
+    {
+      "name": "Poison Homebrew",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>House rule.</strong> RAW poison kills on a bad matrix row (the \"D\" cell); in practice, that turns every contact-poison encounter into a one-hit save-or-die. This system replaces the matrix with a damage roll modulated by a Constitution save.</p><p><strong>The save.</strong> Roll <code>1d20 + CN modifier</code> vs. the poison's difficulty (the intensity number the poison source provides).</p><p><strong>Outcome.</strong> Damage is <strong>N d6</strong> where N is pulled from the intensity band: intensity ≤ 6 = 1d6, 7–11 = 2d6, 12–15 = 3d6, 16+ = 4d6. On a <strong>success</strong> the victim takes <strong>half</strong> of the rolled damage (rounded down). On a <strong>failure</strong> the victim takes <strong>full</strong> damage. There is no \"save or die\" cell.</p><p><strong>Mutation alternate effects.</strong></p><p><strong>Heightened Constitution</strong> grants <strong>+3</strong> to poison saves.</p><p><strong>Bacterial Symbiosis</strong> grants <strong>+3</strong> to poison saves (in addition to radiation).</p><p><strong>No Resistance to Poison</strong> (defect) removes the character's CN modifier entirely on poison saves — the roll is a flat <code>1d20</code> vs. difficulty.</p><p><strong>Robots &amp; chassis immunity.</strong> Robot chassis still auto-succeed (no damage). Armor and chassis poison-immunity traits short-circuit the roll entirely.</p>"
+      },
+      "_id": "NsRpW2GE14WVR7TI",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.NsRpW2GE14WVR7TI"
+    },
+    {
+      "name": "Skills & Proficiencies",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>House rule.</strong> Every PC gets a 25-skill sheet split across six groups (Field, Tech, Combat, Lore, Social, Medical). Each skill is tied to an ability (PS, DX, CN, IN, CH, or MS); the ability can be remapped per-character on the Skills tab if a mutation or unusual build justifies it.</p><p>Players may mark up to <strong>three</strong> skills as <em>proficient</em>. The skill roll is <code>1d20 + ability modifier</code>, and proficient rolls add a flat <strong>+2</strong> on top. There is no scaling by level, no expertise, and no advantage/disadvantage — the cap stays at three forever.</p><p>Ability modifiers use the same 6–15 neutral band as DX-to-hit, PS-damage, and PS-melee-to-hit. A PS 8 character gets +0 on Climbing/Traversal; a PS 18 character gets +3; a PS 4 character gets −2.</p><p>The Skills tab on the character sheet lists every skill as a compact row: name · ability (selectable) · total modifier · proficient toggle · Roll button. The header shows <code>N/3</code> so the proficient cap is always visible. Ticking a fourth proficient skill is blocked with a warning.</p><p>Skill checks exist as a narrative resolution tool. They do not route through the combat pipeline, do not trigger saves, and do not fire Phase 2b hooks. The result is the total on the chat card and nothing else — the GM decides what happens next.</p><p><em>Design goal: \"you are slightly better at not dying stupidly.\"</em></p>"
+      },
+      "_id": "pz4NAqgKnbdweZIh",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.pz4NAqgKnbdweZIh"
+    },
+    {
+      "name": "Field Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Survival (CN)</strong> — living off hostile terrain: finding food and water, reading weather, building shelter, enduring exposure.</p><p><strong>Tracking (IN)</strong> — following trails, identifying creatures from spoor, and knowing when a trail's gone cold.</p><p><strong>Navigation (IN)</strong> — finding a destination in the wastes without landmarks. Overland pathfinding and starmap reading.</p><p><strong>Stealth (DX)</strong> — moving unseen and unheard in hostile territory. Also pickpocketing and hand-tricks.</p><p><strong>Climbing / Traversal (PS)</strong> — ropes, chimneys, sheer walls, ruined stairwells, swimming in rough water, squeezing through tight passages.</p>"
+      },
+      "_id": "WHFeuyBhka64U39p",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.WHFeuyBhka64U39p"
+    },
+    {
+      "name": "Tech Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Ancient Tech (IN)</strong> — identifying, activating, or safely handling unfamiliar pre-Fall gadgets. Paired with the artifact-session roll when an artifact's operation is still unknown.</p><p><strong>Computers (IN)</strong> — coaxing answers from pre-Fall terminals, data cores, and holo-archives.</p><p><strong>Jury-Rigging (IN)</strong> — stitching together emergency repairs from salvage. Getting one more use out of a broken device, or bolting two half-working ones into something useful.</p><p><strong>Salvage (IN)</strong> — knowing what's valuable in a rubble pile, which components are worth pulling, and how to extract them without triggering a failsafe.</p><p><strong>Robotics (IN)</strong> — diagnosing, commanding, and working around robotic units. Also recognizing robot types before they recognize you.</p>"
+      },
+      "_id": "aLdNA05MgBRLVt9N",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.aLdNA05MgBRLVt9N"
+    },
+    {
+      "name": "Combat Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Ballistics (DX)</strong> — threading difficult ranged shots: curves, bank shots, leading a moving target, called shots. Does not replace the attack roll; it informs narrative situations around it.</p><p><strong>Melee Technique (PS)</strong> — non-damage melee moves: disarms, trips, shoves, grapples, and fighting defensively to reach a wounded ally.</p><p><strong>Tactics (IN)</strong> — reading enemy formations, spotting ambush terrain, improvising a plan under pressure.</p><p><strong>Threat Assessment (MS)</strong> — sizing up a hostile encounter before swords come out. Guessing hit dice, cryptic alliances, mutational warning signs.</p>"
+      },
+      "_id": "pXJztJYnu09fZVTU",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.pXJztJYnu09fZVTU"
+    },
+    {
+      "name": "Lore Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Abnormal Biology (IN)</strong> — recognizing mutant creatures by their anatomy, guessing what a new mutation might do, and knowing where to cut on a creature nobody's cataloged.</p><p><strong>Radiation Lore (IN)</strong> — identifying radiation sources, reading hot zones from context, and knowing the long-term effects of various intensities.</p><p><strong>Toxicology (IN)</strong> — identifying poisons, antidotes, contact hazards, and the intensity of a gas cloud from its color and smell.</p><p><strong>Pre-Fall Lore (IN)</strong> — history, geography, and culture of the Ancient civilization; interpreting ruins, dates, and names.</p><p><strong>Faction Lore (IN)</strong> — cryptic alliances, their ranks and watchwords, their grudges, their public faces and private aims.</p>"
+      },
+      "_id": "rHcD5DM9uBi0ft3R",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.rHcD5DM9uBi0ft3R"
+    },
+    {
+      "name": "Social Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Barter (CH)</strong> — haggling, appraising, and not getting ripped off in a domar-economy where nobody agrees what a gun is worth.</p><p><strong>Intimidation (CH)</strong> — threats, displays of force, posture. Works on scared creatures, cracks on brave ones, angers alliances.</p><p><strong>Diplomacy (CH)</strong> — finding common ground with strangers, defusing tension, making requests that don't end in violence.</p><p><strong>Deception (CH)</strong> — lying convincingly, bluffing, disguising intent or identity.</p>"
+      },
+      "_id": "A4gK31u0jJYTFKxl",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.A4gK31u0jJYTFKxl"
+    },
+    {
+      "name": "Medical Skills",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. —</em></p><p><strong>Field Medicine (IN)</strong> — first aid, bleeding control, setting breaks, stabilizing at 0 HP. Works with or without an Ancient medi-kit; the skill determines how effective the care is.</p><p><strong>Biotech Handling (IN)</strong> — safely operating anti-radiation serum, cur-in doses, stim doses, rejuv chambers, and unknown biotech. Reduces the chance of a bad interaction when the patient's biology is novel.</p>"
+      },
+      "_id": "qTlBX7Uzjaa5Rzth",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!1iR9cm89stiRWEcD.qTlBX7Uzjaa5Rzth"
+    }
+  ],
+  "_id": "1iR9cm89stiRWEcD",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!1iR9cm89stiRWEcD"
+}

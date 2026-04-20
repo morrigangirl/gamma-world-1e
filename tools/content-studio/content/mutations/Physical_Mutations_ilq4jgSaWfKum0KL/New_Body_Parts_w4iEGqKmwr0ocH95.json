@@ -1,0 +1,58 @@
+{
+  "name": "New Body Parts",
+  "type": "mutation",
+  "system": {
+    "code": 27,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Add one or more body parts.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant gains one or more anatomical features not normally found on its kind. Possible examples include a third eye in the back of the head, radiation-sensitive feelers, light-sensitive antennae, pincers, a fur coat, feathers, a radiation-absorbing organ, and similar additions.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/new-body-parts.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "w4iEGqKmwr0ocH95",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!w4iEGqKmwr0ocH95"
+}

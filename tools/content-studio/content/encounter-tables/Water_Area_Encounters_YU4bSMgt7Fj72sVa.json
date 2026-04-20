@@ -1,0 +1,470 @@
+{
+  "name": "Water Area Encounters",
+  "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+  "flags": {
+    "gamma-world-1e": {
+      "encounterSeed": true,
+      "encounterSeedVersion": 2
+    }
+  },
+  "description": "<p>Random encounter table for water terrain in Gamma World 1e.</p><p>Roll 1d20 or use the table's built-in draw command.</p>",
+  "formula": "1d20",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Crep Plant",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Crep Plant.</p>",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "vTYdRNxdjyBb9F0b",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.vTYdRNxdjyBb9F0b"
+    },
+    {
+      "type": "text",
+      "name": "Seroon Lou",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 3-18.</p><p>Typical references: Seroon Lou.</p>",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "aBuW8PFbrJSm122Y",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.aBuW8PFbrJSm122Y"
+    },
+    {
+      "type": "text",
+      "name": "Ber Lep",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-8.</p><p>Typical references: Ber Lep.</p>",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "viXCjZD0B2vsxGWu",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.viXCjZD0B2vsxGWu"
+    },
+    {
+      "type": "text",
+      "name": "Win Seen",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 2-7.</p><p>Typical references: Win Seen.</p>",
+      "weight": 1,
+      "range": [
+        4,
+        4
+      ],
+      "drawn": false,
+      "_id": "zLCAXQNZ3lEML5gv",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.zLCAXQNZ3lEML5gv"
+    },
+    {
+      "type": "text",
+      "name": "Narl Ep",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Narl Ep.</p>",
+      "weight": 1,
+      "range": [
+        5,
+        5
+      ],
+      "drawn": false,
+      "_id": "ieMoltVxwOz8TWgd",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.ieMoltVxwOz8TWgd"
+    },
+    {
+      "type": "text",
+      "name": "Terl",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Terl.</p>",
+      "weight": 1,
+      "range": [
+        6,
+        6
+      ],
+      "drawn": false,
+      "_id": "2dLimCkIvLHGz4Di",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.2dLimCkIvLHGz4Di"
+    },
+    {
+      "type": "text",
+      "name": "Menarl",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Menarl.</p>",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "UJKLiZhTrprwbaS6",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.UJKLiZhTrprwbaS6"
+    },
+    {
+      "type": "text",
+      "name": "Fleshin",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Fleshin.</p>",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "27i6xUXxBF6c41Mt",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.27i6xUXxBF6c41Mt"
+    },
+    {
+      "type": "text",
+      "name": "Cren Tosh",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Cren Tosh.</p>",
+      "weight": 1,
+      "range": [
+        9,
+        9
+      ],
+      "drawn": false,
+      "_id": "XfwMGcEOoZxJtSp1",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.XfwMGcEOoZxJtSp1"
+    },
+    {
+      "type": "text",
+      "name": "Barl Nep",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Barl Nep.</p>",
+      "weight": 1,
+      "range": [
+        10,
+        10
+      ],
+      "drawn": false,
+      "_id": "JumxFtWvEUmCDyng",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.JumxFtWvEUmCDyng"
+    },
+    {
+      "type": "text",
+      "name": "Ert Telden",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-6.</p><p>Typical references: Ert Telden.</p>",
+      "weight": 1,
+      "range": [
+        11,
+        11
+      ],
+      "drawn": false,
+      "_id": "WYm6nnZtrAELsgut",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.WYm6nnZtrAELsgut"
+    },
+    {
+      "type": "text",
+      "name": "Fen",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Fen.</p>",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "vXhBbYVU7ZX0Mg3M",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.vXhBbYVU7ZX0Mg3M"
+    },
+    {
+      "type": "text",
+      "name": "Keeshin",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Keeshin.</p>",
+      "weight": 1,
+      "range": [
+        13,
+        13
+      ],
+      "drawn": false,
+      "_id": "FeaU9uq0a1da8TYu",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.FeaU9uq0a1da8TYu"
+    },
+    {
+      "type": "text",
+      "name": "Herkel",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Herkel.</p>",
+      "weight": 1,
+      "range": [
+        14,
+        14
+      ],
+      "drawn": false,
+      "_id": "YvV72hz4pwL7nTut",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.YvV72hz4pwL7nTut"
+    },
+    {
+      "type": "text",
+      "name": "Ert",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Ert.</p>",
+      "weight": 1,
+      "range": [
+        15,
+        15
+      ],
+      "drawn": false,
+      "_id": "bjhDyyQ2sbWJBmSL",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.bjhDyyQ2sbWJBmSL"
+    },
+    {
+      "type": "text",
+      "name": "Android",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-6 per subtype.</p><p>Random subtype: thinker, worker, or warrior.</p><p>Typical references: Android Thinker, Android Worker, Android Warrior.</p>",
+      "weight": 1,
+      "range": [
+        16,
+        16
+      ],
+      "drawn": false,
+      "_id": "Rlpmt91BCI1MxbLL",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.Rlpmt91BCI1MxbLL"
+    },
+    {
+      "type": "text",
+      "name": "Badder",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 3-18.</p><p>Typical references: Badder.</p>",
+      "weight": 1,
+      "range": [
+        17,
+        17
+      ],
+      "drawn": false,
+      "_id": "T4cROGNLhUENznai",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.T4cROGNLhUENznai"
+    },
+    {
+      "type": "text",
+      "name": "Robotic Unit",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: Per referee / installation.</p><p>Choose the appropriate robot model for the site or patrol.</p><p>Typical references: Security Robotoid.</p>",
+      "weight": 1,
+      "range": [
+        18,
+        18
+      ],
+      "drawn": false,
+      "_id": "gFes7VfiCLoItFYv",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.gFes7VfiCLoItFYv"
+    },
+    {
+      "type": "text",
+      "name": "Tribesmen",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: 1-100 (2d10) PSH or humanoids.</p><p>Use Pure Strain Human or humanoid wanderers from the current region.</p><p>Typical references: Pure Strain Human Scavenger, Humanoid Raider.</p>",
+      "weight": 1,
+      "range": [
+        19,
+        19
+      ],
+      "drawn": false,
+      "_id": "WtJuVDu9mq0kB00J",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.WtJuVDu9mq0kB00J"
+    },
+    {
+      "type": "text",
+      "name": "Cryptic Alliance",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/water.svg",
+      "description": "<p>Numbers: Per referee's map.</p><p>Use the cryptic alliance already established for the region.</p>",
+      "weight": 1,
+      "range": [
+        20,
+        20
+      ],
+      "drawn": false,
+      "_id": "HByTuRFa7L3mmonb",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!YU4bSMgt7Fj72sVa.HByTuRFa7L3mmonb"
+    }
+  ],
+  "_id": "YU4bSMgt7Fj72sVa",
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!YU4bSMgt7Fj72sVa"
+}

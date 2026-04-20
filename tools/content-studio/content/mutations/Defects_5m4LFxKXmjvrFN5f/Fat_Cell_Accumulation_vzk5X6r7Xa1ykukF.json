@@ -1,0 +1,98 @@
+{
+  "name": "Fat Cell Accumulation",
+  "type": "mutation",
+  "system": {
+    "code": 8,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Impaired movement and fighting ability.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant is fat, usually reaching twice normal size. The referee determines how badly this hinders movement and fighting ability. In some cases only particular body parts, such as the head, one arm, or one thigh, are enlarged instead of the whole body.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Fat Cell Accumulation — stat adjustments",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.movementMultiplier",
+          "mode": 1,
+          "value": "0.75",
+          "priority": 20
+        },
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "dtpp9PNokEi1u4im",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!vzk5X6r7Xa1ykukF.dtpp9PNokEi1u4im"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/fat-cell-accumulation.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "vzk5X6r7Xa1ykukF",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!vzk5X6r7Xa1ykukF"
+}

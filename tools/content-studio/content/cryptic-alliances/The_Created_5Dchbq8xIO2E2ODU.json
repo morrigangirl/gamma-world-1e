@@ -1,0 +1,55 @@
+{
+  "name": "The Created",
+  "pages": [
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Purpose:</strong> Secret alliance of sentient robots and androids planning humanity's replacement.</p><p><strong>Welcomes:</strong> robot.</p><p><strong>Allies:</strong> —.</p><p><strong>Enemies:</strong> Ranks of the Fit.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+      },
+      "_id": "x7CgFj1ajGOZPej0",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!5Dchbq8xIO2E2ODU.x7CgFj1ajGOZPej0"
+    }
+  ],
+  "_id": "5Dchbq8xIO2E2ODU",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!5Dchbq8xIO2E2ODU"
+}

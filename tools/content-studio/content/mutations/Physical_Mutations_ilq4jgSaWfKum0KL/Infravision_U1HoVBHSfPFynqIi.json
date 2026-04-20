@@ -1,0 +1,92 @@
+{
+  "name": "Infravision",
+  "type": "mutation",
+  "system": {
+    "code": 24,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "See heat; blinded by extreme/close heat, daylight painful.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can see any heat-producing body. At night, that makes the world appear as bright as day. Sudden flashes of heat, such as lasers, explosions, large fires, or even a nearby torch, temporarily blind the mutant. Prolonged exposure to full daylight is also painful.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Infravision — surprise modifier",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.surpriseModifier",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "xy9I4VuWp8YIrc5Y",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!U1HoVBHSfPFynqIi.xy9I4VuWp8YIrc5Y"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/infravision.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "U1HoVBHSfPFynqIi",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!U1HoVBHSfPFynqIi"
+}

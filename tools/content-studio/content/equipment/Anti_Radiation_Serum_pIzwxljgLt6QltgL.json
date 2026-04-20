@@ -1,0 +1,78 @@
+{
+  "name": "Anti-Radiation Serum",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "v",
+    "action": {
+      "mode": "guided",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Restores hit points lost to recent radiation exposure."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Restores hit points lost to recent radiation exposure.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "medical",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "chemical",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {
+        "current": 1,
+        "max": 1
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "medical",
+    "actionTypes": {}
+  },
+  "_id": "pIzwxljgLt6QltgL",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!pIzwxljgLt6QltgL"
+}

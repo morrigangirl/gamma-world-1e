@@ -1,0 +1,38 @@
+{
+  "name": "@gamma-world-1e/content-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Editable compendium source files + web UI for the Gamma World 1e FoundryVTT system. Parallel pipeline to scripts/build-compendia.mjs; the legacy scripts are frozen.",
+  "type": "module",
+  "scripts": {
+    "studio": "concurrently -k -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "tsx watch server/index.ts",
+    "dev:web": "vite",
+    "extract": "node scripts/extract.mjs",
+    "build": "node scripts/build.mjs",
+    "seal": "node scripts/seal.mjs",
+    "validate": "node scripts/validate.mjs",
+    "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit"
+  },
+  "devDependencies": {
+    "@codemirror/lang-json": "^6.0.1",
+    "@tiptap/extension-link": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^20.12.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@uiw/react-codemirror": "^4.23.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "express": "^4.21.1",
+    "multer": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "name": "Partial Carapace",
+  "type": "mutation",
+  "system": {
+    "code": 32,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Base AC6, reduce damage to back and head by half.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>A thick shell covers the mutant&#39;s back and head. Strikes landing there do only half damage. The mutation also gives the mutant a basic armor class of 6.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Partial Carapace — AC cap",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.baseAc",
+          "mode": 3,
+          "value": "6",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "n5OcdsJqpJcwlJxD",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!OFqe2JNCIv49jMqU.n5OcdsJqpJcwlJxD"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/partial-carapace.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "OFqe2JNCIv49jMqU",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!OFqe2JNCIv49jMqU"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Gas Generation: Musk",
+  "type": "mutation",
+  "system": {
+    "code": 9,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Expel gas up to 10 meters.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 m",
+    "duration": "Variable",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Use to repel or attract creatures with an overpowering musk."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant has a gas or musk gland similar to a skunk&#39;s. It may expel the secretion at targets within 10 meters. The discharge can repel, render unconscious, or kill, depending on its nature. Possible forms include obscuring gas, irritating gas, paralysis gas, poison gas, poison musk, blinding musk, and similar effects.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/gas-generation-musk.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "54zR8xijdI4P6HrV",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!54zR8xijdI4P6HrV"
+}

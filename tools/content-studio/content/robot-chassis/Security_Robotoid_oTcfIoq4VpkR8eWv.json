@@ -1,0 +1,55 @@
+{
+  "name": "Security Robotoid",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 4. <strong>Hit Points:</strong> 55.</p><p><strong>Armament:</strong> Laser pistol (3d6, 30/60/120m).</p><p><strong>Sensors:</strong> Vision, IR, sonar, radar.</p><p><strong>Controls:</strong> Command circuit + autopilot.</p><p>Guards facility entrances; challenges intruders with voice prompts before engaging.</p>"
+      },
+      "_id": "ZiMc9AVYY69jfPCW",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!oTcfIoq4VpkR8eWv.ZiMc9AVYY69jfPCW"
+    }
+  ],
+  "_id": "oTcfIoq4VpkR8eWv",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!oTcfIoq4VpkR8eWv"
+}

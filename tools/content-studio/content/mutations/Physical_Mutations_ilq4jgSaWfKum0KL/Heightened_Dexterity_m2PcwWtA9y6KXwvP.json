@@ -1,0 +1,92 @@
+{
+  "name": "Heightened Dexterity",
+  "type": "mutation",
+  "system": {
+    "code": 13,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "+4AC when unencumbered.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant is so agile in combat that its armor class becomes 4. The referee may worsen that armor class when the mutant is heavily encumbered.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Dexterity — unencumbered AC cap",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.baseAc",
+          "mode": 3,
+          "value": "4",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "unencumbered",
+          "computed": false
+        }
+      },
+      "_id": "1c1Dioy8WJY73P3x",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!m2PcwWtA9y6KXwvP.1c1Dioy8WJY73P3x"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-dexterity.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "m2PcwWtA9y6KXwvP",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!m2PcwWtA9y6KXwvP"
+}

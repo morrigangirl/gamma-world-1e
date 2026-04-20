@@ -1,0 +1,58 @@
+{
+  "name": "Heightened Balance",
+  "type": "mutation",
+  "system": {
+    "code": 11,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Maintain balance in difficult circumstances.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant keeps its footing in situations where others would fall. It does not tumble into pits, trip over ropes or wires, or land anywhere but on its feet. If undisturbed, it can climb sheer walls and cross tightropes with no chance of falling.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-balance.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "Gt7OZp7BSouDxKZC",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!Gt7OZp7BSouDxKZC"
+}

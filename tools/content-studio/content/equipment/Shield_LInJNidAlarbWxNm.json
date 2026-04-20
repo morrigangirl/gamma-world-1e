@@ -1,0 +1,69 @@
+{
+  "name": "Shield",
+  "type": "armor",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "acValue": 10,
+    "armorType": "shield",
+    "dxPenalty": 0,
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Primitive shield. Each equipped shield improves armor class by 1.</p>"
+    },
+    "field": {
+      "mode": "none"
+    },
+    "mobility": {},
+    "offense": {},
+    "protection": {
+      "blackRayImmune": false,
+      "radiationImmune": false,
+      "poisonImmune": false,
+      "laserImmune": false,
+      "mentalImmune": false
+    },
+    "traits": {
+      "grantsResistance": [],
+      "grantsImmunity": [],
+      "grantsVulnerability": []
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "LInJNidAlarbWxNm",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!LInJNidAlarbWxNm"
+}

@@ -1,0 +1,98 @@
+{
+  "name": "Heightened Hearing",
+  "type": "mutation",
+  "system": {
+    "code": 14,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Cannot be surprised.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can hear and identify even the faintest sound out to 60 meters. Because of this, it cannot be surprised.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Hearing — surprise bonuses",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.cannotBeSurprised",
+          "mode": 5,
+          "value": "true",
+          "priority": 20
+        },
+        {
+          "key": "gw.surpriseModifier",
+          "mode": 2,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "V9fnihuRCmNecdau",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!dYgTJb9GDSdEXBHR.V9fnihuRCmNecdau"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-hearing.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "dYgTJb9GDSdEXBHR",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!dYgTJb9GDSdEXBHR"
+}

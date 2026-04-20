@@ -1,0 +1,55 @@
+{
+  "name": "Gamma World 1e Quick Start",
+  "pages": [
+    {
+      "name": "Quick Start",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Create or import a character actor, then use the Main tab to roll saving throws, make natural attacks, and review derived defenses.</p><p>Use the Inventory tab for equipped armor and weapons. Weapon attacks post matrix-driven chat cards. On a hit, follow the chat card into damage or the weapon's special effect.</p><p>Use the Mutations tab to activate toggles, spend limited powers, and reset per-day or per-week uses between adventures.</p>"
+      },
+      "_id": "H4F85IlGrFNsFZnH",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!JhevvN4OzSrJ9KqK.H4F85IlGrFNsFZnH"
+    }
+  ],
+  "_id": "JhevvN4OzSrJ9KqK",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!JhevvN4OzSrJ9KqK"
+}

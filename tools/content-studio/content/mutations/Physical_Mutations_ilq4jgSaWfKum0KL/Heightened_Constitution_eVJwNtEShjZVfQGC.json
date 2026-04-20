@@ -1,0 +1,104 @@
+{
+  "name": "Heightened Constitution",
+  "type": "mutation",
+  "system": {
+    "code": 12,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "+2HP per Constitution. Under the 0.8.2 homebrew saves: +3 to poison and radiation saves, and radiation severity is capped at \"severe\" (never Catastrophic Exposure from a single exposure).",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This mutation grants 2 additional hit points for every point of Constitution. It also gives the mutant an 18 resistance to poison and adds 3 points to radiation resistance.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Constitution — CN bonuses",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.poisonResistance",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "gw.radiationResistance",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "gw.hpBonus",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": true
+        }
+      },
+      "_id": "ooY8ugMStk9zLGTT",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!eVJwNtEShjZVfQGC.ooY8ugMStk9zLGTT"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-constitution.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "eVJwNtEShjZVfQGC",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!eVJwNtEShjZVfQGC"
+}

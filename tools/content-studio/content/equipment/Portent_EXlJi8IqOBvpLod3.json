@@ -1,0 +1,81 @@
+{
+  "name": "Portent",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "v",
+    "action": {
+      "mode": "portent",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Backpack shield for up to four beings; absorbs 5 points before burning out."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Backpack-sized four-person energy shield powered by two solar cells.</p><p>The shield keeps out the elements and absorbs 5 damage before burning out; the cells hold about 24 hours of constant use and recharge in daylight.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "energyDevice",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "solar",
+      "power": {
+        "requirement": "cells",
+        "installedType": "solar",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "solar",
+        "cellSlots": 2,
+        "cellsInstalled": 2
+      },
+      "charges": {
+        "current": 24,
+        "max": 24
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "tool",
+    "actionTypes": {}
+  },
+  "_id": "EXlJi8IqOBvpLod3",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!EXlJi8IqOBvpLod3"
+}

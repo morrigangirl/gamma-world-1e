@@ -1,0 +1,61 @@
+{
+  "name": "Chameleon Powers",
+  "type": "mutation",
+  "system": {
+    "code": 3,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Change color to blend in.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "While active",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Blend into the environment; treat the mutant as invisible until revealed."
+    },
+    "actionTypes": [
+      "utility",
+      "buff"
+    ],
+    "description": {
+      "value": "<p>The mutant can shift body color almost instantly to match surrounding terrain or cover. Once the change is made, no continued concentration is needed. The referee decides how effective the camouflage is in a given situation.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/chameleon-powers.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "xmz3fLFwIMeikJ6i",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!xmz3fLFwIMeikJ6i"
+}

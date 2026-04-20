@@ -1,0 +1,94 @@
+{
+  "name": "Telekinetic Flight",
+  "type": "mutation",
+  "system": {
+    "code": 42,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Fly up to 20 meters per second, carry as much as usual.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "Always on",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Fly at up to 20 meters per second, carrying a normal load."
+    },
+    "actionTypes": [
+      "movement"
+    ],
+    "description": {
+      "value": "<p>The mutant can fly at any speed from 1 to 20 meters per second while carrying no more than it could normally carry.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Telekinetic Flight — flight speed",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.flightSpeed",
+          "mode": 4,
+          "value": "20",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "M5669u4vk7YDCEH1",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!6v8iEMhwyWnFDycZ.M5669u4vk7YDCEH1"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/telekinetic-flight.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "6v8iEMhwyWnFDycZ",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!6v8iEMhwyWnFDycZ"
+}

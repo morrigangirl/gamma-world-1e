@@ -1,0 +1,92 @@
+{
+  "name": "Mental Defense Shield",
+  "type": "mutation",
+  "system": {
+    "code": 28,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Sense beings with mental powers in 30m; +4 to mental resistance (max 18).",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant gains 4 points of mental resistance, to a maximum of 18. It also automatically senses the presence of any being with mental powers within 30 meters, whether those powers are currently in use or not.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Mental Defense Shield — mental resistance",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.mentalResistance",
+          "mode": 2,
+          "value": "4",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "BOUzm2xPnOVsN4GF",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!6CprSuY01rTt22HA.BOUzm2xPnOVsN4GF"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/mental-defense-shield.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "6CprSuY01rTt22HA",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!6CprSuY01rTt22HA"
+}

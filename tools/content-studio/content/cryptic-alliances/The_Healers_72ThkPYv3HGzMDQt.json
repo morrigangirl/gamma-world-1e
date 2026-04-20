@@ -1,0 +1,55 @@
+{
+  "name": "The Healers",
+  "pages": [
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Purpose:</strong> Treat the wounded and dispossessed of the wastes without preference.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant, robot.</p><p><strong>Allies:</strong> Brotherhood of Thought.</p><p><strong>Enemies:</strong> —.</p><p><strong>Default reaction bonus to recognised kin:</strong> +1.</p>"
+      },
+      "_id": "s90tJHBfPzlGV38p",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!72ThkPYv3HGzMDQt.s90tJHBfPzlGV38p"
+    }
+  ],
+  "_id": "72ThkPYv3HGzMDQt",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!72ThkPYv3HGzMDQt"
+}

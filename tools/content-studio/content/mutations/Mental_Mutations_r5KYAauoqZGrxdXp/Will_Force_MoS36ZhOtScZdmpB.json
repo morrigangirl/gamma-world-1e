@@ -1,0 +1,319 @@
+{
+  "name": "Will Force",
+  "type": "mutation",
+  "system": {
+    "code": 49,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Double any ability score or +1 to hit for d10 turns every 24 hours.",
+    "reference": {
+      "table": "mental",
+      "page": 14,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "1d10 rounds",
+    "usage": {
+      "limited": true,
+      "per": "day",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "1d10",
+      "saveType": "",
+      "notes": "Choose one ability to double or gain +1 to hit while active."
+    },
+    "actionTypes": [
+      "buff"
+    ],
+    "description": {
+      "value": "<p>By sheer determination, the mutant can double any one of its abilities. It may also be used to grant a +1 bonus on attack rolls instead. This power can be combined with any other mutation. It lasts 1-10 melee turns and may be used only once every 24 hours.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Will Force — to-hit variant",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "to-hit"
+              }
+            ]
+          },
+          "computed": false
+        }
+      },
+      "_id": "sIHq5lJSBGH4j2sW",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.sIHq5lJSBGH4j2sW"
+    },
+    {
+      "name": "Will Force — dx variant (doubled DX to-hit)",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "dx"
+              }
+            ]
+          },
+          "computed": true
+        }
+      },
+      "_id": "CXLEIX6EFLbimWxK",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.CXLEIX6EFLbimWxK"
+    },
+    {
+      "name": "Will Force — ps variant (doubled PS damage)",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.damageFlat",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "ps"
+              }
+            ]
+          },
+          "computed": true
+        }
+      },
+      "_id": "63UiMp95rOOEBPyW",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.63UiMp95rOOEBPyW"
+    },
+    {
+      "name": "Will Force — ms variant (doubled MS mental resistance)",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.mentalResistance",
+          "mode": 4,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "ms"
+              }
+            ]
+          },
+          "computed": true
+        }
+      },
+      "_id": "nqG7BZYZFYEwVYUk",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.nqG7BZYZFYEwVYUk"
+    },
+    {
+      "name": "Will Force — ch variant (doubled CH charisma)",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.charismaBonus",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "ch"
+              }
+            ]
+          },
+          "computed": true
+        }
+      },
+      "_id": "ecO5eiSZwH01i9UM",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.ecO5eiSZwH01i9UM"
+    },
+    {
+      "name": "Will Force — cn variant (doubled CN radiation / poison)",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.radiationResistance",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        },
+        {
+          "key": "gw.poisonResistance",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": {
+            "all": [
+              {
+                "toggleEnabled": true
+              },
+              {
+                "variantIs": "cn"
+              }
+            ]
+          },
+          "computed": true
+        }
+      },
+      "_id": "IzJ6isJc3SGKummU",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!MoS36ZhOtScZdmpB.IzJ6isJc3SGKummU"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/will-force.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "MoS36ZhOtScZdmpB",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!MoS36ZhOtScZdmpB"
+}

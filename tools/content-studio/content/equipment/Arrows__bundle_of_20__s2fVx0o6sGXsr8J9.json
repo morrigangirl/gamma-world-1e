@@ -1,0 +1,57 @@
+{
+  "name": "Arrows (bundle of 20)",
+  "type": "gear",
+  "img": "icons/weapons/ammunition/arrow-simple.webp",
+  "system": {
+    "quantity": 1,
+    "weight": 0.1,
+    "subtype": "ammunition",
+    "equipped": false,
+    "ammo": {
+      "type": "arrow",
+      "rounds": 20
+    },
+    "description": {
+      "value": "Flight arrows for a bow. Stackable bundle."
+    },
+    "action": {
+      "mode": "none"
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "s2fVx0o6sGXsr8J9",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!s2fVx0o6sGXsr8J9"
+}

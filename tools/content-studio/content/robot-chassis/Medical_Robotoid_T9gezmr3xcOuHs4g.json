@@ -1,0 +1,55 @@
+{
+  "name": "Medical Robotoid",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 7. <strong>Hit Points:</strong> 40.</p><p><strong>Armament:</strong> Stun field (mental save or paralysed 1d4 rounds).</p><p><strong>Sensors:</strong> Vision, IR, chem, bio.</p><p><strong>Controls:</strong> Voice + medical link.</p><p>Surgery, triage, pharmacology. Carries a medi-kit, two stim doses, and cur-in dose.</p>"
+      },
+      "_id": "p2Z38q2QDxppqIw4",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!T9gezmr3xcOuHs4g.p2Z38q2QDxppqIw4"
+    }
+  ],
+  "_id": "T9gezmr3xcOuHs4g",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!T9gezmr3xcOuHs4g"
+}

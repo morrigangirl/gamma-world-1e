@@ -1,0 +1,92 @@
+{
+  "name": "Multiple Damage",
+  "type": "mutation",
+  "system": {
+    "code": 31,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Take double (or triple per referree) damage.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>Any damage suffered by the mutant is doubled or even tripled, at the referee&#39;s option. This happens because the mutant believes the harm is worse than it actually is.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Multiple Damage — double damage taken",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.damageTakenMultiplier",
+          "mode": 1,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "dzo7ccQkPvd7AAob",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!dGv7HITuT03Ixp5Q.dzo7ccQkPvd7AAob"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/multiple-damage.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "dGv7HITuT03Ixp5Q",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!dGv7HITuT03Ixp5Q"
+}

@@ -1,0 +1,424 @@
+{
+  "name": "Narl Ep",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/narl-ep.png",
+  "prototypeToken": {
+    "name": "Narl Ep",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/narl-ep.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "mutated-animal",
+      "animalForm": "Plant",
+      "level": 20,
+      "xp": 0,
+      "movement": 10,
+      "alliance": "",
+      "role": "vine-draped water tree",
+      "speech": "",
+      "creatureClass": "Aquatic Tree"
+    },
+    "attributes": {
+      "ms": {
+        "value": 4,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 3,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 5,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 3,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 18,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 120,
+        "value": 120,
+        "max": 120,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 4,
+      "radResistance": 18,
+      "poisonResistance": 18
+    },
+    "biography": {
+      "value": "<p>An enormous white water-tree whose squeeze vines guard its pale canopy.</p><p>Spring seed pods burst open with a destructive sonic blast.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Aquatic Trunk",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 3,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Massive white trunk and anchored root mass."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "xl4xbG9Vba4QCgbg",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZH8SsfcMGrM6upl7.xl4xbG9Vba4QCgbg"
+    },
+    {
+      "name": "Seed Pod Sonic Burst",
+      "type": "gear",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "none",
+        "action": {
+          "mode": "area-damage",
+          "damageFormula": "8d6",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 10,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "Cracked seed pods release 2d6 seeds and a sonic blast that affects all beings within 10 meters."
+        },
+        "description": {
+          "value": "<p>Cracked seed pods release 2d6 seeds and a sonic blast that affects all beings within 10 meters.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "misc",
+        "actionTypes": {}
+      },
+      "_id": "19upMs2Mzf0Bx3ut",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZH8SsfcMGrM6upl7.19upMs2Mzf0Bx3ut"
+    },
+    {
+      "name": "Squeeze Vines",
+      "type": "gear",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "none",
+        "action": {
+          "mode": "guided",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "The narl ep's 5 to 30 squeeze vines defend the tree from anything that approaches too closely."
+        },
+        "description": {
+          "value": "<p>The narl ep's 5 to 30 squeeze vines defend the tree from anything that approaches too closely.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "misc",
+        "actionTypes": {}
+      },
+      "_id": "OtMDNHwXpGamumPY",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZH8SsfcMGrM6upl7.OtMDNHwXpGamumPY"
+    }
+  ],
+  "_id": "ZH8SsfcMGrM6upl7",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!ZH8SsfcMGrM6upl7"
+}

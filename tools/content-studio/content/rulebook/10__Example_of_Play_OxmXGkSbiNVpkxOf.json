@@ -1,0 +1,55 @@
+{
+  "name": "10. Example of Play",
+  "pages": [
+    {
+      "name": "Running a Session",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 43-45</em></p><p>Start with a keyed situation (encounter, discovery, mission). Let the players choose an approach. Roll surprise and reaction as appropriate.</p><p>During combat, use the <em>Attack</em> actions on the character sheet. On hit, click <em>Roll Damage</em>. The referee applies damage via the <em>Apply Damage</em> button on the damage card.</p><p>Use the GM <em>Request Roll</em> toolbar button in chat to ask specific players (or all players) for a saving throw or attribute check.</p>"
+      },
+      "_id": "7S1HphOxOsnswApw",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!OxmXGkSbiNVpkxOf.7S1HphOxOsnswApw"
+    }
+  ],
+  "_id": "OxmXGkSbiNVpkxOf",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!OxmXGkSbiNVpkxOf"
+}

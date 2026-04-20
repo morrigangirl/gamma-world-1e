@@ -1,0 +1,79 @@
+{
+  "name": "Club",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/club.png",
+  "system": {
+    "weaponClass": 1,
+    "category": "primitive",
+    "ammoType": [],
+    "damage": {
+      "formula": "1d6",
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "attackType": "melee",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "damage",
+      "formula": "",
+      "status": "",
+      "notes": ""
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>A common cudgel or improvised striking weapon.</p><p>Damage against larger opponents: 1d3.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "HHY1zVsAuhwyIEr8",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!HHY1zVsAuhwyIEr8"
+}

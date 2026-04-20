@@ -1,0 +1,75 @@
+{
+  "name": "Rejuv Chamber",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "vi",
+    "action": {
+      "mode": "rejuv",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Restores a patient according to current hit-point state."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Hospital appliance that restores severely injured patients, but only safely once per month.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "medical",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "medical",
+    "actionTypes": {}
+  },
+  "_id": "TgOcVJHfS6Y5NfQE",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!TgOcVJHfS6Y5NfQE"
+}

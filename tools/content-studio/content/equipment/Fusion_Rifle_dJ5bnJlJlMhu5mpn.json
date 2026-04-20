@@ -1,0 +1,92 @@
+{
+  "name": "Fusion Rifle",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/fusion-rifle.png",
+  "system": {
+    "weaponClass": 16,
+    "category": "artifact",
+    "ammoType": [
+      "fusion-cell"
+    ],
+    "damage": {
+      "formula": "0",
+      "type": "energy"
+    },
+    "range": {
+      "short": 350,
+      "medium": 0,
+      "long": 700
+    },
+    "attackType": "energy",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "radiation",
+      "formula": "18",
+      "status": "",
+      "notes": "Radiation save (1d20 + CN mod) vs. intensity 18. Miss by 1–3 → Radiation Sickness (mild); 4–6 → Sickness (severe) + new mutation; 7+ → Catastrophic Exposure (onset next day, −10% max HP/hour until ancient treatment or death)."
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Projects twin beams of intensity-18 radiation. A direct hit without Heightened Constitution or Bacterial Symbiosis is virtually certain to produce Catastrophic Exposure.</p><p>Requires an atomic energy cell carried in a converter backpack linked by cable.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false,
+      "tag": "fusion",
+      "deflectAc2Hits": 1,
+      "deflectAc1Hits": 2
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "rifle",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "cells",
+        "installedType": "nuclear",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "nuclear",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 10,
+        "max": 10
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "dJ5bnJlJlMhu5mpn",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!dJ5bnJlJlMhu5mpn"
+}

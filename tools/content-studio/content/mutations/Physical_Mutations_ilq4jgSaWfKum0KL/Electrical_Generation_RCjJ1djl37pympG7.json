@@ -1,0 +1,61 @@
+{
+  "name": "Electrical Generation",
+  "type": "mutation",
+  "system": {
+    "code": 7,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Shock those you touch for 3d6.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Touch",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "3d6",
+      "saveType": "",
+      "notes": "Shocks creatures you touch."
+    },
+    "actionTypes": [
+      "attack",
+      "damage"
+    ],
+    "description": {
+      "value": "<p>The mutant can discharge electrical shocks, eel-like, once each melee turn. Anyone touching the mutant takes 3d6 damage.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/electrical-generation.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "RCjJ1djl37pympG7",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!RCjJ1djl37pympG7"
+}

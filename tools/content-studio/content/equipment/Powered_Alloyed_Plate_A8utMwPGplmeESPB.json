@@ -1,0 +1,74 @@
+{
+  "name": "Powered Alloyed Plate",
+  "type": "armor",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "acValue": 2,
+    "armorType": "heavy",
+    "dxPenalty": 0,
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Improved powered armor. Moves 30 meters per melee turn on one atomic energy cell for roughly 45 hours.</p>"
+    },
+    "field": {
+      "mode": "none"
+    },
+    "mobility": {},
+    "offense": {},
+    "protection": {
+      "blackRayImmune": false,
+      "radiationImmune": false,
+      "poisonImmune": false,
+      "laserImmune": false,
+      "mentalImmune": false
+    },
+    "traits": {
+      "grantsResistance": [],
+      "grantsImmunity": [],
+      "grantsVulnerability": []
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "armor",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "cells",
+        "installedType": "nuclear",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "nuclear",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "A8utMwPGplmeESPB",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!A8utMwPGplmeESPB"
+}

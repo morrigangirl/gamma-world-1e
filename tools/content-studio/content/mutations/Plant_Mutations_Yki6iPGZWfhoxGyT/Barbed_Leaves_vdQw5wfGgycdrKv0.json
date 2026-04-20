@@ -1,0 +1,58 @@
+{
+  "name": "Barbed Leaves",
+  "type": "mutation",
+  "system": {
+    "code": 55,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Anyone striking in melee suffers 1d3 puncture damage per attack.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>These tough leaves are edged with barbs as long as 2.5 centimeters. They normally attack the same way saw-edged leaves do. If the leaves are mounted on a movable plant part, such as a segmented limb, sucker vine, or manipulation vine, that part can attack, inflict damage, and hold or drag the victim with the barbs. Range is limited by the length of the plant part carrying them.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/barbed-leaves.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "vdQw5wfGgycdrKv0",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!vdQw5wfGgycdrKv0"
+}

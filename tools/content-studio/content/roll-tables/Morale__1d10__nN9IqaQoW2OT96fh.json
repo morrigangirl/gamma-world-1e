@@ -1,0 +1,91 @@
+{
+  "name": "Morale (1d10)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Roll when casualties mount or an obvious routing condition triggers.</p>",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Break",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The creature flees combat outright.",
+      "weight": 1,
+      "range": [
+        1,
+        3
+      ],
+      "drawn": false,
+      "_id": "nzMAsXYTuVszesSG",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!nN9IqaQoW2OT96fh.nzMAsXYTuVszesSG"
+    },
+    {
+      "type": "text",
+      "name": "Waver",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The creature hesitates; cannot take an offensive action this round.",
+      "weight": 1,
+      "range": [
+        4,
+        6
+      ],
+      "drawn": false,
+      "_id": "eVzA7NURieLycJfO",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!nN9IqaQoW2OT96fh.eVzA7NURieLycJfO"
+    },
+    {
+      "type": "text",
+      "name": "Hold",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The creature steadies itself and continues fighting.",
+      "weight": 1,
+      "range": [
+        7,
+        10
+      ],
+      "drawn": false,
+      "_id": "vGNnfdA0UZIc2qWN",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!nN9IqaQoW2OT96fh.vGNnfdA0UZIc2qWN"
+    }
+  ],
+  "_id": "nN9IqaQoW2OT96fh",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!nN9IqaQoW2OT96fh"
+}

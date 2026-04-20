@@ -1,0 +1,58 @@
+{
+  "name": "Precognition",
+  "type": "mutation",
+  "system": {
+    "code": 34,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Concentrate, see 3 min into future; take shock damage if you see injury.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "3 minutes",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "See three minutes into the future; may take shock damage from traumatic visions."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can foresee dangerous situations that will personally affect it, but only up to 3 minutes into the future and only with intense concentration. For example, the mutant may look ahead to see what would happen if it opened a certain door, then avoid that outcome by choosing differently. If the vision includes damage to the mutant&#39;s own body, the shock causes immediate damage of 1d6. If the mutant foresees its own death, it immediately takes 2d6 damage and falls unconscious for 3-18 minutes. The referee may limit uses per day, perhaps by rolling 1d4 or 1d6.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/precognition.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "p24dE9IOqc5mcSix",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!p24dE9IOqc5mcSix"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Regeneration",
+  "type": "mutation",
+  "system": {
+    "code": 38,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Regenerate 1HP per 5 kilograms of body weight per day.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant heals and regrows lost hit points at a rate of 1 hit point per day for every 5 kilograms of body weight.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/regeneration.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "tT1AGXjdFc5d7qnJ",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!tT1AGXjdFc5d7qnJ"
+}

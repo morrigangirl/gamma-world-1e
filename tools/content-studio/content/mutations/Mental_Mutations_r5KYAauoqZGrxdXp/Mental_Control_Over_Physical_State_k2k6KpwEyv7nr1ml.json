@@ -1,0 +1,106 @@
+{
+  "name": "Mental Control Over Physical State",
+  "type": "mutation",
+  "system": {
+    "code": 26,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Once per week, increase physical attributes, ignore physical harm, heal 4x.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "5d10 rounds in danger",
+    "usage": {
+      "limited": true,
+      "per": "week",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "5d10",
+      "saveType": "",
+      "notes": "Doubles strength, dexterity, and speed during overwhelming danger."
+    },
+    "actionTypes": [
+      "buff"
+    ],
+    "description": {
+      "value": "<p>The mutant can unconsciously override pain, fatigue, blood loss, and similar physical limits for up to 1 full day. It also heals wounds four times faster than normal. In moments of overwhelming danger, as decided by the referee, the mutant&#39;s Strength, Dexterity, and Speed all double for 5-50 melee turns. This mutation may only be used once per week.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Mental Control Over Physical State — activated bonuses",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.toHitBonus",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        },
+        {
+          "key": "gw.damageFlat",
+          "mode": 2,
+          "value": "0",
+          "priority": 20
+        },
+        {
+          "key": "gw.movementMultiplier",
+          "mode": 1,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "toggleEnabled",
+          "computed": true
+        }
+      },
+      "_id": "nILZZDzfEe5AuSLb",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!k2k6KpwEyv7nr1ml.nILZZDzfEe5AuSLb"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/mental-control-over-physical-state.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "k2k6KpwEyv7nr1ml",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!k2k6KpwEyv7nr1ml"
+}

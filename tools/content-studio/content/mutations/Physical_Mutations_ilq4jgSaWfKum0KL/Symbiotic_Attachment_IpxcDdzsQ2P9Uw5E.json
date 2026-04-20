@@ -1,0 +1,58 @@
+{
+  "name": "Symbiotic Attachment",
+  "type": "mutation",
+  "system": {
+    "code": 43,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "After a successful attack and 3 rounds of contact, control creature.",
+    "reference": {
+      "table": "physical",
+      "page": 11,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Melee",
+    "duration": "After 3 rounds of contact",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "After a successful attack and 3 rounds of attachment, control the victim."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can connect itself to another creature&#39;s nervous system. It must first hit the victim with a natural attacking appendage and then maintain contact for 3 melee turns. Once the link is complete, the mutant has total control of both bodies. If contact is broken, control ends. Restoring that control requires another uninterrupted 3 melee turns of contact.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/symbiotic-attachment.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "IpxcDdzsQ2P9Uw5E",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!IpxcDdzsQ2P9Uw5E"
+}

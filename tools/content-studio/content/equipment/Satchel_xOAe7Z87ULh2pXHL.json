@@ -1,0 +1,57 @@
+{
+  "name": "Satchel",
+  "type": "gear",
+  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "system": {
+    "quantity": 1,
+    "weight": 1,
+    "subtype": "container",
+    "equipped": false,
+    "container": {
+      "capacity": 25,
+      "stored": []
+    },
+    "description": {
+      "value": "A shoulder bag for light loads."
+    },
+    "action": {
+      "mode": "none"
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "xOAe7Z87ULh2pXHL",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!xOAe7Z87ULh2pXHL"
+}

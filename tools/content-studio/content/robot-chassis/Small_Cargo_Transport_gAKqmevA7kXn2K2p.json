@@ -1,0 +1,55 @@
+{
+  "name": "Small Cargo Transport",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> chemical.</p><p><strong>Armor Class:</strong> 7. <strong>Hit Points:</strong> 40.</p><p><strong>Armament:</strong> None.</p><p><strong>Sensors:</strong> Vision, radar.</p><p><strong>Controls:</strong> Driver seat + autopilot.</p><p>Wheeled autonomous vehicle. Typical payload ~1 tonne.</p>"
+      },
+      "_id": "GpHN9m1WP6PFWkij",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!gAKqmevA7kXn2K2p.GpHN9m1WP6PFWkij"
+    }
+  ],
+  "_id": "gAKqmevA7kXn2K2p",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!gAKqmevA7kXn2K2p"
+}

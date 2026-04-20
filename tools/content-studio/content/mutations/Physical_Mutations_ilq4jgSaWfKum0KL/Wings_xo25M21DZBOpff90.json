@@ -1,0 +1,94 @@
+{
+  "name": "Wings",
+  "type": "mutation",
+  "system": {
+    "code": 49,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Fly 12m per turn, carry no more than 25% body weight.",
+    "reference": {
+      "table": "physical",
+      "page": 11,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [
+      "movement"
+    ],
+    "description": {
+      "value": "<p>The mutant grows functional wings and can fly at 12 meters per melee turn. While airborne, it may carry no more than one-fourth of its own body weight. Mutants weighing more than 80 kilograms usually cannot truly fly, though they can still make wing-assisted leaps over walls, trees, and similar obstacles.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Wings — flight speed",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.flightSpeed",
+          "mode": 4,
+          "value": "120",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "0ebv9FiJkMMm4sJo",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!xo25M21DZBOpff90.0ebv9FiJkMMm4sJo"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/wings.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "xo25M21DZBOpff90",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!xo25M21DZBOpff90"
+}

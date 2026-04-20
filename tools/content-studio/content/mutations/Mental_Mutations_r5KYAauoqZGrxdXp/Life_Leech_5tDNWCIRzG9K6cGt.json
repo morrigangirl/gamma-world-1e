@@ -1,0 +1,62 @@
+{
+  "name": "Life Leech",
+  "type": "mutation",
+  "system": {
+    "code": 20,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 m radius +3 m per 4 MS",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "6",
+      "saveType": "",
+      "notes": "Drains 6 HP from each valid target and heals the mutant by the same amount."
+    },
+    "actionTypes": [
+      "attack",
+      "damage",
+      "heal"
+    ],
+    "description": {
+      "value": "<p>The mutant drains life energy from every semi-intelligent or intelligent being, friend or foe, within a 10 meter radius. Increase that radius by 3 meters for every 4 points of Mental Strength the mutant has. Each affected being loses 6 hit points per melee turn, and the mutant gains the same number of hit points. If the mutant later takes damage, subtract it from the leeched hit points first. Any leeched hit points still remaining after combat vanish 24 hours later.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/life-leech.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "5tDNWCIRzG9K6cGt",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!5tDNWCIRzG9K6cGt"
+}

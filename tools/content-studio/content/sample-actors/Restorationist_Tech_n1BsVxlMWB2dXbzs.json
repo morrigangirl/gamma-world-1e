@@ -1,0 +1,566 @@
+{
+  "name": "Restorationist Tech",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Restorationist Tech",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "psh",
+      "animalForm": "",
+      "level": 3,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "restorationists",
+      "role": "ancient tech restorer",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 11,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 7,
+      "naturalAttack": {
+        "name": "Wrench",
+        "damage": "1d4"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 26,
+        "value": 26,
+        "max": 26,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 7,
+      "mentalResistance": 13,
+      "radResistance": 11,
+      "poisonResistance": 11
+    },
+    "biography": {
+      "value": "<p>A pre-war engineering specialist sworn to rebuild humanity's civilization. Carries a kit of tools and a working slug-thrower.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "Ancient signage",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Slug Thrower",
+      "type": "weapon",
+      "img": "systems/gamma-world-1e/assets/weapons/slug-thrower.png",
+      "system": {
+        "weaponClass": 10,
+        "category": "modern",
+        "ammoType": [
+          "slug"
+        ],
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 20,
+          "medium": 0,
+          "long": 40
+        },
+        "attackType": "ranged",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": false,
+        "description": {
+          "value": "<p>Police riot-control sidearm firing stunning slugs.</p><p>Track unconsciousness when stun damage reaches half the target's original hit points.</p><p>Powered by a hydrogen energy cell good for about five clips.</p>"
+        },
+        "traits": {
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "NoYrv4U2RBm2gNF2",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!n1BsVxlMWB2dXbzs.NoYrv4U2RBm2gNF2"
+    },
+    {
+      "name": "Slug-Thrower Rounds (clip of 15)",
+      "type": "gear",
+      "img": "icons/weapons/ammunition/arrow-simple.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 0.1,
+        "subtype": "ammunition",
+        "equipped": false,
+        "ammo": {
+          "type": "slug",
+          "rounds": 15
+        },
+        "description": {
+          "value": "Pre-war .38 caliber rounds."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "sGjCDSQYteoHko2U",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!n1BsVxlMWB2dXbzs.sGjCDSQYteoHko2U"
+    },
+    {
+      "name": "Wrench",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Adjustable spanner for turning nuts and bolts on pre-war machinery.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "tool",
+        "actionTypes": {}
+      },
+      "_id": "1QhZXVIhRmLAQLe5",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!n1BsVxlMWB2dXbzs.1QhZXVIhRmLAQLe5"
+    },
+    {
+      "name": "Small Backpack",
+      "type": "gear",
+      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 2,
+        "subtype": "container",
+        "equipped": false,
+        "container": {
+          "capacity": 50,
+          "stored": []
+        },
+        "description": {
+          "value": "A traveller's pack with shoulder straps."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "Maq4IYPTEPQhEEGb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!n1BsVxlMWB2dXbzs.Maq4IYPTEPQhEEGb"
+    },
+    {
+      "name": "Chemical Energy Cell",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0,
+        "tech": "iv",
+        "action": {
+          "mode": "guided",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": "Rechargeable chemical power cell."
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Rechargeable chemical battery used by many Ancient devices.</p>"
+        },
+        "artifact": {
+          "isArtifact": true,
+          "category": "energyDevice",
+          "chart": "a",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "chemical",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {
+            "current": 1,
+            "max": 1
+          },
+          "functionChance": 40,
+          "harmCallback": ""
+        },
+        "subtype": "power-cell",
+        "actionTypes": {}
+      },
+      "_id": "cpHpWcfr6UW916aw",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!n1BsVxlMWB2dXbzs.cpHpWcfr6UW916aw"
+    }
+  ],
+  "_id": "n1BsVxlMWB2dXbzs",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!n1BsVxlMWB2dXbzs"
+}

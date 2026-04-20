@@ -1,0 +1,61 @@
+{
+  "name": "Electrical Generation",
+  "type": "mutation",
+  "system": {
+    "code": 64,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Discharge 3d6 electrical damage within 5m once per melee turn.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Touch",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "3d6",
+      "saveType": "",
+      "notes": "Shocks creatures you touch."
+    },
+    "actionTypes": [
+      "attack",
+      "damage"
+    ],
+    "description": {
+      "value": "<p>The plant can build up an electrical charge in its tissues and release it offensively or defensively, like an electric eel. The discharge may be delivered through special vines or by simple contact, and it inflicts as much as 4d6 damage. After a discharge, the plant recharges at a rate of 1 die of shocking power per melee turn. Most plants, 80% of them, do not release another shock until all 4 dice have recharged.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/electrical-generation.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "JBmnkdityA9yQz8A",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!JBmnkdityA9yQz8A"
+}

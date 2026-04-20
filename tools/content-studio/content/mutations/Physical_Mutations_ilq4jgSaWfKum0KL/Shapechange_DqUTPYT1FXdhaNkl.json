@@ -1,0 +1,60 @@
+{
+  "name": "Shapechange",
+  "type": "mutation",
+  "system": {
+    "code": 39,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "In 2 melee turns, mimic animal, but without abilities.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "While active",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Takes two rounds to assume a new shape."
+    },
+    "actionTypes": [
+      "utility"
+    ],
+    "description": {
+      "value": "<p>The mutant can alter its outward form to resemble a mammal, insect, or reptile, but gains none of the imitated creature&#39;s abilities. At the start of the campaign, the mutant must choose which of those three broad forms it can mimic. Completing the change takes 2 melee turns of relative inactivity, during which the mutant makes no attacks.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/shapechange.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "DqUTPYT1FXdhaNkl",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!DqUTPYT1FXdhaNkl"
+}

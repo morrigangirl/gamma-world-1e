@@ -1,0 +1,55 @@
+{
+  "name": "Automation Workflows",
+  "pages": [
+    {
+      "name": "Automation Workflows",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Chargen handles attribute assignment, hit points, mutation rolls, and mutation item creation for PSH, humanoids, and mutated animals.</p><p>Physical attacks use the original weapon matrix. Natural attacks use Matrix II. Mental attacks use the mental matrix and can feed directly into mutation or weapon follow-up effects.</p><p>Poison and radiation saves resolve against the original cross-reference tables and produce chat cards with buttons for damage, lethal results, and mutation fallout where appropriate.</p>"
+      },
+      "_id": "fqE6mDMWzOaDrVcs",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!vPg8sJMfIhZerLlb.fqE6mDMWzOaDrVcs"
+    }
+  ],
+  "_id": "vPg8sJMfIhZerLlb",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!vPg8sJMfIhZerLlb"
+}

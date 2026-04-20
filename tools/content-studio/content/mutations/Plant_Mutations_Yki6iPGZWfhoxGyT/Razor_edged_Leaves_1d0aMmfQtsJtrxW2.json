@@ -1,0 +1,58 @@
+{
+  "name": "Razor-edged Leaves",
+  "type": "mutation",
+  "system": {
+    "code": 78,
+    "subtype": "plant",
+    "category": "beneficial",
+    "summary": "Leaves inflict 1d6 slashing damage on contact or brushing pass.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>These are smaller, sharper versions of saw-edged leaves and usually cover the entire plant.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/razor-edged-leaves.png",
+  "folder": "Yki6iPGZWfhoxGyT",
+  "_id": "1d0aMmfQtsJtrxW2",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!1d0aMmfQtsJtrxW2"
+}

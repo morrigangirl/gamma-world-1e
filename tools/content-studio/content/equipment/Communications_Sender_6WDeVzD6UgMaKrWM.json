@@ -1,0 +1,81 @@
+{
+  "name": "Communications Sender",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "iv",
+    "action": {
+      "mode": "guided",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Short-range communications device."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Short-range two-way radio or TV unit with ranges up to 100 kilometers.</p><p>Designed to run from chemical or solar energy cells.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "energyDevice",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "chemical",
+      "power": {
+        "requirement": "cells",
+        "installedType": "chemical",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "chemical,solar",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 12,
+        "max": 12
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "misc",
+    "actionTypes": {}
+  },
+  "_id": "6WDeVzD6UgMaKrWM",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!6WDeVzD6UgMaKrWM"
+}

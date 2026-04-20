@@ -1,0 +1,470 @@
+{
+  "name": "Radioactive Zone Encounters",
+  "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+  "flags": {
+    "gamma-world-1e": {
+      "encounterSeed": true,
+      "encounterSeedVersion": 2
+    }
+  },
+  "description": "<p>Random encounter table for zones terrain in Gamma World 1e.</p><p>Roll 1d20 or use the table's built-in draw command.</p>",
+  "formula": "1d20",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Serf",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Serf.</p>",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "eaZSr3QDqoSzMf3t",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.eaZSr3QDqoSzMf3t"
+    },
+    {
+      "type": "text",
+      "name": "Blight",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Blight.</p>",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "ZMgaYNsFBrzEwEBq",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.ZMgaYNsFBrzEwEBq"
+    },
+    {
+      "type": "text",
+      "name": "Hisser",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Hisser.</p>",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "jknde0RD016tja3W",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.jknde0RD016tja3W"
+    },
+    {
+      "type": "text",
+      "name": "Android",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-6 per subtype.</p><p>Random subtype: thinker, worker, or warrior.</p><p>Typical references: Android Thinker, Android Worker, Android Warrior.</p>",
+      "weight": 1,
+      "range": [
+        4,
+        4
+      ],
+      "drawn": false,
+      "_id": "LTzjAHcKJmg2JYDE",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.LTzjAHcKJmg2JYDE"
+    },
+    {
+      "type": "text",
+      "name": "Blaash",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Blaash.</p>",
+      "weight": 1,
+      "range": [
+        5,
+        5
+      ],
+      "drawn": false,
+      "_id": "TEwc9cHnyeyBhaOJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.TEwc9cHnyeyBhaOJ"
+    },
+    {
+      "type": "text",
+      "name": "Zarn",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Zarn.</p>",
+      "weight": 1,
+      "range": [
+        6,
+        6
+      ],
+      "drawn": false,
+      "_id": "lTPOfylEjb03FjPn",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.lTPOfylEjb03FjPn"
+    },
+    {
+      "type": "text",
+      "name": "Robotic Unit",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: Per referee / installation.</p><p>Choose the appropriate robot model for the site or patrol.</p><p>Typical references: Security Robotoid.</p>",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "3mJDC0K24JJKq8qr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.3mJDC0K24JJKq8qr"
+    },
+    {
+      "type": "text",
+      "name": "Tribesmen",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-100 (2d10) PSH or humanoids.</p><p>Use Pure Strain Human or humanoid wanderers from the current region.</p><p>Typical references: Pure Strain Human Scavenger, Humanoid Raider.</p>",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "JcCsSeyls8eAu2pB",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.JcCsSeyls8eAu2pB"
+    },
+    {
+      "type": "text",
+      "name": "Parn",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Parn.</p>",
+      "weight": 1,
+      "range": [
+        9,
+        9
+      ],
+      "drawn": false,
+      "_id": "Q3CPo8oFGDbOnT4s",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.Q3CPo8oFGDbOnT4s"
+    },
+    {
+      "type": "text",
+      "name": "Cryptic Alliance",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>Numbers: Per referee's map.</p><p>Use the cryptic alliance already established for the region.</p>",
+      "weight": 1,
+      "range": [
+        10,
+        10
+      ],
+      "drawn": false,
+      "_id": "kz41sxC7LVWkIFQK",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.kz41sxC7LVWkIFQK"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        11,
+        11
+      ],
+      "drawn": false,
+      "_id": "Vi9MBtfLcAbEVv6d",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.Vi9MBtfLcAbEVv6d"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "HovQKPw0KI4hEhkd",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.HovQKPw0KI4hEhkd"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        13,
+        13
+      ],
+      "drawn": false,
+      "_id": "4rHBdi6AHQESbwQE",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.4rHBdi6AHQESbwQE"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        14,
+        14
+      ],
+      "drawn": false,
+      "_id": "uQX765TwJWogwDLo",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.uQX765TwJWogwDLo"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        15,
+        15
+      ],
+      "drawn": false,
+      "_id": "jkcaIVR5OBq7typM",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.jkcaIVR5OBq7typM"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        16,
+        16
+      ],
+      "drawn": false,
+      "_id": "5did0zvhgNbPosTY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.5did0zvhgNbPosTY"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        17,
+        17
+      ],
+      "drawn": false,
+      "_id": "9OXeI0VLbum0qiCX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.9OXeI0VLbum0qiCX"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        18,
+        18
+      ],
+      "drawn": false,
+      "_id": "CGGvuYngsW9fIZKH",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.CGGvuYngsW9fIZKH"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        19,
+        19
+      ],
+      "drawn": false,
+      "_id": "NyrViR7SE3eSGzXX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.NyrViR7SE3eSGzXX"
+    },
+    {
+      "type": "text",
+      "name": "No Encounter",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/zones.svg",
+      "description": "<p>No encounter is indicated by the table result.</p>",
+      "weight": 1,
+      "range": [
+        20,
+        20
+      ],
+      "drawn": false,
+      "_id": "fjIoTPSQsZes6va0",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!Ey9CplsBDQ8Pc6fq.fjIoTPSQsZes6va0"
+    }
+  ],
+  "_id": "Ey9CplsBDQ8Pc6fq",
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!Ey9CplsBDQ8Pc6fq"
+}

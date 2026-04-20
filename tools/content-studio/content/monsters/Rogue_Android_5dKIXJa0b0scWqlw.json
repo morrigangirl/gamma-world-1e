@@ -1,0 +1,470 @@
+{
+  "name": "Rogue Android",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/rogue-android.png",
+  "prototypeToken": {
+    "name": "Rogue Android",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/rogue-android.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "robot",
+      "animalForm": "",
+      "level": 6,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "",
+      "role": "sabotage infiltrator",
+      "speech": "common, pre-war codes",
+      "creatureClass": "Android"
+    },
+    "attributes": {
+      "ms": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 45,
+        "value": 45,
+        "max": 45,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 14,
+      "radResistance": 12,
+      "poisonResistance": 12
+    },
+    "biography": {
+      "value": "<p>An android that has broken its pre-war programming. Some are simply damaged; others have joined The Created and actively work against humanity.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "common, pre-war codes",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": true,
+      "mode": "wild",
+      "chassis": "Rogue Android",
+      "identifier": "RA-∅",
+      "controller": "",
+      "powerSource": "nuclear",
+      "powerCurrent": 50,
+      "powerMax": 50,
+      "broadcastCapable": false,
+      "backupHours": 72,
+      "repairDifficulty": 12,
+      "malfunction": "Behavioral inhibitors lost; intent unpredictable."
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Synthetic Shell",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 5,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": true,
+          "poisonImmune": true,
+          "laserImmune": false,
+          "mentalImmune": true
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Disguised as human skin."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "1gkncgUC1ZdZywqp",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!5dKIXJa0b0scWqlw.1gkncgUC1ZdZywqp"
+    },
+    {
+      "name": "Laser Pistol",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {},
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "5d6",
+          "type": "energy"
+        },
+        "range": {
+          "short": 100,
+          "medium": 0,
+          "long": 200
+        },
+        "attackType": "energy",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "laser",
+          "deflectAc2Hits": 1,
+          "deflectAc1Hits": 2,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Concealed sidearm."
+        },
+        "artifact": {
+          "isArtifact": true,
+          "category": "pistol",
+          "chart": "a",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "hydrogen",
+          "power": {
+            "requirement": "cells",
+            "installedType": "hydrogen",
+            "ambientSource": "none",
+            "ambientAvailable": false,
+            "compatibleCells": "hydrogen",
+            "cellSlots": 1,
+            "cellsInstalled": 1
+          },
+          "charges": {
+            "current": 10,
+            "max": 10
+          },
+          "functionChance": 40,
+          "harmCallback": ""
+        },
+        "category": "artifact",
+        "actionTypes": {}
+      },
+      "_id": "NKmWp6gvv5Q5K9Kb",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!5dKIXJa0b0scWqlw.NKmWp6gvv5Q5K9Kb"
+    },
+    {
+      "name": "Servo Strike",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "1d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Hydraulic-boosted strike."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "dbALqWKUqqA6qnSm",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!5dKIXJa0b0scWqlw.dbALqWKUqqA6qnSm"
+    }
+  ],
+  "_id": "5dKIXJa0b0scWqlw",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!5dKIXJa0b0scWqlw"
+}

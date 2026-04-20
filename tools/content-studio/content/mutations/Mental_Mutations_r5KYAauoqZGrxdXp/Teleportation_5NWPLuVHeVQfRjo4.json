@@ -1,0 +1,58 @@
+{
+  "name": "Teleportation",
+  "type": "mutation",
+  "system": {
+    "code": 44,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Teleport self up to 30 km... 25% chance of 10d6 damage if unfamiliar.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "30 km",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "10d6",
+      "saveType": "",
+      "notes": "Unfamiliar destinations carry a 25% chance of 10d6 damage."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can mentally transfer its body to another place up to 30 kilometers away. It may teleport only itself, never others. If it has not spent at least 8 hours memorizing the destination, there is a 25% chance that arrival inflicts 10d6 damage.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/teleportation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "5NWPLuVHeVQfRjo4",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!5NWPLuVHeVQfRjo4"
+}

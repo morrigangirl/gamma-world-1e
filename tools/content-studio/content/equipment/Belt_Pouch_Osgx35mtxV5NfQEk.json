@@ -1,0 +1,57 @@
+{
+  "name": "Belt Pouch",
+  "type": "gear",
+  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "system": {
+    "quantity": 1,
+    "weight": 0.5,
+    "subtype": "container",
+    "equipped": false,
+    "container": {
+      "capacity": 10,
+      "stored": []
+    },
+    "description": {
+      "value": "A small leather pouch that hangs from a belt."
+    },
+    "action": {
+      "mode": "none"
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "Osgx35mtxV5NfQEk",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!Osgx35mtxV5NfQEk"
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Sonic Attack Ability",
+  "type": "mutation",
+  "system": {
+    "code": 42,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Blast all creatures within 10 meters with 3d6 sonic damage every 4 turns.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 m radius",
+    "duration": "Instant",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 4
+    },
+    "effect": {
+      "formula": "3d6",
+      "saveType": "",
+      "notes": "Damages every other creature within 10 meters."
+    },
+    "actionTypes": [
+      "attack",
+      "damage",
+      "save"
+    ],
+    "description": {
+      "value": "<p>The mutant can generate damaging high-frequency sound. Every creature except the mutant within a 10 meter radius suffers 3d6 damage; roll the dice once and apply that result to all affected beings. This attack is not selective and may be used once every 4 melee turns.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/sonic-attack-ability.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "j0CmOEWsIu2smH0B",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!j0CmOEWsIu2smH0B"
+}

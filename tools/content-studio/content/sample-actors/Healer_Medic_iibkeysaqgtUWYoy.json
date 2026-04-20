@@ -1,0 +1,703 @@
+{
+  "name": "Healer Medic",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "prototypeToken": {
+    "name": "Healer Medic",
+    "actorLink": true,
+    "disposition": 1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "",
+      "level": 3,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "healers",
+      "role": "wandering medic",
+      "speech": "common",
+      "creatureClass": ""
+    },
+    "attributes": {
+      "ms": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 10,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 8,
+      "naturalAttack": {
+        "name": "Staff",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 30,
+        "value": 30,
+        "max": 30,
+        "formula": "@attributes.cn.value d6"
+      },
+      "ac": 8,
+      "mentalResistance": 15,
+      "radResistance": 12,
+      "poisonResistance": 12
+    },
+    "biography": {
+      "value": "<p>A healer who goes wherever the wounded lie. Affiliated with the Healers but answers to no-one.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "Common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Small Backpack",
+      "type": "gear",
+      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "system": {
+        "quantity": 1,
+        "weight": 2,
+        "subtype": "container",
+        "equipped": false,
+        "container": {
+          "capacity": 50,
+          "stored": []
+        },
+        "description": {
+          "value": "A traveller's pack with shoulder straps."
+        },
+        "action": {
+          "mode": "none"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "nbtewP9pzTkNxTvp",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.nbtewP9pzTkNxTvp"
+    },
+    {
+      "name": "Bandages",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0.2,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>A roll of clean linen bandages. Stops bleeding and speeds natural healing.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "medical",
+        "actionTypes": {}
+      },
+      "_id": "cfRyz1VE8tDmXlfk",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.cfRyz1VE8tDmXlfk"
+    },
+    {
+      "name": "Splint",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0.3,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Flat wooden splint with cloth ties. Stabilises broken limbs until a medi-kit or medic is available.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "medical",
+        "actionTypes": {}
+      },
+      "_id": "n8Bp12q41cVSM2K7",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.n8Bp12q41cVSM2K7"
+    },
+    {
+      "name": "Herbal Poultice",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 0.2,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Mashed local herbs in a cloth bundle. Modest healing over several hours.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "medical",
+        "actionTypes": {}
+      },
+      "_id": "R9mdzyWqPuZ7cV50",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.R9mdzyWqPuZ7cV50"
+    },
+    {
+      "name": "Trail Rations (3 days)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 3,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>Dried meat, grain biscuit, and dried fruit. Three-day supply.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "ration",
+        "actionTypes": {}
+      },
+      "_id": "iULigFWG2Fk0XttA",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.iULigFWG2Fk0XttA"
+    },
+    {
+      "name": "Canteen (full)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "quantity": 1,
+        "weight": 1,
+        "tech": "none",
+        "action": {
+          "mode": "none",
+          "damageFormula": "",
+          "saveType": "",
+          "intensityFormula": "",
+          "radius": 0,
+          "durationFormula": "",
+          "acDelta": 0,
+          "toHitDelta": 0,
+          "status": "",
+          "consumeQuantity": 0,
+          "ongoing": false,
+          "notes": ""
+        },
+        "area": {
+          "shape": "circle",
+          "radius": 0,
+          "persistentRounds": 0,
+          "animationKey": "",
+          "saveType": "",
+          "onFailStatus": "",
+          "halfDamageOnSave": false
+        },
+        "description": {
+          "value": "<p>One-liter steel canteen. Holds a day's water for one person.</p>"
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "subtype": "ration",
+        "actionTypes": {}
+      },
+      "_id": "m3vQu8NvJlyUqP7b",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!iibkeysaqgtUWYoy.m3vQu8NvJlyUqP7b"
+    },
+    {
+      "name": "Total Healing",
+      "type": "mutation",
+      "system": {
+        "code": 47,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Heall all HP once per day up to 4 times per week.",
+        "reference": {
+          "table": "mental",
+          "page": 14,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "Instant",
+        "usage": {
+          "limited": true,
+          "per": "week",
+          "uses": 4,
+          "max": 4
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "May be used once per day, up to four times per week, to heal to full."
+        },
+        "actionTypes": [
+          "heal"
+        ],
+        "description": {
+          "value": "<p>Heall all HP once per day up to 4 times per week.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "rsEaCTsYo18kUm79",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!iibkeysaqgtUWYoy.rsEaCTsYo18kUm79"
+    }
+  ],
+  "_id": "iibkeysaqgtUWYoy",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!iibkeysaqgtUWYoy"
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Light Generation",
+  "type": "mutation",
+  "system": {
+    "code": 25,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Reduce viewers' AC and to-hit by 4 for d4 turns.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 m",
+    "duration": "1d4 rounds",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "1d4",
+      "saveType": "",
+      "notes": "Blinds viewers, lowering armor class and to-hit by 4."
+    },
+    "actionTypes": [
+      "attack",
+      "save",
+      "utility"
+    ],
+    "description": {
+      "value": "<p>The mutant can emit a brilliant flash of light through its eyes. Even in full daylight, this glare lowers viewers&#39; armor class and chance to hit by 4 points for 1-4 melee turns. The flash is comparable to a camera bulb, so it is not normally useful as steady illumination. Effective range is 10 meters.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/light-generation.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "sLho9xLTwkFuBeWs",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!sLho9xLTwkFuBeWs"
+}

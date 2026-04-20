@@ -1,0 +1,55 @@
+{
+  "name": "Think Tank",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 8. <strong>Hit Points:</strong> 40.</p><p><strong>Armament:</strong> None (psionic defence only).</p><p><strong>Sensors:</strong> Psionic, full data net.</p><p><strong>Controls:</strong> Independent.</p><p>Immobile cognitive engine. Answers questions, solves puzzles, occasionally asks for something in trade.</p>"
+      },
+      "_id": "RLFvtUzwGigYjclZ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!TDA4t2RuboBNJwNm.RLFvtUzwGigYjclZ"
+    }
+  ],
+  "_id": "TDA4t2RuboBNJwNm",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!TDA4t2RuboBNJwNm"
+}

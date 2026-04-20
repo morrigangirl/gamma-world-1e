@@ -1,0 +1,58 @@
+{
+  "name": "Heightened Touch",
+  "type": "mutation",
+  "system": {
+    "code": 19,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Better chance to figure out / use artifacts.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>This mutation improves the mutant&#39;s chance to figure out ancient devices. Given enough time, it can also feel out weak points in objects. That makes the ability useful for opening locks, working safes, or escaping confinement.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-touch.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "SoLXJk4b33AKUiVr",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!SoLXJk4b33AKUiVr"
+}

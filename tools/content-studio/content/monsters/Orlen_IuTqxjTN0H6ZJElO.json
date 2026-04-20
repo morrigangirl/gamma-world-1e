@@ -1,0 +1,923 @@
+{
+  "name": "Orlen",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/orlen.png",
+  "prototypeToken": {
+    "name": "Orlen",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/orlen.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "Humanoid",
+      "level": 15,
+      "xp": 0,
+      "movement": 150,
+      "alliance": "",
+      "role": "four-armed barter mutant",
+      "speech": "common, telepathy",
+      "creatureClass": "Two-Headed Humanoid"
+    },
+    "attributes": {
+      "ms": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 13,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 90,
+        "value": 90,
+        "max": 90,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 14,
+      "radResistance": 15,
+      "poisonResistance": 15
+    },
+    "biography": {
+      "value": "<p>A two-headed four-armed mutant whose divided mind lets it wield tools and weapons with eerie ease.</p><p>Orlens are telepathic, telekinetic, and both brains can project will force.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "common, telepathy",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Orlen Hide",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 7,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Long-limbed and hard to outflank."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "p3O2iKbcBwCug5LC",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.p3O2iKbcBwCug5LC"
+    },
+    {
+      "name": "Four-Arm Assault",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "2d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "damage",
+          "formula": "",
+          "status": "",
+          "notes": ""
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Four arms striking and grappling at once."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "bqSrKrBAr2K1ssH8",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.bqSrKrBAr2K1ssH8"
+    },
+    {
+      "name": "Telepathy",
+      "type": "mutation",
+      "system": {
+        "code": 43,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Read/send thoughts/emotions up to 10 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m",
+        "duration": "Concentration",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Read and project thoughts or emotions."
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Read/send thoughts/emotions up to 10 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "RbVN64IG12MLT4Kb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.RbVN64IG12MLT4Kb"
+    },
+    {
+      "name": "Telekinesis",
+      "type": "mutation",
+      "system": {
+        "code": 40,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "5 rounds on, 5 rounds off",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "mental",
+          "notes": "On a failed mental save, a living target can be lifted / moved (same weight the user can normally lift) for 5 rounds on, 5 rounds off. Inert objects auto-fail the save."
+        },
+        "actionTypes": [
+          "attack",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "5odAAvh2viAcFBIb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.5odAAvh2viAcFBIb"
+    },
+    {
+      "name": "Will Force",
+      "type": "mutation",
+      "system": {
+        "code": 49,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Double any ability score or +1 to hit for d10 turns every 24 hours.",
+        "reference": {
+          "table": "mental",
+          "page": 14,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "Self",
+        "duration": "1d10 rounds",
+        "usage": {
+          "limited": true,
+          "per": "day",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "1d10",
+          "saveType": "",
+          "notes": "Choose one ability to double or gain +1 to hit while active."
+        },
+        "actionTypes": [
+          "buff"
+        ],
+        "description": {
+          "value": "<p>Double any ability score or +1 to hit for d10 turns every 24 hours.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Will Force — to-hit variant",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.toHitBonus",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "to-hit"
+                  }
+                ]
+              },
+              "computed": false
+            }
+          },
+          "_id": "HBBG8QjhNXJbgGMG",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.HBBG8QjhNXJbgGMG"
+        },
+        {
+          "name": "Will Force — dx variant (doubled DX to-hit)",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.toHitBonus",
+              "mode": 2,
+              "value": "0",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "dx"
+                  }
+                ]
+              },
+              "computed": true
+            }
+          },
+          "_id": "34SmSZple0THuNPO",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.34SmSZple0THuNPO"
+        },
+        {
+          "name": "Will Force — ps variant (doubled PS damage)",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.damageFlat",
+              "mode": 2,
+              "value": "0",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "ps"
+                  }
+                ]
+              },
+              "computed": true
+            }
+          },
+          "_id": "Synx18JkR6lpn86l",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.Synx18JkR6lpn86l"
+        },
+        {
+          "name": "Will Force — ms variant (doubled MS mental resistance)",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.mentalResistance",
+              "mode": 4,
+              "value": "0",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "ms"
+                  }
+                ]
+              },
+              "computed": true
+            }
+          },
+          "_id": "KnpsIqN5Kw48LeQi",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.KnpsIqN5Kw48LeQi"
+        },
+        {
+          "name": "Will Force — ch variant (doubled CH charisma)",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.charismaBonus",
+              "mode": 2,
+              "value": "0",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "ch"
+                  }
+                ]
+              },
+              "computed": true
+            }
+          },
+          "_id": "uPsOqIw9ifgjTdsH",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.uPsOqIw9ifgjTdsH"
+        },
+        {
+          "name": "Will Force — cn variant (doubled CN radiation / poison)",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "gw.radiationResistance",
+              "mode": 2,
+              "value": "0",
+              "priority": 20
+            },
+            {
+              "key": "gw.poisonResistance",
+              "mode": 2,
+              "value": "0",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": {
+                "all": [
+                  {
+                    "toggleEnabled": true
+                  },
+                  {
+                    "variantIs": "cn"
+                  }
+                ]
+              },
+              "computed": true
+            }
+          },
+          "_id": "NqtGS6d6OafzIIG0",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA.NqtGS6d6OafzIIG0"
+        }
+      ],
+      "_id": "nG4F3u3OXugm6uiA",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA"
+    },
+    {
+      "name": "Dual Brain",
+      "type": "mutation",
+      "system": {
+        "code": 9,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Two brains; -1 to artifacts; two mental saves, but increase mental 1/2.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Two brains; -1 to artifacts; two mental saves, but increase mental 1/2.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "DrxH90kRjF5utRHb",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!IuTqxjTN0H6ZJElO.DrxH90kRjF5utRHb"
+    }
+  ],
+  "_id": "IuTqxjTN0H6ZJElO",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!IuTqxjTN0H6ZJElO"
+}

@@ -1,0 +1,55 @@
+{
+  "name": "Warbot",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> nuclear.</p><p><strong>Armor Class:</strong> 1. <strong>Hit Points:</strong> 150.</p><p><strong>Armament:</strong> Fusion rifle (8d6), fragmentation grenades (4d6 radius 10m).</p><p><strong>Sensors:</strong> Full suite + radar + tactical AI.</p><p><strong>Controls:</strong> Independent.</p><p>Pre-war battlefield unit. Treat as a dungeon-level encounter on its own.</p>"
+      },
+      "_id": "qQiEU4XLHYghiBmb",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!pG8zLWozInthai3o.qQiEU4XLHYghiBmb"
+    }
+  ],
+  "_id": "pG8zLWozInthai3o",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!pG8zLWozInthai3o"
+}

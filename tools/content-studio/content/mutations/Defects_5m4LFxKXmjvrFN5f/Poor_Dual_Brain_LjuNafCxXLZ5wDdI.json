@@ -1,0 +1,58 @@
+{
+  "name": "Poor Dual Brain",
+  "type": "mutation",
+  "system": {
+    "code": 33,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Second brain that causes problem at inopportune times; see referree.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant has a second brain that interferes with the first. It may seize control of the body at inconvenient times, possess several defects of its own, or sabotage another mental power in a crisis. The referee decides the exact effects and may keep them secret until they become relevant.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/poor-dual-brain.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "LjuNafCxXLZ5wDdI",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!LjuNafCxXLZ5wDdI"
+}

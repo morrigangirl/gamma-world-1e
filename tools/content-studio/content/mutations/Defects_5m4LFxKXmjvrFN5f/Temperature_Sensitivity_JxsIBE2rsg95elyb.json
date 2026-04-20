@@ -1,0 +1,58 @@
+{
+  "name": "Temperature Sensitivity",
+  "type": "mutation",
+  "system": {
+    "code": 88,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Wilts at temperatures below 5°C or above 35°C; -50% movement.",
+    "reference": {
+      "table": "plant",
+      "page": 15,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The plant suffers 2 extra points per die from heat attacks, cold attacks, and energy weapon attacks.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/temperature-sensitivity.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "JxsIBE2rsg95elyb",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!JxsIBE2rsg95elyb"
+}

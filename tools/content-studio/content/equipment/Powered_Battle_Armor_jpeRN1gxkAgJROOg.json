@@ -1,0 +1,243 @@
+{
+  "name": "Powered Battle Armor",
+  "type": "armor",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "acValue": 2,
+    "armorType": "heavy",
+    "dxPenalty": 0,
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Force field absorbs the first 30 hit points sustained each melee turn and grants anti-grav flight plus hydraulic strength.</p>"
+    },
+    "field": {
+      "mode": "full",
+      "capacity": 30
+    },
+    "mobility": {
+      "flight": 100,
+      "lift": 1.5
+    },
+    "offense": {
+      "punchDamage": "8d6"
+    },
+    "protection": {
+      "blackRayImmune": false,
+      "radiationImmune": false,
+      "poisonImmune": false,
+      "laserImmune": false,
+      "mentalImmune": false
+    },
+    "traits": {
+      "grantsResistance": [],
+      "grantsImmunity": [],
+      "grantsVulnerability": []
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "armor",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "cells",
+        "installedType": "nuclear",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "nuclear",
+        "cellSlots": 2,
+        "cellsInstalled": 2
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "effects": [
+      {
+        "label": "Powered Battle Armor — flight",
+        "condition": "equipped",
+        "changes": [
+          {
+            "key": "gw.flightSpeed",
+            "mode": 4,
+            "value": "100",
+            "priority": 20
+          },
+          {
+            "key": "gw.movementBase",
+            "mode": 4,
+            "value": "100",
+            "priority": 20
+          }
+        ]
+      },
+      {
+        "label": "Powered Battle Armor — lift",
+        "condition": "equipped",
+        "changes": [
+          {
+            "key": "gw.liftCapacity",
+            "mode": 4,
+            "value": "1.5",
+            "priority": 20
+          }
+        ]
+      }
+    ],
+    "grantedItems": [
+      {
+        "name": "Powered Battle Fist",
+        "type": "weapon",
+        "img": "icons/svg/sword.svg",
+        "system": {
+          "weaponClass": 1,
+          "damage": {
+            "formula": "8d6",
+            "type": "physical"
+          },
+          "range": {
+            "short": 0,
+            "medium": 0,
+            "long": 0
+          },
+          "attackType": "melee",
+          "rof": 1,
+          "ammo": {
+            "current": 0,
+            "max": 0,
+            "consumes": false
+          },
+          "effect": {
+            "mode": "damage",
+            "formula": "",
+            "status": "",
+            "notes": ""
+          },
+          "traits": {
+            "tag": "powered-fist",
+            "deflectAc2Hits": 0,
+            "deflectAc1Hits": 0,
+            "bypassesForceField": false,
+            "requiresNoForceField": false,
+            "nonlethal": false
+          },
+          "quantity": 1,
+          "weight": 0,
+          "equipped": true,
+          "description": {
+            "value": "<p>Hydraulic punch delivered by powered battle armor.</p>"
+          }
+        }
+      }
+    ],
+    "actionTypes": {}
+  },
+  "effects": [
+    {
+      "name": "Powered Battle Armor — flight",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.flightSpeed",
+          "mode": 4,
+          "value": "100",
+          "priority": 20
+        },
+        {
+          "key": "gw.movementBase",
+          "mode": 4,
+          "value": "100",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "equipped"
+        }
+      },
+      "_id": "5YRJNbEITAzAf7If",
+      "sort": 0,
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "type": "base",
+      "system": {},
+      "duration": {
+        "startTime": null,
+        "combat": null
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "_key": "!items.effects!jpeRN1gxkAgJROOg.5YRJNbEITAzAf7If"
+    },
+    {
+      "name": "Powered Battle Armor — lift",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.liftCapacity",
+          "mode": 4,
+          "value": "1.5",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "equipped"
+        }
+      },
+      "_id": "LWvfow5bKESChTS5",
+      "sort": 0,
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "type": "base",
+      "system": {},
+      "duration": {
+        "startTime": null,
+        "combat": null
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "_key": "!items.effects!jpeRN1gxkAgJROOg.LWvfow5bKESChTS5"
+    }
+  ],
+  "_id": "jpeRN1gxkAgJROOg",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jpeRN1gxkAgJROOg"
+}

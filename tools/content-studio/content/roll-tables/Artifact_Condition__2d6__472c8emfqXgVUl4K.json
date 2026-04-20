@@ -1,0 +1,157 @@
+{
+  "name": "Artifact Condition (2d6)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Determine how well a newly-recovered Ancient artifact functions.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Broken",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Cannot function until repaired.",
+      "weight": 1,
+      "range": [
+        2,
+        5
+      ],
+      "drawn": false,
+      "_id": "EWMk3dXUxjV2UXhU",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.EWMk3dXUxjV2UXhU"
+    },
+    {
+      "type": "text",
+      "name": "Poor",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Function chance ≈ 30%. Malfunctions common.",
+      "weight": 1,
+      "range": [
+        6,
+        7
+      ],
+      "drawn": false,
+      "_id": "69lvshQmoUNzcBuj",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.69lvshQmoUNzcBuj"
+    },
+    {
+      "type": "text",
+      "name": "Fair",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Function chance ≈ 50%. Occasional malfunctions.",
+      "weight": 1,
+      "range": [
+        8,
+        9
+      ],
+      "drawn": false,
+      "_id": "PTn9tl9bWy7nCOSc",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.PTn9tl9bWy7nCOSc"
+    },
+    {
+      "type": "text",
+      "name": "Good",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Function chance ≈ 70%.",
+      "weight": 1,
+      "range": [
+        10,
+        10
+      ],
+      "drawn": false,
+      "_id": "AefAOTCpkxNEQW8X",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.AefAOTCpkxNEQW8X"
+    },
+    {
+      "type": "text",
+      "name": "Excellent",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Function chance ≈ 85%.",
+      "weight": 1,
+      "range": [
+        11,
+        11
+      ],
+      "drawn": false,
+      "_id": "zwRWF7c6ZdCeP0kx",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.zwRWF7c6ZdCeP0kx"
+    },
+    {
+      "type": "text",
+      "name": "Perfect",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Function chance ≈ 95%. Factory-new.",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "mddVOPTr52hVaubM",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!472c8emfqXgVUl4K.mddVOPTr52hVaubM"
+    }
+  ],
+  "_id": "472c8emfqXgVUl4K",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!472c8emfqXgVUl4K"
+}

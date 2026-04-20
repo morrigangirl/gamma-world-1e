@@ -1,0 +1,357 @@
+{
+  "name": "Powered Assault Armor",
+  "type": "armor",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "acValue": 1,
+    "armorType": "heavy",
+    "dxPenalty": 0,
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Force field absorbs the first 50 hit points sustained each melee turn and includes attack-armor systems.</p>"
+    },
+    "field": {
+      "mode": "full",
+      "capacity": 50
+    },
+    "mobility": {
+      "flight": 250,
+      "lift": 2
+    },
+    "offense": {
+      "punchDamage": "9d6"
+    },
+    "protection": {
+      "blackRayImmune": false,
+      "radiationImmune": false,
+      "poisonImmune": false,
+      "laserImmune": false,
+      "mentalImmune": false
+    },
+    "traits": {
+      "grantsResistance": [],
+      "grantsImmunity": [],
+      "grantsVulnerability": []
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "armor",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "cells",
+        "installedType": "nuclear",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "nuclear",
+        "cellSlots": 3,
+        "cellsInstalled": 3
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "effects": [
+      {
+        "label": "Powered Assault Armor — flight",
+        "condition": "equipped",
+        "changes": [
+          {
+            "key": "gw.flightSpeed",
+            "mode": 4,
+            "value": "250",
+            "priority": 20
+          },
+          {
+            "key": "gw.movementBase",
+            "mode": 4,
+            "value": "250",
+            "priority": 20
+          }
+        ]
+      },
+      {
+        "label": "Powered Assault Armor — lift",
+        "condition": "equipped",
+        "changes": [
+          {
+            "key": "gw.liftCapacity",
+            "mode": 4,
+            "value": "2",
+            "priority": 20
+          }
+        ]
+      }
+    ],
+    "grantedItems": [
+      {
+        "name": "Powered Assault Fist",
+        "type": "weapon",
+        "img": "icons/svg/sword.svg",
+        "system": {
+          "weaponClass": 1,
+          "damage": {
+            "formula": "9d6",
+            "type": "physical"
+          },
+          "range": {
+            "short": 0,
+            "medium": 0,
+            "long": 0
+          },
+          "attackType": "melee",
+          "rof": 1,
+          "ammo": {
+            "current": 0,
+            "max": 0,
+            "consumes": false
+          },
+          "effect": {
+            "mode": "damage",
+            "formula": "",
+            "status": "",
+            "notes": ""
+          },
+          "traits": {
+            "tag": "powered-fist",
+            "deflectAc2Hits": 0,
+            "deflectAc1Hits": 0,
+            "bypassesForceField": false,
+            "requiresNoForceField": false,
+            "nonlethal": false
+          },
+          "quantity": 1,
+          "weight": 0,
+          "equipped": true,
+          "description": {
+            "value": "<p>Hydraulic punch delivered by powered assault armor.</p>"
+          }
+        }
+      },
+      {
+        "name": "Built-in Laser Pistol (Left)",
+        "type": "weapon",
+        "img": "icons/svg/sword.svg",
+        "system": {
+          "weaponClass": 13,
+          "damage": {
+            "formula": "5d6",
+            "type": "energy"
+          },
+          "range": {
+            "short": 100,
+            "medium": 0,
+            "long": 200
+          },
+          "attackType": "energy",
+          "rof": 1,
+          "ammo": {
+            "current": 10,
+            "max": 10,
+            "consumes": false
+          },
+          "effect": {
+            "mode": "damage",
+            "formula": "",
+            "status": "",
+            "notes": ""
+          },
+          "traits": {
+            "tag": "laser",
+            "deflectAc2Hits": 1,
+            "deflectAc1Hits": 2,
+            "bypassesForceField": false,
+            "requiresNoForceField": false,
+            "nonlethal": false
+          },
+          "quantity": 1,
+          "weight": 0,
+          "equipped": true,
+          "description": {
+            "value": "<p>Forefinger-mounted laser pistol built into powered assault armor.</p>"
+          }
+        }
+      },
+      {
+        "name": "Built-in Laser Pistol (Right)",
+        "type": "weapon",
+        "img": "icons/svg/sword.svg",
+        "system": {
+          "weaponClass": 13,
+          "damage": {
+            "formula": "5d6",
+            "type": "energy"
+          },
+          "range": {
+            "short": 100,
+            "medium": 0,
+            "long": 200
+          },
+          "attackType": "energy",
+          "rof": 1,
+          "ammo": {
+            "current": 10,
+            "max": 10,
+            "consumes": false
+          },
+          "effect": {
+            "mode": "damage",
+            "formula": "",
+            "status": "",
+            "notes": ""
+          },
+          "traits": {
+            "tag": "laser",
+            "deflectAc2Hits": 1,
+            "deflectAc1Hits": 2,
+            "bypassesForceField": false,
+            "requiresNoForceField": false,
+            "nonlethal": false
+          },
+          "quantity": 1,
+          "weight": 0,
+          "equipped": true,
+          "description": {
+            "value": "<p>Forefinger-mounted laser pistol built into powered assault armor.</p>"
+          }
+        }
+      },
+      {
+        "name": "Built-in Micro Missile Rack",
+        "type": "gear",
+        "img": "icons/svg/item-bag.svg",
+        "system": {
+          "quantity": 20,
+          "weight": 0,
+          "tech": "iv",
+          "action": {
+            "mode": "area-damage",
+            "damageFormula": "7d6",
+            "saveType": "",
+            "intensityFormula": "",
+            "radius": 10,
+            "durationFormula": "",
+            "acDelta": 0,
+            "toHitDelta": 0,
+            "status": "",
+            "consumeQuantity": 1,
+            "notes": "Resolve against all currently targeted creatures in the blast area."
+          },
+          "description": {
+            "value": "<p>Helmet-mounted micro-missile rack built into powered assault armor.</p>"
+          }
+        }
+      }
+    ],
+    "actionTypes": {}
+  },
+  "effects": [
+    {
+      "name": "Powered Assault Armor — flight",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.flightSpeed",
+          "mode": 4,
+          "value": "250",
+          "priority": 20
+        },
+        {
+          "key": "gw.movementBase",
+          "mode": 4,
+          "value": "250",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "equipped"
+        }
+      },
+      "_id": "wPeUIXXOLLtFdL46",
+      "sort": 0,
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "type": "base",
+      "system": {},
+      "duration": {
+        "startTime": null,
+        "combat": null
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "_key": "!items.effects!HDCrNblFeTZ9pG62.wPeUIXXOLLtFdL46"
+    },
+    {
+      "name": "Powered Assault Armor — lift",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": true,
+      "changes": [
+        {
+          "key": "gw.liftCapacity",
+          "mode": 4,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": "equipped"
+        }
+      },
+      "_id": "joDBu0S3uweYbpZ0",
+      "sort": 0,
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "type": "base",
+      "system": {},
+      "duration": {
+        "startTime": null,
+        "combat": null
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "_key": "!items.effects!HDCrNblFeTZ9pG62.joDBu0S3uweYbpZ0"
+    }
+  ],
+  "_id": "HDCrNblFeTZ9pG62",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HDCrNblFeTZ9pG62"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Hover Car",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "quantity": 1,
+    "weight": 0,
+    "tech": "v",
+    "action": {
+      "mode": "guided",
+      "damageFormula": "",
+      "saveType": "",
+      "intensityFormula": "",
+      "radius": 0,
+      "durationFormula": "",
+      "acDelta": 0,
+      "toHitDelta": 0,
+      "status": "anti-grav",
+      "consumeQuantity": 0,
+      "ongoing": false,
+      "notes": "Air-cushion passenger car."
+    },
+    "area": {
+      "shape": "circle",
+      "radius": 0,
+      "persistentRounds": 0,
+      "animationKey": "",
+      "saveType": "",
+      "onFailStatus": "",
+      "halfDamageOnSave": false
+    },
+    "description": {
+      "value": "<p>Common passenger vehicle riding on a cushion of air.</p><p>Uses a steam turbine and one atomic energy cell; the cell lasts about 20,000 kilometers.</p>"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "vehicle",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "nuclear",
+      "power": {
+        "requirement": "cells",
+        "installedType": "nuclear",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "nuclear",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "subtype": "vehicle",
+    "actionTypes": {}
+  },
+  "_id": "t9K7VHkSlnCyqfU4",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!t9K7VHkSlnCyqfU4"
+}

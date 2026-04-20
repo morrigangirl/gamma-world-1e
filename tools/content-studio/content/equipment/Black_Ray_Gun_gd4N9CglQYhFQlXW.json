@@ -1,0 +1,90 @@
+{
+  "name": "Black Ray Gun",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/black-ray-gun.png",
+  "system": {
+    "weaponClass": 15,
+    "category": "artifact",
+    "ammoType": [
+      "black-ray-cell"
+    ],
+    "damage": {
+      "formula": "0",
+      "type": "energy"
+    },
+    "range": {
+      "short": 25,
+      "medium": 0,
+      "long": 50
+    },
+    "attackType": "energy",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "death",
+      "formula": "",
+      "status": "",
+      "notes": "Instant death to living targets not protected by force fields."
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>The ultimate hand-held weapon; living targets without force-field protection die instantly.</p><p>Powered by a chemical energy cell for four shots.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false,
+      "tag": "black-ray"
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "pistol",
+      "chart": "a",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "chemical",
+      "power": {
+        "requirement": "cells",
+        "installedType": "chemical",
+        "ambientSource": "none",
+        "ambientAvailable": false,
+        "compatibleCells": "chemical",
+        "cellSlots": 1,
+        "cellsInstalled": 1
+      },
+      "charges": {
+        "current": 4,
+        "max": 4
+      },
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "gd4N9CglQYhFQlXW",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!gd4N9CglQYhFQlXW"
+}

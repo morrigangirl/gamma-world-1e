@@ -1,0 +1,1147 @@
+{
+  "name": "Mental Mutation Draw (Humanoid, d100)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Roll on the humanoid mental mutation chart.</p>",
+  "formula": "1d100",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Absorption",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Withstand additional damage for _______ up to current HP.",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "nsHnjFV4oLaW5FLO",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.nsHnjFV4oLaW5FLO"
+    },
+    {
+      "type": "text",
+      "name": "Anti-Reflection",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "25% chance to reverse attack and defense when using mental power.",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "i6xVwJVHKeYT7cpq",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.i6xVwJVHKeYT7cpq"
+    },
+    {
+      "type": "text",
+      "name": "Complete Mental Block",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Unable to see or approach __________.",
+      "weight": 1,
+      "range": [
+        3,
+        6
+      ],
+      "drawn": false,
+      "_id": "v9OuK7wPLCJmxvgW",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.v9OuK7wPLCJmxvgW"
+    },
+    {
+      "type": "text",
+      "name": "Cryokinesis",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "ZPINEWC5H9iwy1vQ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.ZPINEWC5H9iwy1vQ"
+    },
+    {
+      "type": "text",
+      "name": "Death Field Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Drain all but one HP from all beings within 20m; unconscious for d20 turns.",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "YMZZTFz8cSBv1avq",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.YMZZTFz8cSBv1avq"
+    },
+    {
+      "type": "text",
+      "name": "De-Evolution",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Once per week, within 30m, strip abilities from mutant opponent.",
+      "weight": 1,
+      "range": [
+        9,
+        10
+      ],
+      "drawn": false,
+      "_id": "03dBn3VGXQMrJ0wU",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.03dBn3VGXQMrJ0wU"
+    },
+    {
+      "type": "text",
+      "name": "Density Control (Others)",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Within 30m, affect others: shrink to improve AC, grow to improve speed.",
+      "weight": 1,
+      "range": [
+        11,
+        11
+      ],
+      "drawn": false,
+      "_id": "fU7H0NoQ6yQNApcp",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.fU7H0NoQ6yQNApcp"
+    },
+    {
+      "type": "text",
+      "name": "Directional Sense",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Always know where you are related to where you've been.",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "txKgzMrmONc8PvOY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.txKgzMrmONc8PvOY"
+    },
+    {
+      "type": "text",
+      "name": "Dual Brain",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Two brains; -1 to artifacts; two mental saves, but increase mental 1/2.",
+      "weight": 1,
+      "range": [
+        13,
+        13
+      ],
+      "drawn": false,
+      "_id": "8Z58dU2qTSUNf54h",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.8Z58dU2qTSUNf54h"
+    },
+    {
+      "type": "text",
+      "name": "Empathy",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Sense feelings of others; force feelings on others in 30m with DC12 MR.",
+      "weight": 1,
+      "range": [
+        14,
+        14
+      ],
+      "drawn": false,
+      "_id": "hfEQfj95auuyGxio",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.hfEQfj95auuyGxio"
+    },
+    {
+      "type": "text",
+      "name": "Epilepsy",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "10% chance to do nothing per melee turn during combat.",
+      "weight": 1,
+      "range": [
+        15,
+        18
+      ],
+      "drawn": false,
+      "_id": "EP2bxWx20dLZ60Bk",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.EP2bxWx20dLZ60Bk"
+    },
+    {
+      "type": "text",
+      "name": "Fear Impulse",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Unreasonable fear of _______.",
+      "weight": 1,
+      "range": [
+        19,
+        22
+      ],
+      "drawn": false,
+      "_id": "RW3YgAUl3qtqNjo2",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.RW3YgAUl3qtqNjo2"
+    },
+    {
+      "type": "text",
+      "name": "Force Field Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Every 24 hours, create invisible force 15cm from body, takes 5d6 damage.",
+      "weight": 1,
+      "range": [
+        23,
+        25
+      ],
+      "drawn": false,
+      "_id": "z5hLcA4ITypD2hyQ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.z5hLcA4ITypD2hyQ"
+    },
+    {
+      "type": "text",
+      "name": "Military Genius",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Tactical prodigy: +4 to hit and +1 damage die on all attacks.",
+      "weight": 1,
+      "range": [
+        26,
+        26
+      ],
+      "drawn": false,
+      "_id": "0ilkhMxM2UiWvk0y",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.0ilkhMxM2UiWvk0y"
+    },
+    {
+      "type": "text",
+      "name": "Economic Genius",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Shrewd trader and leader: +3 charisma bonus.",
+      "weight": 1,
+      "range": [
+        27,
+        27
+      ],
+      "drawn": false,
+      "_id": "9a20Bn56NLGheANJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.9a20Bn56NLGheANJ"
+    },
+    {
+      "type": "text",
+      "name": "Scientific Genius",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Technical savant: +2 to technical skills and artifact analysis.",
+      "weight": 1,
+      "range": [
+        28,
+        28
+      ],
+      "drawn": false,
+      "_id": "O64VHfzxumMqvozv",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.O64VHfzxumMqvozv"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Brain Talent",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Figure out artificat in 1/3 time; 2 mental saves; detect all lies.",
+      "weight": 1,
+      "range": [
+        29,
+        31
+      ],
+      "drawn": false,
+      "_id": "QHJ7Om4dgxpoo5oa",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.QHJ7Om4dgxpoo5oa"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Intelligence",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+4 mental resistance (max 18), -2 to figure out artifact.",
+      "weight": 1,
+      "range": [
+        32,
+        41
+      ],
+      "drawn": false,
+      "_id": "H4jctQSsejMEeVn9",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.H4jctQSsejMEeVn9"
+    },
+    {
+      "type": "text",
+      "name": "Hostility Field",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Any being with 16 INT or less has 20% chance to attack once within 30m.",
+      "weight": 1,
+      "range": [
+        42,
+        45
+      ],
+      "drawn": false,
+      "_id": "39l2c0T0SQTQ8f9Q",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.39l2c0T0SQTQ8f9Q"
+    },
+    {
+      "type": "text",
+      "name": "Illusion Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Create illusions for beings within 30 meters; dispelled by touch.",
+      "weight": 1,
+      "range": [
+        46,
+        46
+      ],
+      "drawn": false,
+      "_id": "1kqi5gK52nVF1AVe",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.1kqi5gK52nVF1AVe"
+    },
+    {
+      "type": "text",
+      "name": "Intuition",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+1 to hit, +3 damage per dice, cannot be used with other powers.",
+      "weight": 1,
+      "range": [
+        47,
+        47
+      ],
+      "drawn": false,
+      "_id": "0Unz6uXGJpDyLLd0",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.0Unz6uXGJpDyLLd0"
+    },
+    {
+      "type": "text",
+      "name": "Life Leech",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).",
+      "weight": 1,
+      "range": [
+        48,
+        52
+      ],
+      "drawn": false,
+      "_id": "DT6BeyRZ7QjLRQ1l",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.DT6BeyRZ7QjLRQ1l"
+    },
+    {
+      "type": "text",
+      "name": "Light Wave Manipulation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Invisible at will; negate laser or create darkness within 10 meters.",
+      "weight": 1,
+      "range": [
+        53,
+        53
+      ],
+      "drawn": false,
+      "_id": "2aOmmZ5n9ZfELirn",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.2aOmmZ5n9ZfELirn"
+    },
+    {
+      "type": "text",
+      "name": "Magnetic Control",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Once / 24 hours, control iron object (25rds, 100m) (MR 12 to succeed).",
+      "weight": 1,
+      "range": [
+        54,
+        54
+      ],
+      "drawn": false,
+      "_id": "9jlzLXHqcvZA94W7",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.9jlzLXHqcvZA94W7"
+    },
+    {
+      "type": "text",
+      "name": "Mass Mind",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Empathize with same type / same power... increase effectiveness.",
+      "weight": 1,
+      "range": [
+        55,
+        55
+      ],
+      "drawn": false,
+      "_id": "Co0rFJSmEdvWQlpJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.Co0rFJSmEdvWQlpJ"
+    },
+    {
+      "type": "text",
+      "name": "Mental Blast",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Every other turn, do 3d6 mental damage within 15 meters.",
+      "weight": 1,
+      "range": [
+        56,
+        58
+      ],
+      "drawn": false,
+      "_id": "uHWOdorvurgEnZng",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.uHWOdorvurgEnZng"
+    },
+    {
+      "type": "text",
+      "name": "Mental Control",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Take control of being within 15m, but get hurt or die with that being.",
+      "weight": 1,
+      "range": [
+        59,
+        59
+      ],
+      "drawn": false,
+      "_id": "AGci5KT1EA1sqvLy",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.AGci5KT1EA1sqvLy"
+    },
+    {
+      "type": "text",
+      "name": "Mental Control Over Physical State",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Once per week, increase physical attributes, ignore physical harm, heal 4x.",
+      "weight": 1,
+      "range": [
+        60,
+        60
+      ],
+      "drawn": false,
+      "_id": "E9Xsomgy74YLcFeI",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.E9Xsomgy74YLcFeI"
+    },
+    {
+      "type": "text",
+      "name": "Mental Defenselessness",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Mental Strength is now 3.",
+      "weight": 1,
+      "range": [
+        61,
+        62
+      ],
+      "drawn": false,
+      "_id": "km8RJC0w22GCjaGg",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.km8RJC0w22GCjaGg"
+    },
+    {
+      "type": "text",
+      "name": "Mental Defense Shield",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Sense beings with mental powers in 30m; +4 to mental resistance (max 18).",
+      "weight": 1,
+      "range": [
+        63,
+        63
+      ],
+      "drawn": false,
+      "_id": "OXJyEcUPUpXxgdLK",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.OXJyEcUPUpXxgdLK"
+    },
+    {
+      "type": "text",
+      "name": "Molecular Disruption",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Every d6 days, attempt molecular disruption at great cost, see page 14.",
+      "weight": 1,
+      "range": [
+        64,
+        64
+      ],
+      "drawn": false,
+      "_id": "7BwkawqGeKCcybT4",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.7BwkawqGeKCcybT4"
+    },
+    {
+      "type": "text",
+      "name": "Molecular Understanding",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+1 die of damage; immediately figure out Chart A, -1 on other charts.",
+      "weight": 1,
+      "range": [
+        65,
+        66
+      ],
+      "drawn": false,
+      "_id": "yTn26eDSPGTYhjfU",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.yTn26eDSPGTYhjfU"
+    },
+    {
+      "type": "text",
+      "name": "Multiple Damage",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Take double (or triple per referree) damage.",
+      "weight": 1,
+      "range": [
+        67,
+        69
+      ],
+      "drawn": false,
+      "_id": "VXD6Jqnn2H7vxKXA",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.VXD6Jqnn2H7vxKXA"
+    },
+    {
+      "type": "text",
+      "name": "Planar Travel",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Once / week, open 3m x 3m door that lasts 3 rounds to another plane.",
+      "weight": 1,
+      "range": [
+        70,
+        70
+      ],
+      "drawn": false,
+      "_id": "80sUeuvoYT5wU3CP",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.80sUeuvoYT5wU3CP"
+    },
+    {
+      "type": "text",
+      "name": "Poor Dual Brain",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Second brain that causes problem at inopportune times; see referree.",
+      "weight": 1,
+      "range": [
+        71,
+        73
+      ],
+      "drawn": false,
+      "_id": "V8yyTqcFbWYkxr3m",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.V8yyTqcFbWYkxr3m"
+    },
+    {
+      "type": "text",
+      "name": "Precognition",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Concentrate, see 3 min into future; take shock damage if you see injury.",
+      "weight": 1,
+      "range": [
+        74,
+        74
+      ],
+      "drawn": false,
+      "_id": "BgVjDTLa6MQ0oGtY",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.BgVjDTLa6MQ0oGtY"
+    },
+    {
+      "type": "text",
+      "name": "Pyrokinesis",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "1d6 fire damage... +1d6 per round of concentration.",
+      "weight": 1,
+      "range": [
+        75,
+        75
+      ],
+      "drawn": false,
+      "_id": "hUepKKs3cyCwzGlX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.hUepKKs3cyCwzGlX"
+    },
+    {
+      "type": "text",
+      "name": "Radar/Sonar",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "See day or night, +2 to hit within 30 meters.",
+      "weight": 1,
+      "range": [
+        76,
+        76
+      ],
+      "drawn": false,
+      "_id": "cHMHNjBznwadtqQw",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.cHMHNjBznwadtqQw"
+    },
+    {
+      "type": "text",
+      "name": "Reflection",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.",
+      "weight": 1,
+      "range": [
+        77,
+        77
+      ],
+      "drawn": false,
+      "_id": "mdBKn9eoy4V3L7Ew",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.mdBKn9eoy4V3L7Ew"
+    },
+    {
+      "type": "text",
+      "name": "Repulsion Field",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Every 24 hours, create invisible within 15 meters, takes 5d6 damage.",
+      "weight": 1,
+      "range": [
+        78,
+        78
+      ],
+      "drawn": false,
+      "_id": "6PUvXBQOncQKneiw",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.6PUvXBQOncQKneiw"
+    },
+    {
+      "type": "text",
+      "name": "Sound Imitation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reflect sonic attack (still take effects) or mimic sounds.",
+      "weight": 1,
+      "range": [
+        79,
+        79
+      ],
+      "drawn": false,
+      "_id": "owy87CzWBmi6WfkN",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.owy87CzWBmi6WfkN"
+    },
+    {
+      "type": "text",
+      "name": "Telekinesis",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.",
+      "weight": 1,
+      "range": [
+        80,
+        82
+      ],
+      "drawn": false,
+      "_id": "QFC83rv6GD9EId3E",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.QFC83rv6GD9EId3E"
+    },
+    {
+      "type": "text",
+      "name": "Telekinetic Arm",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "20 meter telekinetic arm with 18 STR; powered weapons damage if hit arm.",
+      "weight": 1,
+      "range": [
+        83,
+        83
+      ],
+      "drawn": false,
+      "_id": "xYdkB2jjdziP7u24",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.xYdkB2jjdziP7u24"
+    },
+    {
+      "type": "text",
+      "name": "Telekinetic Flight",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Fly up to 20 meters per second, carry as much as usual.",
+      "weight": 1,
+      "range": [
+        84,
+        84
+      ],
+      "drawn": false,
+      "_id": "zo80YQHBuW8eqklx",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.zo80YQHBuW8eqklx"
+    },
+    {
+      "type": "text",
+      "name": "Telepathy",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Read/send thoughts/emotions up to 10 meters.",
+      "weight": 1,
+      "range": [
+        85,
+        85
+      ],
+      "drawn": false,
+      "_id": "joio1ZpzvKHjhR0E",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.joio1ZpzvKHjhR0E"
+    },
+    {
+      "type": "text",
+      "name": "Teleportation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Teleport self up to 30 km... 25% chance of 10d6 damage if unfamiliar.",
+      "weight": 1,
+      "range": [
+        86,
+        86
+      ],
+      "drawn": false,
+      "_id": "s3moNWjbHv9D6SZ1",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.s3moNWjbHv9D6SZ1"
+    },
+    {
+      "type": "text",
+      "name": "Thought Imitation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reflect mental attack (still take effects) or mimic thoughts to communicate.",
+      "weight": 1,
+      "range": [
+        87,
+        87
+      ],
+      "drawn": false,
+      "_id": "r8UvD34U5P0HP0nd",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.r8UvD34U5P0HP0nd"
+    },
+    {
+      "type": "text",
+      "name": "Time Field Manipulation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "PERCENT CHANCE OF SUCCESS:.",
+      "weight": 1,
+      "range": [
+        88,
+        88
+      ],
+      "drawn": false,
+      "_id": "noDVuLv12gu2WS1I",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.noDVuLv12gu2WS1I"
+    },
+    {
+      "type": "text",
+      "name": "Total Healing",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Heall all HP once per day up to 4 times per week.",
+      "weight": 1,
+      "range": [
+        89,
+        89
+      ],
+      "drawn": false,
+      "_id": "eBEmnKPry80TghB7",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.eBEmnKPry80TghB7"
+    },
+    {
+      "type": "text",
+      "name": "Weather Manipulation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Prevailing Conditions.",
+      "weight": 1,
+      "range": [
+        90,
+        90
+      ],
+      "drawn": false,
+      "_id": "B5uxekhDsvGGNsQT",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.B5uxekhDsvGGNsQT"
+    },
+    {
+      "type": "text",
+      "name": "Will Force",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Double any ability score or +1 to hit for d10 turns every 24 hours.",
+      "weight": 1,
+      "range": [
+        91,
+        95
+      ],
+      "drawn": false,
+      "_id": "USFCjckLTrq4zGx4",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!ifSd9q3c25eq4P5v.USFCjckLTrq4zGx4"
+    }
+  ],
+  "_id": "ifSd9q3c25eq4P5v",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!ifSd9q3c25eq4P5v"
+}

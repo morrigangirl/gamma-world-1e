@@ -1,0 +1,92 @@
+{
+  "name": "Heightened Smell",
+  "type": "mutation",
+  "system": {
+    "code": 16,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Can smell, detect, and track like a bloodhound.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can separate and identify odors at a distance of up to 60 meters. It cannot be ambushed by non-plant creatures approaching from upwind, though this is different from immunity to surprise. It can track any trail less than a day old across any surface except water. Once it has encountered another being, it can later identify objects and locations associated with that being, such as possessions or campsites.</p>"
+    }
+  },
+  "effects": [
+    {
+      "name": "Heightened Smell — surprise modifier",
+      "img": "icons/svg/aura.svg",
+      "transfer": true,
+      "disabled": false,
+      "changes": [
+        {
+          "key": "gw.surpriseModifier",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "flags": {
+        "gamma-world-1e": {
+          "condition": null,
+          "computed": false
+        }
+      },
+      "_id": "VtSUVtdMRbi0MR9X",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!items.effects!S42FxSDAtyccMJS6.VtSUVtdMRbi0MR9X"
+    }
+  ],
+  "img": "systems/gamma-world-1e/assets/mutations/heightened-smell.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "S42FxSDAtyccMJS6",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!S42FxSDAtyccMJS6"
+}

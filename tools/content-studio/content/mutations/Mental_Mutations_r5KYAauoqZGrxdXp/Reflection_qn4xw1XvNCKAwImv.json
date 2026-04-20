@@ -1,0 +1,60 @@
+{
+  "name": "Reflection",
+  "type": "mutation",
+  "system": {
+    "code": 37,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Every 24 hours, reflect damage; 3d damage + 1d per round of concentration.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "toggle",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "Up to 18 rounds",
+    "usage": {
+      "limited": true,
+      "per": "day",
+      "uses": 1,
+      "max": 1
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Begins by reflecting up to 3 dice of damage, increasing by 1 die per round of concentration."
+    },
+    "actionTypes": [
+      "defense"
+    ],
+    "description": {
+      "value": "<p>Using this power requires complete concentration and stillness. On the 1st melee turn of concentration, the mutant can reflect up to 3 dice of damage of any type back at the beings who caused it. On the 2nd turn, the limit rises to 4 dice, and so on, up to 20 dice on the 16th and final turn. Reflected damage can never exceed the amount originally inflicted. The power may be used once every 24 hours. While it is active, the mutant is still vulnerable to simple incapacitating effects that inflict no dice of damage, such as Light Generation. The mutant may continue reflecting even while taking damage, as long as it takes no other action. While reflection is active, the mutant takes no damage unless the incoming damage exceeds its current reflecting limit.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/reflection.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "qn4xw1XvNCKAwImv",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!qn4xw1XvNCKAwImv"
+}

@@ -1,0 +1,55 @@
+{
+  "name": "Ecology Bot — Agricultural",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> solar.</p><p><strong>Armor Class:</strong> 9. <strong>Hit Points:</strong> 30.</p><p><strong>Armament:</strong> Soil probe (1d3).</p><p><strong>Sensors:</strong> Vision, chem, soil.</p><p><strong>Controls:</strong> Voice.</p><p>Tends fields and orchards. Friendly to cultivators; will fight pests to the death.</p>"
+      },
+      "_id": "c4MuOUhYkCdHSVRu",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!sWDhYW6tqbXvyapj.c4MuOUhYkCdHSVRu"
+    }
+  ],
+  "_id": "sWDhYW6tqbXvyapj",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!sWDhYW6tqbXvyapj"
+}

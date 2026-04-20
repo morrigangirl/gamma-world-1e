@@ -1,0 +1,58 @@
+{
+  "name": "Hostility Field",
+  "type": "mutation",
+  "system": {
+    "code": 17,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Any being with 16 INT or less has 20% chance to attack once within 30m.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant unconsciously projects an unpleasant field in a 30 meter radius. Any being with an Intelligence of 16 or less, friend or foe, has a 20% chance of wanting to attack the mutant when it first enters the field.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/hostility-field.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "eNU4OP9QDxXg7yY5",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!eNU4OP9QDxXg7yY5"
+}

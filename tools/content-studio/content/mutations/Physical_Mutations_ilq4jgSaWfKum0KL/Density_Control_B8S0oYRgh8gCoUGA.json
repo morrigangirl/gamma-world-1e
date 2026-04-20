@@ -1,0 +1,60 @@
+{
+  "name": "Density Control",
+  "type": "mutation",
+  "system": {
+    "code": 4,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Shrink to improve AC, grow to improve speed.",
+    "reference": {
+      "table": "physical",
+      "page": 9,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "Self",
+    "duration": "Variable",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Use to describe shrinking for protection or enlarging for speed; adjust manually for unusual sizes."
+    },
+    "actionTypes": [
+      "buff"
+    ],
+    "description": {
+      "value": "<p>The mutant can alter the molecular structure of its own body to become denser or less dense. When becoming denser, the body shrinks and armor class improves in direct proportion to the size reduction. A mutant reduced to one-half normal size has twice normal armor class, and one reduced to one-eighth normal size is too dense to be pierced by swords, spears, arrows, and similar weapons. The tradeoff is that movement and reflexes are reduced by the same ratio, so a mutant at one-eighth size also acts at one-eighth normal speed.</p><p>When becoming less dense, the body expands instead. This lowers armor class and physical strength, but increases speed. A mutant at twice normal size has an armor class four classes lower than normal and can move four times as fast. Expansion is limited to double normal size. The change is instantaneous, and there is no limit to how often the mutant may do this.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/density-control.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "B8S0oYRgh8gCoUGA",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!B8S0oYRgh8gCoUGA"
+}

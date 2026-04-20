@@ -1,0 +1,157 @@
+{
+  "name": "Combat Reference Sheets",
+  "pages": [
+    {
+      "name": "Physical Attack Matrix I",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Descending armor class is used: cross the defender’s armor class with the attacker’s weapon class to get the d20 target number needed to hit.</p><p>Physical weapon attacks use Matrix I.</p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>AC</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr></thead>\n        <tbody><tr><th scope=\"row\">1</th><td>19</td><td>19</td><td>18</td><td>15</td><td>13</td><td>16</td><td>14</td><td>18</td><td>18</td><td>16</td><td>16</td><td>16</td><td>12</td><td>14</td><td>14</td><td>12</td></tr><tr><th scope=\"row\">2</th><td>17</td><td>18</td><td>17</td><td>14</td><td>12</td><td>15</td><td>13</td><td>17</td><td>16</td><td>15</td><td>15</td><td>15</td><td>11</td><td>13</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">3</th><td>16</td><td>16</td><td>16</td><td>12</td><td>10</td><td>15</td><td>12</td><td>16</td><td>15</td><td>14</td><td>15</td><td>15</td><td>8</td><td>12</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">4</th><td>15</td><td>14</td><td>15</td><td>12</td><td>10</td><td>15</td><td>11</td><td>15</td><td>14</td><td>13</td><td>15</td><td>15</td><td>8</td><td>11</td><td>13</td><td>10</td></tr><tr><th scope=\"row\">5</th><td>14</td><td>13</td><td>14</td><td>12</td><td>10</td><td>15</td><td>10</td><td>14</td><td>13</td><td>12</td><td>14</td><td>15</td><td>8</td><td>11</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">6</th><td>13</td><td>12</td><td>13</td><td>12</td><td>10</td><td>15</td><td>9</td><td>13</td><td>12</td><td>11</td><td>11</td><td>15</td><td>8</td><td>10</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">7</th><td>12</td><td>11</td><td>12</td><td>12</td><td>10</td><td>13</td><td>8</td><td>12</td><td>11</td><td>10</td><td>10</td><td>11</td><td>8</td><td>10</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">8</th><td>11</td><td>10</td><td>11</td><td>12</td><td>10</td><td>13</td><td>7</td><td>11</td><td>10</td><td>9</td><td>9</td><td>9</td><td>8</td><td>9</td><td>13</td><td>11</td></tr><tr><th scope=\"row\">9</th><td>10</td><td>9</td><td>10</td><td>12</td><td>10</td><td>7</td><td>6</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>8</td><td>8</td><td>8</td><td>11</td></tr><tr><th scope=\"row\">10</th><td>9</td><td>8</td><td>9</td><td>11</td><td>9</td><td>6</td><td>5</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>8</td><td>8</td><td>8</td><td>10</td></tr></tbody>\n      </table>\n    </div>\n  \n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>Weapon Class</th><th>Weapons</th></tr></thead>\n        <tbody><tr><th scope=\"row\">1</th><td>Clubs, hammers, lances, maces, spears</td></tr><tr><th scope=\"row\">2</th><td>Axes, daggers, flails, morning stars</td></tr><tr><th scope=\"row\">3</th><td>Pole arms, swords</td></tr><tr><th scope=\"row\">4</th><td>Vibro dagger</td></tr><tr><th scope=\"row\">5</th><td>Vibro blade, energy mace</td></tr><tr><th scope=\"row\">6</th><td>Stun whip</td></tr><tr><th scope=\"row\">7</th><td>Robotic tentacles</td></tr><tr><th scope=\"row\">8</th><td>Grenades, javelins</td></tr><tr><th scope=\"row\">9</th><td>Arrows, crossbow bolts, sling projectiles</td></tr><tr><th scope=\"row\">10</th><td>Pistol slugs</td></tr><tr><th scope=\"row\">11</th><td>Needler</td></tr><tr><th scope=\"row\">12</th><td>Stun ray pistols and rifles</td></tr><tr><th scope=\"row\">13</th><td>Laser pistols and rifles</td></tr><tr><th scope=\"row\">14</th><td>Mk V blaster and Mk VII rifle</td></tr><tr><th scope=\"row\">15</th><td>Black ray pistol</td></tr><tr><th scope=\"row\">16</th><td>Fusion rifle, micro missile, mini missile</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "Bec9sljGu4sO6XTQ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!JabLQkxPgVDpTchA.Bec9sljGu4sO6XTQ"
+    },
+    {
+      "name": "Physical Attack Matrix II",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Use Matrix II for creatures and natural attacks without a listed weapon class.</p><p>Cross the defender’s descending armor class with the attacker’s hit-dice bracket.</p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>AC</th><th>1</th><th>2-3</th><th>4-5</th><th>6-8</th><th>9-10</th><th>11-14</th><th>15+</th></tr></thead>\n        <tbody><tr><th scope=\"row\">1</th><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td></tr><tr><th scope=\"row\">2</th><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td></tr><tr><th scope=\"row\">3</th><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td></tr><tr><th scope=\"row\">4</th><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td></tr><tr><th scope=\"row\">5</th><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td></tr><tr><th scope=\"row\">6</th><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td></tr><tr><th scope=\"row\">7</th><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td></tr><tr><th scope=\"row\">8</th><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td></tr><tr><th scope=\"row\">9</th><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td></tr><tr><th scope=\"row\">10</th><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "owfynSsE02S9neZW",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!JabLQkxPgVDpTchA.owfynSsE02S9neZW"
+    },
+    {
+      "name": "Mental Attack Matrix",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Cross the defender’s mental strength with the attacker’s mental strength to find the required d20 result.</p><p>\"A\" means automatic success; \"NE\" means no effect or impossible.</p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.86rem\">\n        \n        <thead><tr><th>Def\\Att</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th></tr></thead>\n        <tbody><tr><th scope=\"row\">3</th><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">4</th><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">5</th><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">6</th><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">7</th><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">8</th><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td><td>A</td></tr><tr><th scope=\"row\">9</th><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>A</td></tr><tr><th scope=\"row\">10</th><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td></tr><tr><th scope=\"row\">11</th><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td></tr><tr><th scope=\"row\">12</th><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td></tr><tr><th scope=\"row\">13</th><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td></tr><tr><th scope=\"row\">14</th><td>NE</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td></tr><tr><th scope=\"row\">15</th><td>NE</td><td>NE</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td></tr><tr><th scope=\"row\">16</th><td>NE</td><td>NE</td><td>NE</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td></tr><tr><th scope=\"row\">17</th><td>NE</td><td>NE</td><td>NE</td><td>NE</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td></tr><tr><th scope=\"row\">18</th><td>NE</td><td>NE</td><td>NE</td><td>NE</td><td>NE</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "PXVTv1jMmp9CWCad",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!JabLQkxPgVDpTchA.PXVTv1jMmp9CWCad"
+    },
+    {
+      "name": "Weapon Damage Chart",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This chart covers the primitive and low-tech weapons listed in the Gamma World core rules.</p><p>Damage is split by target size: small/man-sized versus large opponents.</p>\n    <div style=\"overflow-x:auto;margin:0.75rem 0\">\n      <table style=\"border-collapse:collapse;width:max-content;min-width:100%;font-size:0.92rem\">\n        \n        <thead><tr><th>Weapon</th><th>Small / Man-Sized</th><th>Large</th><th>Effective Range</th></tr></thead>\n        <tbody><tr><th scope=\"row\">Arrow</th><td>1d6</td><td>1d6</td><td>100</td></tr><tr><th scope=\"row\">Axe Battle</th><td>1d8</td><td>1d8</td><td>Melee</td></tr><tr><th scope=\"row\">Axe Hand</th><td>1d6</td><td>1d4</td><td>20</td></tr><tr><th scope=\"row\">Club</th><td>1d6</td><td>1d3</td><td>10</td></tr><tr><th scope=\"row\">Crossbow Bolt</th><td>1d4</td><td>1d4</td><td>120</td></tr><tr><th scope=\"row\">Dagger</th><td>1d4</td><td>1d3</td><td>20</td></tr><tr><th scope=\"row\">Flail</th><td>2d4-1</td><td>2d4</td><td>Melee</td></tr><tr><th scope=\"row\">Javelin</th><td>1d6</td><td>1d6</td><td>40</td></tr><tr><th scope=\"row\">Lance Mounted</th><td>1d6</td><td>1d10</td><td>Melee</td></tr><tr><th scope=\"row\">Mace</th><td>2d4-1</td><td>1d6</td><td>Melee</td></tr><tr><th scope=\"row\">Morning Star</th><td>2d4</td><td>2d4-1</td><td>Melee</td></tr><tr><th scope=\"row\">Pole Arm</th><td>1d8</td><td>1d12</td><td>Melee</td></tr><tr><th scope=\"row\">Sling Bullet</th><td>1d4+1</td><td>2d4-1</td><td>100</td></tr><tr><th scope=\"row\">Sling Stone</th><td>1d4</td><td>1d4</td><td>80</td></tr><tr><th scope=\"row\">Spear</th><td>1d6</td><td>1d8</td><td>20</td></tr><tr><th scope=\"row\">Sword Long</th><td>1d8</td><td>1d12</td><td>Melee</td></tr><tr><th scope=\"row\">Sword Short</th><td>1d6</td><td>1d8</td><td>Melee</td></tr><tr><th scope=\"row\">Sword Two Hand</th><td>1d10</td><td>3d6</td><td>Melee</td></tr></tbody>\n      </table>\n    </div>"
+      },
+      "_id": "eNiBePoxFTBGVVRd",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!JabLQkxPgVDpTchA.eNiBePoxFTBGVVRd"
+    }
+  ],
+  "_id": "JabLQkxPgVDpTchA",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!JabLQkxPgVDpTchA"
+}

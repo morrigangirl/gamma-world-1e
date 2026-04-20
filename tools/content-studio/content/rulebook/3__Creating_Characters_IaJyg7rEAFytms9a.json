@@ -1,0 +1,803 @@
+{
+  "name": "3. Creating Characters",
+  "pages": [
+    {
+      "name": "Character Types",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 6-8</em></p><p>Characters fall into one of five types:</p><p><strong>Pure Strain Human (PSH)</strong>: unmutated humans. Interact easily with Ancient technology; see the <em>PSH Reliability</em> house rule in the System Documentation pack.</p><p><strong>Humanoid</strong>: visibly-mutated humans. Roll both physical and mental mutations.</p><p><strong>Mutated Animal</strong>: sentient animals with one or more mutations. Pick a base animal (bear, dog, lizard, etc.) and roll the animal mutation tables.</p><p><strong>Mutated Plant</strong>: sentient plants. Roll on the Plant Mutation table.</p><p><strong>Robot</strong>: a pre-war robotic unit under player control. Uses the Robotic Units chassis profiles.</p>"
+      },
+      "_id": "644KgzD64QUUTmN2",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.644KgzD64QUUTmN2"
+    },
+    {
+      "name": "Attributes",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 6-7</em></p><p>Roll 3d6 for each of the six attributes, in order: Mental Strength (MS), Intelligence (IN), Dexterity (DX), Charisma (CH), Constitution (CN), Physical Strength (PS).</p><p>Mutated animals may adjust up to three attributes by up to 2 points each to reflect their stock.</p><p>Robots use a fixed profile appropriate to their chassis; see the <strong>Robotic Units</strong> pack.</p><table class=\"gw-rulebook__table\"><caption>Attribute Modifiers</caption><thead><tr><th>Score</th><th>Modifier Effect</th></tr></thead><tbody><tr><td>3-4</td><td>-2 effective</td></tr><tr><td>5-8</td><td>-1 effective</td></tr><tr><td>9-12</td><td>no modifier</td></tr><tr><td>13-15</td><td>+1 effective</td></tr><tr><td>16-17</td><td>+2 effective</td></tr><tr><td>18</td><td>+3 effective</td></tr></tbody></table>"
+      },
+      "_id": "UltUdOjgq4dSzwp2",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.UltUdOjgq4dSzwp2"
+    },
+    {
+      "name": "Hit Points",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 7</em></p><p>Starting HP = sum of 1d6 rolls, one per point of CN (3-18 dice).</p><p>PSH and humanoid characters gain additional HP when leveling up; mutated animals, plants, and robots do not level in RAW but gain attribute bonuses.</p>"
+      },
+      "_id": "6dDHMhFMU3jRmdgU",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.6dDHMhFMU3jRmdgU"
+    },
+    {
+      "name": "Mutations",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 9-16</em></p><p>Humanoids roll 1d4 physical mutations and 1d4 mental mutations on the humanoid tables.</p><p>Mutated animals roll 1d4 physical mutations and 1d4 mental mutations on the animal tables.</p><p>Mutated plants roll 1d4-1 mutations on the Plant table.</p><p>A result in the Defect range is a drawback; a result in the \"Good Mutation\" reroll range re-rolls with guaranteed benefit; a result in the \"Pick Any\" range lets the player choose.</p><p>Use the <strong>Roll Tables</strong> pack's Mutation Draw tables to roll mutations at the table.</p>"
+      },
+      "_id": "Ajc9im4KXeSQiecX",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.Ajc9im4KXeSQiecX"
+    },
+    {
+      "name": "Cryptic Alliance",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 27</em></p><p>At character creation, a PC may elect to belong to one of the nine cryptic alliances — or remain independent.</p><p>Membership is not automatic: a faction recruits those whose type and disposition fit its agenda. Roll percentile to test acceptance: 75% for a humanoid, lower for pure mutants, lower still for those the faction considers unfit.</p><p>See the <strong>Cryptic Alliances</strong> pack for faction briefs and the <code>allianceReactionModifier</code> helper for inter-faction reaction bonuses.</p>"
+      },
+      "_id": "aQYAL63VCAhbLkx1",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.aQYAL63VCAhbLkx1"
+    },
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>&lt;!-- GENERATED BY extract-rulebook-prose.mjs --&gt; &lt;!-- Auto-OCR'd from ref/gamma-world-core-rules.pdf. Proofread before importing. --&gt;</p>"
+      },
+      "_id": "CiT2lZCUM9Mbk9NB",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.CiT2lZCUM9Mbk9NB"
+    },
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Fortifications may range in type from prominent buildings to vast subterranean complexes. Contents of a fortification will vary, depending upon its original function. Many times, due to the strength of the fortification, the contents will be relatively intact and unharmed.</p><p>Fortifications will be found in one of three states: depowered, active, and manned. Depowered complexes have no security system in operation and are quite likely to have been sacked of most usable contents. Active complexes still have functioning security systems, robotic units, and so forth, but lack an “intelligent” commanding force and function according to pre-2322 programming. Manned fortifications are active complexes with a directing inteiligence, such as the remnants of a group of ancients, or a band of Restorationists (see CRYPTIC ALLIANCES). The referee is to determine the extent of function, supply, etc. for all fortifications he includes in his game.</p>"
+      },
+      "_id": "McOmjjdGUuiEIiLN",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.McOmjjdGUuiEIiLN"
+    },
+    {
+      "name": "Spaceports",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>These were primary targets of The Apocalypse during the Shadow Years and are usually found in the center of an extremely devastated area, saturated with hard radiation. The construction and shielding of the spaceports was such that many survived, relatively unaffected by the holocaust. The referee can fill his spaceports with highly complex equipment, aircraft, spacecraft, and possibly a starship.</p>"
+      },
+      "_id": "vhl9xulj9osCNi0b",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.vhl9xulj9osCNi0b"
+    },
+    {
+      "name": "Other Suggestions",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Radioactive Desert: These areas appear to be “conventional” deserts, but are actually the results of high-yield fusion weapons. Radioactive deserts are taboo to nearly ail races of men, as the hazards are many. Every being spending time in a radioactive desert has a5% chance per day of suffering radiation poisoning of random intensity (see HAZARDS). The presence of radiation-resistant mutations is another danger to be considered when entering these deserts.</p><p>On the bright side, however, since radioactive deserts were created by target seeking weapons, the target may be close by, or even in the center of the desert. Thus, even though radioactive deserts are dangerous, and often used as areas of banishment for outcasts, they can hold treasures of the Ancients in ruined cities or whatever else was the target of the fusion weapons.</p><p>Roads, Highways, and Transportation: Most roads, railroads, and other avenues of transportation have been destroyed. However, some portions of a vast highway system for air-cushioned vehicles (similar to our interstate system) remain, due to the incredibly tough duralloy metal trom whicn it was constructed. The underground mass transit systems in the ancient Metropolises may also remain in varying states of disrepair.</p><p>Creatures and Artifacts: After the referee has decided upon the layout of his world and filled in the necessary portions of the overall terrain map and his detailed maps, he must distribute artifacts and equipment to appropriate places and populate this world with men and monsters (including plants). Following sections of the book provide guides for establishing all sorts of non-player creatures and plants, and the referee wiil soon learn how much of what to put where. It is desirable to key the detailed maps to lists describing these creatures and artifacts and their reasons for being there.</p>"
+      },
+      "_id": "Ltxv3yDSpMiJ3EA8",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.Ltxv3yDSpMiJ3EA8"
+    },
+    {
+      "name": "The First Scenario",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Using the maps and lists he has thus far accumulated, the referee is now ready to devise a scenario in which the players may start the campaign. This will give the players background, a place to start, and reasons to go adventuring in GAMMA WORLD.</p><p>Hopefully the referee wiil keep a constant thread of logic behind his game and challenge the players with mental as weli as physical problems. The more unknowns facing the players, especially those who have read these rules, the better. Be careful to make sure that the capable player can deduce new effects and solutions to problems through hints given by the referee as well as his own reasoning powers. For example, if an adventurer walks through a doorway in a ruin and is killed by no apparent means, there is no way for other players to avoid a similar fate. Suppose, however, a player approaches a doorway in a ruin, sees a blinking light over a small slot next to the door, walks through the door anyway, is killed by no apparent means, and the blinking light goes out. Surviving players will be able to assume the blinking lignt is some sort of warning device and will avoid such doorways in the future, perhaps trying to find some other way to enter. !f one of these survivors should later find a piastic card that looks like it might fit into the slot, tries it, the light goes out, and he enters unharmed. . . voila! Thus, a probiem has been overcome through the use of reasoning. Perhaps that</p><p>player will find some object of value inside the doorway as a reward for his clear thinking.</p><p>Character personae are created at the beginning of the campaign,</p><p>endowed with certain basic attributes through the roll of dice. First,</p><p>each player must choose to play either Pure Strain Human, human- _ oid, or mutated animal-type characters (the advantages and disad-</p><p>vantages of each of these three categories will be explained</p><p>momentarily). Having selected the type of character he wishes to</p><p>play, the player then rolls three six-sided dice to determine the relative strengths of each of his character's six basic attributes. mental strength, intelligence, dexterity, charisma, constitution, and physical strength. As a general rule, a roll of 3-8 for a given attribute indicates a weak trait, 9-12 is average, and 13-18 is above average. The relative strengths of certain attributes can (and most likely will) change during the course of the campaign, due to mutation, acquired experience, or some other method devised by the referee.</p><p>It is desirable that few, if any, of a player character's basic attributes be below average. Player characters represent an elite with the desire, the initiative, and the ability to venture outside the boundaries of the village, town, or tribal lands. They are the pioneers, explorers, and tamers of the vast wilderness. It is they who will eventually bring order to the chaos of GAMMA WORLD and an end to the Black Years. To increase the player's chances of rolling up an exceptional character, the referee will find it advisable to use the following method: for each basic attribute, the player rolls four dice (4d6) but totals only the highest three. If, for example, the player rolled 4, 3, 5, 1 on the four dice, he would add together 4+3+45= 12 and leave out the 1. If he rolled 4, 3, 2, 2 he would add 4+34+42=9 and leave out the second 2. While it is still possibie to roll very low numbers (3, 2, 2, 1), the player’s chances of rolling an average to above average character are greatly increased.</p><p>After determining the relative strengths of all characters’ basic</p><p>attributes, players electing to play humanoid or mutated animal</p><p>characters must determine their characters’ mutations. This</p><p>process can be done in one of two ways. The first way is for the</p><p>character to roll a single four-sided die twice to determine the</p><p>number of physical and mental mutations (one roll for each). The</p><p>number of mutations having been determined, the player then rolls</p><p>a pair of percentile dice for each mutation, consulting the appropri-</p><p>ate chart for results. Using this method, the character may or may</p><p>not have mutational defects, depending upon the dice rail. The second method of determining a character's mutations is to determine the number of mutations in the same manner as described above, but then to allow the player to pick the mutations</p><p>he wishes his character to receive: Aftar tha player has selectad tha</p><p>proper number of mutations, the referee then selects one or more</p><p>mutational defects in the following manner: a roll of three or four</p><p>when determining the number of mutations (either physical or</p><p>mental) indicates one physical or mental mutational defect, as the</p><p>case may be (or both, if botn dice rolis were either three or four). Two rolis of two indicates either one physicat or one mental mutational defect (referee’s discretion). Rolls totalling three or less mutations receive no mutational defects. Mutational defects may</p><p>be found on the same chart as ‘normal’? mutations, and are</p><p>indicated by the letter “‘D”.</p>"
+      },
+      "_id": "zpYbN8CZpm1DDdQz",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.zpYbN8CZpm1DDdQz"
+    },
+    {
+      "name": "Character Types",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": ""
+      },
+      "_id": "3EhImoacYvEYMq1m",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.3EhImoacYvEYMq1m"
+    },
+    {
+      "name": "Pure Strain Human",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>As the name implies, Pure Strain Humans (PSH) are human is beings who possess no physical or mental mutations. The PSH va</p><p>character could be considered the ‘‘weakest”’ character type in ra GAMMA WORLD. The lack of even some of the more common mutath tions found in other beings makes them very vulnerable to physical si or mental harm. Without any of the heightened sense mutations, ov they often fail to perceive danger near them, and in combat situaa tions PSH are limited to ‘‘normal” physical means and possess only co a purely defensive mental strength.</p><p>One might think that the PSH character is doomed. However, C PSH characters have some advantages to themselves that compensate for their lack of mutations. ap</p><p>The Pure Strain Human is a direct descendent of pre-2322 stock. et PSH characters with proper identification will always be recognized hi</p><p>sp by pre-2322 robotic units, and by the same token, can pass security checks that would block most mutants. For this reason, many of the du surviving Pure Strain Humans live in or near the ruins of ancient of cities, and most are familiar, at least to some degree, with the techex nological functions occurring within the ruins. This knowledge w generates a combination fear/awe/respect in the mutated characof ters of GAMMA WORLD, which in turn leads to another advantage al for the PSH: heightened charisma. Al! PSH characters automaticalin ly receive a bonus of three points to their dice roll for charisma (but di remember that the total cannot exceed 18).</p><p>lo</p><p>th HUMANOIDS ch Humanoid characters are mutated human stock; that is, a basic an human with one or more mutations. Humanoids could in a sense be considered the “strongest” character type, as they have the mutations usually necessary for survival in GAMMA WORLD, but are still human enough to function, at least to a degree, within the remains of pre-2322 civilization. Humanoids without outward physical mutations and possessing proper JD’s will usually be recognized by all but the most sophisticated automations as authorized personnel.</p>"
+      },
+      "_id": "c52ufrIT7OJqWLvt",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.c52ufrIT7OJqWLvt"
+    },
+    {
+      "name": "Mutated Animals",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Players electing to play mutated animal characters should first select a basic animal stock, keeping in mind the relative advantages and strengths of that particular species. For game purposes, the selected animal will initially possess the equivalent intelligence of d a human, but this does not count as a mutation and should not be c confused with the mental mutation “heightened intelligence,” w which is additional intelligence above and beyond the basic die roll m for that attribute. Having selected the basic animal type, players c determine basic attributes and mutations in the same manner.as g humanoids. o</p><p>In any mutated animal type, the referee must determine how the re character will function within groups of humanoids and Pure Strain s Humans. Determination of whether the mutated animal character is th capable of speech, the use of paws/hooves/fins as hands, and so forth, should be made as logically and reasonably as possible th before the start of the game to prevent later arguments as to a m player character’s abilities. In no case will mutated animal types be e able to command robotic units or pass any type of security check, though the possibility of reprogramming such units is left to the referee's discretion.</p>"
+      },
+      "_id": "FFWYwFbswLYEG2a9",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.FFWYwFbswLYEG2a9"
+    },
+    {
+      "name": "Basic Attributes",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": ""
+      },
+      "_id": "eFpxIz1ToY0zF318",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.eFpxIz1ToY0zF318"
+    },
+    {
+      "name": "Mental Strength",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This attribute deals with the character's ability to control, both offensively and defensively, psionic energies and powers. In the case of beings possessing no mental mutations, such as Pure Strain Humans, the mental strength rating is used simply for defense during mental attacks. For characters or creatures with mental mutations, this rating Is used for both offense and defense. Also, unlike other basic attribute ratings, mental strength increases with use. Details of this increase, along with rules for mental combat, can be found under the MENTAL COMBAT heading.</p><p>INTELLIGENCE —</p><p>A character's intelligence rating is a gauge of his intellect, wit, ‘ logic, reasoning powers, and so forth. This factor is most important when attempting to determine the operation of artifacts of any type, and as a guide for referee-determined actions by a character in a given situation. When attempting to learn the operation of an artifact (see ARTIFACT USE), a player may subtract a point from each N die roll for every point of intelligence over 15; players must add a o point to each die roll for every point of intelligence less than seven. p</p>"
+      },
+      "_id": "XW8sCzXgBEK3gdD3",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.XW8sCzXgBEK3gdD3"
+    },
+    {
+      "name": "Dexterity",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>The dexterity of a character indicates the speed at which a player</p><p>able to function, his or her agility, and his or her reaction time in arious situations. For example, when a being with a dexterity ating of 16 encounters a being with a dexterity of 10, the being with he dexterity of 16 will have first choice of actions — in combat ituations, have first strike, and so forth. For each point of dexterity ver 15, a character adds one point to the die roll when trying to hit target in physical combat. A dexterity rating of less than 6 gives a orresponding minus on hit probability.</p>"
+      },
+      "_id": "68d7Q7cfM7SCAlnl",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.68d7Q7cfM7SCAlnl"
+    },
+    {
+      "name": "Charisma",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This trait reflects a being’s leadership ability, through physica! ppearance, personality, magnetism, persuasiveness, willpower, tc. Pure Strain Humans, as explained earlier, possess an unusually igh charisma, and many times will wind up being group leaders, pokesmen, and so on. This factor may be used by the referee uring encounters between player characters and other inhabitants f GAMMA WORLD to determine the reactions of both parties. For xample, a group of GAMMA WORLD adventurers, lost in the wilderness, encounters a small group of nomadic tribesmen. if Uruk f Meresmire (charisma 4) asks for directions, the reteree should llow only a very small chance that the tribesmen will help (at least n a favorable manner...a good referee might allow the tribesmen to irect the adventurers to a nearby swamp or a similar unpleasant ocale). On the other hand, if Artur Pendragon (charisma 17) asks, he tribesmen will probably help if they can. When non-piayer haracters or creatures are encountered, two dice (2d6) are rolled nd the following table is consulted:</p>"
+      },
+      "_id": "EKt4oLkiFHlpG4v0",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.EKt4oLkiFHlpG4v0"
+    },
+    {
+      "name": "Reaction Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Dice Score Reaction</p><p>2 Extremely nostile, may attack”</p><p>3-5 Hostile, distrustful, may attack’</p><p>6-8 Uncertain</p><p>9-11 Friendly, helpful</p><p>12 Enthusiastic, loyal</p><p>“No further attempt may be made to entice, hire, or otherwise</p><p>interact with the being.</p><p>Offers of money, weapons, food, artifacts, etc., may influence the die roll, adding or subtracting points to/from the total before consulting the REACTION TABLE. The referee should judge whether the offer even warrants a plus or minus. Such plusses and minuses should normally be limited to 1 point, although some circumstances may warrant increasing it to 2 points. If, for example, a gren (a creature which dislikes ancient technological devices) is offered a “music box’' (a portable tape player) the player should eceive a reaction penalty of -1; whereas an offer of a bale of synthetic clothing to a yexi/ (see CREATURES) would probably give he player a reaction bonus of +2.</p><p>A player’s charisma also affects the reaction die roll, as well as he maximum number of followers a player may have and their morale rating (for an explanation of morale, see MORALE). These effects are noted on the CHARISMA table below:</p>"
+      },
+      "_id": "SwKK6HKz0gitDSVQ",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.SwKK6HKz0gitDSVQ"
+    },
+    {
+      "name": "Charisma Table",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Charisma Maximum No. Morale Reaction</p><p>Score of Followers Adjustment Adjustment</p><p>8 3 “1 normal</p><p>9 4 normal normal</p><p>10 4 normal normal</p><p>1 4 normal normal</p><p>12 5 normal normal</p><p>13 5 normal +1</p><p>18 15 +3 ere)</p><p>NOTE: Followers are non-player characters who serve the player out of loyalty rather than for pay. Non-player characters who serve for pay are known as hirelings or henchmen. There ts no limit to the</p><p>number of hirelings a player may have. (Also see NON-PLAYER CHARACTERS).</p><p>The CHARISMA TABLE assumes two things: that the player can communicate with the non-player character or creature, and that both parties are of the same type (Pure Strain Human, humanoid, or mutated animal). The referee will judge whether communication is Possible. If the player and non-player characters are of different types use the following table:</p>"
+      },
+      "_id": "DlgGypMdj4gjHjfs",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.DlgGypMdj4gjHjfs"
+    },
+    {
+      "name": "Charisma Table Modifiers",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Non-Piayer Character Type</p><p>Player</p><p>Character Mutated</p><p>Type PSH Humanoid Animal</p><p>PSH normal 21 Uet “3/1/41</p><p>Humanoid -2/-1/-1 normal -27-41-1</p><p>Mutated -3/-21-2 -2/-21-4 normal</p><p>Animal</p><p>The three numbers (#/#/#) indicate the modifications to the three columns of the CHARISMA TABLE (Maximum Number of Followers/Morale Adjustment/Reaction Adjustment).</p>"
+      },
+      "_id": "4wwYwN0x0rBxr88m",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.4wwYwN0x0rBxr88m"
+    },
+    {
+      "name": "Constitution",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>Constitution is a gauge of the amount of physical damage a character is able to withstand (from wounds, poison, radiation, etc.) before death. This rating never changes during the course of a character's existence.</p><p>Exception: Some particularly rare or unusual mutational effects, such as exposure to Kaskium, may raise or lower constitution ratings.</p><p>The constitution rating is first used to determine the number of “hit points” — a numerical expression of the amount of injury, measured in points, a character can sustain before death. Hit points are determined by roiling a number of six-sided dice equal to the constitution rating. For example, if a character had a constitution of 13, he would roll thirteen six-sided dice and total the numbers rolled. tf the die rolls were 4, 1, 1, 3, 6, 5, 1, 1, 2, 5, 1, 1,3, the character would have 34 hit points. Procedures for caiculating amounts of damage sustained in combat, healing processes (expressed in terms of hit points gained or lost), mutational effects on hit points, and so forth, will be found under appropriate sections elsewhere in these rules.</p><p>The constitution rating is also used to determine a character's ability to survive poisonina and exposure to radiation. Results of encounters with poisons and radiation depend upon the strength or intensity of the poison or radiation and may be calculated on the charts found in the HAZARDS section.</p>"
+      },
+      "_id": "BQ7uaj4pq9bsIU1m",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.BQ7uaj4pq9bsIU1m"
+    },
+    {
+      "name": "Physical Strength",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>This trait deals with a character's ability to perform physical acts. The main use of the physical strength rating is to determine how much damage a character can do in physical combat. For each point of physical strenath over 15. a character receives a bonus point to the die roll that determines damage done in combat to his Opponent. A physical strength of less than 6 gives a corresponding minus to damage done. Further details on this determination will be found under the PHYSIGAL COMBAT section. In addition, the referee may also use the physical strength rating to determine if an individual is capable of certain unusually strenuous physical actions.</p><p>NON-PLAYER CHARACTERS AND CREATURES</p><p>Characters and creatures found in GAMMA WORLD other than the player characters themselves must be created and determined by the referee. Some of the more common creatures are listed under ENCOUNTERS, but the referee should create more. By doing so, the referee makes his game unique, and greatly increases the challenge to the players by offering more of the unexpected and unknown.</p><p>Non-player characters and creatures are those to be encountered by the players In thefr adventures and explorations. Accordingly, most of the attributes of these life forms will at first be unknown to the players. Non-player characters and creatures, when encountered, are handled by the referee — and their reaction may be hostile, neutral, or friendly, depending upon their disposition and biological make-up, and upon the charisma of the leader(s) of the Party of players (see CHARISMA).</p><p>Non-intelligent creatures, plants, vegetables, and so forth should be created by selecting a base creature or plant and adding mutations by chance or choice. The creation, operation, and use of</p><p>robotic units is explained later under ROBOTIC UNITS. Intelligent beings (human or otherwise) should be created in the same manner as described in CREATING CHARACTERS. Examples of the behavior of some non-player characters and creatures are given under ENCOUNTERS.</p><p>Non-player characters and creatures may algo serve as followers or hirelings (henchmen) of player characters. Followers and hirelings may be acquired as they are randomly encountered in the course of adventuring, or, when in a settled area (such as a town or village) the players may advertise that they are looking for other adventurers by frequenting places where the inhabitants gather. It is up to the referee to then determine whether there is anyone else in the area who is interested. Generally, the iarger the settlement, the more likely there is someone willing to leave it. Once the initial reaction of the non-player character or creature to the players has been determined (see CHARISMA), it is up to the players and the referee to use their imaginations and acting skills to determine the further course of events. The idea is to become (in your imagination) the character or creature in the situation. Bo what you would do if it really was you. Such interplay between referee and players is the heart of any role-playing game, and the source of the term itself.</p>"
+      },
+      "_id": "X7wV2DNxBLBj5TL4",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.X7wV2DNxBLBj5TL4"
+    },
+    {
+      "name": "Hopeless Characters",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p>When a player is particularly unlucky with his dice rolling for his character and most or all basic attributes are below average, the referee may, at his discretion, declare the character unsuitable for GAMMA WORLD adventures and allow the player to create a new character to take his place.</p>"
+      },
+      "_id": "7Qr6Mo6ylvJ3bIdR",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!IaJyg7rEAFytms9a.7Qr6Mo6ylvJ3bIdR"
+    }
+  ],
+  "_id": "IaJyg7rEAFytms9a",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!IaJyg7rEAFytms9a"
+}

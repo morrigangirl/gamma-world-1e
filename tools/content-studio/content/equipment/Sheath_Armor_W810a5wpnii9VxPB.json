@@ -1,0 +1,71 @@
+{
+  "name": "Sheath Armor",
+  "type": "armor",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "acValue": 4,
+    "armorType": "light",
+    "dxPenalty": 0,
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Padded riot-control armor with helmet and guards.</p>"
+    },
+    "field": {
+      "mode": "none"
+    },
+    "mobility": {},
+    "offense": {},
+    "protection": {
+      "blackRayImmune": false,
+      "radiationImmune": false,
+      "poisonImmune": false,
+      "laserImmune": false,
+      "mentalImmune": false
+    },
+    "traits": {
+      "grantsResistance": [],
+      "grantsImmunity": [],
+      "grantsVulnerability": []
+    },
+    "artifact": {
+      "isArtifact": true,
+      "category": "armor",
+      "chart": "b",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {},
+      "functionChance": 40,
+      "harmCallback": ""
+    },
+    "actionTypes": {}
+  },
+  "_id": "W810a5wpnii9VxPB",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!W810a5wpnii9VxPB"
+}

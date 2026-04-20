@@ -1,0 +1,1103 @@
+{
+  "name": "Physical Mutation Draw (Mutated Animal, d100)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Roll on the mutated animal physical mutation chart.</p>",
+  "formula": "1d100",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Attraction Odor",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "You attract carnivores.",
+      "weight": 1,
+      "range": [
+        1,
+        2
+      ],
+      "drawn": false,
+      "_id": "x9joyioSOYMDYyjr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.x9joyioSOYMDYyjr"
+    },
+    {
+      "type": "text",
+      "name": "Body Structure Change",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reduce your resistance to some outside element.",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "3sLp0HjbXGGAYKym",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.3sLp0HjbXGGAYKym"
+    },
+    {
+      "type": "text",
+      "name": "Chameleon Powers",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Change color to blend in.",
+      "weight": 1,
+      "range": [
+        4,
+        6
+      ],
+      "drawn": false,
+      "_id": "ZUOBxNdMWz8XBFX2",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.ZUOBxNdMWz8XBFX2"
+    },
+    {
+      "type": "text",
+      "name": "Density Control",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Shrink to improve AC, grow to improve speed.",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "wBRjaG7cfGNQJ3YU",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.wBRjaG7cfGNQJ3YU"
+    },
+    {
+      "type": "text",
+      "name": "Diminished Sense",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "One sense does not function normally.",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "WruF5DesOFV8uYah",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.WruF5DesOFV8uYah"
+    },
+    {
+      "type": "text",
+      "name": "Double Physical Pain",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Sustain double damage.",
+      "weight": 1,
+      "range": [
+        9,
+        9
+      ],
+      "drawn": false,
+      "_id": "NGlR0JrB6KDbuCBp",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.NGlR0JrB6KDbuCBp"
+    },
+    {
+      "type": "text",
+      "name": "Electrical Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Shock those you touch for 3d6.",
+      "weight": 1,
+      "range": [
+        10,
+        11
+      ],
+      "drawn": false,
+      "_id": "s0RoVdNaKVG59782",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.s0RoVdNaKVG59782"
+    },
+    {
+      "type": "text",
+      "name": "Fat Cell Accumulation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Impaired movement and fighting ability.",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "Xa4cz7zS7aC31Ejf",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.Xa4cz7zS7aC31Ejf"
+    },
+    {
+      "type": "text",
+      "name": "Gas Generation: Musk",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Expel gas up to 10 meters.",
+      "weight": 1,
+      "range": [
+        13,
+        13
+      ],
+      "drawn": false,
+      "_id": "vgBzWGXkoqs2wpz9",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.vgBzWGXkoqs2wpz9"
+    },
+    {
+      "type": "text",
+      "name": "Heat Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Beams of heat up to 15 meters that do 4d6 every 3 turns.",
+      "weight": 1,
+      "range": [
+        14,
+        14
+      ],
+      "drawn": false,
+      "_id": "ZZFUAs4LMK6FkfTW",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.ZZFUAs4LMK6FkfTW"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Balance",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Maintain balance in difficult circumstances.",
+      "weight": 1,
+      "range": [
+        15,
+        15
+      ],
+      "drawn": false,
+      "_id": "Drf9OopGQNpVqgEx",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.Drf9OopGQNpVqgEx"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Constitution",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+2HP per Constitution. Under the 0.8.2 homebrew saves: +3 to poison and radiation saves, and radiation severity is capped at \"severe\" (never Catastrophic Exposure from a single exposure).",
+      "weight": 1,
+      "range": [
+        16,
+        21
+      ],
+      "drawn": false,
+      "_id": "FwmZyV6R0d2aNdca",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.FwmZyV6R0d2aNdca"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Dexterity",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+4AC when unencumbered.",
+      "weight": 1,
+      "range": [
+        22,
+        22
+      ],
+      "drawn": false,
+      "_id": "GFcmmiP3cAJFinEV",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.GFcmmiP3cAJFinEV"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Hearing",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Cannot be surprised.",
+      "weight": 1,
+      "range": [
+        23,
+        23
+      ],
+      "drawn": false,
+      "_id": "RR7mX8I87EIndIln",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.RR7mX8I87EIndIln"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Precision",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+2 damage dice with any weapon.",
+      "weight": 1,
+      "range": [
+        24,
+        24
+      ],
+      "drawn": false,
+      "_id": "wQnXsGVI3qNdGvoI",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.wQnXsGVI3qNdGvoI"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Smell",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Can smell, detect, and track like a bloodhound.",
+      "weight": 1,
+      "range": [
+        25,
+        25
+      ],
+      "drawn": false,
+      "_id": "7PodFpvZiP2oJNg5",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.7PodFpvZiP2oJNg5"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Strength",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "+3 damage dice with non-powered weapons.",
+      "weight": 1,
+      "range": [
+        26,
+        29
+      ],
+      "drawn": false,
+      "_id": "G6TjlhJpewe75Y18",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.G6TjlhJpewe75Y18"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Taste",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Detect poison/edibility.",
+      "weight": 1,
+      "range": [
+        30,
+        32
+      ],
+      "drawn": false,
+      "_id": "VCtsGOQQxfLMSHnN",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.VCtsGOQQxfLMSHnN"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Touch",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Better chance to figure out / use artifacts.",
+      "weight": 1,
+      "range": [
+        33,
+        33
+      ],
+      "drawn": false,
+      "_id": "1CUgxnY9i5DQ5nqP",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.1CUgxnY9i5DQ5nqP"
+    },
+    {
+      "type": "text",
+      "name": "Heightened Vision",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "See clearly at 3 kilometers, see infrared and ultraviolet.",
+      "weight": 1,
+      "range": [
+        34,
+        34
+      ],
+      "drawn": false,
+      "_id": "sC14pzzqta676aKt",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.sC14pzzqta676aKt"
+    },
+    {
+      "type": "text",
+      "name": "Hemophilia",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Lose 2HP per round until wounds are bound.",
+      "weight": 1,
+      "range": [
+        35,
+        36
+      ],
+      "drawn": false,
+      "_id": "uiKX4Z3idOzCZRkj",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.uiKX4Z3idOzCZRkj"
+    },
+    {
+      "type": "text",
+      "name": "Increased Metabolism",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Eat every 5th round or lose 1STR and 2HP / turn.",
+      "weight": 1,
+      "range": [
+        37,
+        37
+      ],
+      "drawn": false,
+      "_id": "ywLWj2rpiJgCRSAg",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.ywLWj2rpiJgCRSAg"
+    },
+    {
+      "type": "text",
+      "name": "Increased Speed",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Move 2x, Attack 2x, accomplish mental tasks quickly.",
+      "weight": 1,
+      "range": [
+        38,
+        39
+      ],
+      "drawn": false,
+      "_id": "lhldNsuILouYuW0V",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.lhldNsuILouYuW0V"
+    },
+    {
+      "type": "text",
+      "name": "Infravision",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "See heat; blinded by extreme/close heat, daylight painful.",
+      "weight": 1,
+      "range": [
+        40,
+        41
+      ],
+      "drawn": false,
+      "_id": "paBGX9CMAiAVdWKV",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.paBGX9CMAiAVdWKV"
+    },
+    {
+      "type": "text",
+      "name": "Light Generation",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reduce viewers' AC and to-hit by 4 for d4 turns.",
+      "weight": 1,
+      "range": [
+        42,
+        42
+      ],
+      "drawn": false,
+      "_id": "X3uWrkY1redX7Xw4",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.X3uWrkY1redX7Xw4"
+    },
+    {
+      "type": "text",
+      "name": "Multiple Body Parts",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Multiply any normal body part (except the brain).",
+      "weight": 1,
+      "range": [
+        43,
+        45
+      ],
+      "drawn": false,
+      "_id": "boqulKkzKBdm6SgF",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.boqulKkzKBdm6SgF"
+    },
+    {
+      "type": "text",
+      "name": "New Body Parts",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Add one or more body parts.",
+      "weight": 1,
+      "range": [
+        46,
+        47
+      ],
+      "drawn": false,
+      "_id": "G30POy7gBAfPaYAI",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.G30POy7gBAfPaYAI"
+    },
+    {
+      "type": "text",
+      "name": "No Resistance To Bacteria",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Little to no resistance to infection or illness; -10HP/day.",
+      "weight": 1,
+      "range": [
+        48,
+        48
+      ],
+      "drawn": false,
+      "_id": "SuLhyNWT9ppEAPyD",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.SuLhyNWT9ppEAPyD"
+    },
+    {
+      "type": "text",
+      "name": "No Resistance To Poison",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Under the 0.8.2 homebrew saves: the character loses their Constitution modifier on every poison save — the roll is a flat 1d20 vs. poison difficulty. Successes still halve damage; failures still take full damage.",
+      "weight": 1,
+      "range": [
+        49,
+        49
+      ],
+      "drawn": false,
+      "_id": "yzelre0sS95NeWSl",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.yzelre0sS95NeWSl"
+    },
+    {
+      "type": "text",
+      "name": "No Sensory Nerve Endings",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Cannot feel pain or judge HP; +2 penalty to figure artifacts.",
+      "weight": 1,
+      "range": [
+        50,
+        51
+      ],
+      "drawn": false,
+      "_id": "k3TZUqCPRrkdv4LX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.k3TZUqCPRrkdv4LX"
+    },
+    {
+      "type": "text",
+      "name": "Oversized Body Parts",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Beneficial/effective increase in size of one body part.",
+      "weight": 1,
+      "range": [
+        52,
+        52
+      ],
+      "drawn": false,
+      "_id": "xhAyxwiYzHV48JWR",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.xhAyxwiYzHV48JWR"
+    },
+    {
+      "type": "text",
+      "name": "Partial Carapace",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Base AC6, reduce damage to back and head by half.",
+      "weight": 1,
+      "range": [
+        53,
+        56
+      ],
+      "drawn": false,
+      "_id": "0zAAg97WJOBKgwZy",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.0zAAg97WJOBKgwZy"
+    },
+    {
+      "type": "text",
+      "name": "Photosynthetic Skin",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Feed on sun, heal 4x in sun, +1DMG/die from heat/cold, half speed in dark.",
+      "weight": 1,
+      "range": [
+        57,
+        60
+      ],
+      "drawn": false,
+      "_id": "WJhxh3seE4fkCvRV",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.WJhxh3seE4fkCvRV"
+    },
+    {
+      "type": "text",
+      "name": "Physical Reflection",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reflect one type of energy away in random direction.",
+      "weight": 1,
+      "range": [
+        61,
+        61
+      ],
+      "drawn": false,
+      "_id": "rMazo410bG6D6wkP",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.rMazo410bG6D6wkP"
+    },
+    {
+      "type": "text",
+      "name": "Poor Respiratory System",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Must rest after 5 rounds of combat or faint for d6 minutes.",
+      "weight": 1,
+      "range": [
+        62,
+        62
+      ],
+      "drawn": false,
+      "_id": "EJIDUJR5lvnmkyx6",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.EJIDUJR5lvnmkyx6"
+    },
+    {
+      "type": "text",
+      "name": "Quills/Spines",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Quills/Spines, d4/d3 or d12 DMG, throw 3 meters, re-grow in 1 week.",
+      "weight": 1,
+      "range": [
+        63,
+        63
+      ],
+      "drawn": false,
+      "_id": "5WKR2gTQl0QPg7Pe",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.5WKR2gTQl0QPg7Pe"
+    },
+    {
+      "type": "text",
+      "name": "Radiated Eyes",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Blasts of radiation up to 10 meters that do 3d6 every 4 turns.",
+      "weight": 1,
+      "range": [
+        64,
+        64
+      ],
+      "drawn": false,
+      "_id": "GBP0wyDjc3JTiIPH",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.GBP0wyDjc3JTiIPH"
+    },
+    {
+      "type": "text",
+      "name": "Regeneration",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Regenerate 1HP per 5 kilograms of body weight per day.",
+      "weight": 1,
+      "range": [
+        65,
+        67
+      ],
+      "drawn": false,
+      "_id": "IqVSVdW66FqgTcdN",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.IqVSVdW66FqgTcdN"
+    },
+    {
+      "type": "text",
+      "name": "Shapechange",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "In 2 melee turns, mimic animal, but without abilities.",
+      "weight": 1,
+      "range": [
+        68,
+        68
+      ],
+      "drawn": false,
+      "_id": "xYMXlWkIqFDEhs9q",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.xYMXlWkIqFDEhs9q"
+    },
+    {
+      "type": "text",
+      "name": "Shorter",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "D%+D% centimeters tall; reduce damage, but very hard to hit.",
+      "weight": 1,
+      "range": [
+        69,
+        71
+      ],
+      "drawn": false,
+      "_id": "l9htGSa1AvEsQzCw",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.l9htGSa1AvEsQzCw"
+    },
+    {
+      "type": "text",
+      "name": "Skin Structure Change",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Skin defect causes _______.",
+      "weight": 1,
+      "range": [
+        72,
+        72
+      ],
+      "drawn": false,
+      "_id": "b9gU33F9p2ayfBnr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.b9gU33F9p2ayfBnr"
+    },
+    {
+      "type": "text",
+      "name": "Sonic Attack Ability",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Blast all creatures within 10 meters with 3d6 sonic damage every 4 turns.",
+      "weight": 1,
+      "range": [
+        73,
+        73
+      ],
+      "drawn": false,
+      "_id": "uHyjrbJujoijl0II",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.uHyjrbJujoijl0II"
+    },
+    {
+      "type": "text",
+      "name": "Symbiotic Attachment",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "After a successful attack and 3 rounds of contact, control creature.",
+      "weight": 1,
+      "range": [
+        74,
+        74
+      ],
+      "drawn": false,
+      "_id": "PFYyC8CmNjfryz8N",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.PFYyC8CmNjfryz8N"
+    },
+    {
+      "type": "text",
+      "name": "Taller",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "D6+2 meters tall... +1DMG per meter over 2, -1 \"to hit\" per 2 meters over 2.",
+      "weight": 1,
+      "range": [
+        75,
+        82
+      ],
+      "drawn": false,
+      "_id": "843PP0tlWX9yPc5R",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.843PP0tlWX9yPc5R"
+    },
+    {
+      "type": "text",
+      "name": "Total Carapace",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Reduce damage to 1/2 and raise AC to 4 but reduce movement by 25%.",
+      "weight": 1,
+      "range": [
+        83,
+        83
+      ],
+      "drawn": false,
+      "_id": "mpNHRfHZXyz15cRI",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.mpNHRfHZXyz15cRI"
+    },
+    {
+      "type": "text",
+      "name": "Ultravision",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "See UV, radiation, energy cells, mental powers, electricity, etc.",
+      "weight": 1,
+      "range": [
+        84,
+        86
+      ],
+      "drawn": false,
+      "_id": "bJsh9WMmAeIV8En2",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.bJsh9WMmAeIV8En2"
+    },
+    {
+      "type": "text",
+      "name": "Vision Defect",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "-4 to hit, difficulty seeing objects more than 15m away.",
+      "weight": 1,
+      "range": [
+        87,
+        87
+      ],
+      "drawn": false,
+      "_id": "K3A6NVZijC9euP11",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.K3A6NVZijC9euP11"
+    },
+    {
+      "type": "text",
+      "name": "Weight Decrease",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "25% slower, 25% weaker.",
+      "weight": 1,
+      "range": [
+        88,
+        88
+      ],
+      "drawn": false,
+      "_id": "Hc3UopFEOHE4whda",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.Hc3UopFEOHE4whda"
+    },
+    {
+      "type": "text",
+      "name": "Wings",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "Fly 12m per turn, carry no more than 25% body weight.",
+      "weight": 1,
+      "range": [
+        89,
+        90
+      ],
+      "drawn": false,
+      "_id": "JW9DoxUOKcchkyRb",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!7C6fvDg4QBC4ZOmR.JW9DoxUOKcchkyRb"
+    }
+  ],
+  "_id": "7C6fvDg4QBC4ZOmR",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!7C6fvDg4QBC4ZOmR"
+}

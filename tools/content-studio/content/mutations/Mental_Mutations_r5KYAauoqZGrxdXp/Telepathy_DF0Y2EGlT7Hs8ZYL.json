@@ -1,0 +1,58 @@
+{
+  "name": "Telepathy",
+  "type": "mutation",
+  "system": {
+    "code": 43,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Read/send thoughts/emotions up to 10 meters.",
+    "reference": {
+      "table": "mental",
+      "page": 13,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "10 m",
+    "duration": "Concentration",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Read and project thoughts or emotions."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can read another creature&#39;s thoughts or emotions and send its own in return. The effect ignores language barriers and works on all beings within 10 meters.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/telepathy.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "DF0Y2EGlT7Hs8ZYL",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!DF0Y2EGlT7Hs8ZYL"
+}

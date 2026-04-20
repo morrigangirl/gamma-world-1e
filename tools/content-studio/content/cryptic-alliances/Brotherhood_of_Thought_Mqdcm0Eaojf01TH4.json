@@ -1,0 +1,55 @@
+{
+  "name": "Brotherhood of Thought",
+  "pages": [
+    {
+      "name": "Overview",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Purpose:</strong> Preserve pre-Shadow-Years knowledge and champion peaceful coexistence among mutants and PSH.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant.</p><p><strong>Allies:</strong> The Seekers, The Healers.</p><p><strong>Enemies:</strong> Ranks of the Fit, Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+      },
+      "_id": "ofhiUE2uF0Vl9j5v",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!Mqdcm0Eaojf01TH4.ofhiUE2uF0Vl9j5v"
+    }
+  ],
+  "_id": "Mqdcm0Eaojf01TH4",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!Mqdcm0Eaojf01TH4"
+}

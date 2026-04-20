@@ -1,0 +1,69 @@
+{
+  "name": "Surprise (1d6)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Each side rolls. 1-2 means that side is surprised.</p>",
+  "formula": "1d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Surprised",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The side rolling 1–2 is surprised and loses the first melee turn.",
+      "weight": 1,
+      "range": [
+        1,
+        2
+      ],
+      "drawn": false,
+      "_id": "GGRagnmDLWQEih8W",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!f3HkdufDZZnE1e6C.GGRagnmDLWQEih8W"
+    },
+    {
+      "type": "text",
+      "name": "Not Surprised",
+      "img": "icons/svg/d20-grey.svg",
+      "description": "The side rolling 3–6 is ready to act normally.",
+      "weight": 1,
+      "range": [
+        3,
+        6
+      ],
+      "drawn": false,
+      "_id": "BH8Ygbg9ey09uQox",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!f3HkdufDZZnE1e6C.BH8Ygbg9ey09uQox"
+    }
+  ],
+  "_id": "f3HkdufDZZnE1e6C",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!f3HkdufDZZnE1e6C"
+}

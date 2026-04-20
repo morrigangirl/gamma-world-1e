@@ -1,0 +1,58 @@
+{
+  "name": "Thought Imitation",
+  "type": "mutation",
+  "system": {
+    "code": 45,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Reflect mental attack (still take effects) or mimic thoughts to communicate.",
+    "reference": {
+      "table": "mental",
+      "page": 14,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can immediately send back any thought or mental attack directed at it, though it still suffers the original effect. It can also perfectly imitate the communication patterns of any creature whose thought processes it knows, even if that creature does not use a language the mutant understands. Returned mental attacks are temporary and cannot be repeated later, but familiar communication patterns can be recalled afterward.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/thought-imitation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "7R51oDloHy3D7MJ7",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!7R51oDloHy3D7MJ7"
+}

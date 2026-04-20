@@ -1,0 +1,470 @@
+{
+  "name": "Forest Encounters",
+  "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+  "flags": {
+    "gamma-world-1e": {
+      "encounterSeed": true,
+      "encounterSeedVersion": 2
+    }
+  },
+  "description": "<p>Random encounter table for forest terrain in Gamma World 1e.</p><p>Roll 1d20 or use the table's built-in draw command.</p>",
+  "formula": "1d20",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+    {
+      "type": "text",
+      "name": "Win Seen",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 2-7.</p><p>Typical references: Win Seen.</p>",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "bApl29PwPQCco7jk",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.bApl29PwPQCco7jk"
+    },
+    {
+      "type": "text",
+      "name": "Kai Lin",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Kai Lin.</p>",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "LdFwVdKg7UCBoiTy",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.LdFwVdKg7UCBoiTy"
+    },
+    {
+      "type": "text",
+      "name": "Horl Choo",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Horl Choo.</p>",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "Wyk1otW1Dm4Z1YPJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.Wyk1otW1Dm4Z1YPJ"
+    },
+    {
+      "type": "text",
+      "name": "Grens",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-6.</p><p>Typical references: Grens.</p>",
+      "weight": 1,
+      "range": [
+        4,
+        4
+      ],
+      "drawn": false,
+      "_id": "1cpVePqfmjw3ZaiJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.1cpVePqfmjw3ZaiJ"
+    },
+    {
+      "type": "text",
+      "name": "Herp",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Herp.</p>",
+      "weight": 1,
+      "range": [
+        5,
+        5
+      ],
+      "drawn": false,
+      "_id": "Txeh8MSMFywkGoEJ",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.Txeh8MSMFywkGoEJ"
+    },
+    {
+      "type": "text",
+      "name": "Obb",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Obb.</p>",
+      "weight": 1,
+      "range": [
+        6,
+        6
+      ],
+      "drawn": false,
+      "_id": "EwRgShtjq3QSuPOj",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.EwRgShtjq3QSuPOj"
+    },
+    {
+      "type": "text",
+      "name": "Hisser",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Hisser.</p>",
+      "weight": 1,
+      "range": [
+        7,
+        7
+      ],
+      "drawn": false,
+      "_id": "bmwYhIyLuqEPZUYk",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.bmwYhIyLuqEPZUYk"
+    },
+    {
+      "type": "text",
+      "name": "Ert Telden",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-6.</p><p>Typical references: Ert Telden.</p>",
+      "weight": 1,
+      "range": [
+        8,
+        8
+      ],
+      "drawn": false,
+      "_id": "n8EpYRHIHwwHfhxX",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.n8EpYRHIHwwHfhxX"
+    },
+    {
+      "type": "text",
+      "name": "Robotic Unit",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: Per referee / installation.</p><p>Choose the appropriate robot model for the site or patrol.</p><p>Typical references: Security Robotoid.</p>",
+      "weight": 1,
+      "range": [
+        9,
+        9
+      ],
+      "drawn": false,
+      "_id": "mBEbSlf134VHrtAM",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.mBEbSlf134VHrtAM"
+    },
+    {
+      "type": "text",
+      "name": "Arn",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-6.</p><p>Typical references: Arn.</p>",
+      "weight": 1,
+      "range": [
+        10,
+        10
+      ],
+      "drawn": false,
+      "_id": "nF3CLC4sftDWcX1y",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.nF3CLC4sftDWcX1y"
+    },
+    {
+      "type": "text",
+      "name": "Soul Besh",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Soul Besh.</p>",
+      "weight": 1,
+      "range": [
+        11,
+        11
+      ],
+      "drawn": false,
+      "_id": "mSA9JYZu5VXrl7oc",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.mSA9JYZu5VXrl7oc"
+    },
+    {
+      "type": "text",
+      "name": "Centisteed",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1.</p><p>Typical references: Centisteed.</p>",
+      "weight": 1,
+      "range": [
+        12,
+        12
+      ],
+      "drawn": false,
+      "_id": "V1iTgzLSi6AI1qQr",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.V1iTgzLSi6AI1qQr"
+    },
+    {
+      "type": "text",
+      "name": "Blaash",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Blaash.</p>",
+      "weight": 1,
+      "range": [
+        13,
+        13
+      ],
+      "drawn": false,
+      "_id": "cADTv4Z3K1S25Gyn",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.cADTv4Z3K1S25Gyn"
+    },
+    {
+      "type": "text",
+      "name": "Pineto",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1 (1-8 in the wild).</p><p>Typical references: Pineto.</p>",
+      "weight": 1,
+      "range": [
+        14,
+        14
+      ],
+      "drawn": false,
+      "_id": "HJpO06xg4eMyAsqk",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.HJpO06xg4eMyAsqk"
+    },
+    {
+      "type": "text",
+      "name": "Ark",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Ark.</p>",
+      "weight": 1,
+      "range": [
+        15,
+        15
+      ],
+      "drawn": false,
+      "_id": "y7VUMpeWespQdCbt",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.y7VUMpeWespQdCbt"
+    },
+    {
+      "type": "text",
+      "name": "Perth",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-10.</p><p>Typical references: Perth.</p>",
+      "weight": 1,
+      "range": [
+        16,
+        16
+      ],
+      "drawn": false,
+      "_id": "nzqoYrGMzYC4OO9l",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.nzqoYrGMzYC4OO9l"
+    },
+    {
+      "type": "text",
+      "name": "Sep",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-6.</p><p>Typical references: Sep.</p>",
+      "weight": 1,
+      "range": [
+        17,
+        17
+      ],
+      "drawn": false,
+      "_id": "H5sDvuVJu7agFcKa",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.H5sDvuVJu7agFcKa"
+    },
+    {
+      "type": "text",
+      "name": "Serf",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 1-4.</p><p>Typical references: Serf.</p>",
+      "weight": 1,
+      "range": [
+        18,
+        18
+      ],
+      "drawn": false,
+      "_id": "8pvvR0vNVMXv6l47",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.8pvvR0vNVMXv6l47"
+    },
+    {
+      "type": "text",
+      "name": "Badder",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: 3-18.</p><p>Typical references: Badder.</p>",
+      "weight": 1,
+      "range": [
+        19,
+        19
+      ],
+      "drawn": false,
+      "_id": "DUxuVzzOuU7DrXlt",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.DUxuVzzOuU7DrXlt"
+    },
+    {
+      "type": "text",
+      "name": "Cryptic Alliance",
+      "img": "systems/gamma-world-1e/assets/ui/encounters/forest.svg",
+      "description": "<p>Numbers: Per referee's map.</p><p>Use the cryptic alliance already established for the region.</p>",
+      "weight": 1,
+      "range": [
+        20,
+        20
+      ],
+      "drawn": false,
+      "_id": "iskIMGK6tr14I40m",
+      "flags": {},
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!tables.results!VnSQNdvMroYhDBCF.iskIMGK6tr14I40m"
+    }
+  ],
+  "_id": "VnSQNdvMroYhDBCF",
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!tables!VnSQNdvMroYhDBCF"
+}

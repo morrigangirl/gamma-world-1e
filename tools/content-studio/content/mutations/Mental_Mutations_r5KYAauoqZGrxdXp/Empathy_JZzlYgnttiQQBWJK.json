@@ -1,0 +1,61 @@
+{
+  "name": "Empathy",
+  "type": "mutation",
+  "system": {
+    "code": 10,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Sense feelings of others; force feelings on others in 30m with DC12 MR.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "30 m",
+    "duration": "Concentration",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "mental",
+      "notes": "On a failed mental save, the target feels the emotion the user projects (treat non-intelligent creatures as MR 12)."
+    },
+    "actionTypes": [
+      "attack",
+      "save"
+    ],
+    "description": {
+      "value": "<p>The mutant can sense the feelings of others, including fear, pain, hunger, hatred, and similar emotions. It can also impose emotions on any non-intelligent creature, treating such a target as if it had a mental resistance of 12. Range is 30 meters. This can drive a pack away in fear, draw prey closer, and so on.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/empathy.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "JZzlYgnttiQQBWJK",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!JZzlYgnttiQQBWJK"
+}

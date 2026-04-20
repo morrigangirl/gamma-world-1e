@@ -1,0 +1,58 @@
+{
+  "name": "No Resistance To Bacteria",
+  "type": "mutation",
+  "system": {
+    "code": 28,
+    "subtype": "defect",
+    "category": "defect",
+    "summary": "Little to no resistance to infection or illness; -10HP/day.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant has little or no resistance to disease, so infection becomes a major threat. This defect only matters if disease-causing agents exist in the campaign. A dirty wound might turn septic, the scratch of a predator might infect, or a common cold might become pneumonia. Such illnesses can inflict up to 10 points of damage per day and are very difficult to cure.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/no-resistance-to-bacteria.png",
+  "folder": "5m4LFxKXmjvrFN5f",
+  "_id": "shAtQQvE22EGil67",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!shAtQQvE22EGil67"
+}

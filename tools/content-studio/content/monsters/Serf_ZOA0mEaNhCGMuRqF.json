@@ -1,0 +1,854 @@
+{
+  "name": "Serf",
+  "type": "monster",
+  "img": "systems/gamma-world-1e/assets/monsters/portraits/serf.png",
+  "prototypeToken": {
+    "name": "Serf",
+    "actorLink": false,
+    "disposition": -1,
+    "displayName": 20,
+    "displayBars": 20,
+    "width": 1,
+    "height": 1,
+    "bar1": {
+      "attribute": "resources.hp"
+    },
+    "texture": {
+      "src": "systems/gamma-world-1e/assets/monsters/tokens/serf.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "sight": {
+      "enabled": true,
+      "range": 60,
+      "visionMode": "basic",
+      "angle": 360,
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "details": {
+      "type": "humanoid",
+      "animalForm": "Humanoid",
+      "level": 10,
+      "xp": 0,
+      "movement": 120,
+      "alliance": "",
+      "role": "brigade psychic",
+      "speech": "common",
+      "creatureClass": "Psychic Humanoid"
+    },
+    "attributes": {
+      "ms": {
+        "value": 15,
+        "mod": 0,
+        "save": 0
+      },
+      "in": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "dx": {
+        "value": 12,
+        "mod": 0,
+        "save": 0
+      },
+      "ch": {
+        "value": 8,
+        "mod": 0,
+        "save": 0
+      },
+      "cn": {
+        "value": 14,
+        "mod": 0,
+        "save": 0
+      },
+      "ps": {
+        "value": 16,
+        "mod": 0,
+        "save": 0
+      }
+    },
+    "combat": {
+      "baseAc": 10,
+      "naturalAttack": {
+        "name": "Natural Attack",
+        "damage": "1d6"
+      }
+    },
+    "resources": {
+      "hp": {
+        "base": 60,
+        "value": 60,
+        "max": 60,
+        "formula": ""
+      },
+      "ac": 10,
+      "mentalResistance": 15,
+      "radResistance": 14,
+      "poisonResistance": 14
+    },
+    "biography": {
+      "value": "<p>Semi-nomadic quasi-military humanoids with partial carapaces, poison claws, and a formidable suite of mental mutations.</p><p>Serfs prefer to fight with their powers rather than with weapons.</p>",
+      "appearance": "",
+      "notes": ""
+    },
+    "social": {
+      "languages": "common",
+      "literacy": "",
+      "relatives": "",
+      "homeRegion": "",
+      "reputation": 0
+    },
+    "encounter": {
+      "reactionModifier": 0,
+      "surpriseModifier": 0,
+      "morale": 0,
+      "intelligence": "auto",
+      "cannotBeSurprised": false
+    },
+    "robotics": {
+      "isRobot": false,
+      "mode": "inactive",
+      "chassis": "",
+      "identifier": "",
+      "controller": "",
+      "powerSource": "none",
+      "powerCurrent": 0,
+      "powerMax": 0,
+      "broadcastCapable": false,
+      "backupHours": 0,
+      "repairDifficulty": 0,
+      "malfunction": ""
+    },
+    "chargen": {
+      "rolled": true,
+      "statMethod": "manual",
+      "mutationMethod": "random",
+      "mutationsRolled": false
+    }
+  },
+  "items": [
+    {
+      "name": "Partial Carapace",
+      "type": "armor",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "acValue": 6,
+        "armorType": "heavy",
+        "dxPenalty": 0,
+        "field": {
+          "mode": "none",
+          "capacity": 0
+        },
+        "mobility": {
+          "flight": 0,
+          "jump": 0,
+          "lift": 0
+        },
+        "offense": {
+          "punchDamage": ""
+        },
+        "protection": {
+          "blackRayImmune": false,
+          "radiationImmune": false,
+          "poisonImmune": false,
+          "laserImmune": false,
+          "mentalImmune": false
+        },
+        "equipped": true,
+        "quantity": 1,
+        "weight": 0,
+        "description": {
+          "value": "Hard plates over the torso and limbs."
+        },
+        "traits": {
+          "grantsResistance": [],
+          "grantsImmunity": [],
+          "grantsVulnerability": []
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "actionTypes": {}
+      },
+      "_id": "4eX58JCKrlzgX94i",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.4eX58JCKrlzgX94i"
+    },
+    {
+      "name": "Poison Claws",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "flags": {
+        "gamma-world-1e": {
+          "naturalWeapon": true
+        }
+      },
+      "system": {
+        "weaponClass": 1,
+        "damage": {
+          "formula": "1d6",
+          "type": "physical"
+        },
+        "range": {
+          "short": 0,
+          "medium": 0,
+          "long": 0
+        },
+        "attackType": "melee",
+        "rof": 1,
+        "ammo": {
+          "current": 0,
+          "max": 0,
+          "consumes": false
+        },
+        "effect": {
+          "mode": "poison",
+          "formula": "8",
+          "status": "",
+          "notes": "Serf claws carry intensity 8 poison."
+        },
+        "traits": {
+          "tag": "natural",
+          "deflectAc2Hits": 0,
+          "deflectAc1Hits": 0,
+          "bypassesForceField": false,
+          "requiresNoForceField": false,
+          "nonlethal": false
+        },
+        "quantity": 1,
+        "weight": 0,
+        "equipped": true,
+        "description": {
+          "value": "Clawed hands with toxic nails."
+        },
+        "artifact": {
+          "isArtifact": false,
+          "category": "none",
+          "chart": "none",
+          "condition": "fair",
+          "canShortOut": true,
+          "canExplode": false,
+          "harmResolutionType": "generic",
+          "identified": false,
+          "operationKnown": false,
+          "powerSource": "none",
+          "power": {
+            "requirement": "none",
+            "installedType": "none",
+            "ambientSource": "none",
+            "ambientAvailable": false
+          },
+          "charges": {}
+        },
+        "category": "natural",
+        "actionTypes": {}
+      },
+      "_id": "yjiMYlnrMKGHKQJZ",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "effects": [],
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.yjiMYlnrMKGHKQJZ"
+    },
+    {
+      "name": "Heightened Strength",
+      "type": "mutation",
+      "system": {
+        "code": 17,
+        "subtype": "physical",
+        "category": "beneficial",
+        "summary": "+3 damage dice with non-powered weapons.",
+        "reference": {
+          "table": "physical",
+          "page": 10,
+          "variant": ""
+        },
+        "active": false,
+        "activation": {
+          "mode": "passive",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "",
+        "duration": "",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": ""
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>+3 damage dice with non-powered weapons.</p>"
+        }
+      },
+      "effects": [
+        {
+          "name": "Heightened Strength — conventional weapon damage",
+          "img": "icons/svg/aura.svg",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "gw.conventionalWeaponExtraDice",
+              "mode": 2,
+              "value": "3",
+              "priority": 20
+            }
+          ],
+          "flags": {
+            "gamma-world-1e": {
+              "condition": null,
+              "computed": false
+            }
+          },
+          "_id": "KdA4bVmmjGaYzy37",
+          "sort": 0,
+          "_stats": {
+            "systemId": "gamma-world-1e",
+            "createdTime": 1704067200000,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "type": "base",
+          "system": {},
+          "duration": {
+            "startTime": null,
+            "combat": null
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "_key": "!actors.items.effects!ZOA0mEaNhCGMuRqF.Mp1kszn0uwttYhZi.KdA4bVmmjGaYzy37"
+        }
+      ],
+      "_id": "Mp1kszn0uwttYhZi",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.Mp1kszn0uwttYhZi"
+    },
+    {
+      "name": "Light Wave Manipulation",
+      "type": "mutation",
+      "system": {
+        "code": 21,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Invisible at will; negate laser or create darkness within 10 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "toggle",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m",
+        "duration": "While active",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Become invisible, create darkness, or negate lasers."
+        },
+        "actionTypes": [
+          "attack",
+          "save",
+          "utility"
+        ],
+        "description": {
+          "value": "<p>Invisible at will; negate laser or create darkness within 10 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "c1UwlTHYs0Exdyh8",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.c1UwlTHYs0Exdyh8"
+    },
+    {
+      "name": "Density Control (Others)",
+      "type": "mutation",
+      "system": {
+        "code": 7,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Within 30m, affect others: shrink to improve AC, grow to improve speed.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "30 m",
+        "duration": "Variable",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "mental",
+          "notes": "Manipulates another being's density after a successful mental attack."
+        },
+        "actionTypes": [
+          "attack",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Within 30m, affect others: shrink to improve AC, grow to improve speed.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "TjQFNP9REMUhT8nV",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.TjQFNP9REMUhT8nV"
+    },
+    {
+      "name": "Life Leech",
+      "type": "mutation",
+      "system": {
+        "code": 20,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m radius +3 m per 4 MS",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "6",
+          "saveType": "",
+          "notes": "Drains 6 HP from each valid target and heals the mutant by the same amount."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "heal"
+        ],
+        "description": {
+          "value": "<p>Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).</p>"
+        }
+      },
+      "effects": [],
+      "_id": "GFkMaQQPDD50FPCQ",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.GFkMaQQPDD50FPCQ"
+    },
+    {
+      "name": "Death Field Generation",
+      "type": "mutation",
+      "system": {
+        "code": 5,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Drain all but one HP from all beings within 20m; unconscious for d20 turns.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "20 m radius",
+        "duration": "Instant",
+        "usage": {
+          "limited": true,
+          "per": "encounter",
+          "uses": 1,
+          "max": 1
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "All affected creatures drop to 1 HP. User is nearly unconscious for 1d20 rounds."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Drain all but one HP from all beings within 20m; unconscious for d20 turns.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "BmVce6MbetdyTDNj",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.BmVce6MbetdyTDNj"
+    },
+    {
+      "name": "Mental Blast",
+      "type": "mutation",
+      "system": {
+        "code": 24,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Every other turn, do 3d6 mental damage within 15 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 12,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "15 m",
+        "duration": "Instant",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 2
+        },
+        "effect": {
+          "formula": "3d6",
+          "saveType": "mental",
+          "notes": "Launch a mental assault once every other round."
+        },
+        "actionTypes": [
+          "attack",
+          "damage",
+          "save"
+        ],
+        "description": {
+          "value": "<p>Every other turn, do 3d6 mental damage within 15 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "VXWJPKLdgDiaPB7e",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.VXWJPKLdgDiaPB7e"
+    },
+    {
+      "name": "Telepathy",
+      "type": "mutation",
+      "system": {
+        "code": 43,
+        "subtype": "mental",
+        "category": "beneficial",
+        "summary": "Read/send thoughts/emotions up to 10 meters.",
+        "reference": {
+          "table": "mental",
+          "page": 13,
+          "variant": ""
+        },
+        "active": true,
+        "activation": {
+          "mode": "action",
+          "enabled": false,
+          "remaining": 0
+        },
+        "range": "10 m",
+        "duration": "Concentration",
+        "usage": {
+          "limited": false,
+          "per": "at-will",
+          "uses": 0,
+          "max": 0
+        },
+        "cooldown": {
+          "current": 0,
+          "max": 0
+        },
+        "effect": {
+          "formula": "",
+          "saveType": "",
+          "notes": "Read and project thoughts or emotions."
+        },
+        "actionTypes": [],
+        "description": {
+          "value": "<p>Read/send thoughts/emotions up to 10 meters.</p>"
+        }
+      },
+      "effects": [],
+      "_id": "wKsjQpftlWWcmyp1",
+      "flags": {},
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "img": "icons/svg/item-bag.svg",
+      "_key": "!actors.items!ZOA0mEaNhCGMuRqF.wKsjQpftlWWcmyp1"
+    }
+  ],
+  "_id": "ZOA0mEaNhCGMuRqF",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!actors!ZOA0mEaNhCGMuRqF"
+}

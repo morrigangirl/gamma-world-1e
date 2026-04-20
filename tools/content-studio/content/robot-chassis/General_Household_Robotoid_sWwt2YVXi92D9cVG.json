@@ -1,0 +1,55 @@
+{
+  "name": "General Household Robotoid",
+  "pages": [
+    {
+      "name": "Profile",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Power Source:</strong> solar.</p><p><strong>Armor Class:</strong> 9. <strong>Hit Points:</strong> 22.</p><p><strong>Armament:</strong> None.</p><p><strong>Sensors:</strong> Vision, chem.</p><p><strong>Controls:</strong> Voice.</p><p>Cleaning, cooking, nursing, basic child-minding. Often the friendliest robot a party meets.</p>"
+      },
+      "_id": "jz1vLD1eE5hpaOrH",
+      "flags": {},
+      "sort": 0,
+      "ownership": {
+        "default": -1
+      },
+      "_stats": {
+        "systemId": "gamma-world-1e",
+        "createdTime": 1704067200000,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "_key": "!journal.pages!sWwt2YVXi92D9cVG.jz1vLD1eE5hpaOrH"
+    }
+  ],
+  "_id": "sWwt2YVXi92D9cVG",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "categories": [],
+  "_key": "!journal!sWwt2YVXi92D9cVG"
+}

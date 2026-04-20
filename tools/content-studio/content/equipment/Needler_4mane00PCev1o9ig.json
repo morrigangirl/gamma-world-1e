@@ -1,0 +1,82 @@
+{
+  "name": "Needler",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/needler.png",
+  "system": {
+    "weaponClass": 11,
+    "category": "modern",
+    "ammoType": [
+      "needler-poison",
+      "needler-paralysis"
+    ],
+    "damage": {
+      "formula": "0",
+      "type": "physical"
+    },
+    "range": {
+      "short": 50,
+      "medium": 0,
+      "long": 100
+    },
+    "attackType": "ranged",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "poison",
+      "formula": "17",
+      "status": "",
+      "notes": "Poison darts: poison save vs. difficulty 17 (3d6 damage, halved on success). Paralysis darts: poison save vs. difficulty 17; on failure the victim is paralyzed for up to 20 minutes, less one minute per point of Constitution."
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Soundless dart weapon. Fires poison or paralysis capsules — load whichever ammo stack the situation calls for.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "4mane00PCev1o9ig",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!4mane00PCev1o9ig"
+}

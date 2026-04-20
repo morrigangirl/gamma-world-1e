@@ -1,0 +1,58 @@
+{
+  "name": "Photosynthetic Skin",
+  "type": "mutation",
+  "system": {
+    "code": 33,
+    "subtype": "physical",
+    "category": "beneficial",
+    "summary": "Feed on sun, heal 4x in sun, +1DMG/die from heat/cold, half speed in dark.",
+    "reference": {
+      "table": "physical",
+      "page": 10,
+      "variant": ""
+    },
+    "active": false,
+    "activation": {
+      "mode": "passive",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "",
+    "duration": "",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": ""
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can manufacture its own food in sunlight or an equivalent light source. If it spends most of its time basking without moving, it heals lost hit points four times faster than normal. The drawback is that heat and cold attacks inflict 1 extra point of damage per die, and the mutant moves at half speed in darkness.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/photosynthetic-skin.png",
+  "folder": "ilq4jgSaWfKum0KL",
+  "_id": "EhbDzNICh8FIPLfm",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!EhbDzNICh8FIPLfm"
+}

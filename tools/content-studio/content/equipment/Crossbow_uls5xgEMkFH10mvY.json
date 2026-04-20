@@ -1,0 +1,81 @@
+{
+  "name": "Crossbow",
+  "type": "weapon",
+  "img": "systems/gamma-world-1e/assets/weapons/crossbow.png",
+  "system": {
+    "weaponClass": 9,
+    "category": "primitive",
+    "ammoType": [
+      "crossbow-bolt"
+    ],
+    "damage": {
+      "formula": "1d4",
+      "type": "physical"
+    },
+    "range": {
+      "short": 120,
+      "medium": 0,
+      "long": 240
+    },
+    "attackType": "ranged",
+    "rof": 1,
+    "ammo": {
+      "current": 0,
+      "max": 0,
+      "consumes": false
+    },
+    "effect": {
+      "mode": "damage",
+      "formula": "",
+      "status": "",
+      "notes": ""
+    },
+    "quantity": 1,
+    "weight": 0,
+    "equipped": false,
+    "description": {
+      "value": "<p>Heavy mechanical bow with slower but reliable shots.</p>"
+    },
+    "traits": {
+      "bypassesForceField": false,
+      "requiresNoForceField": false,
+      "nonlethal": false
+    },
+    "artifact": {
+      "isArtifact": false,
+      "category": "none",
+      "chart": "none",
+      "condition": "fair",
+      "canShortOut": true,
+      "canExplode": false,
+      "harmResolutionType": "generic",
+      "identified": false,
+      "operationKnown": false,
+      "powerSource": "none",
+      "power": {
+        "requirement": "none",
+        "installedType": "none",
+        "ambientSource": "none",
+        "ambientAvailable": false
+      },
+      "charges": {}
+    },
+    "actionTypes": {}
+  },
+  "_id": "uls5xgEMkFH10mvY",
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "effects": [],
+  "_key": "!items!uls5xgEMkFH10mvY"
+}

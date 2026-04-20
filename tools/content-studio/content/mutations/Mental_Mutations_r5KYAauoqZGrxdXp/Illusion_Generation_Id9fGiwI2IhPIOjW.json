@@ -1,0 +1,58 @@
+{
+  "name": "Illusion Generation",
+  "type": "mutation",
+  "system": {
+    "code": 18,
+    "subtype": "mental",
+    "category": "beneficial",
+    "summary": "Create illusions for beings within 30 meters; dispelled by touch.",
+    "reference": {
+      "table": "mental",
+      "page": 12,
+      "variant": ""
+    },
+    "active": true,
+    "activation": {
+      "mode": "action",
+      "enabled": false,
+      "remaining": 0
+    },
+    "range": "30 m",
+    "duration": "Concentration",
+    "usage": {
+      "limited": false,
+      "per": "at-will",
+      "uses": 0,
+      "max": 0
+    },
+    "cooldown": {
+      "current": 0,
+      "max": 0
+    },
+    "effect": {
+      "formula": "",
+      "saveType": "",
+      "notes": "Creates visual, audible, and olfactory illusions until touched."
+    },
+    "actionTypes": [],
+    "description": {
+      "value": "<p>The mutant can create images directly in the minds of beings within 30 meters. These illusions may include visual, audible, and olfactory elements, and they vanish only when someone tries to touch them.</p>"
+    }
+  },
+  "effects": [],
+  "img": "systems/gamma-world-1e/assets/mutations/illusion-generation.png",
+  "folder": "r5KYAauoqZGrxdXp",
+  "_id": "Id9fGiwI2IhPIOjW",
+  "flags": {},
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "gamma-world-1e",
+    "createdTime": 1704067200000,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!items!Id9fGiwI2IhPIOjW"
+}
