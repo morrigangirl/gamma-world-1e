@@ -1,4 +1,5 @@
 import { findMutationByName } from "./tables/mutation-data.mjs";
+import { mutationDescriptionFor } from "./tables/mutation-descriptions.generated.mjs";
 
 /**
  * 0.8.4 Tier 1 — ActiveEffect migration pilot.
@@ -1289,7 +1290,12 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
       // no sheet-surface contribution return an empty array here.
       actionTypes: resolveMutationActionTypes(rule),
       description: {
-        value: `<p>${summary}</p>`
+        // 0.10.0 — homebrew descriptions authored in
+        // ref/rulebook-prose/06-Updated-Mutations.md flow through
+        // `mutation-descriptions.generated.mjs`. Falls back to the
+        // summary-based placeholder when the mutation has no entry
+        // in the markdown (e.g. the three split Genius items).
+        value: mutationDescriptionFor(definition.subtype, definition.name) ?? `<p>${summary}</p>`
       }
     },
     effects: emittedEffects
