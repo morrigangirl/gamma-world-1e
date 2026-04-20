@@ -1,4 +1,8 @@
-2026/04/19-21:23:56.216447 17115b000 Log #20: 0 ops saved to Table #23 OK
-2026/04/19-21:23:56.216554 17115b000 Archiving /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/mutations/000020.log: OK
-2026/04/19-21:23:56.216718 17115b000 Table #22: 182 entries OK
-2026/04/19-21:23:56.217046 17115b000 **** Repaired leveldb /Volumes/Creative/FoundryVTT/Data/systems/gamma-world-1e/packs/mutations; recovered 1 files; 63172 bytes. Some data may have been lost. ****
+2026/04/19-21:53:52.321749 173d6b000 Recovering log #7
+2026/04/19-21:53:52.322748 173d6b000 Delete type=0 #7
+2026/04/19-21:53:52.322779 173d6b000 Delete type=3 #6
+2026/04/19-21:53:52.325058 174603000 Level-0 table #11: started
+2026/04/19-21:53:52.325073 174603000 Level-0 table #11: 0 bytes OK
+2026/04/19-21:53:52.325155 174603000 Delete type=0 #9
+2026/04/19-21:53:52.325188 174603000 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
+2026/04/19-21:53:52.325210 174603000 Manual compaction at level-1 from '\x00' @ 72057594037927935 : 1 .. '\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd' @ 0 : 0; will stop at (end)
