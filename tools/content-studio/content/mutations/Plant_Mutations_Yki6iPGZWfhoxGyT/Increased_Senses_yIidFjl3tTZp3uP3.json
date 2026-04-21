@@ -5,7 +5,6 @@
     "code": 67,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Sense movement, heat, and vibration within 20m; +4 to detect intruders.",
     "reference": {
       "table": "plant",
       "page": 15,

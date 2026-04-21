@@ -5,7 +5,6 @@
     "code": 38,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Regenerate 1HP per 5 kilograms of body weight per day.",
     "reference": {
       "table": "physical",
       "page": 10,

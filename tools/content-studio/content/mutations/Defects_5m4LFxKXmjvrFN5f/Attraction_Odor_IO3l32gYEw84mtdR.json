@@ -5,7 +5,6 @@
     "code": 53,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Emit a scent that draws carnivores — attackers gain +2 to hit.",
     "reference": {
       "table": "plant",
       "page": 15,

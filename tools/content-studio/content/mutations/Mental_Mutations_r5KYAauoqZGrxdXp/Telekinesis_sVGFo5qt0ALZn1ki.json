@@ -5,7 +5,6 @@
     "code": 40,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Lift objects (same weight as normally lift) within 15m for 5 turns every 5 turns.",
     "reference": {
       "table": "mental",
       "page": 13,

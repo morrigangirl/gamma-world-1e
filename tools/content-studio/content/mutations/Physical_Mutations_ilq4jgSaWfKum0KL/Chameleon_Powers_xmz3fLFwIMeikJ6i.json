@@ -5,7 +5,6 @@
     "code": 3,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Change color to blend in.",
     "reference": {
       "table": "physical",
       "page": 9,

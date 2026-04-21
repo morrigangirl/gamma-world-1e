@@ -5,7 +5,6 @@
     "code": 34,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Reflect one type of energy away in random direction.",
     "reference": {
       "table": "physical",
       "page": 10,

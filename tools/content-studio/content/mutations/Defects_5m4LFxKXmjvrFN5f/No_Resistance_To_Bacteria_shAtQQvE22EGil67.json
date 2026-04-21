@@ -5,7 +5,6 @@
     "code": 28,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Little to no resistance to infection or illness; -10HP/day.",
     "reference": {
       "table": "physical",
       "page": 10,

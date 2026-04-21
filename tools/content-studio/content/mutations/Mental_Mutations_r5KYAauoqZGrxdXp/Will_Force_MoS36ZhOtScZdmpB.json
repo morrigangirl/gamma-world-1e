@@ -5,7 +5,6 @@
     "code": 49,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Double any ability score or +1 to hit for d10 turns every 24 hours.",
     "reference": {
       "table": "mental",
       "page": 14,

@@ -15,7 +15,6 @@ import { resolveAllPendingAoe, resolveAoeSaveRow } from "./aoe.mjs";
 import { renderUndoButton, requestUndo } from "./undo.mjs";
 import {
   evaluateCondition,
-  fillVariant,
   getMutationRule,
   mutationHasVariant,
   mutationVariant
@@ -58,15 +57,15 @@ export function registerHooks() {
 /**
  * Roll a random variant for mutations that have a d6-style pick-one at
  * acquisition (Absorption, Body Structure Change, Complete Mental Block,
- * Fear Impulse, Genius Capability, Physical Reflection, Skin Structure
- * Change). Fires on every item create, but only acts when:
+ * Fear Impulse, Physical Reflection, Skin Structure Change). Fires on
+ * every item create, but only acts when:
  *   - the item is a mutation owned by an Actor,
  *   - the variant slot is empty (so pre-rolled items keep their choice), and
  *   - the mutation name is one we know how to roll for.
  *
- * updateSource() mutates the in-flight document before the DB write, so
- * the rolled variant ships with the same create and there's no flash of
- * an empty placeholder on the sheet.
+ * updateSource() mutates the in-flight document before the DB write so
+ * the rolled variant ships with the same create. Sheet and chat card
+ * surfaces render `Variant: X` labels off `system.reference.variant`.
  */
 function onPreCreateMutationRollVariant(item, data, _options, _userId) {
   if (!item || item.type !== "mutation") return;
@@ -80,10 +79,6 @@ function onPreCreateMutationRollVariant(item, data, _options, _userId) {
   if (!rolled) return;
 
   const updates = { "system.reference.variant": rolled };
-  const currentSummary = item.system?.summary ?? data?.system?.summary ?? "";
-  if (typeof currentSummary === "string" && currentSummary.includes("_")) {
-    updates["system.summary"] = fillVariant(currentSummary, rolled);
-  }
   try {
     item.updateSource(updates);
     // ui.notifications isn't available during pre-create on some paths;

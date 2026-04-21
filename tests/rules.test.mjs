@@ -821,7 +821,6 @@ import {
   buildMutationItemSource,
   combatBonusFromDexterity,
   damageBonusFromStrength,
-  fillVariant,
   hitBonusFromStrength,
   MUTATION_VARIANT_POOLS,
   mutationHasVariant,
@@ -1209,10 +1208,10 @@ test("Phase 5 — damageTraitMultiplier honors the priority order", () => {
 
 test("Random-variant mutation table and helpers", () => {
   // The table covers every mutation whose outcome is rolled once at
-  // acquisition (pick-one at drop). Adding a mutation here without
-  // adding a summary placeholder is fine — the notes line carries the
-  // variant string. Missing from the table = no roll on drop, so we
-  // keep the set tight and explicit.
+  // acquisition (pick-one at drop). The rolled value lands on
+  // `system.reference.variant`; the sheet and chat card surfaces render
+  // it as a separate `Variant: X` label. Missing from the table = no
+  // roll on drop, so we keep the set tight and explicit.
   assert.deepEqual(Object.keys(MUTATION_VARIANT_POOLS).sort(), [
     "Absorption",
     "Body Structure Change",
@@ -1252,12 +1251,6 @@ test("Random-variant mutation table and helpers", () => {
   const rolled = mutationVariant("Absorption", stubRng);
   assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes(rolled),
     `Absorption roll "${rolled}" should be in the RAW pool`);
-
-  // fillVariant replaces underscore runs with the variant string.
-  assert.equal(fillVariant("Unable to see or approach _______.", "robots"),
-               "Unable to see or approach robots.");
-  assert.equal(fillVariant("No placeholder here.", "ignored"), "No placeholder here.");
-  assert.equal(fillVariant("leading _____.", ""), "leading _____.");
 });
 
 test("buildMutationItemSource honors rollVariant=false (compendium build)", () => {
@@ -1274,15 +1267,14 @@ test("buildMutationItemSource honors rollVariant=false (compendium build)", () =
   };
 
   const rolled = buildMutationItemSource(def, { rng: () => 0, rollVariant: true });
-  assert.ok(rolled.system.reference.variant, "rollVariant:true must produce a variant");
-  assert.ok(!rolled.system.summary.includes("_______"),
-    "summary placeholder should have been filled");
+  assert.ok(rolled.system.reference.variant,
+    "rollVariant:true must populate system.reference.variant");
+  assert.ok(MUTATION_VARIANT_POOLS.Absorption.includes(rolled.system.reference.variant),
+    "rolled variant must be drawn from the mutation's pool");
 
   const baked = buildMutationItemSource(def, { rollVariant: false });
   assert.equal(baked.system.reference.variant, "",
-    "rollVariant:false must leave the variant empty");
-  assert.ok(baked.system.summary.includes("_______"),
-    "rollVariant:false must preserve the summary placeholder");
+    "rollVariant:false must leave the variant slot empty for drop-hook re-roll");
 });
 
 test("Attribute-to-combat bonus bands match the existing 6-15 neutral range", () => {

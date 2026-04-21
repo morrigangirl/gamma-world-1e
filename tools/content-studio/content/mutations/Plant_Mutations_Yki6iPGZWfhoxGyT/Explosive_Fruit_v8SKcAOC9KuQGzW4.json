@@ -5,7 +5,6 @@
     "code": 65,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Fruit detonates for 2d6 damage in a 5m radius when disturbed or thrown.",
     "reference": {
       "table": "plant",
       "page": 15,

@@ -5,7 +5,6 @@
     "code": 70,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Move on root-legs at 6m per turn.",
     "reference": {
       "table": "plant",
       "page": 15,

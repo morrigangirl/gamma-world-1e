@@ -5,7 +5,6 @@
     "code": 36,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Quills/Spines, d4/d3 or d12 DMG, throw 3 meters, re-grow in 1 week.",
     "reference": {
       "table": "physical",
       "page": 10,

@@ -33,6 +33,16 @@ npm run studio
 
 The studio opens at <http://127.0.0.1:5173> and proxies `/api` to `127.0.0.1:3737`.
 
+For a background process with clean start/stop, use the helper script:
+
+```bash
+./studio start    # launches API+web in background, waits until both ports respond
+./studio stop     # terminates the process tree, verifies ports are free
+./studio status   # shows pid + port state
+./studio restart
+./studio logs     # tail the combined log
+```
+
 ## Build safety
 
 Default build target is **scratch** (`tmp/studio-build/output/`, gitignored). This lets you

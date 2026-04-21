@@ -5,7 +5,6 @@
     "code": 27,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Add one or more body parts.",
     "reference": {
       "table": "physical",
       "page": 10,

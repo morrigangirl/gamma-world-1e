@@ -5,7 +5,6 @@
     "code": 15,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "+2 damage dice with any weapon.",
     "reference": {
       "table": "physical",
       "page": 9,

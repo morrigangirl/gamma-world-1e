@@ -5,7 +5,6 @@
     "code": 16,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "+4 mental resistance (max 18), -2 to figure out artifact.",
     "reference": {
       "table": "mental",
       "page": 12,

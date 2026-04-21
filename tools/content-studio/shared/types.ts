@@ -8,6 +8,12 @@ export interface PackDescriptor {
   count: number;
 }
 
+export interface PackCreateRequest {
+  name: string;
+  label: string;
+  type: PackType;
+}
+
 export interface DocSummary {
   id: string;
   name: string;

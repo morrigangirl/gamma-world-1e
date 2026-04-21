@@ -5,7 +5,6 @@
     "code": 20,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Leech 6 HP/turn from eachi being in 10m (+3m per 4pts of mental strength).",
     "reference": {
       "table": "mental",
       "page": 12,

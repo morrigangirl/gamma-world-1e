@@ -5,7 +5,6 @@
     "code": 39,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Reflect sonic attack (still take effects) or mimic sounds.",
     "reference": {
       "table": "mental",
       "page": 13,

@@ -5,7 +5,6 @@
     "code": 3,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Unable to see or approach __________.",
     "reference": {
       "table": "mental",
       "page": 11,

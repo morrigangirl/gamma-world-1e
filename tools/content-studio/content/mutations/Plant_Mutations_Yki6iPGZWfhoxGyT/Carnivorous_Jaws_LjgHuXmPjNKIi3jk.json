@@ -5,7 +5,6 @@
     "code": 58,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Hinged snapping jaws inflict 2d6 bite damage within 2m.",
     "reference": {
       "table": "plant",
       "page": 15,

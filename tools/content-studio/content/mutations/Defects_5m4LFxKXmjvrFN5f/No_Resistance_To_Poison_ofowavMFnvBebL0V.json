@@ -5,7 +5,6 @@
     "code": 29,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Under the 0.8.2 homebrew saves: the character loses their Constitution modifier on every poison save — the roll is a flat 1d20 vs. poison difficulty. Successes still halve damage; failures still take full damage.",
     "reference": {
       "table": "physical",
       "page": 10,

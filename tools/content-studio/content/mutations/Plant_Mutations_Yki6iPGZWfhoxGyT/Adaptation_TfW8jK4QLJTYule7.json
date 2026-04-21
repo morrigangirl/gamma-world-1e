@@ -5,7 +5,6 @@
     "code": 51,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Adapt once per day to a hostile environment (heat, cold, radiation, vacuum) for up to 24 hours.",
     "reference": {
       "table": "plant",
       "page": 15,

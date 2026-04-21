@@ -5,7 +5,6 @@
     "code": 33,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Feed on sun, heal 4x in sun, +1DMG/die from heat/cold, half speed in dark.",
     "reference": {
       "table": "physical",
       "page": 10,

@@ -5,7 +5,6 @@
     "code": 19,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "+1 to hit, +3 damage per dice, cannot be used with other powers.",
     "reference": {
       "table": "mental",
       "page": 12,

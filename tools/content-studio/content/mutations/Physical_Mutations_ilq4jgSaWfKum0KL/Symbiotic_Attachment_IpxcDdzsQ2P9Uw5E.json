@@ -5,7 +5,6 @@
     "code": 43,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "After a successful attack and 3 rounds of contact, control creature.",
     "reference": {
       "table": "physical",
       "page": 11,

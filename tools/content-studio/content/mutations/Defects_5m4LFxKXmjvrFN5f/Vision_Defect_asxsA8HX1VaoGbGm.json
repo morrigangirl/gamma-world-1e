@@ -5,7 +5,6 @@
     "code": 47,
     "subtype": "defect",
     "category": "defect",
-    "summary": "-4 to hit, difficulty seeing objects more than 15m away.",
     "reference": {
       "table": "physical",
       "page": 11,

@@ -5,7 +5,6 @@
     "code": 4,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Shrink to improve AC, grow to improve speed.",
     "reference": {
       "table": "physical",
       "page": 9,

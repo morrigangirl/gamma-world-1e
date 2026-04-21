@@ -5,7 +5,6 @@
     "code": 35,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Must rest after 5 rounds of combat or faint for d6 minutes.",
     "reference": {
       "table": "physical",
       "page": 10,

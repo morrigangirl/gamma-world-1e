@@ -5,7 +5,6 @@
     "code": 78,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Leaves inflict 1d6 slashing damage on contact or brushing pass.",
     "reference": {
       "table": "plant",
       "page": 15,

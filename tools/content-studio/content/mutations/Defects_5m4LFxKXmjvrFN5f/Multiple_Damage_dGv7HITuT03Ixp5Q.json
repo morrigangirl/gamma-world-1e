@@ -5,7 +5,6 @@
     "code": 31,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Take double (or triple per referree) damage.",
     "reference": {
       "table": "mental",
       "page": 13,

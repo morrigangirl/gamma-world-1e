@@ -1,4 +1,4 @@
-import type { DocSummary, FoundryDoc, MediaEntry, PackDescriptor } from "../../shared/types";
+import type { DocSummary, FoundryDoc, MediaEntry, PackCreateRequest, PackDescriptor } from "../../shared/types";
 
 async function json<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -11,6 +11,12 @@ async function json<T>(res: Response): Promise<T> {
 
 export const api = {
   listPacks: () => fetch("/api/packs").then(json<PackDescriptor[]>),
+  createPack: (body: PackCreateRequest) =>
+    fetch("/api/packs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(json<PackDescriptor>),
   listDocs: (pack: string) => fetch(`/api/packs/${pack}/docs`).then(json<DocSummary[]>),
   readDoc: (pack: string, id: string) => fetch(`/api/packs/${pack}/docs/${id}`).then(json<FoundryDoc>),
   writeDoc: (pack: string, id: string, body: FoundryDoc) =>

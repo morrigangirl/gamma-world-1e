@@ -5,7 +5,6 @@
     "code": 26,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Once per week, increase physical attributes, ignore physical harm, heal 4x.",
     "reference": {
       "table": "mental",
       "page": 13,

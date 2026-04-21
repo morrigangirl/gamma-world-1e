@@ -5,7 +5,6 @@
     "code": 11,
     "subtype": "defect",
     "category": "defect",
-    "summary": "10% chance to do nothing per melee turn during combat.",
     "reference": {
       "table": "mental",
       "page": 12,

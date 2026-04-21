@@ -3,6 +3,7 @@ import PackSidebar from "./components/PackSidebar.js";
 import DocList from "./components/DocList.js";
 import DocEditor from "./components/DocEditor.js";
 import BuildPanel from "./components/BuildPanel.js";
+import NewCompendiumModal from "./components/NewCompendiumModal.js";
 import { api } from "./api.js";
 import type { DocSummary, FoundryDoc, PackDescriptor } from "../../shared/types";
 
@@ -13,6 +14,7 @@ export default function App() {
   const [activeDoc, setActiveDoc] = useState<FoundryDoc | null>(null);
   const [status, setStatus] = useState<string>("");
   const [buildOpen, setBuildOpen] = useState(false);
+  const [newPackOpen, setNewPackOpen] = useState(false);
 
   useEffect(() => {
     api.listPacks().then((p) => {
@@ -78,7 +80,12 @@ export default function App() {
           {buildOpen ? "Hide build log" : "Show build log"}
         </button>
       </div>
-      <PackSidebar packs={packs} active={activePack} onSelect={setActivePack} />
+      <PackSidebar
+        packs={packs}
+        active={activePack}
+        onSelect={setActivePack}
+        onNewPack={() => setNewPackOpen(true)}
+      />
       <DocList
         docs={docs}
         activeId={activeDoc?._id ?? null}
@@ -100,6 +107,19 @@ export default function App() {
           setStatus("build complete");
         }}
       />
+      {newPackOpen && (
+        <NewCompendiumModal
+          existing={packs}
+          onClose={() => setNewPackOpen(false)}
+          onCreated={async (pack) => {
+            setNewPackOpen(false);
+            const fresh = await api.listPacks();
+            setPacks(fresh);
+            setActivePack(pack.name);
+            setStatus(`created compendium ${pack.label}`);
+          }}
+        />
+      )}
     </div>
   );
 }

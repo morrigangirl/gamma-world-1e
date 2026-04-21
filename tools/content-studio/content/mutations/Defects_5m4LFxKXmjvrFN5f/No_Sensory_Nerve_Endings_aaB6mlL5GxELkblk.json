@@ -5,7 +5,6 @@
     "code": 30,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Cannot feel pain or judge HP; +2 penalty to figure artifacts.",
     "reference": {
       "table": "physical",
       "page": 10,

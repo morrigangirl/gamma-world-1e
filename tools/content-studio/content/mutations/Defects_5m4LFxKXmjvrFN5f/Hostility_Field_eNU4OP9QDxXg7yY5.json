@@ -5,7 +5,6 @@
     "code": 17,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Any being with 16 INT or less has 20% chance to attack once within 30m.",
     "reference": {
       "table": "mental",
       "page": 12,

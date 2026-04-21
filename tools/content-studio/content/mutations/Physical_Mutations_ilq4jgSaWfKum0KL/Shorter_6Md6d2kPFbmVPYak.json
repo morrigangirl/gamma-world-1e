@@ -5,7 +5,6 @@
     "code": 40,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "D%+D% centimeters tall; reduce damage, but very hard to hit.",
     "reference": {
       "table": "physical",
       "page": 10,

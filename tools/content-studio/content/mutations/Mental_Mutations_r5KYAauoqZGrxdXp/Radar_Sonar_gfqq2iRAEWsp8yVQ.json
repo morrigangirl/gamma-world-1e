@@ -5,7 +5,6 @@
     "code": 36,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "See day or night, +2 to hit within 30 meters.",
     "reference": {
       "table": "mental",
       "page": 13,

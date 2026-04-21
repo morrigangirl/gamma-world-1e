@@ -5,7 +5,6 @@
     "code": 4,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Within 25m, 1d6 freezing damage... +1d6/rd for 10 rounds.",
     "reference": {
       "table": "mental",
       "page": 11,

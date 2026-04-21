@@ -5,7 +5,6 @@
     "code": 21,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Lose 2HP per round until wounds are bound.",
     "reference": {
       "table": "physical",
       "page": 10,

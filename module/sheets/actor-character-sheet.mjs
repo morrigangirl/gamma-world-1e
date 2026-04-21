@@ -312,7 +312,7 @@ function formatMutationItem(item) {
     item.system.activation?.enabled ? game.i18n.localize("GAMMA_WORLD.Mutation.ActiveNow") : ""
   );
   item.gwDetailLine = compact(
-    item.system.summary,
+    truncate(plainText(item.system.description?.value ?? ""), 180),
     item.system.reference?.variant ? `variant: ${item.system.reference.variant}` : ""
   ).join(" · ");
   item.gwRuleLine = compact(
@@ -928,12 +928,11 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     const editor = foundry.applications.ux.TextEditor.implementation;
     const enrich = editor.enrichHTML.bind(editor);
     const descriptionHtml = String(item.system.description?.value ?? "").trim();
-    const summaryText = String(item.system.summary ?? "").trim();
     const notesText = String(item.system.effect?.notes ?? "").trim();
 
     let content = descriptionHtml
       ? await enrich(descriptionHtml, { relativeTo: item })
-      : paragraphize(summaryText || notesText);
+      : paragraphize(notesText);
 
     const descriptionText = plainText(descriptionHtml);
     if (notesText && (plainText(notesText) !== descriptionText)) {

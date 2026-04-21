@@ -5,7 +5,6 @@
     "code": 45,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Reduce damage to 1/2 and raise AC to 4 but reduce movement by 25%.",
     "reference": {
       "table": "physical",
       "page": 11,

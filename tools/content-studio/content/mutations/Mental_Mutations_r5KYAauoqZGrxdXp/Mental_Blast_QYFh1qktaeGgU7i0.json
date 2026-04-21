@@ -5,7 +5,6 @@
     "code": 24,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Every other turn, do 3d6 mental damage within 15 meters.",
     "reference": {
       "table": "mental",
       "page": 12,

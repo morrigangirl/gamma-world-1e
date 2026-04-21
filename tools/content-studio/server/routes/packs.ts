@@ -7,7 +7,7 @@ import {
   readDoc,
   writeDoc
 } from "../lib/content-store.js";
-import { listPackDescriptors } from "../lib/pack-meta.js";
+import { addPack, listPackDescriptors } from "../lib/pack-meta.js";
 import type { PackDescriptor } from "../../shared/types.js";
 
 const router = Router();
@@ -27,6 +27,11 @@ router.get("/", handle(() => {
   const descriptors = listPackDescriptors();
   const out: PackDescriptor[] = descriptors.map((p) => ({ ...p, count: countDocs(p.name) }));
   return out;
+}));
+
+router.post("/", handle((req, res) => {
+  const pack = addPack(req.body ?? {});
+  res.status(201).json(pack);
 }));
 
 router.get("/:pack/docs", handle((req) => listDocs(req.params.pack)));

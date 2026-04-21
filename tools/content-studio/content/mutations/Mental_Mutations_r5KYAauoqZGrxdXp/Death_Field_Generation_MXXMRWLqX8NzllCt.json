@@ -5,7 +5,6 @@
     "code": 5,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Drain all but one HP from all beings within 20m; unconscious for d20 turns.",
     "reference": {
       "table": "mental",
       "page": 12,

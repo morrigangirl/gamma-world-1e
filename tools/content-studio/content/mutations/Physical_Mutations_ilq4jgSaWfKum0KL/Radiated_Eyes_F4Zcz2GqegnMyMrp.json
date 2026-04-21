@@ -5,7 +5,6 @@
     "code": 37,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Blasts of radiation up to 10 meters that do 3d6 every 4 turns.",
     "reference": {
       "table": "physical",
       "page": 10,

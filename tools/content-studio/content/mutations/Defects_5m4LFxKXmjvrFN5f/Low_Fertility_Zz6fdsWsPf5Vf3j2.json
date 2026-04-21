@@ -5,7 +5,6 @@
     "code": 68,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Only 10% of seeds germinate; cannot propagate normally.",
     "reference": {
       "table": "plant",
       "page": 15,

@@ -5,7 +5,6 @@
     "code": 1,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Withstand additional damage for _______ up to current HP.",
     "reference": {
       "table": "mental",
       "page": 11,

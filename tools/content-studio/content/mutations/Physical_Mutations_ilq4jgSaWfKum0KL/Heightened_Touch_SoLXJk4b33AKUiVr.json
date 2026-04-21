@@ -5,7 +5,6 @@
     "code": 19,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Better chance to figure out / use artifacts.",
     "reference": {
       "table": "physical",
       "page": 10,

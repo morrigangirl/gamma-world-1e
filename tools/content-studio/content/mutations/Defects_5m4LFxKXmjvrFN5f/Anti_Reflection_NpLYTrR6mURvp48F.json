@@ -5,7 +5,6 @@
     "code": 2,
     "subtype": "defect",
     "category": "defect",
-    "summary": "25% chance to reverse attack and defense when using mental power.",
     "reference": {
       "table": "mental",
       "page": 11,

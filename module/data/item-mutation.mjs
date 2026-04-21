@@ -22,8 +22,6 @@ export class MutationData extends foundry.abstract.TypeDataModel {
       category: str({ initial: "beneficial",
         choices: ["beneficial", "defect"] }),
 
-      summary: str({ initial: "" }),
-
       reference: new SchemaField({
         table:   str({ initial: "" }),
         page:    int({ initial: 0, min: 0 }),

@@ -5,7 +5,6 @@
     "code": 41,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Skin defect causes _______.",
     "reference": {
       "table": "physical",
       "page": 10,

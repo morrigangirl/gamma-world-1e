@@ -135,11 +135,6 @@ export function abilityModifierFromScore(score) {
   return 0;
 }
 
-function fillVariant(summary, variant) {
-  if (!variant) return summary ?? "";
-  return String(summary ?? "").replace(/_+/g, variant);
-}
-
 /**
  * Map of mutation name → the list of random variant outcomes. A mutation
  * in this table has one of its outcomes rolled once at the moment the
@@ -182,9 +177,9 @@ export function mutationHasVariant(name) {
   return !!MUTATION_VARIANT_POOLS[name];
 }
 
-/** Exposed for the drop-hook so it can write the rolled variant + patch
- *  the summary placeholder in a single updateSource call. */
-export { mutationVariant, fillVariant, MUTATION_VARIANT_POOLS };
+/** Exposed for the drop-hook so it can roll and write the variant in a
+ *  single updateSource call, and for tests that exercise the pool. */
+export { mutationVariant, MUTATION_VARIANT_POOLS };
 
 export const MUTATION_RULES = {
   "Absorption": {
@@ -1154,9 +1149,52 @@ export function mutationActionLabel(item) {
   return "Use";
 }
 
-export function describeMutation(item) {
-  const summary = item?.system?.summary || findMutationByName(item?.name)?.summary || "";
-  return fillVariant(summary, item?.system?.reference?.variant);
+/**
+ * HTML describe: returns the authored rich description for chat / tooltip
+ * surfaces that accept HTML, with a `Variant: X` footer appended when the
+ * mutation carries a rolled variant (Absorption, Fear Impulse, Will
+ * Force, etc.). Falls back to the static definition summary wrapped in
+ * `<p>` when the item has no description (rare — the three split
+ * Genius items historically had no authored prose, now fixed).
+ *
+ * Callers feeding the result into existing `<p>${...}</p>` wrappers
+ * should drop the wrapper; the description already contains its own
+ * paragraph tags.
+ */
+export function describeMutationHtml(item) {
+  const raw = item?.system?.description?.value;
+  const description = String(raw ?? "").trim();
+  const fallback = description
+    || (() => {
+      const definition = findMutationByName(item?.name);
+      const defSummary = String(definition?.summary ?? "").trim();
+      return defSummary ? `<p>${defSummary}</p>` : "";
+    })();
+  const variant = String(item?.system?.reference?.variant ?? "").trim();
+  const variantLine = variant
+    ? `<p class="gw-card-meta">Variant: ${variant}</p>`
+    : "";
+  return fallback + variantLine;
+}
+
+/**
+ * Plain-text describe: for surfaces that can't render HTML (damage-card
+ * notes field, applyTemporaryEffect notes, ui.notifications). Extracts
+ * the text out of the authored description and appends a `(variant: X)`
+ * suffix when set.
+ *
+ * Uses a lightweight regex strip rather than the DOMParser-backed
+ * `plainText()` helper in actor-character-sheet.mjs to avoid a UI->rules
+ * layer import. The regex is sufficient for single-paragraph mutation
+ * prose; it collapses whitespace and drops tag markup.
+ */
+export function describeMutationText(item) {
+  const raw = String(item?.system?.description?.value ?? "");
+  const description = raw.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const definition = findMutationByName(item?.name);
+  const fallback = description || String(definition?.summary ?? "").trim();
+  const variant = String(item?.system?.reference?.variant ?? "").trim();
+  return variant ? `${fallback} (variant: ${variant})` : fallback;
 }
 
 /**
@@ -1195,14 +1233,11 @@ function serializeCondition(condition) {
 
 export function buildMutationItemSource(definition, { rng = Math.random, rollVariant = true } = {}) {
   const rule = getMutationRule(definition.name);
-  // rollVariant = false: leave the variant empty and keep the summary
-  // placeholder as-is. Used by compendium pack builds so that dragging
-  // e.g. Absorption onto a character triggers a fresh d6 roll rather
-  // than always defaulting to whatever happened to roll at pack build
-  // time. The drop-hook (see module/hooks.mjs mutation-variant wiring)
-  // is responsible for rolling the variant on add.
+  // rollVariant = false: leave the variant empty. Compendium pack builds
+  // pass this so the sealed mutation items don't bake a pre-rolled
+  // variant; the preCreateItem hook (see module/hooks.mjs) rolls fresh
+  // on drag-drop.
   const variant = rollVariant ? mutationVariant(definition.name, rng) : "";
-  const summary = fillVariant(definition.summary, variant);
   const notes = variant ? `Variant: ${variant}.` : "";
 
   // 0.8.4 Tier 1 — emit the rule's `effects` array onto the item source
@@ -1256,7 +1291,6 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
       code: definition.code,
       subtype: definition.category === "defect" ? "defect" : definition.subtype,
       category: definition.category,
-      summary,
       reference: {
         table: definition.subtype,
         page: definition.page,
@@ -1294,9 +1328,11 @@ export function buildMutationItemSource(definition, { rng = Math.random, rollVar
         // 0.10.0 — homebrew descriptions authored in
         // ref/rulebook-prose/06-Updated-Mutations.md flow through
         // `mutation-descriptions.generated.mjs`. Falls back to the
-        // summary-based placeholder when the mutation has no entry
-        // in the markdown (e.g. the three split Genius items).
-        value: mutationDescriptionFor(definition.subtype, definition.name) ?? `<p>${summary}</p>`
+        // canonical 1e definition-table summary wrapped in a paragraph
+        // when the mutation has no authored prose entry (e.g. some of
+        // the Genius split items).
+        value: mutationDescriptionFor(definition.subtype, definition.name)
+          ?? `<p>${String(definition.summary ?? "").trim()}</p>`
       }
     },
     effects: emittedEffects
@@ -1310,7 +1346,6 @@ export function enrichMutationSystemData(item) {
   const system = item.system;
 
   system.code ||= definition?.code ?? 0;
-  system.summary ||= fillVariant(definition?.summary ?? "", system.reference?.variant);
   system.reference.table ||= definition?.subtype ?? "";
   system.reference.page ||= definition?.page ?? 0;
   system.activation.mode ||= rule.mode;

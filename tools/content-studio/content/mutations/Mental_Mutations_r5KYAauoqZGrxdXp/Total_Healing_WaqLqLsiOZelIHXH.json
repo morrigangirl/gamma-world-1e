@@ -5,7 +5,6 @@
     "code": 47,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Heall all HP once per day up to 4 times per week.",
     "reference": {
       "table": "mental",
       "page": 14,

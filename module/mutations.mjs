@@ -1,7 +1,8 @@
 import { SYSTEM_ID } from "./config.mjs";
 import {
   buildMutationItemSource,
-  describeMutation,
+  describeMutationHtml,
+  describeMutationText,
   getMutationRule,
   mutationActionLabel,
   mutationHasAction
@@ -329,7 +330,7 @@ async function handleToggle(actor, item) {
 
   const actionLabel = enabling ? "activated" : "deactivated";
   const durationLine = remaining ? `<p>Duration remaining: ${remaining} round(s).</p>` : "";
-  await postMutationMessage(actor, item, `<p>${actor.name} has ${actionLabel} ${item.name}.</p>${durationLine}<p>${describeMutation(item)}</p>`);
+  await postMutationMessage(actor, item, `<p>${actor.name} has ${actionLabel} ${item.name}.</p>${durationLine}${describeMutationHtml(item)}`);
   await actor.refreshDerivedResources({ adjustCurrent: false });
   return true;
 }
@@ -358,7 +359,7 @@ async function handleDamage(actor, item) {
     baseFormula: item.system.effect.formula || "1d6",
     targetUuid,
     damageType: item.system.effect.saveType || "physical",
-    notes: describeMutation(item)
+    notes: describeMutationText(item)
   });
   return true;
 }
@@ -619,10 +620,11 @@ async function handleMentalControl(actor, item) {
 
 async function handleNote(actor, item) {
   await commitMutationUse(item, { consumeUse: true, setCooldown: true });
+  const notesLine = item.system.effect.notes ? `<p>${item.system.effect.notes}</p>` : "";
   await postMutationMessage(
     actor,
     item,
-    `<p>${describeMutation(item)}</p><p>${item.system.effect.notes || ""}</p>`
+    `${describeMutationHtml(item)}${notesLine}`
   );
   return true;
 }
@@ -716,7 +718,7 @@ async function handleMentalSave(actor, item) {
   if (save?.status !== "resolved") return false;
 
   const verdict = save.success ? "resisted" : "failed";
-  const effectText = item.system.effect?.notes || describeMutation(item);
+  const effectText = item.system.effect?.notes || describeMutationText(item);
   await postMutationMessage(
     actor,
     item,
@@ -754,17 +756,18 @@ async function handleGuided(actor, item) {
       mode: "generic",
       remainingRounds: setup.rounds,
       sourceName: item.name,
-      notes: item.system.effect.notes || describeMutation(item),
+      notes: item.system.effect.notes || describeMutationText(item),
       changes: {}
     });
   }
 
   const trackedNames = targets.length ? targets.map((target) => target.name).join(", ") : "chat only";
+  const notesLine = item.system.effect.notes ? `<p>${item.system.effect.notes}</p>` : "";
   await postMutationMessage(
     actor,
     item,
-    `<p>${describeMutation(item)}</p>
-     <p>${item.system.effect.notes || ""}</p>
+    `${describeMutationHtml(item)}
+     ${notesLine}
      <p>Tracking: ${trackedNames}${setup.rounds > 0 ? ` for ${setup.rounds} round(s)` : ""}.</p>`
   );
   return true;
@@ -772,7 +775,7 @@ async function handleGuided(actor, item) {
 
 export async function useMutation(actor, item) {
   if (!mutationHasAction(item)) {
-    await postMutationMessage(actor, item, `<p>${describeMutation(item)}</p>`);
+    await postMutationMessage(actor, item, describeMutationHtml(item));
     return true;
   }
 

@@ -5,7 +5,6 @@
     "code": 76,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Vine contact causes intensity 12 poison save plus 1d6 damage.",
     "reference": {
       "table": "plant",
       "page": 15,

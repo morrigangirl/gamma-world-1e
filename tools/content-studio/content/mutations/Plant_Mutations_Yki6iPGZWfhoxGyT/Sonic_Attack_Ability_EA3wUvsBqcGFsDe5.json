@@ -5,7 +5,6 @@
     "code": 83,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Emits high-pitched sonic pulse for 2d6 damage within 6m once per round.",
     "reference": {
       "table": "plant",
       "page": 15,

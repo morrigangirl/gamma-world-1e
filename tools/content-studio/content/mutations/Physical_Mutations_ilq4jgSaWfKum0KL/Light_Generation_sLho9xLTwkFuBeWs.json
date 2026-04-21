@@ -5,7 +5,6 @@
     "code": 25,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Reduce viewers' AC and to-hit by 4 for d4 turns.",
     "reference": {
       "table": "physical",
       "page": 10,

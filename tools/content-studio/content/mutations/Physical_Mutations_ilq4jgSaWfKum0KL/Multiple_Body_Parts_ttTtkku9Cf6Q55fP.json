@@ -5,7 +5,6 @@
     "code": 26,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Multiply any normal body part (except the brain).",
     "reference": {
       "table": "physical",
       "page": 10,

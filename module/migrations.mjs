@@ -319,7 +319,13 @@ function mutationUpdateData(item) {
   const system = item.system;
 
   if (!system.code && definition?.code) update["system.code"] = definition.code;
-  if (!system.summary && definition?.summary) update["system.summary"] = definition.summary;
+  // 0.12.0 — system.summary was dropped from the schema. Issue a field
+  // deletion so pre-0.12.0 items stored with a summary don't leave
+  // stale data in the DB. Foundry's `system.-=summary: null` idiom
+  // silently no-ops when the field is already absent.
+  if (item._source?.system && "summary" in item._source.system) {
+    update["system.-=summary"] = null;
+  }
   if (!system.reference?.table && definition?.subtype) update["system.reference.table"] = definition.subtype;
   if (!(system.reference?.page > 0) && definition?.page) update["system.reference.page"] = definition.page;
   if (!system.activation?.mode) update["system.activation.mode"] = rule.mode;

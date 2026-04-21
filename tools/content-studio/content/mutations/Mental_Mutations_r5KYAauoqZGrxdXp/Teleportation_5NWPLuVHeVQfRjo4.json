@@ -5,7 +5,6 @@
     "code": 44,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Teleport self up to 30 km... 25% chance of 10d6 damage if unfamiliar.",
     "reference": {
       "table": "mental",
       "page": 13,

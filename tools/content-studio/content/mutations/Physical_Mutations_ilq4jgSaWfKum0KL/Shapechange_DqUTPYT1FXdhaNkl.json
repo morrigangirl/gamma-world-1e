@@ -5,7 +5,6 @@
     "code": 39,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "In 2 melee turns, mimic animal, but without abilities.",
     "reference": {
       "table": "physical",
       "page": 10,

@@ -5,7 +5,6 @@
     "code": 88,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Wilts at temperatures below 5°C or above 35°C; -50% movement.",
     "reference": {
       "table": "plant",
       "page": 15,

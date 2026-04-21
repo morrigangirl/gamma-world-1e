@@ -5,7 +5,6 @@
     "code": 30,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "+1 die of damage; immediately figure out Chart A, -1 on other charts.",
     "reference": {
       "table": "mental",
       "page": 13,

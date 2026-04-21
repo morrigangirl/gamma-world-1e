@@ -5,7 +5,6 @@
     "code": 22,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Eat every 5th round or lose 1STR and 2HP / turn.",
     "reference": {
       "table": "physical",
       "page": 10,

@@ -5,7 +5,6 @@
     "code": 10,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Beams of heat up to 15 meters that do 4d6 every 3 turns.",
     "reference": {
       "table": "physical",
       "page": 9,

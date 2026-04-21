@@ -5,7 +5,6 @@
     "code": 5,
     "subtype": "defect",
     "category": "defect",
-    "summary": "One sense does not function normally.",
     "reference": {
       "table": "physical",
       "page": 9,

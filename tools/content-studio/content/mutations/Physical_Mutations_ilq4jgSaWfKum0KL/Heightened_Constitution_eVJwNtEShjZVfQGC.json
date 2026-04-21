@@ -5,7 +5,6 @@
     "code": 12,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "+2HP per Constitution. Under the 0.8.2 homebrew saves: +3 to poison and radiation saves, and radiation severity is capped at \"severe\" (never Catastrophic Exposure from a single exposure).",
     "reference": {
       "table": "physical",
       "page": 9,

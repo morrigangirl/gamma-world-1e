@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# Start/stop/status helper for the Gamma World 1e content-studio.
+#
+# Usage:
+#   ./studio start    — launch API (3737) + Vite dev server (5173) in the background
+#   ./studio stop     — terminate the background processes
+#   ./studio restart  — stop then start
+#   ./studio status   — report pid and port state
+#   ./studio logs     — tail the combined log
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PID_FILE="$SCRIPT_DIR/.studio.pid"
+LOG_FILE="$SCRIPT_DIR/.studio.log"
+API_PORT=3737
+WEB_PORT=5173
+WAIT_SECONDS=40
+
+is_running() {
+  [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null
+}
+
+port_listening() {
+  # macOS + Linux: lsof is the common denominator
+  lsof -iTCP:"$1" -sTCP:LISTEN -nP >/dev/null 2>&1
+}
+
+wait_for_ports() {
+  local waited=0
+  until port_listening "$API_PORT" && port_listening "$WEB_PORT"; do
+    if (( waited >= WAIT_SECONDS )); then
+      echo "timed out waiting for ports $API_PORT/$WEB_PORT" >&2
+      return 1
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+}
+
+# Recursively SIGTERM a pid and all its descendants.
+stop_tree() {
+  local pid=$1
+  local children
+  children=$(pgrep -P "$pid" 2>/dev/null || true)
+  for c in $children; do stop_tree "$c"; done
+  kill -TERM "$pid" 2>/dev/null || true
+}
+
+wait_for_ports_free() {
+  local waited=0
+  while port_listening "$API_PORT" || port_listening "$WEB_PORT"; do
+    if (( waited >= 10 )); then
+      # Last resort: force-kill anything still bound to either port
+      for p in "$API_PORT" "$WEB_PORT"; do
+        local pids
+        pids=$(lsof -iTCP:"$p" -sTCP:LISTEN -nP -t 2>/dev/null || true)
+        for pid in $pids; do kill -KILL "$pid" 2>/dev/null || true; done
+      done
+      break
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+}
+
+cmd_start() {
+  if is_running; then
+    echo "studio already running (pid $(cat "$PID_FILE"))"
+    return 0
+  fi
+  if port_listening "$API_PORT" || port_listening "$WEB_PORT"; then
+    echo "port $API_PORT or $WEB_PORT already in use — aborting" >&2
+    return 1
+  fi
+  cd "$SCRIPT_DIR"
+  echo "---- $(date -u +'%Y-%m-%dT%H:%M:%SZ') starting studio ----" >> "$LOG_FILE"
+  nohup npm run studio >> "$LOG_FILE" 2>&1 &
+  echo $! > "$PID_FILE"
+  if wait_for_ports; then
+    echo "studio up"
+    echo "  pid : $(cat "$PID_FILE")"
+    echo "  api : http://127.0.0.1:$API_PORT"
+    echo "  web : http://127.0.0.1:$WEB_PORT"
+    echo "  log : $LOG_FILE"
+  else
+    echo "studio failed to become ready; see $LOG_FILE" >&2
+    cmd_stop >/dev/null 2>&1 || true
+    return 1
+  fi
+}
+
+cmd_stop() {
+  if ! is_running; then
+    echo "studio not running"
+    rm -f "$PID_FILE"
+    return 0
+  fi
+  local pid
+  pid=$(cat "$PID_FILE")
+  stop_tree "$pid"
+  rm -f "$PID_FILE"
+  wait_for_ports_free
+  echo "studio stopped"
+}
+
+cmd_status() {
+  local pid_line="pid file : absent"
+  if [[ -f "$PID_FILE" ]]; then
+    local pid
+    pid=$(cat "$PID_FILE")
+    if kill -0 "$pid" 2>/dev/null; then
+      pid_line="pid file : $pid (alive)"
+    else
+      pid_line="pid file : $pid (dead — stale)"
+    fi
+  fi
+  echo "$pid_line"
+  if port_listening "$API_PORT"; then
+    echo "api 3737 : listening"
+  else
+    echo "api 3737 : closed"
+  fi
+  if port_listening "$WEB_PORT"; then
+    echo "web 5173 : listening"
+  else
+    echo "web 5173 : closed"
+  fi
+}
+
+cmd_restart() {
+  cmd_stop
+  cmd_start
+}
+
+cmd_logs() {
+  tail -f "$LOG_FILE"
+}
+
+case "${1:-}" in
+  start)   cmd_start ;;
+  stop)    cmd_stop ;;
+  restart) cmd_restart ;;
+  status)  cmd_status ;;
+  logs)    cmd_logs ;;
+  *)       echo "usage: $(basename "$0") {start|stop|restart|status|logs}" >&2; exit 2 ;;
+esac

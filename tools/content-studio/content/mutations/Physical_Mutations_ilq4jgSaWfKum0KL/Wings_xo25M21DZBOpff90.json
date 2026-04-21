@@ -5,7 +5,6 @@
     "code": 49,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Fly 12m per turn, carry no more than 25% body weight.",
     "reference": {
       "table": "physical",
       "page": 11,

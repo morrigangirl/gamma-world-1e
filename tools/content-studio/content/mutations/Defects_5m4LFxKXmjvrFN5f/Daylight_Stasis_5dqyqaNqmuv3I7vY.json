@@ -5,7 +5,6 @@
     "code": 61,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Becomes inert and inactive during daylight hours.",
     "reference": {
       "table": "plant",
       "page": 15,

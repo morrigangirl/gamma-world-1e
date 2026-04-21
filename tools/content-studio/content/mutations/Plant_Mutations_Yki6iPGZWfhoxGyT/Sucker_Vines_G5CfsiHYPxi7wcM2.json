@@ -5,7 +5,6 @@
     "code": 86,
     "subtype": "plant",
     "category": "beneficial",
-    "summary": "Drain 1d4 HP per round from gripped victims; HP is transferred to the plant.",
     "reference": {
       "table": "plant",
       "page": 15,

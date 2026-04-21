@@ -5,7 +5,6 @@
     "code": 9,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Two brains; -1 to artifacts; two mental saves, but increase mental 1/2.",
     "reference": {
       "table": "mental",
       "page": 12,

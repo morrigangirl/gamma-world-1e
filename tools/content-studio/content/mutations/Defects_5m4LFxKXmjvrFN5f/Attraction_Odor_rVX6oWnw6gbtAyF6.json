@@ -5,7 +5,6 @@
     "code": 1,
     "subtype": "defect",
     "category": "defect",
-    "summary": "You attract carnivores.",
     "reference": {
       "table": "physical",
       "page": 9,

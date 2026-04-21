@@ -5,7 +5,6 @@
     "code": 17,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "+3 damage dice with non-powered weapons.",
     "reference": {
       "table": "physical",
       "page": 10,

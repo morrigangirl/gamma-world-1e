@@ -5,7 +5,6 @@
     "code": 35,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "1d6 fire damage... +1d6 per round of concentration.",
     "reference": {
       "table": "mental",
       "page": 13,

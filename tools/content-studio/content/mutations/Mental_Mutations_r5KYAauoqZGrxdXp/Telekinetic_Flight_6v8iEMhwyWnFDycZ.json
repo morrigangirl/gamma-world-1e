@@ -5,7 +5,6 @@
     "code": 42,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Fly up to 20 meters per second, carry as much as usual.",
     "reference": {
       "table": "mental",
       "page": 13,

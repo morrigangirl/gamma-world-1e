@@ -4,9 +4,10 @@ interface Props {
   packs: PackDescriptor[];
   active: string | null;
   onSelect: (name: string) => void;
+  onNewPack: () => void;
 }
 
-export default function PackSidebar({ packs, active, onSelect }: Props) {
+export default function PackSidebar({ packs, active, onSelect, onNewPack }: Props) {
   return (
     <nav className="sidebar">
       <h2>Compendia</h2>
@@ -23,6 +24,9 @@ export default function PackSidebar({ packs, active, onSelect }: Props) {
           <span className="count">{pack.count}</span>
         </div>
       ))}
+      <div style={{ padding: "0.75rem" }}>
+        <button style={{ width: "100%" }} onClick={onNewPack}>+ New Compendium</button>
+      </div>
     </nav>
   );
 }

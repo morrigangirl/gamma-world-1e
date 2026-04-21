@@ -5,7 +5,6 @@
     "code": 81,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Half normal plant size; all damage dice lowered by one step.",
     "reference": {
       "table": "plant",
       "page": 15,

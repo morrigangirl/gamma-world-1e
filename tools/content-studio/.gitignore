@@ -1,3 +1,5 @@
 node_modules/
 dist/
 .studio-build-ok
+.studio.pid
+.studio.log

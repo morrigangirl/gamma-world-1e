@@ -5,7 +5,6 @@
     "code": 18,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "Detect poison/edibility.",
     "reference": {
       "table": "physical",
       "page": 10,

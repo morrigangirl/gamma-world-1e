@@ -5,7 +5,6 @@
     "code": 45,
     "subtype": "mental",
     "category": "beneficial",
-    "summary": "Reflect mental attack (still take effects) or mimic thoughts to communicate.",
     "reference": {
       "table": "mental",
       "page": 14,

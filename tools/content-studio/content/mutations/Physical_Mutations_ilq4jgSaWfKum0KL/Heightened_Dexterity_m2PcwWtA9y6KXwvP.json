@@ -5,7 +5,6 @@
     "code": 13,
     "subtype": "physical",
     "category": "beneficial",
-    "summary": "+4AC when unencumbered.",
     "reference": {
       "table": "physical",
       "page": 9,

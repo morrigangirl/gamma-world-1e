@@ -5,7 +5,6 @@
     "code": 48,
     "subtype": "defect",
     "category": "defect",
-    "summary": "25% slower, 25% weaker.",
     "reference": {
       "table": "physical",
       "page": 11,

@@ -5,7 +5,6 @@
     "code": 6,
     "subtype": "defect",
     "category": "defect",
-    "summary": "Sustain double damage.",
     "reference": {
       "table": "physical",
       "page": 9,

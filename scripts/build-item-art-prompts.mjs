@@ -83,8 +83,7 @@ function buildWeaponPrompt(weapon) {
 /* ------------------------------------------------------------------ */
 
 function buildMutationPrompt(mutation) {
-  const description = stripHtml(mutation.system?.summary ?? "")
-    || stripHtml(mutation.system?.description?.value ?? "");
+  const description = stripHtml(mutation.system?.description?.value ?? "");
   const subtype = mutation.system?.subtype ?? "";
   const category = mutation.system?.category ?? "";
 
