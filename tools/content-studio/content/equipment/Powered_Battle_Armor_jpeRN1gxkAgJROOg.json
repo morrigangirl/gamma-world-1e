@@ -55,13 +55,16 @@
         "cellSlots": 2,
         "cellsInstalled": 2
       },
-      "charges": {},
+      "charges": {
+        "current": 48,
+        "max": 48
+      },
       "functionChance": 40,
       "harmCallback": ""
     },
     "effects": [
       {
-        "label": "Powered Battle Armor — flight",
+        "label": "Powered Battle Armor \u2014 flight",
         "condition": "equipped",
         "changes": [
           {
@@ -79,7 +82,7 @@
         ]
       },
       {
-        "label": "Powered Battle Armor — lift",
+        "label": "Powered Battle Armor \u2014 lift",
         "condition": "equipped",
         "changes": [
           {
@@ -141,7 +144,7 @@
   },
   "effects": [
     {
-      "name": "Powered Battle Armor — flight",
+      "name": "Powered Battle Armor \u2014 flight",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
@@ -186,7 +189,7 @@
       "_key": "!items.effects!jpeRN1gxkAgJROOg.5YRJNbEITAzAf7If"
     },
     {
-      "name": "Powered Battle Armor — lift",
+      "name": "Powered Battle Armor \u2014 lift",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,

@@ -55,13 +55,16 @@
         "cellSlots": 2,
         "cellsInstalled": 2
       },
-      "charges": {},
+      "charges": {
+        "current": 42,
+        "max": 42
+      },
       "functionChance": 40,
       "harmCallback": ""
     },
     "effects": [
       {
-        "label": "Powered Attack Armor — flight",
+        "label": "Powered Attack Armor \u2014 flight",
         "condition": "equipped",
         "changes": [
           {
@@ -79,7 +82,7 @@
         ]
       },
       {
-        "label": "Powered Attack Armor — lift",
+        "label": "Powered Attack Armor \u2014 lift",
         "condition": "equipped",
         "changes": [
           {
@@ -255,7 +258,7 @@
   },
   "effects": [
     {
-      "name": "Powered Attack Armor — flight",
+      "name": "Powered Attack Armor \u2014 flight",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
@@ -300,7 +303,7 @@
       "_key": "!items.effects!RkJ65PDzYSa89tVO.UWTURI7oSObRvFgY"
     },
     {
-      "name": "Powered Attack Armor — lift",
+      "name": "Powered Attack Armor \u2014 lift",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,

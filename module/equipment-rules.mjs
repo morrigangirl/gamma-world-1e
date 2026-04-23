@@ -1009,23 +1009,44 @@ const WEAPON_DEFAULTS = {
 };
 
 const WEAPON_ARTIFACTS = {
+  // 0.13.0-preflight: canonical names + rulebook charges (clip / dart budgets
+  // per cell). See CONSUMPTION_CATALOG for how these translate into per-use
+  // percent drain. Legacy split names ("Slug Thrower (.38)", "Needler (Poison)",
+  // "Needler (Paralysis)") retained as aliases until 0.14.0 sweep.
+  "Slug Thrower": {
+    category: "pistol",
+    chart: "a",
+    powerSource: "hydrogen",
+    power: powerProfile({ cells: ["hydrogen"], slots: 1 }),
+    charges: { current: 5, max: 5 }
+  },
   "Slug Thrower (.38)": {
     category: "pistol",
     chart: "a",
     powerSource: "hydrogen",
-    power: powerProfile({ cells: ["hydrogen"], slots: 1 })
+    power: powerProfile({ cells: ["hydrogen"], slots: 1 }),
+    charges: { current: 5, max: 5 }
+  },
+  "Needler": {
+    category: "pistol",
+    chart: "a",
+    powerSource: "chemical",
+    power: powerProfile({ cells: ["chemical"], slots: 1 }),
+    charges: { current: 30, max: 30 }
   },
   "Needler (Poison)": {
     category: "pistol",
     chart: "a",
     powerSource: "chemical",
-    power: powerProfile({ cells: ["chemical"], slots: 1 })
+    power: powerProfile({ cells: ["chemical"], slots: 1 }),
+    charges: { current: 30, max: 30 }
   },
   "Needler (Paralysis)": {
     category: "pistol",
     chart: "a",
     powerSource: "chemical",
-    power: powerProfile({ cells: ["chemical"], slots: 1 })
+    power: powerProfile({ cells: ["chemical"], slots: 1 }),
+    charges: { current: 30, max: 30 }
   },
   "Stun Ray Pistol": {
     category: "pistol",
@@ -1131,55 +1152,67 @@ const WEAPON_ARTIFACTS = {
 };
 
 const ARMOR_ARTIFACTS = {
+  // 0.13.0-preflight: rulebook hours-of-constant-use per atomic cell populate
+  // charges so collectNamedArtifactUpdates paints the correct budget onto
+  // worlds. Phase 1 migration derives consumption.unit=hour + perUnit from
+  // these numbers via CONSUMPTION_CATALOG.
   "Sheath Armor": { category: "armor", chart: "b" },
   "Powered Plate": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 1 })
+    power: powerProfile({ cells: ["nuclear"], slots: 1 }),
+    charges: { current: 50, max: 50 }
   },
   "Powered Alloyed Plate": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 1 })
+    power: powerProfile({ cells: ["nuclear"], slots: 1 }),
+    charges: { current: 45, max: 45 }
   },
   "Plastic Armor": { category: "armor", chart: "b" },
   "Energized Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 1 })
+    power: powerProfile({ cells: ["nuclear"], slots: 1 }),
+    charges: { current: 40, max: 40 }
   },
   "Inertia Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 2 })
+    power: powerProfile({ cells: ["nuclear"], slots: 2 }),
+    charges: { current: 60, max: 60 }
   },
   "Powered Scout Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 2 })
+    power: powerProfile({ cells: ["nuclear"], slots: 2 }),
+    charges: { current: 54, max: 54 }
   },
   "Powered Battle Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 2 })
+    power: powerProfile({ cells: ["nuclear"], slots: 2 }),
+    charges: { current: 48, max: 48 }
   },
   "Powered Attack Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 2 })
+    power: powerProfile({ cells: ["nuclear"], slots: 2 }),
+    charges: { current: 42, max: 42 }
   },
   "Powered Assault Armor": {
     category: "armor",
     chart: "b",
     powerSource: "nuclear",
-    power: powerProfile({ cells: ["nuclear"], slots: 3 })
+    power: powerProfile({ cells: ["nuclear"], slots: 3 }),
+    charges: { current: 48, max: 48 }
   }
 };
 

@@ -55,13 +55,16 @@
         "cellSlots": 3,
         "cellsInstalled": 3
       },
-      "charges": {},
+      "charges": {
+        "current": 48,
+        "max": 48
+      },
       "functionChance": 40,
       "harmCallback": ""
     },
     "effects": [
       {
-        "label": "Powered Assault Armor — flight",
+        "label": "Powered Assault Armor \u2014 flight",
         "condition": "equipped",
         "changes": [
           {
@@ -79,7 +82,7 @@
         ]
       },
       {
-        "label": "Powered Assault Armor — lift",
+        "label": "Powered Assault Armor \u2014 lift",
         "condition": "equipped",
         "changes": [
           {
@@ -255,7 +258,7 @@
   },
   "effects": [
     {
-      "name": "Powered Assault Armor — flight",
+      "name": "Powered Assault Armor \u2014 flight",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
@@ -300,7 +303,7 @@
       "_key": "!items.effects!HDCrNblFeTZ9pG62.wPeUIXXOLLtFdL46"
     },
     {
-      "name": "Powered Assault Armor — lift",
+      "name": "Powered Assault Armor \u2014 lift",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,

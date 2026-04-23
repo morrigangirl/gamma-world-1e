@@ -35,7 +35,7 @@
     "weight": 0,
     "equipped": false,
     "description": {
-      "value": "<p>Soundless dart weapon. Fires poison or paralysis capsules — load whichever ammo stack the situation calls for.</p>"
+      "value": "<p>Soundless dart weapon. Fires poison or paralysis capsules \u2014 load whichever ammo stack the situation calls for.</p>"
     },
     "traits": {
       "bypassesForceField": false,
@@ -43,23 +43,29 @@
       "nonlethal": false
     },
     "artifact": {
-      "isArtifact": false,
-      "category": "none",
-      "chart": "none",
+      "isArtifact": true,
+      "category": "pistol",
+      "chart": "a",
       "condition": "fair",
       "canShortOut": true,
       "canExplode": false,
       "harmResolutionType": "generic",
       "identified": false,
       "operationKnown": false,
-      "powerSource": "none",
+      "powerSource": "chemical",
       "power": {
-        "requirement": "none",
-        "installedType": "none",
+        "requirement": "cells",
+        "installedType": "chemical",
         "ambientSource": "none",
-        "ambientAvailable": false
+        "ambientAvailable": false,
+        "compatibleCells": "chemical",
+        "cellSlots": 1,
+        "cellsInstalled": 1
       },
-      "charges": {}
+      "charges": {
+        "current": 30,
+        "max": 30
+      }
     },
     "actionTypes": {}
   },

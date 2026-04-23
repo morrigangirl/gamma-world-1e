@@ -49,7 +49,10 @@
         "cellSlots": 1,
         "cellsInstalled": 1
       },
-      "charges": {},
+      "charges": {
+        "current": 50,
+        "max": 50
+      },
       "functionChance": 40,
       "harmCallback": ""
     },

@@ -42,23 +42,29 @@
       "nonlethal": false
     },
     "artifact": {
-      "isArtifact": false,
-      "category": "none",
-      "chart": "none",
+      "isArtifact": true,
+      "category": "pistol",
+      "chart": "a",
       "condition": "fair",
       "canShortOut": true,
       "canExplode": false,
       "harmResolutionType": "generic",
       "identified": false,
       "operationKnown": false,
-      "powerSource": "none",
+      "powerSource": "hydrogen",
       "power": {
-        "requirement": "none",
-        "installedType": "none",
+        "requirement": "cells",
+        "installedType": "hydrogen",
         "ambientSource": "none",
-        "ambientAvailable": false
+        "ambientAvailable": false,
+        "compatibleCells": "hydrogen",
+        "cellSlots": 1,
+        "cellsInstalled": 1
       },
-      "charges": {}
+      "charges": {
+        "current": 5,
+        "max": 5
+      }
     },
     "actionTypes": {}
   },

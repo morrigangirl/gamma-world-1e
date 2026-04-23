@@ -51,13 +51,16 @@
         "cellSlots": 1,
         "cellsInstalled": 1
       },
-      "charges": {},
+      "charges": {
+        "current": 40,
+        "max": 40
+      },
       "functionChance": 40,
       "harmCallback": ""
     },
     "effects": [
       {
-        "label": "Energized Armor — jump",
+        "label": "Energized Armor \u2014 jump",
         "condition": "equipped",
         "changes": [
           {
@@ -73,7 +76,7 @@
   },
   "effects": [
     {
-      "name": "Energized Armor — jump",
+      "name": "Energized Armor \u2014 jump",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
