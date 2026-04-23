@@ -1258,10 +1258,12 @@ const GEAR_ARTIFACTS = {
     power: powerProfile({ cells: ["chemical"], slots: 1 }),
     charges: { current: 12, max: 12 }
   },
-  "Chemical Energy Cell": { category: "energyDevice", chart: "a", powerSource: "chemical", charges: { current: 1, max: 1 } },
-  "Solar Energy Cell": { category: "energyDevice", chart: "a", powerSource: "solar", charges: { current: 1, max: 1 } },
-  "Hydrogen Energy Cell": { category: "energyDevice", chart: "a", powerSource: "hydrogen", charges: { current: 1, max: 1 } },
-  "Atomic Energy Cell": { category: "energyDevice", chart: "a", powerSource: "nuclear", charges: { current: 1, max: 1 } },
+  // 0.12.0 — power cells carry percent charge (0..100). See isPowerCell /
+  // cellChargePercent in module/artifact-power.mjs. 100/100 = fresh.
+  "Chemical Energy Cell": { category: "energyDevice", chart: "a", powerSource: "chemical", charges: { current: 100, max: 100 } },
+  "Solar Energy Cell": { category: "energyDevice", chart: "a", powerSource: "solar", charges: { current: 100, max: 100 } },
+  "Hydrogen Energy Cell": { category: "energyDevice", chart: "a", powerSource: "hydrogen", charges: { current: 100, max: 100 } },
+  "Atomic Energy Cell": { category: "energyDevice", chart: "a", powerSource: "nuclear", charges: { current: 100, max: 100 } },
   "Energy Cell Charger": {
     category: "energyDevice",
     chart: "b",
@@ -1557,7 +1559,11 @@ export function inferWeaponCategory(item) {
 
 const GEAR_SUBTYPE_PATTERNS = [
   [/\barrow|crossbow bolt|sling stone|sling bullet|slug-?thrower round|needler dart|gyrojet|javelin \(bundle\)|stun rifle cell/i, "ammunition"],
-  [/\b(power|energy)\s+cell\b|\bpower pack\b|\bbattery\b|\benergy cell charger\b/i, "power-cell"],
+  // 0.12.0 — "power-cell" subtype is reserved for items that actually
+  // hold charge under the percent-charge model. The Energy Cell Charger
+  // (a tool that refills cells) and a Spent Power Cell (depleted husk)
+  // are intentionally excluded and classified elsewhere below.
+  [/\b(power|energy)\s+cell\b|\bpower pack\b|\bbattery\b/i, "power-cell"],
   [/\bbackpack|satchel|pouch|ruck ?sack|saddlebag|hamper|bandolier/i, "container"],
   [/\bmedi-?kit|stim dose|pain reducer|mind booster|intera shot|sustenance dose|accelera dose|cur-?in dose|anti-?radiation serum|rejuv chamber|stasis chamber|life ray|bandage|splint|poultice|suggestion change/i, "medical"],
   [/\bgrenade|bomb\b|damage pack|explosive|mine|detonator/i, "explosive"],

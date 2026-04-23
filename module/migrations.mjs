@@ -889,6 +889,81 @@ async function migrateMutationEffects084(actor) {
   }
 }
 
+/**
+ * 0.12.0 — bring power-cell gear items onto the percent-charge model.
+ *
+ * For each gear item with `system.subtype === "power-cell"`:
+ *   - If `quantity > 1`, split into that many `quantity: 1` rows, each
+ *     fresh at `charges: { current: 100, max: 100 }`. Foundry stacks
+ *     assume uniform members and we now have to carry distinct charge
+ *     levels per cell, so stacks become individual rows.
+ *   - If `quantity === 1` but `charges.max !== 100`, rewrite to
+ *     `{ current: 100, max: 100 }`. Existing half-drained cells can't
+ *     be recovered from the old model (charge used to live on the
+ *     consuming weapon) so every surviving cell starts fresh.
+ *   - Otherwise skip. Idempotent: second pass finds nothing to change.
+ *
+ * Works for both world-level unowned items (`owner: null`) and
+ * actor-owned items (`owner: Actor`). Returns a `{ migrated, split }`
+ * counter so the caller can aggregate for the chat summary.
+ */
+async function migratePowerCells012(owner) {
+  const counters = { migrated: 0, split: 0 };
+  const collection = owner?.items ?? game.items;
+  const cells = [...collection.contents].filter(
+    (item) => item?.type === "gear" && item?.system?.subtype === "power-cell"
+  );
+
+  for (const cell of cells) {
+    const qty = Math.max(1, Number(cell.system?.quantity ?? 1));
+    const max = Number(cell.system?.artifact?.charges?.max ?? 0);
+
+    if (qty > 1) {
+      // Clone (qty - 1) siblings, update the original to singleton/fresh.
+      const source = cell.toObject();
+      delete source._id;
+      delete source._key;
+      source.system.quantity = 1;
+      source.system.artifact = source.system.artifact ?? {};
+      source.system.artifact.charges = { current: 100, max: 100 };
+      const clones = Array.from({ length: qty - 1 }, () => foundry.utils.deepClone(source));
+      try {
+        if (owner) {
+          await owner.createEmbeddedDocuments("Item", clones, { gammaWorldSync: true });
+        } else {
+          for (const clone of clones) {
+            await Item.create(clone, { gammaWorldSync: true });
+          }
+        }
+        await cell.update({
+          "system.quantity": 1,
+          "system.artifact.charges.current": 100,
+          "system.artifact.charges.max": 100
+        }, { gammaWorldSync: true });
+        counters.split += 1;
+        counters.migrated += qty;
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | 0.12.0 cell stack-split failed for "${cell.name}"`, error);
+      }
+      continue;
+    }
+
+    if (max !== 100) {
+      try {
+        await cell.update({
+          "system.artifact.charges.current": 100,
+          "system.artifact.charges.max": 100
+        }, { gammaWorldSync: true });
+        counters.migrated += 1;
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | 0.12.0 cell charge rewrite failed for "${cell.name}"`, error);
+      }
+    }
+  }
+
+  return counters;
+}
+
 export async function migrateWorld() {
   if (!game.user?.isGM) return;
 
@@ -947,6 +1022,35 @@ export async function migrateWorld() {
       });
     } catch (_error) {
       // Cosmetic; don't block migration on a chat failure.
+    }
+  }
+
+  // 0.12.0 — power cells switch from a 1/1 binary token to integer
+  // percent charge. Stacks are split so each cell carries its own
+  // charge level. Walks world-level items first, then every actor.
+  if (compareSemver(storedVersion, "0.12.0") < 0) {
+    const cellTotals = { migrated: 0, split: 0 };
+    try {
+      const worldCounts = await migratePowerCells012(null);
+      cellTotals.migrated += worldCounts.migrated;
+      cellTotals.split += worldCounts.split;
+      for (const actor of game.actors.contents) {
+        const actorCounts = await migratePowerCells012(actor);
+        cellTotals.migrated += actorCounts.migrated;
+        cellTotals.split += actorCounts.split;
+      }
+      if (cellTotals.migrated > 0 && game.user?.isGM) {
+        const splitLine = cellTotals.split > 0
+          ? `; ${cellTotals.split} stack${cellTotals.split === 1 ? "" : "s"} split into individual items`
+          : "";
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.12.0:</strong> ${cellTotals.migrated} power cell${cellTotals.migrated === 1 ? "" : "s"} migrated to percent-charge${splitLine}.</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.12.0 power-cell migration failed`, error);
     }
   }
 

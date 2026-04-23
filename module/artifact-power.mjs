@@ -1,4 +1,4 @@
-import { POWER_CELL_TYPES, ARTIFACT_AMBIENT_SOURCES } from "./config.mjs";
+import { POWER_CELL_TYPES, ARTIFACT_AMBIENT_SOURCES, CELL_MAX_CHARGE } from "./config.mjs";
 
 const CELL_ITEM_NAMES = {
   chemical: "Chemical Energy Cell",
@@ -6,6 +6,28 @@ const CELL_ITEM_NAMES = {
   hydrogen: "Hydrogen Energy Cell",
   nuclear: "Atomic Energy Cell"
 };
+
+/**
+ * 0.12.0 — single-source-of-truth test for "is this a power-cell gear item?"
+ * Power cells are `type: "gear"` with `subtype: "power-cell"`. Their
+ * `system.artifact.charges.current/max` is interpreted as integer percent
+ * charge (0..CELL_MAX_CHARGE). Non-cell artifacts keep the legacy
+ * "shots/uses remaining" meaning on the same field.
+ */
+export function isPowerCell(item) {
+  return item?.type === "gear" && item?.system?.subtype === "power-cell";
+}
+
+/**
+ * 0.12.0 — read a cell's current charge as an integer percent clamped to
+ * [0, CELL_MAX_CHARGE]. Returns `null` for non-cell items so callers can
+ * distinguish "no cell here" from "cell at 0%".
+ */
+export function cellChargePercent(item) {
+  if (!isPowerCell(item)) return null;
+  const raw = Number(item.system?.artifact?.charges?.current ?? 0);
+  return Math.max(0, Math.min(CELL_MAX_CHARGE, Math.round(raw)));
+}
 
 function artifactData(item) {
   return item?.system?.artifact ?? {};

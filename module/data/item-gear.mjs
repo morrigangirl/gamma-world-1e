@@ -119,6 +119,18 @@ export class GearData extends foundry.abstract.TypeDataModel {
           ambientSource: str({ initial: "none" }),
           ambientAvailable: new BooleanField({ initial: false })
         }),
+        /**
+         * 0.12.0 — dual-meaning field. For gear items with
+         * `system.subtype === "power-cell"`, `current` / `max` are
+         * integer percent charge (0..100) and `max` is always 100. For
+         * every other artifact (medical one-shots, weapon shot-counters
+         * via the legacy item-centric path, etc.) they retain their
+         * legacy "uses remaining" meaning. Use `isPowerCell(item)` /
+         * `cellChargePercent(item)` in `module/artifact-power.mjs` as
+         * the single branch point. The schema bounds stay `min: 0` and
+         * unbounded above because non-cell artifacts may carry shot
+         * counters larger than 100.
+         */
         charges: new SchemaField({
           current: int({ initial: 0, min: 0 }),
           max: int({ initial: 0, min: 0 })

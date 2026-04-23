@@ -1214,6 +1214,13 @@ body.system-gamma-world-1e,
   gap: 0.45rem 0.6rem;
 }
 
+/* 0.12.0 — power-cell charge percentage suffix in the item sheet. */
+.gw-charge-percent-suffix {
+  display: inline-block;
+  margin-left: 0.25rem;
+  opacity: 0.7;
+}
+
 .gw-chargen {
   display: flex;
   flex-direction: column;

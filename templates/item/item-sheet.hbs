@@ -546,16 +546,31 @@
         </span>
       </div>
       <div class="form-group">
-        <label>{{localize "GAMMA_WORLD.Artifact.PowerSource"}} / {{localize "GAMMA_WORLD.Artifact.Charges"}}</label>
+        <label>
+          {{localize "GAMMA_WORLD.Artifact.PowerSource"}} /
+          {{#if isPowerCell}}{{localize "GAMMA_WORLD.PowerCell.Charge"}}{{else}}{{localize "GAMMA_WORLD.Artifact.Charges"}}{{/if}}
+        </label>
         <span>
           <select name="system.artifact.powerSource">
             {{#each config.POWER_CELL_TYPES as |label key|}}
               <option value="{{key}}" {{#if (gwEq key ../system.artifact.powerSource)}}selected{{/if}}>{{localize label}}</option>
             {{/each}}
           </select>
-          <input type="number" name="system.artifact.charges.current" value="{{system.artifact.charges.current}}" style="width:4rem;" />
-          /
-          <input type="number" name="system.artifact.charges.max" value="{{system.artifact.charges.max}}" style="width:4rem;" />
+          {{#if isPowerCell}}
+            {{!-- 0.12.0: cells store charge as an integer percent 0..100.
+                  Max is invariant (100) so we write a hidden field to keep
+                  it stable across autosaves regardless of what was loaded. --}}
+            <input type="number" name="system.artifact.charges.current"
+                   value="{{system.artifact.charges.current}}"
+                   min="0" max="100" step="1" style="width:5rem;"
+                   data-gw-charge-percent />
+            <span class="gw-charge-percent-suffix">%</span>
+            <input type="hidden" name="system.artifact.charges.max" value="100" />
+          {{else}}
+            <input type="number" name="system.artifact.charges.current" value="{{system.artifact.charges.current}}" style="width:4rem;" />
+            /
+            <input type="number" name="system.artifact.charges.max" value="{{system.artifact.charges.max}}" style="width:4rem;" />
+          {{/if}}
         </span>
       </div>
       <div class="form-group">

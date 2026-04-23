@@ -6,7 +6,7 @@ import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES, DAMAGE_TYPES, DAMAGE_TYPE
 import { computeSkillModifier, countProficientSkills, rollSkill } from "../skills.mjs";
 import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
-import { artifactNeedsPowerManagement, artifactPowerSummary } from "../artifact-power.mjs";
+import { artifactNeedsPowerManagement, artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
 import { applyRest } from "../healing.mjs";
 import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
@@ -270,12 +270,16 @@ function formatGearItem(item) {
     unknownArtifact ? "" : (actionMode !== "none" ? actionMode.replace(/-/g, " ") : ""),
     unknownArtifact ? game.i18n.localize("GAMMA_WORLD.Artifact.UnknownBadge") : (isArtifact ? "Artifact" : "")
   );
+  // 0.12.0: power cells surface their charge % in the inventory row.
+  // Hidden behind unknownArtifact so unidentified cells don't leak state.
+  const chargeSegment = isPowerCell(item) ? `${cellChargePercent(item)}% charge` : "";
   item.gwDetailLine = unknownArtifact
     ? unknownArtifactSummary()
     : compact(
     `qty ${item.system.quantity}`,
     techLabel && (item.system.tech !== "none") ? techLabel : "",
-    Number(item.system.weight ?? 0) > 0 ? `${item.system.weight} wt` : ""
+    Number(item.system.weight ?? 0) > 0 ? `${item.system.weight} wt` : "",
+    chargeSegment
   ).join(" · ");
   item.gwRuleLine = unknownArtifact
     ? unknownArtifactUseLabel()

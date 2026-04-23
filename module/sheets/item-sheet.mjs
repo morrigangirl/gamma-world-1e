@@ -4,7 +4,7 @@
  */
 
 import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, AMMO_TYPES, AMMO_TYPE_KEYS } from "../config.mjs";
-import { artifactPowerSummary } from "../artifact-power.mjs";
+import { artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -50,6 +50,11 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     context.type   = item.type;
     context.isGM   = !!game.user?.isGM;
     context.artifactPowerSummary = item.system.artifact?.isArtifact ? artifactPowerSummary(item) : "";
+
+    // 0.12.0 — cells carry a charge percentage instead of a shot count.
+    // Template branches on `isPowerCell` to render the Charge row.
+    context.isPowerCell = isPowerCell(item);
+    context.cellChargePercent = context.isPowerCell ? cellChargePercent(item) : null;
     context.artifactSession = item.flags?.[SYSTEM_ID]?.artifactSession ?? null;
     context.artifactSessionStatus = context.artifactSession?.resolved
       ? (context.artifactSession.result === "resolved-success" ? "Function understood" : "Danger result")

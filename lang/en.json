@@ -818,7 +818,15 @@
       "ShortCircuit": "The artifact shorts out during use."
     },
     "PowerCell": {
-      "None": "No power cell"
+      "None": "No power cell",
+      "Charge": "Charge",
+      "ChargePercent": "{percent}%",
+      "ChargeSuffix": "% charge",
+      "Empty": "Depleted",
+      "Full": "Fully charged",
+      "AtomicNotRechargeable": "Atomic cells are not rechargeable — swap fuel cylinders instead.",
+      "DisuseDrain": "Chemical and solar cells lose their charge after 1d6 years of disuse.",
+      "ChargerIncompatible": "This cell cannot be recharged by the Energy Cell Charger."
     },
     "Encounter": {
       "ReactionResult": {

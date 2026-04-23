@@ -361,6 +361,15 @@ export const POWER_CELL_TYPES = {
   nuclear: "GAMMA_WORLD.Robot.Power.Nuclear"
 };
 
+/**
+ * 0.12.0 — canonical full-charge value for a power cell. A `gear` item
+ * with `system.subtype === "power-cell"` interprets
+ * `system.artifact.charges.current/max` as integer percent (0..100) where
+ * `max` is always `CELL_MAX_CHARGE`. See `isPowerCell` / `cellChargePercent`
+ * in `module/artifact-power.mjs` for the single-source-of-truth helpers.
+ */
+export const CELL_MAX_CHARGE = 100;
+
 export const ARTIFACT_POWER_REQUIREMENTS = {
   none: "GAMMA_WORLD.Artifact.Power.Requirement.None",
   cells: "GAMMA_WORLD.Artifact.Power.Requirement.Cells",
@@ -516,6 +525,7 @@ export const GAMMA_WORLD = {
   ENCOUNTER_INTELLIGENCE,
   ROUTE_PERIODS,
   POWER_CELL_TYPES,
+  CELL_MAX_CHARGE,
   ARTIFACT_POWER_REQUIREMENTS,
   ARTIFACT_AMBIENT_SOURCES,
   ARTIFACT_CATEGORIES,

@@ -42,7 +42,7 @@ import {
   gearHasAction,
   weaponRuleForName
 } from "../module/equipment-rules.mjs";
-import { artifactPowerStatus, compatibleCellTypes } from "../module/artifact-power.mjs";
+import { artifactPowerStatus, compatibleCellTypes, isPowerCell, cellChargePercent } from "../module/artifact-power.mjs";
 import { resolvePilotAnimationKey } from "../module/animations.mjs";
 import {
   artifactDisplayName,
@@ -675,6 +675,76 @@ test("artifact power states distinguish cells, ambient power, and depletion", ()
   assert.equal(artifactPowerStatus(charger).reason, "ambient");
   assert.equal(artifactPowerStatus(laserPistol).powered, false);
   assert.equal(artifactPowerStatus(laserPistol).reason, "depleted");
+});
+
+test("0.12.0 — isPowerCell + cellChargePercent report percent charge for cells", () => {
+  const fresh = {
+    type: "gear",
+    system: {
+      subtype: "power-cell",
+      artifact: { isArtifact: true, charges: { current: 100, max: 100 } }
+    }
+  };
+  const half = {
+    type: "gear",
+    system: {
+      subtype: "power-cell",
+      artifact: { isArtifact: true, charges: { current: 50, max: 100 } }
+    }
+  };
+  const overfull = {
+    type: "gear",
+    system: {
+      subtype: "power-cell",
+      artifact: { isArtifact: true, charges: { current: 250, max: 100 } }
+    }
+  };
+  const notCell = {
+    type: "gear",
+    system: {
+      subtype: "medical",
+      artifact: { isArtifact: true, charges: { current: 1, max: 1 } }
+    }
+  };
+  const notGear = {
+    type: "weapon",
+    system: {
+      subtype: "power-cell",
+      artifact: { isArtifact: true, charges: { current: 100, max: 100 } }
+    }
+  };
+
+  assert.equal(isPowerCell(fresh), true);
+  assert.equal(isPowerCell(half), true);
+  assert.equal(isPowerCell(notCell), false);
+  assert.equal(isPowerCell(notGear), false);
+
+  assert.equal(cellChargePercent(fresh), 100);
+  assert.equal(cellChargePercent(half), 50);
+  assert.equal(cellChargePercent(overfull), 100, "clamp above CELL_MAX_CHARGE");
+  assert.equal(cellChargePercent(notCell), null, "non-cell returns null");
+  assert.equal(cellChargePercent(notGear), null, "wrong item type returns null");
+});
+
+test("0.12.0 — fresh cell source JSON ships at 100/100 charges and qty 1", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const cellDir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const fixtures = [
+    "Chemical_Energy_Cell_5WZCQw10qC2C5mu8.json",
+    "Hydrogen_Energy_Cell_FzjMKPJO5DyEIubS.json",
+    "Solar_Energy_Cell_zDoKwdObDgU0oa4i.json",
+    "Atomic_Energy_Cell_EXFqB7bcBJKFfaen.json"
+  ];
+  for (const filename of fixtures) {
+    const data = JSON.parse(await fs.readFile(path.join(cellDir, filename), "utf8"));
+    assert.equal(data.system.subtype, "power-cell", `${filename} subtype`);
+    assert.equal(data.system.quantity, 1, `${filename} quantity`);
+    assert.equal(data.system.artifact.charges.current, 100, `${filename} charges.current`);
+    assert.equal(data.system.artifact.charges.max, 100, `${filename} charges.max`);
+  }
 });
 
 test("initiative helpers expose 5e-style initiative and Gamma World surprise bonus", () => {
