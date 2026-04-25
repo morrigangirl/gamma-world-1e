@@ -253,8 +253,36 @@ function uninstalledCellsOfType(actor, type) {
     .sort((a, b) => (cellChargePercent(b) ?? 0) - (cellChargePercent(a) ?? 0));
 }
 
+/**
+ * 0.13.x — like uninstalledCellsOfType, but also includes cells already
+ * installed in `forItem`. The Replace Cells dialog uses this so that a
+ * device with cells installed (e.g. by the 0.13.0 migration) doesn't
+ * report "no compatible cells" when those cells are sitting right
+ * there in inventory tagged for this very device. They're about to be
+ * ejected by replaceArtifactCells anyway; counting them as available
+ * lets the swap proceed.
+ */
+function cellsAvailableForDevice(actor, type, forItem) {
+  const itemName = artifactCellItemName(type);
+  if (!itemName) return [];
+  const forUuid = forItem?.uuid ?? null;
+  return actor.items
+    .filter((entry) => {
+      if (entry.type !== "gear" || entry.name !== itemName) return false;
+      if (entry.system?.subtype !== "power-cell") return false;
+      const installedIn = entry.flags?.[SYSTEM_ID]?.installedIn;
+      // Either uninstalled, OR installed in the device that's about to swap.
+      return !installedIn || (forUuid && installedIn === forUuid);
+    })
+    .sort((a, b) => (cellChargePercent(b) ?? 0) - (cellChargePercent(a) ?? 0));
+}
+
 function uninstalledCellCount(actor, type) {
   return uninstalledCellsOfType(actor, type).length;
+}
+
+function availableCellCountForDevice(actor, type, forItem) {
+  return cellsAvailableForDevice(actor, type, forItem).length;
 }
 
 /**
@@ -320,10 +348,14 @@ export async function replaceArtifactCells(actor, item, { cellType = "" } = {}) 
     return false;
   }
 
+  // 0.13.x — count cells already installed in THIS device as "available"
+  // for the swap (they'll be ejected as the first step of replaceArtifactCells
+  // below). Without this, a device with cells installed by the migration
+  // refuses to open the dialog because all matching cells appear "taken."
   const options = compatible
     .map((type) => ({
       type,
-      count: uninstalledCellCount(actor, type)
+      count: availableCellCountForDevice(actor, type, item)
     }))
     .filter((entry) => entry.count > 0);
 
