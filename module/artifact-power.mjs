@@ -1,4 +1,4 @@
-import { SYSTEM_ID, POWER_CELL_TYPES, ARTIFACT_AMBIENT_SOURCES, CELL_MAX_CHARGE } from "./config.mjs";
+import { SYSTEM_ID, POWER_CELL_TYPES, ARTIFACT_AMBIENT_SOURCES, CELL_MAX_CHARGE, MINUTES_PER_ROUND } from "./config.mjs";
 
 const CELL_ITEM_NAMES = {
   chemical: "Chemical Energy Cell",
@@ -519,6 +519,44 @@ async function postCellDepletedNotice(item, cell) {
 export async function accumulateDrain(item, deltaUnits) {
   if (!isItemActiveForDrain(item)) return { consumed: false, reason: "inactive" };
   return consumeArtifactCharge(item, deltaUnits);
+}
+
+/**
+ * 0.13.0 Batch 2 — combat-round tick for per-minute drain devices.
+ *
+ * Wired to `Hooks.on("updateCombat")` in module/hooks.mjs. Fires only
+ * when the round counter advances (skipping turn-changes within the
+ * same round). For each combatant's actor, scans owned items for
+ * `consumption.unit === "minute"` AND `isItemActiveForDrain(item)` AND
+ * at least one installed cell, then debits those cells by
+ * MINUTES_PER_ROUND minutes' worth of drain via `accumulateDrain`.
+ *
+ * Out-of-combat the drain pauses — GW1e melee time only advances during
+ * combat. A vibro dagger left ignited after combat doesn't burn its
+ * cell on the world clock; players narratively handwave that away.
+ */
+export async function tickCombatPowerDrain(combat, changed) {
+  if (!game.user?.isGM) return;
+  if (!("round" in changed) || changed.round == null) return;
+
+  const actors = new Set();
+  for (const combatant of combat.combatants) {
+    if (combatant.actor) actors.add(combatant.actor);
+  }
+
+  for (const actor of actors) {
+    for (const item of actor.items) {
+      if (item.system?.consumption?.unit !== "minute") continue;
+      if (!isItemActiveForDrain(item)) continue;
+      const installed = item.system?.artifact?.power?.installedCellIds ?? [];
+      if (!installed.length) continue;
+      try {
+        await accumulateDrain(item, MINUTES_PER_ROUND);
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | tickCombatPowerDrain failed for ${item?.name}`, error);
+      }
+    }
+  }
 }
 
 /**

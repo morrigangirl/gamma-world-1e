@@ -60,6 +60,13 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     // 0.13.0 — consumer-side: non-cell artifacts expose a per-use drain
     // rate (system.consumption) and list the cells they've claimed.
     context.hasConsumption = ["weapon", "armor", "gear"].includes(item.type) && !context.isPowerCell;
+    // 0.13.0 Batch 2 — Ignite / Stow toggle is rendered only for weapons
+    // with a time-based drain (vibro dagger, stun whip, etc.). Other item
+    // types use `equipped` for the active gate; weapons need their own
+    // toggle because "equipped" doesn't mean "powered on" for them.
+    context.showActiveToggle =
+      item.type === "weapon" &&
+      ["minute", "hour", "day"].includes(item.system?.consumption?.unit ?? "");
     const installedCellIds = Array.isArray(item.system?.artifact?.power?.installedCellIds)
       ? item.system.artifact.power.installedCellIds : [];
     context.installedCellEntries = [];

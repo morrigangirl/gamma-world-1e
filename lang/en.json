@@ -841,7 +841,11 @@
       "PerDay": "{percent}% / day",
       "EjectCell": "Eject cell",
       "InstalledIn": "installed in {device}",
-      "CellDepleted": "{device}'s {cellType} cell is depleted."
+      "CellDepleted": "{device}'s {cellType} cell is depleted.",
+      "ActiveLabel": "Active",
+      "Ignite": "Ignite",
+      "Stow": "Stow",
+      "ActiveBadge": "active"
     },
     "Encounter": {
       "ReactionResult": {

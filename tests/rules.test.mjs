@@ -804,6 +804,63 @@ test("0.13.0 — CONSUMPTION_CATALOG pins Batch 4 armor hours-of-constant-use", 
     { unit: "hour", usesPerFullCell: 60, cellSlots: 2, powerSource: "nuclear" });
 });
 
+test("0.13.0 Batch 2 — JSONs ship with per-minute consumption blocks", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const cases = [
+    ["Energy_Mace_11na7J1UH9d7N9vf.json",   100 / 15],
+    ["Stun_Whip_rinXCx25HYVboYwS.json",     100 / 30],
+    ["Vibro_Dagger_N8PoHeeJjoEENEKK.json",  100 / 30],
+    ["Vibro_Blade_xXgVxpYjGFOkx3kQ.json",   100 / 20],
+    ["Micro_Missile_hpxkSsdlJ0FM7kpQ.json", 100 / 30]
+  ];
+  for (const [filename, expectedPerUnit] of cases) {
+    const data = JSON.parse(await fs.readFile(path.join(dir, filename), "utf8"));
+    assert.equal(data.system.consumption?.unit, "minute", `${filename} unit`);
+    assert.ok(Math.abs(data.system.consumption?.perUnit - expectedPerUnit) < 1e-6,
+      `${filename} perUnit ~= ${expectedPerUnit}`);
+    // Active toggle defaults to false in the source so dragging from the
+    // compendium gives the GM an off-state weapon to ignite.
+    assert.equal(data.system.artifact?.active, false, `${filename} active default`);
+  }
+});
+
+test("0.13.0 Batch 2 — accumulator residue progression for a 30-min Vibro Dagger", () => {
+  // Pure-math check on the fractional accumulator logic. Each call adds
+  // 100/30 = 3.333% to the residue; integer percent peeled off floor()d.
+  // Sequence: round 1 → +3.333 → 3% off, residue 0.333
+  //           round 2 → +3.333 (=3.666) → 3% off, residue 0.666
+  //           round 3 → +3.333 (=4.000) → 4% off, residue 0.000
+  //           round 4 → +3.333 → 3% off, residue 0.333
+  // After 30 rounds the cell should be at 0% (100/30 × 30 = 100%).
+  const perUnit = 100 / 30;
+  let acc = 0;
+  let drained = 0;
+  for (let i = 0; i < 30; i++) {
+    acc += perUnit;
+    const whole = Math.floor(acc);
+    drained += whole;
+    acc -= whole;
+  }
+  assert.equal(drained, 100, "30 rounds of 1-minute ticks empties a Vibro Dagger cell");
+  assert.ok(Math.abs(acc) < 1e-6, "residue lands at zero after a clean budget");
+
+  // Independent check on Energy Mace (15 min): 15 ticks of 6.667% each.
+  const maceRate = 100 / 15;
+  let maceAcc = 0;
+  let maceDrained = 0;
+  for (let i = 0; i < 15; i++) {
+    maceAcc += maceRate;
+    const whole = Math.floor(maceAcc);
+    maceDrained += whole;
+    maceAcc -= whole;
+  }
+  assert.equal(maceDrained, 100, "Energy Mace empties a chemical cell in 15 minutes");
+});
+
 test("0.13.0 — Batch 1 JSONs ship with the canonical consumption block", async () => {
   const fs = await import("node:fs/promises");
   const path = await import("node:path");

@@ -595,6 +595,22 @@
           </select>
         </span>
       </div>
+      {{#if showActiveToggle}}
+      {{!-- 0.13.0 Batch 2 — Ignite / Stow for time-drain weapons.
+            Per-minute drain (vibro dagger, stun whip, energy mace, etc.)
+            only ticks while the weapon is active. The combat-round hook
+            checks this flag before debiting the cell. --}}
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Consumption.ActiveLabel"}}</label>
+        <span>
+          <label class="gw-active-toggle">
+            <input type="checkbox" name="system.artifact.active"
+                   {{#if system.artifact.active}}checked{{/if}} />
+            {{#if system.artifact.active}}{{localize "GAMMA_WORLD.Consumption.Stow"}}{{else}}{{localize "GAMMA_WORLD.Consumption.Ignite"}}{{/if}}
+          </label>
+        </span>
+      </div>
+      {{/if}}
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Consumption.InstalledCells"}}</label>
         <span>

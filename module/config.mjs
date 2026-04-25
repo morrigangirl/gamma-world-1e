@@ -370,6 +370,18 @@ export const POWER_CELL_TYPES = {
  */
 export const CELL_MAX_CHARGE = 100;
 
+/**
+ * 0.13.0 Batch 2 — number of in-fiction minutes that pass per combat
+ * round. Used by tickCombatPowerDrain to advance time-drain weapons'
+ * accumulators on each updateCombat round-change. GW1e canonically runs
+ * combat at 1 melee turn = 1 minute (rulebook 06:1234 powered armor and
+ * 06:828 vibro weapons both quote durations in minutes-of-constant-use
+ * that line up with melee turns). A homebrew that wants to slow the
+ * drain (e.g. 15 seconds per round) can override by setting a hidden
+ * world setting; the default is 1.
+ */
+export const MINUTES_PER_ROUND = 1;
+
 export const ARTIFACT_POWER_REQUIREMENTS = {
   none: "GAMMA_WORLD.Artifact.Power.Requirement.None",
   cells: "GAMMA_WORLD.Artifact.Power.Requirement.Cells",
@@ -526,6 +538,7 @@ export const GAMMA_WORLD = {
   ROUTE_PERIODS,
   POWER_CELL_TYPES,
   CELL_MAX_CHARGE,
+  MINUTES_PER_ROUND,
   ARTIFACT_POWER_REQUIREMENTS,
   ARTIFACT_AMBIENT_SOURCES,
   ARTIFACT_CATEGORIES,

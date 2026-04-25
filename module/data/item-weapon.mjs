@@ -107,6 +107,13 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
       artifact: new SchemaField({
         isArtifact: new BooleanField({ initial: false }),
+        // 0.13.0 Batch 2 — weapon-active toggle for time-drain devices
+        // (vibro dagger, stun whip, energy mace, micro missile…). Set
+        // by the Ignite / Stow button on the weapon sheet. Read by
+        // isItemActiveForDrain to decide whether the per-minute combat
+        // tick should debit the installed cell. Discrete-shot weapons
+        // ignore this field entirely (their drain fires per-shot).
+        active: new BooleanField({ initial: false }),
         category: str({ initial: "none" }),
         chart: str({ initial: "none" }),
         condition: str({ initial: "fair" }),

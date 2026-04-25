@@ -47,14 +47,20 @@
         "requirement": "none",
         "installedType": "none",
         "ambientSource": "none",
-        "ambientAvailable": false
+        "ambientAvailable": false,
+        "installedCellIds": []
       },
       "charges": {},
       "functionChance": 40,
-      "harmCallback": ""
+      "harmCallback": "",
+      "active": false
     },
     "subtype": "misc",
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "minute",
+      "perUnit": 3.3333333333333335
+    }
   },
   "_id": "hpxkSsdlJ0FM7kpQ",
   "flags": {},

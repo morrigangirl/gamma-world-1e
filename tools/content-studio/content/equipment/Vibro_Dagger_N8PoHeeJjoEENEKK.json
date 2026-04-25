@@ -58,16 +58,22 @@
         "ambientAvailable": false,
         "compatibleCells": "hydrogen",
         "cellSlots": 1,
-        "cellsInstalled": 1
+        "cellsInstalled": 1,
+        "installedCellIds": []
       },
       "charges": {
         "current": 30,
         "max": 30
       },
       "functionChance": 40,
-      "harmCallback": ""
+      "harmCallback": "",
+      "active": false
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "minute",
+      "perUnit": 3.3333333333333335
+    }
   },
   "_id": "N8PoHeeJjoEENEKK",
   "flags": {},
