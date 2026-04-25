@@ -240,13 +240,48 @@ export function artifactCellItemName(type = "none") {
  * cell is its own inventory row; we filter out any already-installed cells
  * (flagged `installedIn: <device uuid>`) so they're not double-claimed.
  */
+/**
+ * 0.13.x — predicate: does this gear item *look like* a power cell of
+ * the given type, accepting older / homebrew / hand-edited shapes?
+ *
+ * Strict criteria (subtype === "power-cell") works for cells published
+ * by the studio pipeline and items the equipment-rules inference has
+ * already touched. But cells that pre-date the subtype standard, or
+ * were dragged in from a third-party module, or were directly edited
+ * may have subtype: "misc" or no subtype at all. We accept any of:
+ *
+ *   1. system.subtype === "power-cell" (canonical), OR
+ *   2. system.artifact.powerSource matches the requested cell type
+ *      (covers misc/null/undefined subtypes that nevertheless tag
+ *      themselves as the right power source), OR
+ *   3. The item's name matches the canonical CELL_ITEM_NAMES mapping
+ *      AND the subtype is not one of the explicit non-cell subtypes
+ *      ("ammunition", "trade-good", "tool" — used by Spent Power Cell,
+ *      Energy Cell Charger, ammo magazines).
+ *
+ * Excludes the explicit non-cell subtypes outright so a Spent Power
+ * Cell or Energy Cell Charger never gets misclassified.
+ */
+function looksLikeCellOfType(entry, type) {
+  if (!entry || entry.type !== "gear") return false;
+  const subtype = entry.system?.subtype;
+  // Hard exclude: explicit non-cell subtypes. Spent / Charger items
+  // were intentionally relabeled in 0.12.0 and must never be claimed.
+  if (subtype === "ammunition" || subtype === "trade-good" || subtype === "tool") return false;
+  const canonicalName = artifactCellItemName(type);
+  const matchesName = !!canonicalName && entry.name === canonicalName;
+  const matchesPowerSource = entry.system?.artifact?.powerSource === type;
+  // Canonical case (1).
+  if (subtype === "power-cell") return matchesName || matchesPowerSource;
+  // Loose cases (2) and (3) — cell-shaped items with non-canonical
+  // subtype slip through if name OR powerSource matches.
+  return matchesName || matchesPowerSource;
+}
+
 function uninstalledCellsOfType(actor, type) {
-  const itemName = artifactCellItemName(type);
-  if (!itemName) return [];
   return actor.items
     .filter((entry) => {
-      if (entry.type !== "gear" || entry.name !== itemName) return false;
-      if (entry.system?.subtype !== "power-cell") return false;
+      if (!looksLikeCellOfType(entry, type)) return false;
       const installedIn = entry.flags?.[SYSTEM_ID]?.installedIn;
       return !installedIn;
     })
@@ -263,18 +298,57 @@ function uninstalledCellsOfType(actor, type) {
  * lets the swap proceed.
  */
 function cellsAvailableForDevice(actor, type, forItem) {
-  const itemName = artifactCellItemName(type);
-  if (!itemName) return [];
   const forUuid = forItem?.uuid ?? null;
   return actor.items
     .filter((entry) => {
-      if (entry.type !== "gear" || entry.name !== itemName) return false;
-      if (entry.system?.subtype !== "power-cell") return false;
+      if (!looksLikeCellOfType(entry, type)) return false;
       const installedIn = entry.flags?.[SYSTEM_ID]?.installedIn;
       // Either uninstalled, OR installed in the device that's about to swap.
       return !installedIn || (forUuid && installedIn === forUuid);
     })
     .sort((a, b) => (cellChargePercent(b) ?? 0) - (cellChargePercent(a) ?? 0));
+}
+
+/**
+ * 0.13.x — diagnostic helper. When the Replace Cells dialog reports
+ * zero compatible cells, this gives the GM a reason: enumerates every
+ * gear item on the actor that looks vaguely like a cell of one of the
+ * compatible types, and explains why each was rejected. Logs a single
+ * console.warn with the rundown.
+ */
+function logCellLookupDiagnostic(actor, item, compatibleTypes) {
+  if (!actor) return;
+  const lines = [];
+  for (const type of compatibleTypes) {
+    const canonical = artifactCellItemName(type);
+    const candidates = actor.items.filter((entry) => {
+      if (entry.type !== "gear") return false;
+      // Wide net: name OR powerSource OR subtype could indicate this is a cell.
+      if (entry.name === canonical) return true;
+      if (entry.system?.artifact?.powerSource === type) return true;
+      if (entry.system?.subtype === "power-cell") return true;
+      return false;
+    });
+    for (const c of candidates) {
+      const reasons = [];
+      if (c.name !== canonical) reasons.push(`name="${c.name}" (expected "${canonical}")`);
+      if (c.system?.artifact?.powerSource !== type) {
+        reasons.push(`powerSource="${c.system?.artifact?.powerSource ?? ""}" (expected "${type}")`);
+      }
+      if (c.system?.subtype !== "power-cell") {
+        reasons.push(`subtype="${c.system?.subtype ?? ""}"`);
+      }
+      const installedIn = c.flags?.[SYSTEM_ID]?.installedIn;
+      if (installedIn) reasons.push(`installedIn=${installedIn}`);
+      const accepted = looksLikeCellOfType(c, type) && (!installedIn || installedIn === item?.uuid);
+      lines.push(`  - ${c.name} (id=${c.id}, type=${type}) ${accepted ? "ACCEPTED" : "REJECTED"}${reasons.length ? `; ${reasons.join(", ")}` : ""}`);
+    }
+  }
+  if (lines.length === 0) {
+    console.warn(`${SYSTEM_ID} | ${item?.name ?? "device"}: no cell-shaped items on ${actor.name}. Compatible types: ${compatibleTypes.join(", ")}.`);
+  } else {
+    console.warn(`${SYSTEM_ID} | ${item?.name ?? "device"}: cell lookup on ${actor.name} (compatible: ${compatibleTypes.join(", ")}):\n${lines.join("\n")}`);
+  }
 }
 
 function uninstalledCellCount(actor, type) {
@@ -358,6 +432,14 @@ export async function replaceArtifactCells(actor, item, { cellType = "" } = {}) 
       count: availableCellCountForDevice(actor, type, item)
     }))
     .filter((entry) => entry.count > 0);
+
+  if (!options.length) {
+    // Helpful diagnostic — many "no compatible cells" reports come from
+    // homebrew / older actors whose cells lack subtype: "power-cell",
+    // or where a name typo prevents the canonical lookup. Dump every
+    // cell-shaped item on the actor with a reason for each rejection.
+    logCellLookupDiagnostic(actor, item, compatible);
+  }
 
   if (!options.length) {
     ui.notifications?.warn(`No compatible power cells are available for ${item.name}.`);
