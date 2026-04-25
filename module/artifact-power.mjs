@@ -548,20 +548,32 @@ export async function accumulateDrain(item, deltaUnits) {
  * pieces are mechanical/passive and don't depend on power.
  */
 export function armorIsInert(armor) {
-  if (!armor || armor.type !== "armor") return false;
-  const perUnit = Number(armor.system?.consumption?.perUnit ?? 0);
-  if (perUnit <= 0) return false;   // not cell-drained, can't go inert
-  const cellIds = armor.system?.artifact?.power?.installedCellIds ?? [];
-  if (cellIds.length === 0) return true;   // declares drain but no cells slotted
-  // Inert iff every cell is at 0% (broken UUIDs count as missing/empty).
-  for (const uuid of cellIds) {
-    try {
-      const cell = foundry.utils.fromUuidSync?.(uuid)
-        ?? globalThis.fromUuidSync?.(uuid);
-      if (cell && (cellChargePercent(cell) ?? 0) > 0) return false;
-    } catch (_error) { /* broken ref counts as empty */ }
+  // Hardened against throws — derived-data pipeline calls this for every
+  // equipped armor on every prepareData pass, including in-flight states
+  // during item drag/drop where partial documents can be in unusual
+  // shapes. Any throw here would break the sheet render (and therefore
+  // drop acceptance), so the whole function is wrapped to fail-soft to
+  // "not inert" — that matches pre-0.13.0 behavior (armor stays usable).
+  try {
+    if (!armor || armor.type !== "armor") return false;
+    const perUnit = Number(armor.system?.consumption?.perUnit ?? 0);
+    if (perUnit <= 0) return false;   // not cell-drained, can't go inert
+    const rawCellIds = armor.system?.artifact?.power?.installedCellIds;
+    const cellIds = Array.isArray(rawCellIds) ? rawCellIds : [];
+    if (cellIds.length === 0) return true;   // declares drain but no cells slotted
+    // Inert iff every cell is at 0% (broken UUIDs count as missing/empty).
+    for (const uuid of cellIds) {
+      try {
+        const cell = foundry.utils.fromUuidSync?.(uuid)
+          ?? globalThis.fromUuidSync?.(uuid);
+        if (cell && (cellChargePercent(cell) ?? 0) > 0) return false;
+      } catch (_error) { /* broken ref counts as empty */ }
+    }
+    return true;
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | armorIsInert threw on ${armor?.name ?? "?"}; treating as not-inert`, error);
+    return false;
   }
-  return true;
 }
 
 /**
