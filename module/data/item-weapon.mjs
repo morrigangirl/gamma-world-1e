@@ -159,7 +159,10 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
       // An item is subject to cell-drain iff unit !== "" and perUnit > 0
       // AND installedCellIds resolves to at least one cell.
       consumption: new SchemaField({
-        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        // blank: true is required because the default initial value is ""
+        // (meaning "no drain rule"), and Foundry's StringField rejects
+        // empty strings unless explicitly allowed even when "" is in choices.
+        unit:    str({ initial: "", blank: true, choices: ["", "shot", "clip", "minute", "hour", "day"] }),
         perUnit: num({ initial: 0, min: 0 })
       }),
 

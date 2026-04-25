@@ -127,7 +127,9 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
       // 0.13.0 — declarative per-tick drain. Armor uses unit: "hour" with
       // perUnit = 100 / (hours-per-cell × cellSlots). See CONSUMPTION_CATALOG.
       consumption: new SchemaField({
-        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        // blank: true required — empty unit means "no drain rule" and
+        // Foundry's StringField defaults reject "" even when in choices.
+        unit:    str({ initial: "", blank: true, choices: ["", "shot", "clip", "minute", "hour", "day"] }),
         perUnit: num({ initial: 0, min: 0 })
       }),
 

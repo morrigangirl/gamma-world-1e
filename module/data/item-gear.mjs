@@ -147,7 +147,9 @@ export class GearData extends foundry.abstract.TypeDataModel {
       // Gear items with unit: "hour" (Energy Cloak, Portent, Anti-grav Sled)
       // drain while equipped; "minute" items drain while active.
       consumption: new SchemaField({
-        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        // blank: true required — empty unit means "no drain rule" and
+        // Foundry's StringField defaults reject "" even when in choices.
+        unit:    str({ initial: "", blank: true, choices: ["", "shot", "clip", "minute", "hour", "day"] }),
         perUnit: num({ initial: 0, min: 0 })
       }),
 
