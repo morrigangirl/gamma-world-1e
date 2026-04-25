@@ -414,6 +414,16 @@ export async function uninstallCell(item, cellUuid) {
  * anymore — cells carry the charge now.
  */
 export async function replaceArtifactCells(actor, item, { cellType = "" } = {}) {
+  // 0.13.x — cells must never be the TARGET of a cell installation. Without
+  // this guard, a cell's powerSource → compatibleCellTypes fallback makes
+  // the cell look like a 1-slot device that accepts itself, and clicking
+  // its battery icon claims the cell INTO ITSELF (installedIn = self.uuid).
+  // Cells manage charge via direct edit on their own sheet, not via this
+  // dialog.
+  if (isPowerCell(item)) {
+    ui.notifications?.info(`${item.name} is a power cell; edit its charge on its own sheet instead.`);
+    return false;
+  }
   const status = artifactPowerStatus(item);
   const slots = Math.max(1, status.cellSlots);
   const compatible = status.compatibleTypes;
@@ -794,6 +804,14 @@ export async function rechargeArtifact(item) {
 }
 
 export async function manageArtifactPower(actor, item) {
+  // 0.13.x — cells aren't power-managed via this dialog (they ARE the
+  // power). Without this guard, a cell's powerSource fallback in
+  // compatibleCellTypes makes it look like a 1-slot device, and the
+  // Replace Cells action ends up claiming the cell into itself.
+  if (isPowerCell(item)) {
+    ui.notifications?.info(`${item.name} is a power cell; edit its charge directly on its sheet.`);
+    return false;
+  }
   const status = artifactPowerStatus(item);
   const actions = [];
 

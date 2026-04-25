@@ -1216,6 +1216,47 @@ export async function migrateWorld() {
     }
   }
 
+  // 0.13.2 — scrub bogus self-pointing installedIn flags on cells.
+  // The 0.13.0/0.13.1 build of compatibleCellTypes() falls back to
+  // [powerSource] when compatibleCells is empty, which let cells appear
+  // as 1-slot devices that accept their own type. Clicking the battery
+  // icon on a cell ran replaceArtifactCells with the cell as the target,
+  // which claimed the cell INTO ITSELF (installedIn = self.uuid).
+  // The 0.13.2 manageArtifactPower / replaceArtifactCells guards stop
+  // new self-installs; this migration scrubs the existing damage so
+  // the Replace Cells dialog stops treating those cells as "installed."
+  if (compareSemver(storedVersion, "0.13.2") < 0) {
+    const scrubTotals = { scanned: 0, scrubbed: 0 };
+    try {
+      const visit = async (collection) => {
+        for (const item of collection.contents) {
+          if (item?.type !== "gear" || item?.system?.subtype !== "power-cell") continue;
+          scrubTotals.scanned += 1;
+          const installedIn = item.flags?.[SYSTEM_ID]?.installedIn;
+          if (installedIn && installedIn === item.uuid) {
+            await item.update({
+              [`flags.${SYSTEM_ID}.-=installedIn`]: null
+            }, { gammaWorldSync: true });
+            scrubTotals.scrubbed += 1;
+          }
+        }
+      };
+      await visit(game.items);
+      for (const actor of game.actors.contents) {
+        await visit(actor.items);
+      }
+      if (scrubTotals.scrubbed > 0 && game.user?.isGM) {
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.13.2:</strong> scrubbed ${scrubTotals.scrubbed} cell${scrubTotals.scrubbed === 1 ? "" : "s"} that had been incorrectly self-installed (out of ${scrubTotals.scanned} scanned).</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.13.2 self-install scrub failed`, error);
+    }
+  }
+
   await game.settings.set(SYSTEM_ID, "schemaVersion", currentVersion);
 }
 
