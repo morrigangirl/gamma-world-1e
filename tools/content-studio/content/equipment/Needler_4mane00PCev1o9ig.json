@@ -60,14 +60,19 @@
         "ambientAvailable": false,
         "compatibleCells": "chemical",
         "cellSlots": 1,
-        "cellsInstalled": 1
+        "cellsInstalled": 1,
+        "installedCellIds": []
       },
       "charges": {
         "current": 30,
         "max": 30
       }
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "shot",
+      "perUnit": 3.3333333333333335
+    }
   },
   "_id": "4mane00PCev1o9ig",
   "flags": {},

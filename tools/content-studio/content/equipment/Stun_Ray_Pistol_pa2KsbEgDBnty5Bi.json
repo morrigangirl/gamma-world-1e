@@ -60,7 +60,8 @@
         "ambientAvailable": false,
         "compatibleCells": "solar",
         "cellSlots": 1,
-        "cellsInstalled": 1
+        "cellsInstalled": 1,
+        "installedCellIds": []
       },
       "charges": {
         "current": 10,
@@ -69,7 +70,11 @@
       "functionChance": 40,
       "harmCallback": ""
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "shot",
+      "perUnit": 10
+    }
   },
   "_id": "pa2KsbEgDBnty5Bi",
   "flags": {},

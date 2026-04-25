@@ -273,13 +273,37 @@ function formatGearItem(item) {
   // 0.12.0: power cells surface their charge % in the inventory row.
   // Hidden behind unknownArtifact so unidentified cells don't leak state.
   const chargeSegment = isPowerCell(item) ? `${cellChargePercent(item)}% charge` : "";
+  // 0.13.0: if this cell is installed in a device, tell the player which
+  // one so they can tell "loose in the pack" from "in my laser pistol."
+  // Uses fromUuidSync (Foundry 11+); null if the target is gone.
+  let installedInSegment = "";
+  const installedInUuid = isPowerCell(item) ? item.flags?.["gamma-world-1e"]?.installedIn : null;
+  if (installedInUuid) {
+    try {
+      const host = foundry.utils.fromUuidSync?.(installedInUuid)
+        ?? globalThis.fromUuidSync?.(installedInUuid);
+      if (host?.name) installedInSegment = `installed in ${host.name}`;
+    } catch (_error) { /* dangling ref */ }
+  }
+  // 0.13.0: non-cell consumers show a per-use drain rate badge so the
+  // player can eyeball "this drains my cell 10% per shot" at a glance.
+  let drainSegment = "";
+  const consumptionUnit = item.system?.consumption?.unit ?? "";
+  const consumptionPer  = Number(item.system?.consumption?.perUnit ?? 0);
+  if (!isPowerCell(item) && consumptionUnit && consumptionPer > 0) {
+    // Round to 1 decimal for display; 3.333 → "3.3% / shot"
+    const rounded = Math.round(consumptionPer * 10) / 10;
+    drainSegment = `${rounded}% / ${consumptionUnit}`;
+  }
   item.gwDetailLine = unknownArtifact
     ? unknownArtifactSummary()
     : compact(
     `qty ${item.system.quantity}`,
     techLabel && (item.system.tech !== "none") ? techLabel : "",
     Number(item.system.weight ?? 0) > 0 ? `${item.system.weight} wt` : "",
-    chargeSegment
+    chargeSegment,
+    installedInSegment,
+    drainSegment
   ).join(" · ");
   item.gwRuleLine = unknownArtifact
     ? unknownArtifactUseLabel()

@@ -42,7 +42,8 @@ import {
   gearHasAction,
   weaponRuleForName
 } from "../module/equipment-rules.mjs";
-import { artifactPowerStatus, compatibleCellTypes, isPowerCell, cellChargePercent } from "../module/artifact-power.mjs";
+import { artifactPowerStatus, compatibleCellTypes, isPowerCell, cellChargePercent, isItemActiveForDrain } from "../module/artifact-power.mjs";
+import { CONSUMPTION_CATALOG, consumptionRateFor } from "../module/equipment-rules.mjs";
 import { resolvePilotAnimationKey } from "../module/animations.mjs";
 import {
   artifactDisplayName,
@@ -745,6 +746,113 @@ test("0.12.0 — fresh cell source JSON ships at 100/100 charges and qty 1", asy
     assert.equal(data.system.artifact.charges.current, 100, `${filename} charges.current`);
     assert.equal(data.system.artifact.charges.max, 100, `${filename} charges.max`);
   }
+});
+
+test("0.13.0 — consumptionRateFor computes percent-per-cell per unit", () => {
+  // Single-cell, 10 shots: 100/10/1 = 10% per shot.
+  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 10, cellSlots: 1 }), 10);
+  // Single-cell, 4 shots: 100/4/1 = 25% per shot (Black Ray).
+  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 4, cellSlots: 1 }), 25);
+  // Two-cell parallel, 5 shots per rifle: 100/5/2 = 10% per cell per shot (Mark VII).
+  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 5, cellSlots: 2 }), 10);
+  // Fractional: Needler at 30 darts per cell = 3.333...% per dart.
+  const needlerRate = consumptionRateFor({ unit: "shot", usesPerFullCell: 30, cellSlots: 1 });
+  assert.ok(Math.abs(needlerRate - (100 / 30)) < 1e-9, "needler rate ~= 3.333");
+  // Parallel time-drain: Portent at 24h over 2 cells = 2.08...%/h per cell.
+  const portentRate = consumptionRateFor({ unit: "hour", usesPerFullCell: 24, cellSlots: 2 });
+  assert.ok(Math.abs(portentRate - (100 / 24 / 2)) < 1e-9, "portent rate ~= 2.083");
+  // Safety: null / missing entries → 0.
+  assert.equal(consumptionRateFor(null), 0);
+  assert.equal(consumptionRateFor(undefined), 0);
+  // Safety: zero uses → clamped to 1 so we never divide by 0.
+  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 0, cellSlots: 1 }), 100);
+});
+
+test("0.13.0 — CONSUMPTION_CATALOG pins Batch 1 values from the rulebook", () => {
+  // Rulebook 06:656-658 — Laser Pistol = Hydrogen 10 shots.
+  assert.deepEqual(CONSUMPTION_CATALOG["Laser Pistol"],
+    { unit: "shot", usesPerFullCell: 10, cellSlots: 1, powerSource: "hydrogen" });
+  // Rulebook 06:692-694 — Black Ray Gun = Chemical 4 shots (1 cell).
+  assert.deepEqual(CONSUMPTION_CATALOG["Black Ray Gun"],
+    { unit: "shot", usesPerFullCell: 4, cellSlots: 1, powerSource: "chemical" });
+  // Rulebook 06:714-716 — Stun Rifle = Solar 5 shots.
+  assert.deepEqual(CONSUMPTION_CATALOG["Stun Rifle"],
+    { unit: "shot", usesPerFullCell: 5, cellSlots: 1, powerSource: "solar" });
+  // Rulebook 06:742-744 — Laser Rifle = Hydrogen 5 shots.
+  assert.deepEqual(CONSUMPTION_CATALOG["Laser Rifle"],
+    { unit: "shot", usesPerFullCell: 5, cellSlots: 1, powerSource: "hydrogen" });
+  // Rulebook 06:768-770 — Mark VII = 2 Hydrogen cells, 5 shots.
+  assert.deepEqual(CONSUMPTION_CATALOG["Mark VII Blaster Rifle"],
+    { unit: "shot", usesPerFullCell: 5, cellSlots: 2, powerSource: "hydrogen" });
+  // Rulebook 06:800-802 — Fusion Rifle = Atomic 10 shots.
+  assert.deepEqual(CONSUMPTION_CATALOG["Fusion Rifle"],
+    { unit: "shot", usesPerFullCell: 10, cellSlots: 1, powerSource: "nuclear" });
+  // Rulebook 06:608-610 — Needler = Chemical 3 clips × 10 darts = 30 darts.
+  assert.deepEqual(CONSUMPTION_CATALOG["Needler"],
+    { unit: "shot", usesPerFullCell: 30, cellSlots: 1, powerSource: "chemical" });
+  // Rulebook 06:568-570 — Slug Thrower = Hydrogen 5 clips per cell.
+  assert.deepEqual(CONSUMPTION_CATALOG["Slug Thrower"],
+    { unit: "clip", usesPerFullCell: 5, cellSlots: 1, powerSource: "hydrogen" });
+});
+
+test("0.13.0 — CONSUMPTION_CATALOG pins Batch 4 armor hours-of-constant-use", () => {
+  assert.deepEqual(CONSUMPTION_CATALOG["Powered Plate"],
+    { unit: "hour", usesPerFullCell: 50, cellSlots: 1, powerSource: "nuclear" });
+  assert.deepEqual(CONSUMPTION_CATALOG["Powered Assault Armor"],
+    { unit: "hour", usesPerFullCell: 48, cellSlots: 3, powerSource: "nuclear" });
+  assert.deepEqual(CONSUMPTION_CATALOG["Inertia Armor"],
+    { unit: "hour", usesPerFullCell: 60, cellSlots: 2, powerSource: "nuclear" });
+});
+
+test("0.13.0 — Batch 1 JSONs ship with the canonical consumption block", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const expected = {
+    "Laser_Pistol_cWzJPKijqyUA6eYW.json":           { unit: "shot", perUnit: 10 },
+    "Stun_Ray_Pistol_pa2KsbEgDBnty5Bi.json":        { unit: "shot", perUnit: 10 },
+    "Black_Ray_Gun_gd4N9CglQYhFQlXW.json":          { unit: "shot", perUnit: 25 },
+    "Stun_Rifle_BA0cUig7iNmxUZMx.json":             { unit: "shot", perUnit: 20 },
+    "Laser_Rifle_IebgCJG0bp5KtANI.json":            { unit: "shot", perUnit: 20 },
+    "Mark_V_Blaster_D64jCcalrvdLbgFd.json":         { unit: "shot", perUnit: 20 },
+    "Mark_VII_Blaster_Rifle_qpxi7xQJopkYFyie.json": { unit: "shot", perUnit: 10 },
+    "Fusion_Rifle_dJ5bnJlJlMhu5mpn.json":           { unit: "shot", perUnit: 10 },
+    "Slug_Thrower_TEWLRcePspMEbo2t.json":           { unit: "clip", perUnit: 20 }
+  };
+  for (const [filename, want] of Object.entries(expected)) {
+    const data = JSON.parse(await fs.readFile(path.join(dir, filename), "utf8"));
+    assert.equal(data.system.consumption?.unit, want.unit, `${filename} unit`);
+    assert.equal(data.system.consumption?.perUnit, want.perUnit, `${filename} perUnit`);
+  }
+  // Needler is fractional — match with tolerance.
+  const needler = JSON.parse(await fs.readFile(
+    path.join(dir, "Needler_4mane00PCev1o9ig.json"), "utf8"));
+  assert.equal(needler.system.consumption?.unit, "shot");
+  assert.ok(Math.abs(needler.system.consumption?.perUnit - (100 / 30)) < 1e-6,
+    "Needler perUnit ~= 3.333");
+});
+
+test("0.13.0 — isItemActiveForDrain branches by item type + activation flag", () => {
+  const armorOn  = { type: "armor",  system: { equipped: true } };
+  const armorOff = { type: "armor",  system: { equipped: false } };
+  const weaponOn  = { type: "weapon", system: { artifact: { active: true } } };
+  const weaponOff = { type: "weapon", system: { artifact: { active: false } } };
+  const gearOn   = { type: "gear",   system: { equipped: true } };
+  const gearOff  = { type: "gear",   system: { equipped: false } };
+  const mutation = { type: "mutation", system: {} };
+
+  assert.equal(isItemActiveForDrain(armorOn),  true);
+  assert.equal(isItemActiveForDrain(armorOff), false);
+  assert.equal(isItemActiveForDrain(weaponOn), true);
+  assert.equal(isItemActiveForDrain(weaponOff), false);
+  assert.equal(isItemActiveForDrain(gearOn),  true);
+  assert.equal(isItemActiveForDrain(gearOff), false);
+  assert.equal(isItemActiveForDrain(mutation), false,
+    "non-weapon/armor/gear types never drain");
+  assert.equal(isItemActiveForDrain(null), false);
+  assert.equal(isItemActiveForDrain(undefined), false);
 });
 
 test("initiative helpers expose 5e-style initiative and Gamma World surprise bonus", () => {

@@ -4,7 +4,7 @@
  */
 
 import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, AMMO_TYPES, AMMO_TYPE_KEYS } from "../config.mjs";
-import { artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
+import { artifactPowerSummary, isPowerCell, cellChargePercent, uninstallCell as uninstallCellFn } from "../artifact-power.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -26,6 +26,7 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       clearMalfunction: GammaWorldItemSheet.#onClearMalfunction,
+      uninstallCell:    GammaWorldItemSheet.#onUninstallCell,
       createItemAE: GammaWorldItemSheet.#onCreateItemAE,
       toggleItemAE: GammaWorldItemSheet.#onToggleItemAE,
       editItemAE:   GammaWorldItemSheet.#onEditItemAE,
@@ -55,6 +56,25 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     // Template branches on `isPowerCell` to render the Charge row.
     context.isPowerCell = isPowerCell(item);
     context.cellChargePercent = context.isPowerCell ? cellChargePercent(item) : null;
+
+    // 0.13.0 — consumer-side: non-cell artifacts expose a per-use drain
+    // rate (system.consumption) and list the cells they've claimed.
+    context.hasConsumption = ["weapon", "armor", "gear"].includes(item.type) && !context.isPowerCell;
+    const installedCellIds = Array.isArray(item.system?.artifact?.power?.installedCellIds)
+      ? item.system.artifact.power.installedCellIds : [];
+    context.installedCellEntries = [];
+    for (const uuid of installedCellIds) {
+      try {
+        const cell = await fromUuid(uuid);
+        if (cell && cell.type === "gear" && cell.system?.subtype === "power-cell") {
+          context.installedCellEntries.push({
+            uuid: cell.uuid,
+            name: cell.name,
+            chargePercent: cellChargePercent(cell) ?? 0
+          });
+        }
+      } catch (_error) { /* dangling ref — dropped silently */ }
+    }
     context.artifactSession = item.flags?.[SYSTEM_ID]?.artifactSession ?? null;
     context.artifactSessionStatus = context.artifactSession?.resolved
       ? (context.artifactSession.result === "resolved-success" ? "Function understood" : "Danger result")
@@ -220,6 +240,31 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
       await effect.deleteDialog();
     } else {
       await effect.delete();
+    }
+  }
+
+  /**
+   * 0.13.0 — uninstall a specific cell from this device. Strips the
+   * cell's installedIn flag and removes its UUID from the device's
+   * installedCellIds. Cell stays in actor inventory at its current
+   * charge. GM-only because it mutates shared inventory state.
+   */
+  static async #onUninstallCell(event, target) {
+    event?.preventDefault?.();
+    if (!game.user?.isGM) {
+      ui.notifications?.warn(game.i18n?.localize?.("GAMMA_WORLD.Consumption.GmOnly")
+        ?? "Only the GM can eject cells.");
+      return;
+    }
+    const cellUuid = target?.dataset?.cellUuid;
+    if (!cellUuid) return;
+    const item = this.document;
+    if (!item) return;
+    try {
+      await uninstallCellFn(item, cellUuid);
+    } catch (error) {
+      console.warn(`gamma-world-1e | uninstall cell failed for ${item?.uuid}`, error);
+      ui.notifications?.error(error?.message ?? String(error));
     }
   }
 

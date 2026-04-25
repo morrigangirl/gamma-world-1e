@@ -828,6 +828,21 @@
       "DisuseDrain": "Chemical and solar cells lose their charge after 1d6 years of disuse.",
       "ChargerIncompatible": "This cell cannot be recharged by the Energy Cell Charger."
     },
+    "Consumption": {
+      "Label": "Consumption",
+      "PerUnitHint": "Percent of one cell drained per unit. Fractional values are allowed for sub-percent rates (e.g., 3.333 for a Needler's 30-dart budget).",
+      "UnitLabel": "% per",
+      "InstalledCells": "Installed cells",
+      "NoneInstalled": "None installed",
+      "PerShot": "{percent}% / shot",
+      "PerClip": "{percent}% / clip",
+      "PerMinute": "{percent}% / minute",
+      "PerHour": "{percent}% / hour",
+      "PerDay": "{percent}% / day",
+      "EjectCell": "Eject cell",
+      "InstalledIn": "installed in {device}",
+      "CellDepleted": "{device}'s {cellType} cell is depleted."
+    },
     "Encounter": {
       "ReactionResult": {
         "2": "Extremely hostile",

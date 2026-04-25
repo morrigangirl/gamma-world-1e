@@ -117,7 +117,13 @@ export class GearData extends foundry.abstract.TypeDataModel {
           cellsInstalled: int({ initial: 0, min: 0 }),
           installedType: str({ initial: "none" }),
           ambientSource: str({ initial: "none" }),
-          ambientAvailable: new BooleanField({ initial: false })
+          ambientAvailable: new BooleanField({ initial: false }),
+          // 0.13.0 — UUIDs of the cell items currently installed in this
+          // gear device. Drain is split equally across installed cells.
+          // Kept in sync with cellsInstalled for one version cycle.
+          installedCellIds: new ArrayField(new StringField({
+            required: false, blank: false
+          }), { initial: [] })
         }),
         /**
          * 0.12.0 — dual-meaning field. For gear items with
@@ -135,6 +141,14 @@ export class GearData extends foundry.abstract.TypeDataModel {
           current: int({ initial: 0, min: 0 }),
           max: int({ initial: 0, min: 0 })
         })
+      }),
+
+      // 0.13.0 — declarative per-tick drain (shared with weapon/armor).
+      // Gear items with unit: "hour" (Energy Cloak, Portent, Anti-grav Sled)
+      // drain while equipped; "minute" items drain while active.
+      consumption: new SchemaField({
+        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        perUnit: num({ initial: 0, min: 0 })
       }),
 
       description: new SchemaField({

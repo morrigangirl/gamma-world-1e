@@ -1,7 +1,7 @@
 import { SYSTEM_ID, CRYPTIC_ALLIANCES, SKILLS } from "./config.mjs";
 import { findMutationByName } from "./tables/mutation-data.mjs";
 import { getMutationRule } from "./mutation-rules.mjs";
-import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory } from "./equipment-rules.mjs";
+import { equipmentMigrationUpdate, inferGearSubtype, inferWeaponCategory, CONSUMPTION_CATALOG, consumptionRateFor } from "./equipment-rules.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
 import { GammaWorldConfig } from "./apps/gm-automation-config.mjs";
 import { legacyToMeters } from "./movement-conversion.mjs";
@@ -964,6 +964,124 @@ async function migratePowerCells012(owner) {
   return counters;
 }
 
+/**
+ * 0.13.0 — attach a declarative consumption rule to every cell-powered
+ * weapon / armor / gear item and (where possible) claim cells from the
+ * owning actor's inventory to populate installedCellIds.
+ *
+ * For each item whose `name` is keyed in CONSUMPTION_CATALOG:
+ *  - Write system.consumption.{unit, perUnit} from the catalog.
+ *  - Try to claim `cellSlots` uninstalled cells of the matching
+ *    powerSource from the owning actor's inventory. If claim succeeds:
+ *      - Rewrite each claimed cell's charges.current to reflect the
+ *        item's legacy charges.current/max ratio (a Laser Pistol at
+ *        7/10 shots → each cell becomes 70%). If the item has no legacy
+ *        max, leave claimed cells at their pre-existing charge.
+ *      - Flag each cell `installedIn: <item.uuid>`.
+ *      - Set installedCellIds + cellsInstalled on the item, and zero
+ *        the item's own charges.current/max (cell owns the charge now).
+ *    If claim fails (too few matching cells in inventory): leave the
+ *    item's legacy counter intact so the device doesn't stop working.
+ *    The consumption block is still set — the new path activates as
+ *    soon as cells are installed.
+ *
+ * Idempotent: an already-migrated item has `consumption.perUnit > 0`
+ * AND `charges.max === 0` AND `installedCellIds.length > 0`; the second
+ * pass finds no work to do.
+ */
+async function migrateConsumerCharges013(owner) {
+  const counters = { items: 0, cellsInstalled: 0, legacyPreserved: 0 };
+  const collection = owner?.items ?? game.items;
+  const candidates = [...collection.contents].filter((item) => {
+    if (item.type !== "weapon" && item.type !== "armor" && item.type !== "gear") return false;
+    if (item.system?.subtype === "power-cell") return false;
+    return Object.prototype.hasOwnProperty.call(CONSUMPTION_CATALOG, item.name);
+  });
+
+  for (const item of candidates) {
+    const catalog = CONSUMPTION_CATALOG[item.name];
+    const perUnit = consumptionRateFor(catalog);
+    const currentUses = Math.max(0, Number(item.system?.artifact?.charges?.current ?? 0));
+    const maxUses     = Math.max(0, Number(item.system?.artifact?.charges?.max ?? 0));
+    const existingPerUnit = Number(item.system?.consumption?.perUnit ?? 0);
+    const existingIds = Array.isArray(item.system?.artifact?.power?.installedCellIds)
+      ? item.system.artifact.power.installedCellIds : [];
+
+    // Idempotency: already migrated (consumption set AND either cells
+    // installed or legacy counter zeroed) → skip.
+    if (existingPerUnit > 0 && (existingIds.length > 0 || maxUses === 0)) {
+      continue;
+    }
+
+    const update = {
+      "system.consumption.unit":    catalog.unit,
+      "system.consumption.perUnit": perUnit
+    };
+
+    // Try to claim cells. Actor must be present and the item must have
+    // at least `cellSlots` uninstalled matching cells in inventory.
+    let claimed = [];
+    if (owner && catalog.cellSlots > 0) {
+      const cellItemName = cellNameForPowerSource(catalog.powerSource);
+      if (cellItemName) {
+        const pct = maxUses > 0
+          ? Math.round(100 * currentUses / maxUses)
+          : 100;   // no legacy usage data → assume fresh cells
+        const candidates = owner.items.filter((e) =>
+          e.type === "gear" &&
+          e.system?.subtype === "power-cell" &&
+          e.name === cellItemName &&
+          !e.flags?.[SYSTEM_ID]?.installedIn
+        ).sort((a, b) => {
+          const ac = Number(a.system?.artifact?.charges?.current ?? 0);
+          const bc = Number(b.system?.artifact?.charges?.current ?? 0);
+          return bc - ac;
+        });
+        if (candidates.length >= catalog.cellSlots) {
+          const chosen = candidates.slice(0, catalog.cellSlots);
+          for (const cell of chosen) {
+            await cell.update({
+              "system.artifact.charges.current": Math.max(0, Math.min(100, pct)),
+              [`flags.${SYSTEM_ID}.installedIn`]: item.uuid
+            }, { gammaWorldSync: true });
+            claimed.push(cell.uuid);
+          }
+        }
+      }
+    }
+
+    if (claimed.length > 0) {
+      update["system.artifact.power.installedCellIds"] = claimed;
+      update["system.artifact.power.cellsInstalled"]   = claimed.length;
+      update["system.artifact.power.installedType"]    = catalog.powerSource;
+      // Zero the item's own shot counter — cells carry the charge now.
+      update["system.artifact.charges.current"] = 0;
+      update["system.artifact.charges.max"]     = 0;
+      counters.cellsInstalled += claimed.length;
+    } else if (maxUses > 0) {
+      // Keep the legacy counter intact so the device still works on the
+      // old path. consumption.perUnit is set either way, so the new path
+      // activates the moment cells are installed.
+      counters.legacyPreserved += 1;
+    }
+
+    await item.update(update, { gammaWorldSync: true });
+    counters.items += 1;
+  }
+
+  return counters;
+}
+
+const CELL_NAMES_BY_SOURCE = {
+  chemical: "Chemical Energy Cell",
+  solar:    "Solar Energy Cell",
+  hydrogen: "Hydrogen Energy Cell",
+  nuclear:  "Atomic Energy Cell"
+};
+function cellNameForPowerSource(source) {
+  return CELL_NAMES_BY_SOURCE[source] ?? null;
+}
+
 export async function migrateWorld() {
   if (!game.user?.isGM) return;
 
@@ -1051,6 +1169,38 @@ export async function migrateWorld() {
       }
     } catch (error) {
       console.warn(`${SYSTEM_ID} | 0.12.0 power-cell migration failed`, error);
+    }
+  }
+
+  // 0.13.0 — attach per-item consumption rules and (where possible)
+  // claim installed cells from actor inventory. Items without matching
+  // cells on hand retain their legacy charges counter; the new path
+  // activates automatically when cells are later installed.
+  if (compareSemver(storedVersion, "0.13.0") < 0) {
+    const consumerTotals = { items: 0, cellsInstalled: 0, legacyPreserved: 0 };
+    try {
+      const worldCounts = await migrateConsumerCharges013(null);
+      consumerTotals.items          += worldCounts.items;
+      consumerTotals.cellsInstalled += worldCounts.cellsInstalled;
+      consumerTotals.legacyPreserved += worldCounts.legacyPreserved;
+      for (const actor of game.actors.contents) {
+        const actorCounts = await migrateConsumerCharges013(actor);
+        consumerTotals.items          += actorCounts.items;
+        consumerTotals.cellsInstalled += actorCounts.cellsInstalled;
+        consumerTotals.legacyPreserved += actorCounts.legacyPreserved;
+      }
+      if (consumerTotals.items > 0 && game.user?.isGM) {
+        const pieces = [`${consumerTotals.items} powered item${consumerTotals.items === 1 ? "" : "s"} converted`];
+        if (consumerTotals.cellsInstalled > 0) pieces.push(`${consumerTotals.cellsInstalled} cell${consumerTotals.cellsInstalled === 1 ? "" : "s"} installed`);
+        if (consumerTotals.legacyPreserved > 0) pieces.push(`${consumerTotals.legacyPreserved} item${consumerTotals.legacyPreserved === 1 ? "" : "s"} kept legacy counter (no matching cells on hand)`);
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.13.0:</strong> ${pieces.join("; ")}.</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.13.0 consumer-charge migration failed`, error);
     }
   }
 

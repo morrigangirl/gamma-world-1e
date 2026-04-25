@@ -60,7 +60,8 @@
         "ambientAvailable": false,
         "compatibleCells": "hydrogen",
         "cellSlots": 2,
-        "cellsInstalled": 2
+        "cellsInstalled": 2,
+        "installedCellIds": []
       },
       "charges": {
         "current": 5,
@@ -69,7 +70,11 @@
       "functionChance": 40,
       "harmCallback": ""
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "shot",
+      "perUnit": 10
+    }
   },
   "_id": "qpxi7xQJopkYFyie",
   "flags": {},

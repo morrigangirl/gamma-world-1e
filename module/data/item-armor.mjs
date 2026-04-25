@@ -2,7 +2,7 @@
 
 import { ACTION_TYPES, DAMAGE_TYPES } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField, ArrayField } =
   foundry.data.fields;
 
 /**
@@ -110,12 +110,25 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
           cellsInstalled: int({ initial: 0, min: 0 }),
           installedType: str({ initial: "none" }),
           ambientSource: str({ initial: "none" }),
-          ambientAvailable: new BooleanField({ initial: false })
+          ambientAvailable: new BooleanField({ initial: false }),
+          // 0.13.0 — UUIDs of the cell items currently installed in this
+          // armor. Drain is split equally across installed cells. Kept in
+          // sync with cellsInstalled for one version cycle.
+          installedCellIds: new ArrayField(new StringField({
+            required: false, blank: false
+          }), { initial: [] })
         }),
         charges: new SchemaField({
           current: int({ initial: 0, min: 0 }),
           max: int({ initial: 0, min: 0 })
         })
+      }),
+
+      // 0.13.0 — declarative per-tick drain. Armor uses unit: "hour" with
+      // perUnit = 100 / (hours-per-cell × cellSlots). See CONSUMPTION_CATALOG.
+      consumption: new SchemaField({
+        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        perUnit: num({ initial: 0, min: 0 })
       }),
 
       description: new SchemaField({

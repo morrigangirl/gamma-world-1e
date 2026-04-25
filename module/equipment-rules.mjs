@@ -1216,6 +1216,87 @@ const ARMOR_ARTIFACTS = {
   }
 };
 
+/**
+ * 0.13.0 — per-item cell-drain rule. Keyed by item name (the same key
+ * `WEAPON_ARTIFACTS` / `ARMOR_ARTIFACTS` / `GEAR_ARTIFACTS` use), it
+ * describes how one "use" of the device translates into a percent-drain
+ * on the installed cell(s).
+ *
+ * Fields:
+ *   unit             — the tick kind the device advertises to users. One
+ *                      of "shot" (discrete-fire), "clip" (magazine
+ *                      insertion), "minute" (time-drain in combat),
+ *                      "hour" (time-drain in world time), "day" (daily).
+ *   usesPerFullCell  — the rulebook's Battery Life budget, in units of
+ *                      `unit`. E.g. Laser Pistol is "10 shots", so 10.
+ *   cellSlots        — how many cells the device pulls from in parallel.
+ *                      Drain is split equally across them:
+ *                          perCell = 100 / usesPerFullCell / cellSlots
+ *                      Example: Mark VII Blaster Rifle is 2 hydrogen cells
+ *                      for 5 shots per rifle → each cell absorbs 10%/shot.
+ *   powerSource      — the canonical cell type. One of POWER_CELL_TYPES
+ *                      minus "none" ("chemical" | "solar" | "hydrogen" |
+ *                      "nuclear").
+ *
+ * Used by:
+ *   - `migrateConsumerCharges013` (module/migrations.mjs) to backfill
+ *     `system.consumption` onto every matching item at the 0.13.0 world
+ *     version bump.
+ *   - `collectNamedArtifactUpdates` as a fallback source for consumption
+ *     data on homebrew items or worlds that haven't migrated.
+ *   - Studio JSON authors: the Phase 0 rule-table charges values are
+ *     derived from the `usesPerFullCell` numbers here.
+ *
+ * Rulebook references are in 06-artifacts-and-equipment.md under the
+ * respective item's "Power Source / Battery Life" block.
+ */
+export const CONSUMPTION_CATALOG = Object.freeze({
+  // Batch 1 — discrete-shot weapons
+  "Laser Pistol":           { unit: "shot",   usesPerFullCell: 10, cellSlots: 1, powerSource: "hydrogen" },
+  "Stun Ray Pistol":        { unit: "shot",   usesPerFullCell: 10, cellSlots: 1, powerSource: "solar"    },
+  "Black Ray Gun":          { unit: "shot",   usesPerFullCell: 4,  cellSlots: 1, powerSource: "chemical" },
+  "Stun Rifle":             { unit: "shot",   usesPerFullCell: 5,  cellSlots: 1, powerSource: "solar"    },
+  "Laser Rifle":            { unit: "shot",   usesPerFullCell: 5,  cellSlots: 1, powerSource: "hydrogen" },
+  "Mark V Blaster":         { unit: "shot",   usesPerFullCell: 5,  cellSlots: 1, powerSource: "hydrogen" },
+  "Mark VII Blaster Rifle": { unit: "shot",   usesPerFullCell: 5,  cellSlots: 2, powerSource: "hydrogen" },
+  "Fusion Rifle":           { unit: "shot",   usesPerFullCell: 10, cellSlots: 1, powerSource: "nuclear"  },
+  "Needler":                { unit: "shot",   usesPerFullCell: 30, cellSlots: 1, powerSource: "chemical" },
+  "Slug Thrower":           { unit: "clip",   usesPerFullCell: 5,  cellSlots: 1, powerSource: "hydrogen" },
+  // Batch 2 — time-based weapons (per-minute)
+  "Energy Mace":            { unit: "minute", usesPerFullCell: 15, cellSlots: 1, powerSource: "chemical" },
+  "Stun Whip":              { unit: "minute", usesPerFullCell: 30, cellSlots: 1, powerSource: "chemical" },
+  "Vibro Dagger":           { unit: "minute", usesPerFullCell: 30, cellSlots: 1, powerSource: "hydrogen" },
+  "Vibro Blade":            { unit: "minute", usesPerFullCell: 20, cellSlots: 1, powerSource: "hydrogen" },
+  "Micro Missile":          { unit: "minute", usesPerFullCell: 30, cellSlots: 1, powerSource: "hydrogen" },
+  // Batch 3 — time-based wearables (per-hour)
+  "Energy Cloak":            { unit: "hour", usesPerFullCell: 12,  cellSlots: 1, powerSource: "chemical" },
+  "Communications Sender":   { unit: "hour", usesPerFullCell: 12,  cellSlots: 1, powerSource: "chemical" },
+  "Portent":                 { unit: "hour", usesPerFullCell: 24,  cellSlots: 2, powerSource: "solar"    },
+  "Anti-grav Sled":          { unit: "hour", usesPerFullCell: 100, cellSlots: 1, powerSource: "nuclear"  },
+  // Batch 4 — powered armor (per-hour)
+  "Powered Plate":          { unit: "hour",  usesPerFullCell: 50,  cellSlots: 1, powerSource: "nuclear"  },
+  "Powered Alloyed Plate":  { unit: "hour",  usesPerFullCell: 45,  cellSlots: 1, powerSource: "nuclear"  },
+  "Energized Armor":        { unit: "hour",  usesPerFullCell: 40,  cellSlots: 1, powerSource: "nuclear"  },
+  "Inertia Armor":          { unit: "hour",  usesPerFullCell: 60,  cellSlots: 2, powerSource: "nuclear"  },
+  "Powered Scout Armor":    { unit: "hour",  usesPerFullCell: 54,  cellSlots: 2, powerSource: "nuclear"  },
+  "Powered Battle Armor":   { unit: "hour",  usesPerFullCell: 48,  cellSlots: 2, powerSource: "nuclear"  },
+  "Powered Attack Armor":   { unit: "hour",  usesPerFullCell: 42,  cellSlots: 2, powerSource: "nuclear"  },
+  "Powered Assault Armor":  { unit: "hour",  usesPerFullCell: 48,  cellSlots: 3, powerSource: "nuclear"  }
+});
+
+/**
+ * 0.13.0 — compute the per-cell drain (percent per unit) for a catalog
+ * entry. Fractional values are expected (e.g. Needler = 100/30/1 = 3.333…).
+ * Returns 0 for missing or zero-use entries so callers can safely gate on
+ * `perUnit > 0`.
+ */
+export function consumptionRateFor(catalog) {
+  if (!catalog) return 0;
+  const uses  = Math.max(1, Number(catalog.usesPerFullCell) || 1);
+  const slots = Math.max(1, Number(catalog.cellSlots)       || 1);
+  return 100 / uses / slots;
+}
+
 const GEAR_ARTIFACTS = {
   "Tear Gas Grenade": { category: "grenade", chart: "a" },
   "Stun Grenade": { category: "grenade", chart: "a" },

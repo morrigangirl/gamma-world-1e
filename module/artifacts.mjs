@@ -87,7 +87,11 @@ export async function resolveArtifactOperation(actor, item, { cause = "use" } = 
   const hidden = await resolveArtifactOperationCheck(actor, item, { cause });
   if (!hidden?.success) return hidden ?? { success: false };
 
-  if (power.chargesMax > 0) {
+  // 0.13.0: fire the consume path when either (a) the item has a cell-drain
+  // rule populated (new path — debits installed cell by perUnit%), OR
+  // (b) the legacy own-charges-max counter is nonzero (medi-kit doses,
+  // un-migrated items). The consume helper routes between the two.
+  if (power.usesCellDrain || power.chargesMax > 0) {
     await consumeArtifactCharge(item, 1);
   }
 

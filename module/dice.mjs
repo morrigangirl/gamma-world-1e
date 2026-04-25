@@ -880,13 +880,30 @@ export async function rollAttack(actor, weapon) {
   // counter if no gear ammo was found. The inline path routes through
   // consumeResource so the `autoConsumeCharges` setting, depletion
   // notice, and resourceConsumed hook fire consistently (Phase 4).
-  if (ammoItem) {
+  //
+  // 0.13.0 — energy weapons (consumption.unit === "shot" + installed
+  // cells) draw exclusively from the installed cell; the consumeArtifactCharge
+  // call in resolveArtifactOperation handles that drain. Skip the ammo-gear
+  // double-drain so a Laser Pistol with an Energy Clip in inventory (legacy
+  // data) doesn't burn both the clip and the cell. Slug Thrower and Needler
+  // aren't affected: they still carry physical ammo (slugs, darts) on top
+  // of the cell, and their consumption unit isn't "shot" (Slug Thrower is
+  // "clip", Needler is per-dart which is "shot" — flag via installedCellIds
+  // below so each weapon specifies its own semantics).
+  const cellIds = Array.isArray(weapon.system?.artifact?.power?.installedCellIds)
+    ? weapon.system.artifact.power.installedCellIds : [];
+  const isEnergyShotWeapon =
+    cellIds.length > 0 &&
+    weapon.system?.consumption?.unit === "shot" &&
+    weapon.name !== "Needler";   // Needler's cell drains per dart alongside the dart-ammo.
+
+  if (ammoItem && !isEnergyShotWeapon) {
     // Ammo gear items track counts under system.ammo.rounds, not
     // system.ammo.current — the consumeResource helper doesn't know
     // about this shape. Keep the direct update here.
     const remaining = Math.max(0, Number(ammoItem.system.ammo.rounds ?? 0) - 1);
     await ammoItem.update({ "system.ammo.rounds": remaining });
-  } else if (weapon.system.ammo?.consumes) {
+  } else if (!isEnergyShotWeapon && weapon.system.ammo?.consumes) {
     await consumeResource(weapon, "ammo", 1, { context });
   }
 

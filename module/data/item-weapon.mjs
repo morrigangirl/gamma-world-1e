@@ -2,7 +2,7 @@
 
 import { ACTION_TYPES } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField } =
+const { SchemaField, NumberField, StringField, HTMLField, BooleanField, SetField, ArrayField } =
   foundry.data.fields;
 
 const int = (opts = {}) => new NumberField({
@@ -127,12 +127,33 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
           cellsInstalled: int({ initial: 0, min: 0 }),
           installedType: str({ initial: "none" }),
           ambientSource: str({ initial: "none" }),
-          ambientAvailable: new BooleanField({ initial: false })
+          ambientAvailable: new BooleanField({ initial: false }),
+          // 0.13.0 — UUIDs of the cell items currently installed in this
+          // device. Drain is split equally across installed cells; order
+          // is preserved for stable UI. Kept in sync with cellsInstalled
+          // (a count) for one version cycle; cellsInstalled is deprecated
+          // in 0.14.0.
+          installedCellIds: new ArrayField(new StringField({
+            required: false, blank: false
+          }), { initial: [] })
         }),
         charges: new SchemaField({
           current: int({ initial: 0, min: 0 }),
           max: int({ initial: 0, min: 0 })
         })
+      }),
+
+      // 0.13.0 — declarative consumption rule. `unit` is the tick kind
+      // ("shot" for discrete-fire, "clip" for magazine-insert, "minute" /
+      // "hour" / "day" for time-drain). `perUnit` is the percent of one
+      // cell drained per one tick; fractional values (e.g. 3.333 for a
+      // 30-dart Needler, or 2.08 for a 24-hour Portent shield cell-pair)
+      // are legal and handled by the accumulator in artifact-power.mjs.
+      // An item is subject to cell-drain iff unit !== "" and perUnit > 0
+      // AND installedCellIds resolves to at least one cell.
+      consumption: new SchemaField({
+        unit:    str({ initial: "", choices: ["", "shot", "clip", "minute", "hour", "day"] }),
+        perUnit: num({ initial: 0, min: 0 })
       }),
 
       description: new SchemaField({

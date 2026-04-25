@@ -573,6 +573,54 @@
           {{/if}}
         </span>
       </div>
+      {{#if hasConsumption}}
+      {{!-- 0.13.0 — declarative per-use drain on the consumer side.
+            Rendered for every non-cell artifact panel. Fractional
+            perUnit values allowed (Needler = 3.333% per dart). --}}
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Consumption.Label"}}</label>
+        <span>
+          <input type="number" name="system.consumption.perUnit"
+                 value="{{system.consumption.perUnit}}"
+                 step="0.01" min="0" style="width:5rem;"
+                 title="{{localize 'GAMMA_WORLD.Consumption.PerUnitHint'}}" />
+          <span class="gw-consumption-suffix">{{localize "GAMMA_WORLD.Consumption.UnitLabel"}}</span>
+          <select name="system.consumption.unit">
+            <option value=""       {{#if (gwEq ""       system.consumption.unit)}}selected{{/if}}>—</option>
+            <option value="shot"   {{#if (gwEq "shot"   system.consumption.unit)}}selected{{/if}}>shot</option>
+            <option value="clip"   {{#if (gwEq "clip"   system.consumption.unit)}}selected{{/if}}>clip</option>
+            <option value="minute" {{#if (gwEq "minute" system.consumption.unit)}}selected{{/if}}>minute</option>
+            <option value="hour"   {{#if (gwEq "hour"   system.consumption.unit)}}selected{{/if}}>hour</option>
+            <option value="day"    {{#if (gwEq "day"    system.consumption.unit)}}selected{{/if}}>day</option>
+          </select>
+        </span>
+      </div>
+      <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Consumption.InstalledCells"}}</label>
+        <span>
+          {{#if installedCellEntries.length}}
+            <ul class="gw-installed-cell-list">
+              {{#each installedCellEntries}}
+                <li>
+                  <span class="gw-installed-cell-name">{{this.name}}</span>
+                  <span class="gw-installed-cell-charge">{{this.chargePercent}}%</span>
+                  {{#if ../isGM}}
+                    <button type="button"
+                            data-action="uninstallCell"
+                            data-cell-uuid="{{this.uuid}}"
+                            title="{{localize 'GAMMA_WORLD.Consumption.EjectCell'}}">
+                      <i class="fa-solid fa-eject"></i>
+                    </button>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <span class="gw-no-installed-cells">{{localize "GAMMA_WORLD.Consumption.NoneInstalled"}}</span>
+          {{/if}}
+        </span>
+      </div>
+      {{/if}}
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Artifact.Malfunction"}}</label>
         <span class="gw-artifact-malfunction-row">

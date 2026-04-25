@@ -59,14 +59,19 @@
         "ambientAvailable": false,
         "compatibleCells": "hydrogen",
         "cellSlots": 1,
-        "cellsInstalled": 1
+        "cellsInstalled": 1,
+        "installedCellIds": []
       },
       "charges": {
         "current": 5,
         "max": 5
       }
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "clip",
+      "perUnit": 20
+    }
   },
   "_id": "TEWLRcePspMEbo2t",
   "flags": {},
