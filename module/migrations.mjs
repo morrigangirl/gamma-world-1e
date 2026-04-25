@@ -1007,9 +1007,14 @@ async function migrateConsumerCharges013(owner) {
     const existingIds = Array.isArray(item.system?.artifact?.power?.installedCellIds)
       ? item.system.artifact.power.installedCellIds : [];
 
-    // Idempotency: already migrated (consumption set AND either cells
-    // installed or legacy counter zeroed) → skip.
-    if (existingPerUnit > 0 && (existingIds.length > 0 || maxUses === 0)) {
+    // Idempotency: skip only when consumption.perUnit matches the
+    // current catalog rate AND either cells are installed or legacy
+    // counter is zeroed. Comparing against the catalog rate (not just
+    // ">0") catches 0.13.0-era worlds where multi-cell devices had a
+    // halved perUnit due to the formula bug; those re-migrate to the
+    // correct per-cell rate on world load.
+    const perUnitMatches = Math.abs(existingPerUnit - perUnit) < 1e-6;
+    if (perUnitMatches && (existingIds.length > 0 || maxUses === 0)) {
       continue;
     }
 
@@ -1176,7 +1181,14 @@ export async function migrateWorld() {
   // claim installed cells from actor inventory. Items without matching
   // cells on hand retain their legacy charges counter; the new path
   // activates automatically when cells are later installed.
-  if (compareSemver(storedVersion, "0.13.0") < 0) {
+  //
+  // 0.13.1 — re-runs the migration with a corrected per-cell drain
+  // formula. The 0.13.0 release used `100 / uses / cellSlots` which
+  // halved the rate for multi-cell devices (Mark VII Blaster Rifle,
+  // powered armor). The fixed formula `100 / uses` writes the correct
+  // per-cell rate; the migration's idempotency check compares against
+  // the current catalog rate so stale 0.13.0 values are overwritten.
+  if (compareSemver(storedVersion, "0.13.1") < 0) {
     const consumerTotals = { items: 0, cellsInstalled: 0, legacyPreserved: 0 };
     try {
       const worldCounts = await migrateConsumerCharges013(null);
@@ -1196,11 +1208,11 @@ export async function migrateWorld() {
         await ChatMessage.create({
           speaker: { alias: "Gamma World" },
           whisper: ChatMessage.getWhisperRecipients("GM"),
-          content: `<div class="gw-chat-card"><p><strong>Migration 0.13.0:</strong> ${pieces.join("; ")}.</p></div>`
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.13.1:</strong> ${pieces.join("; ")}.</p></div>`
         });
       }
     } catch (error) {
-      console.warn(`${SYSTEM_ID} | 0.13.0 consumer-charge migration failed`, error);
+      console.warn(`${SYSTEM_ID} | 0.13.1 consumer-charge migration failed`, error);
     }
   }
 

@@ -20,7 +20,7 @@ import {
   mutationVariant
 } from "./mutation-rules.mjs";
 import { tickCombatMutationState } from "./mutations.mjs";
-import { tickCombatPowerDrain } from "./artifact-power.mjs";
+import { tickCombatPowerDrain, tickWorldTimePowerDrain } from "./artifact-power.mjs";
 import { openChatRollRequestDialog } from "./request-rolls.mjs";
 import { openCinematicComposer } from "./cinematic/compose.mjs";
 import { prototypeTokenMigrationUpdate } from "./token-defaults.mjs";
@@ -53,6 +53,7 @@ export function registerHooks() {
   Hooks.on("updateCombat", tickCombatMutationState);
   Hooks.on("updateCombat", tickCombatActorState);
   Hooks.on("updateCombat", tickCombatPowerDrain);
+  Hooks.on("updateWorldTime", tickWorldTimePowerDrain);
   Hooks.on("deleteCombat", onCombatDelete);
 }
 

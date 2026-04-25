@@ -420,8 +420,15 @@ export function isItemActiveForDrain(item) {
 }
 
 /**
- * 0.13.0 — debit each installed cell by `amount * perUnit / cellIds.length`
- * percent. Sub-percent residue accumulates in the item's
+ * 0.13.0 — debit each installed cell by `amount * perUnit` percent.
+ *
+ * Semantic note (0.13.1 fix): cells in parallel drain at the same rate
+ * simultaneously; the catalog's perUnit IS the per-cell drain rate.
+ * Earlier code divided by cellIds.length, which halved the drain for
+ * multi-cell devices and made them last twice as long as the rulebook.
+ * Removed.
+ *
+ * Sub-percent residue accumulates in the item's
  * `flags.<SYSTEM_ID>.drainAccumulator` so a 2%/hour armor eventually
  * debits 1% after half an hour, etc. Broken cell UUIDs (cell deleted
  * or transferred off the actor) are scrubbed from the item on the next
@@ -434,12 +441,14 @@ async function drainInstalledCells(item, amount, perUnit, cellIds) {
     return { consumed: false, reason: "no-cells" };
   }
 
-  const rawDrain    = unitsRequested * Number(perUnit || 0);
-  const perCellRaw  = rawDrain / cellIds.length;
+  // perUnit is the per-cell drain rate. With cells in parallel they all
+  // drain at the same rate simultaneously, so one accumulator on the
+  // item suffices for the whole pool.
+  const perCellRate = unitsRequested * Number(perUnit || 0);
 
   const flagPath = `flags.${SYSTEM_ID}.drainAccumulator`;
   const priorAcc = Number(foundry.utils.getProperty(item, flagPath) ?? 0) || 0;
-  const proposedPerCell = priorAcc + perCellRaw;
+  const proposedPerCell = priorAcc + perCellRate;
   const wholePctPerCell = Math.floor(proposedPerCell);
   const residue         = proposedPerCell - wholePctPerCell;
 
@@ -519,6 +528,44 @@ async function postCellDepletedNotice(item, cell) {
 export async function accumulateDrain(item, deltaUnits) {
   if (!isItemActiveForDrain(item)) return { consumed: false, reason: "inactive" };
   return consumeArtifactCharge(item, deltaUnits);
+}
+
+/**
+ * 0.13.0 Batch 3 — world-time tick for per-hour drain devices.
+ *
+ * Wired to `Hooks.on("updateWorldTime")` in module/hooks.mjs. Foundry
+ * fires this whenever `game.time.advance(seconds)` is called (e.g. by
+ * a long-rest button, a "fast forward" macro, or the system's combat
+ * encounter pacing). The `dt` argument is the delta in seconds.
+ *
+ * Walks every actor on the world; for each gear/armor/weapon item with
+ * `consumption.unit === "hour"` AND `isItemActiveForDrain(item)` AND
+ * at least one installed cell, debits those cells by `dt / 3600` hours.
+ * The per-hour rate is fractional for most devices; `accumulateDrain`
+ * carries sub-percent residue across calls.
+ *
+ * Out-of-scope (deferred): solar passive recharge in daylight (would
+ * tick UP); disuse drain over years; ambient line/broadcast power.
+ */
+export async function tickWorldTimePowerDrain(_worldTime, dt, _options) {
+  if (!game.user?.isGM) return;
+  const seconds = Math.max(0, Number(dt) || 0);
+  if (seconds === 0) return;
+  const hours = seconds / 3600;
+
+  for (const actor of game.actors?.contents ?? []) {
+    for (const item of actor.items) {
+      if (item.system?.consumption?.unit !== "hour") continue;
+      if (!isItemActiveForDrain(item)) continue;
+      const installed = item.system?.artifact?.power?.installedCellIds ?? [];
+      if (!installed.length) continue;
+      try {
+        await accumulateDrain(item, hours);
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | tickWorldTimePowerDrain failed for ${item?.name}`, error);
+      }
+    }
+  }
 }
 
 /**

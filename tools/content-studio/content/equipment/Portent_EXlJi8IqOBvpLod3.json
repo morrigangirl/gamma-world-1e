@@ -50,7 +50,8 @@
         "ambientAvailable": false,
         "compatibleCells": "solar",
         "cellSlots": 2,
-        "cellsInstalled": 2
+        "cellsInstalled": 2,
+        "installedCellIds": []
       },
       "charges": {
         "current": 24,
@@ -60,7 +61,11 @@
       "harmCallback": ""
     },
     "subtype": "tool",
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "hour",
+      "perUnit": 4.166666666666667
+    }
   },
   "_id": "EXlJi8IqOBvpLod3",
   "flags": {},

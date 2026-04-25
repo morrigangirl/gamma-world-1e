@@ -1285,16 +1285,38 @@ export const CONSUMPTION_CATALOG = Object.freeze({
 });
 
 /**
- * 0.13.0 — compute the per-cell drain (percent per unit) for a catalog
- * entry. Fractional values are expected (e.g. Needler = 100/30/1 = 3.333…).
- * Returns 0 for missing or zero-use entries so callers can safely gate on
- * `perUnit > 0`.
+ * 0.13.1 — compute the per-cell drain (percent per unit) for a catalog
+ * entry.
+ *
+ * Semantic: the rulebook's "Battery Life: N hours" or "N shots" is the
+ * lifespan of the *device* given fully-charged cells. Cells in parallel
+ * all drain at the same rate, simultaneously, and the device runs out
+ * when any cell hits zero (since "requires both cells" disables the
+ * device when one is empty). Therefore each cell drains at
+ * `100 / usesPerFullCell` per unit, regardless of cellSlots — the slot
+ * count tells you HOW MANY cells drain at once, not how the rate is
+ * split between them.
+ *
+ * Examples (each ends with all installed cells at 0% after the full
+ * usesPerFullCell budget):
+ *   Laser Pistol (1 hydrogen, 10 shots)        → 10%/shot per cell
+ *   Mark VII Blaster (2 hydrogen, 5 shots)     → 20%/shot per cell
+ *   Portent Shield (2 solar, 24 hours)         → 4.17%/h per cell
+ *   Powered Scout Armor (2 atomic, 54 hours)   → 1.85%/h per cell
+ *   Powered Assault Armor (3 atomic, 48 hours) → 2.08%/h per cell
+ *
+ * Fractional values are expected (Needler = 100/30 = 3.333…). Returns
+ * 0 for missing entries so callers can safely gate on `perUnit > 0`.
+ *
+ * Pre-0.13.1 BUG NOTE: an earlier formula divided by cellSlots, halving
+ * (or worse) the per-cell rate for multi-cell devices. The 0.13.1
+ * migration recomputes from this corrected formula and overwrites stale
+ * actor-item perUnit values.
  */
 export function consumptionRateFor(catalog) {
   if (!catalog) return 0;
-  const uses  = Math.max(1, Number(catalog.usesPerFullCell) || 1);
-  const slots = Math.max(1, Number(catalog.cellSlots)       || 1);
-  return 100 / uses / slots;
+  const uses = Math.max(1, Number(catalog.usesPerFullCell) || 1);
+  return 100 / uses;
 }
 
 const GEAR_ARTIFACTS = {

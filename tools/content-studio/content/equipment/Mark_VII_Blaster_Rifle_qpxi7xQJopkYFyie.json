@@ -73,7 +73,7 @@
     "actionTypes": {},
     "consumption": {
       "unit": "shot",
-      "perUnit": 10
+      "perUnit": 20
     }
   },
   "_id": "qpxi7xQJopkYFyie",

@@ -748,19 +748,28 @@ test("0.12.0 — fresh cell source JSON ships at 100/100 charges and qty 1", asy
   }
 });
 
-test("0.13.0 — consumptionRateFor computes percent-per-cell per unit", () => {
-  // Single-cell, 10 shots: 100/10/1 = 10% per shot.
+test("0.13.1 — consumptionRateFor returns per-cell drain rate (no slots divisor)", () => {
+  // Cells in parallel drain at the same rate simultaneously. The rule
+  // table's `cellSlots` says HOW MANY drain at once, not how the rate
+  // splits between them. After `usesPerFullCell` ticks every cell hits 0%.
+
+  // Single-cell, 10 shots: 100/10 = 10% per cell per shot (Laser Pistol).
   assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 10, cellSlots: 1 }), 10);
-  // Single-cell, 4 shots: 100/4/1 = 25% per shot (Black Ray).
+  // Single-cell, 4 shots: 100/4 = 25% per cell per shot (Black Ray).
   assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 4, cellSlots: 1 }), 25);
-  // Two-cell parallel, 5 shots per rifle: 100/5/2 = 10% per cell per shot (Mark VII).
-  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 5, cellSlots: 2 }), 10);
+  // Two-cell parallel, 5 shots per rifle: 100/5 = 20% per cell per shot
+  // (Mark VII). Each cell drains 20%/shot; after 5 shots both at 0%.
+  assert.equal(consumptionRateFor({ unit: "shot", usesPerFullCell: 5, cellSlots: 2 }), 20);
   // Fractional: Needler at 30 darts per cell = 3.333...% per dart.
   const needlerRate = consumptionRateFor({ unit: "shot", usesPerFullCell: 30, cellSlots: 1 });
   assert.ok(Math.abs(needlerRate - (100 / 30)) < 1e-9, "needler rate ~= 3.333");
-  // Parallel time-drain: Portent at 24h over 2 cells = 2.08...%/h per cell.
+  // Parallel time-drain: Portent at 24h with 2 cells parallel: each
+  // cell drains 100/24 = 4.17%/h. After 24h both at 0%.
   const portentRate = consumptionRateFor({ unit: "hour", usesPerFullCell: 24, cellSlots: 2 });
-  assert.ok(Math.abs(portentRate - (100 / 24 / 2)) < 1e-9, "portent rate ~= 2.083");
+  assert.ok(Math.abs(portentRate - (100 / 24)) < 1e-9, "portent rate ~= 4.167 per cell");
+  // Three-cell parallel, 48h Powered Assault Armor: 100/48 = 2.08%/h per cell.
+  const assaultRate = consumptionRateFor({ unit: "hour", usesPerFullCell: 48, cellSlots: 3 });
+  assert.ok(Math.abs(assaultRate - (100 / 48)) < 1e-9, "assault armor rate ~= 2.083 per cell");
   // Safety: null / missing entries → 0.
   assert.equal(consumptionRateFor(null), 0);
   assert.equal(consumptionRateFor(undefined), 0);
@@ -802,6 +811,54 @@ test("0.13.0 — CONSUMPTION_CATALOG pins Batch 4 armor hours-of-constant-use", 
     { unit: "hour", usesPerFullCell: 48, cellSlots: 3, powerSource: "nuclear" });
   assert.deepEqual(CONSUMPTION_CATALOG["Inertia Armor"],
     { unit: "hour", usesPerFullCell: 60, cellSlots: 2, powerSource: "nuclear" });
+});
+
+test("0.13.0 Batch 3 — JSONs ship with per-hour consumption blocks", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const cases = [
+    ["Energy_Cloak_3Jxc7auUzG5jI3ke.json",          100 / 12],
+    ["Communications_Sender_6WDeVzD6UgMaKrWM.json", 100 / 12],
+    ["Portent_EXlJi8IqOBvpLod3.json",               100 / 24],
+    ["Anti_grav_Sled_GCmSuLBLMuPRDtm0.json",        100 / 100]
+  ];
+  for (const [filename, expectedPerUnit] of cases) {
+    const data = JSON.parse(await fs.readFile(path.join(dir, filename), "utf8"));
+    assert.equal(data.system.consumption?.unit, "hour", `${filename} unit`);
+    assert.ok(Math.abs(data.system.consumption?.perUnit - expectedPerUnit) < 1e-6,
+      `${filename} perUnit ~= ${expectedPerUnit}`);
+  }
+});
+
+test("0.13.0 Batch 3 — accumulator residue progression for Energy Cloak (12h)", () => {
+  // Energy Cloak: chemical, 12h per cell. 100/12 = 8.333% per hour per cell.
+  // After 12 ticks of 1 hour each, the cell should be at 0% with zero residue.
+  const perUnit = 100 / 12;
+  let acc = 0;
+  let drained = 0;
+  for (let i = 0; i < 12; i++) {
+    acc += perUnit;
+    const whole = Math.floor(acc);
+    drained += whole;
+    acc -= whole;
+  }
+  assert.equal(drained, 100, "12 hours of 1-hour ticks empties an Energy Cloak cell");
+  assert.ok(Math.abs(acc) < 1e-6, "residue lands at zero on a clean budget");
+
+  // Anti-grav Sled (100h, 1%/h): 100 ticks at 1% each → 100 drained, residue 0.
+  const sledRate = 1;
+  let sledAcc = 0;
+  let sledDrained = 0;
+  for (let i = 0; i < 100; i++) {
+    sledAcc += sledRate;
+    const whole = Math.floor(sledAcc);
+    sledDrained += whole;
+    sledAcc -= whole;
+  }
+  assert.equal(sledDrained, 100, "100 hours empties an Anti-grav Sled atomic cell");
 });
 
 test("0.13.0 Batch 2 — JSONs ship with per-minute consumption blocks", async () => {
@@ -874,7 +931,7 @@ test("0.13.0 — Batch 1 JSONs ship with the canonical consumption block", async
     "Stun_Rifle_BA0cUig7iNmxUZMx.json":             { unit: "shot", perUnit: 20 },
     "Laser_Rifle_IebgCJG0bp5KtANI.json":            { unit: "shot", perUnit: 20 },
     "Mark_V_Blaster_D64jCcalrvdLbgFd.json":         { unit: "shot", perUnit: 20 },
-    "Mark_VII_Blaster_Rifle_qpxi7xQJopkYFyie.json": { unit: "shot", perUnit: 10 },
+    "Mark_VII_Blaster_Rifle_qpxi7xQJopkYFyie.json": { unit: "shot", perUnit: 20 },
     "Fusion_Rifle_dJ5bnJlJlMhu5mpn.json":           { unit: "shot", perUnit: 10 },
     "Slug_Thrower_TEWLRcePspMEbo2t.json":           { unit: "clip", perUnit: 20 }
   };
