@@ -53,7 +53,8 @@
         "ambientAvailable": false,
         "compatibleCells": "nuclear",
         "cellSlots": 2,
-        "cellsInstalled": 2
+        "cellsInstalled": 2,
+        "installedCellIds": []
       },
       "charges": {
         "current": 48,
@@ -140,7 +141,11 @@
         }
       }
     ],
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "hour",
+      "perUnit": 2.0833333333333335
+    }
   },
   "effects": [
     {

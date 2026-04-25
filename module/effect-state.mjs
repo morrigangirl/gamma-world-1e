@@ -3,6 +3,7 @@ import { syncBarrierEffectsForActor, syncTemporaryEffectsForActor } from "./anim
 import { charismaReactionAdjustment } from "./tables/encounter-tables.mjs";
 import { runAsGM } from "./gm-executor.mjs";
 import { HOOK, fireAnnounceHook, fireVetoHook } from "./hook-surface.mjs";
+import { armorIsInert } from "./artifact-power.mjs";
 
 /**
  * 0.9.0 Tier 3 — modes that stay on the legacy flag array because
@@ -691,7 +692,13 @@ export function applyTemporaryDerivedModifiers(actor, derived) {
 }
 
 export function syncActorProtectionStateData(actor, state = getActorState(actor)) {
-  const equippedArmor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
+  // 0.13.0 Batch 4 — inert powered armor (cells depleted) loses both
+  // its laser-deflect benefit and its partial force field. Treat it as
+  // unequipped for protection-state purposes; the actorHasForceField
+  // and AC paths gate on the same `!armorIsInert` filter.
+  const equippedArmor = actor.items.filter((item) =>
+    item.type === "armor" && item.system.equipped && !armorIsInert(item)
+  );
   const activeArmorIds = new Set(equippedArmor.map((item) => item.id));
 
   for (const [armorId] of Object.entries(state.laserDeflect)) {
@@ -720,7 +727,12 @@ export async function syncActorProtectionState(actor) {
 }
 
 function hasArmorHazardProtection(actor, type) {
-  const equippedArmor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
+  // 0.13.0 Batch 4 — inert powered armor's hazard protection booleans
+  // (radiationImmune, poisonImmune, blackRayImmune) are powered defenses;
+  // they collapse along with the force field when the cells run dry.
+  const equippedArmor = actor.items.filter((item) =>
+    item.type === "armor" && item.system.equipped && !armorIsInert(item)
+  );
   return equippedArmor.some((armor) => {
     if (type === "radiation") return !!armor.system.protection?.radiationImmune;
     if (type === "poison") return !!armor.system.protection?.poisonImmune;
@@ -741,7 +753,12 @@ export function actorHasHazardProtection(actor, type) {
 
 export function actorHasForceField(actor) {
   const state = getActorState(actor);
-  const equippedArmor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
+  // 0.13.0 Batch 4 — inert powered armor's force field has collapsed.
+  // Filter it out so depleted Powered Plate / Scout / Battle / Attack /
+  // Assault Armor don't claim a phantom field bonus.
+  const equippedArmor = actor.items.filter((item) =>
+    item.type === "armor" && item.system.equipped && !armorIsInert(item)
+  );
   if (Object.values(state.barriers).some((barrier) => barrier.remaining > 0)) return true;
   return equippedArmor.some((armor) => (
     (armor.system.field?.mode === "full" && !(state.barriers?.[`${armor.id}:field`]?.destroyed))

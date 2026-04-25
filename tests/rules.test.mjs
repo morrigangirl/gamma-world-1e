@@ -42,7 +42,7 @@ import {
   gearHasAction,
   weaponRuleForName
 } from "../module/equipment-rules.mjs";
-import { artifactPowerStatus, compatibleCellTypes, isPowerCell, cellChargePercent, isItemActiveForDrain } from "../module/artifact-power.mjs";
+import { artifactPowerStatus, compatibleCellTypes, isPowerCell, cellChargePercent, isItemActiveForDrain, armorIsInert } from "../module/artifact-power.mjs";
 import { CONSUMPTION_CATALOG, consumptionRateFor } from "../module/equipment-rules.mjs";
 import { resolvePilotAnimationKey } from "../module/animations.mjs";
 import {
@@ -811,6 +811,92 @@ test("0.13.0 — CONSUMPTION_CATALOG pins Batch 4 armor hours-of-constant-use", 
     { unit: "hour", usesPerFullCell: 48, cellSlots: 3, powerSource: "nuclear" });
   assert.deepEqual(CONSUMPTION_CATALOG["Inertia Armor"],
     { unit: "hour", usesPerFullCell: 60, cellSlots: 2, powerSource: "nuclear" });
+});
+
+test("0.13.0 Batch 4 — JSONs ship with per-hour armor consumption blocks", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const cases = [
+    ["Powered_Plate_VLXPBBH4oS2yIzrA.json",         100 / 50],
+    ["Powered_Alloyed_Plate_A8utMwPGplmeESPB.json", 100 / 45],
+    ["Energized_Armor_fPVwP7u8joXxqqHN.json",       100 / 40],
+    ["Inertia_Armor_DxvWMCJVOuEtZClt.json",         100 / 60],
+    ["Powered_Scout_Armor_xqeqoS9kTc1I7QeP.json",   100 / 54],
+    ["Powered_Battle_Armor_jpeRN1gxkAgJROOg.json",  100 / 48],
+    ["Powered_Attack_Armor_RkJ65PDzYSa89tVO.json",  100 / 42],
+    ["Powered_Assault_Armor_HDCrNblFeTZ9pG62.json", 100 / 48]
+  ];
+  for (const [filename, expectedPerUnit] of cases) {
+    const data = JSON.parse(await fs.readFile(path.join(dir, filename), "utf8"));
+    assert.equal(data.system.consumption?.unit, "hour", `${filename} unit`);
+    assert.ok(Math.abs(data.system.consumption?.perUnit - expectedPerUnit) < 1e-6,
+      `${filename} perUnit ~= ${expectedPerUnit}`);
+  }
+});
+
+test("0.13.0 Batch 4 — armorIsInert truth table", () => {
+  // Non-cell armor (no consumption rule): never inert.
+  const sheath = { type: "armor", system: { consumption: { unit: "", perUnit: 0 } } };
+  assert.equal(armorIsInert(sheath), false, "non-cell armor never inert");
+
+  // Cell-drained armor with no cells installed: inert (declares drain
+  // but has no power source to draw from).
+  const noCells = {
+    type: "armor",
+    system: {
+      consumption: { unit: "hour", perUnit: 2 },
+      artifact: { power: { installedCellIds: [] } }
+    }
+  };
+  assert.equal(armorIsInert(noCells), true, "no cells slotted → inert");
+
+  // Wrong type: function returns false for non-armor (other code paths
+  // handle weapon / gear cells via isItemActiveForDrain).
+  const weapon = {
+    type: "weapon",
+    system: {
+      consumption: { unit: "minute", perUnit: 3 },
+      artifact: { power: { installedCellIds: ["uuid:foo"] } }
+    }
+  };
+  assert.equal(armorIsInert(weapon), false, "non-armor type ignored");
+
+  // Null / undefined safety.
+  assert.equal(armorIsInert(null), false);
+  assert.equal(armorIsInert(undefined), false);
+  assert.equal(armorIsInert({}), false);
+});
+
+test("0.13.0 Batch 4 — accumulator residue progression for Powered Plate (50h)", () => {
+  // Powered Plate: atomic, 50h per cell. 100/50 = 2%/h per cell.
+  // After 50 ticks of 1 hour each, the cell should be at 0% with zero residue.
+  const perUnit = 100 / 50;
+  let acc = 0;
+  let drained = 0;
+  for (let i = 0; i < 50; i++) {
+    acc += perUnit;
+    const whole = Math.floor(acc);
+    drained += whole;
+    acc -= whole;
+  }
+  assert.equal(drained, 100, "50 hours empties a Powered Plate atomic cell");
+  assert.ok(Math.abs(acc) < 1e-6, "residue lands at zero on a clean budget");
+
+  // Powered Scout Armor (54h, 2 atomic cells parallel): per-cell drain
+  // is 100/54 = 1.85%/h. After 54 ticks each cell at 0%.
+  const scoutRate = 100 / 54;
+  let scoutAcc = 0;
+  let scoutDrained = 0;
+  for (let i = 0; i < 54; i++) {
+    scoutAcc += scoutRate;
+    const whole = Math.floor(scoutAcc);
+    scoutDrained += whole;
+    scoutAcc -= whole;
+  }
+  assert.equal(scoutDrained, 100, "54 hours empties each Scout Armor atomic cell");
 });
 
 test("0.13.0 Batch 3 — JSONs ship with per-hour consumption blocks", async () => {

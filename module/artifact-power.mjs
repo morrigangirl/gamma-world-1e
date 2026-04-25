@@ -531,6 +531,40 @@ export async function accumulateDrain(item, deltaUnits) {
 }
 
 /**
+ * 0.13.0 Batch 4 — true when a cell-drained armor has run out of power.
+ *
+ * An armor is "inert" iff:
+ *   1. It declares a per-tick drain rule (consumption.perUnit > 0)
+ *   2. AND either it has no installed cells at all, OR every installed
+ *      cell is at 0% charge (or its UUID is broken).
+ *
+ * Used by buildActorDerived and applyEquipmentEffects to gate the
+ * powered benefits (AC bonus, force field, flight, lift, granted
+ * traits) on the armor still having juice. The `dxPenalty` continues
+ * to apply regardless — an inert powered-armor suit is still a heavy
+ * carcass on the wearer; the penalty stays.
+ *
+ * Non-cell-drained armor (no consumption rule) is never inert — those
+ * pieces are mechanical/passive and don't depend on power.
+ */
+export function armorIsInert(armor) {
+  if (!armor || armor.type !== "armor") return false;
+  const perUnit = Number(armor.system?.consumption?.perUnit ?? 0);
+  if (perUnit <= 0) return false;   // not cell-drained, can't go inert
+  const cellIds = armor.system?.artifact?.power?.installedCellIds ?? [];
+  if (cellIds.length === 0) return true;   // declares drain but no cells slotted
+  // Inert iff every cell is at 0% (broken UUIDs count as missing/empty).
+  for (const uuid of cellIds) {
+    try {
+      const cell = foundry.utils.fromUuidSync?.(uuid)
+        ?? globalThis.fromUuidSync?.(uuid);
+      if (cell && (cellChargePercent(cell) ?? 0) > 0) return false;
+    } catch (_error) { /* broken ref counts as empty */ }
+  }
+  return true;
+}
+
+/**
  * 0.13.0 Batch 3 — world-time tick for per-hour drain devices.
  *
  * Wired to `Hooks.on("updateWorldTime")` in module/hooks.mjs. Foundry

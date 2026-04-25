@@ -1,6 +1,7 @@
 import { SYSTEM_ID } from "./config.mjs";
 import { artifactFunctionChance } from "./tables/artifact-tables.mjs";
 import { applyEffectChange, evaluateCondition } from "./mutation-rules.mjs";
+import { armorIsInert } from "./artifact-power.mjs";
 
 /**
  * 0.9.1 Tier 4 — Foundry ACTIVE_EFFECT_MODES numeric enum mirror for
@@ -1962,7 +1963,12 @@ export function applyEquipmentModifiers(actor, derived) {
  * deprecated `protection.*` fields.
  */
 export function applyEquipmentEffects(actor, derived) {
-  const armors = actor.items.filter((item) => item.type === "armor");
+  // 0.13.0 Batch 4 — inert powered armor (cells depleted) skips its
+  // declarative effects entirely. Mobility upgrades, lift bonuses, and
+  // any future per-armor declarative grants only apply while the suit
+  // has at least one charged cell. Non-cell armor (mechanical/passive)
+  // is never inert — armorIsInert returns false for those.
+  const armors = actor.items.filter((item) => item.type === "armor" && !armorIsInert(item));
   const collected = [];
   for (const armor of armors) {
     const rule = getArmorRule(armor);

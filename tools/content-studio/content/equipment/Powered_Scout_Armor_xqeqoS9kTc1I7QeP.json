@@ -48,7 +48,8 @@
         "ambientAvailable": false,
         "compatibleCells": "nuclear",
         "cellSlots": 2,
-        "cellsInstalled": 2
+        "cellsInstalled": 2,
+        "installedCellIds": []
       },
       "charges": {
         "current": 54,
@@ -57,7 +58,11 @@
       "functionChance": 40,
       "harmCallback": ""
     },
-    "actionTypes": {}
+    "actionTypes": {},
+    "consumption": {
+      "unit": "hour",
+      "perUnit": 1.8518518518518519
+    }
   },
   "_id": "xqeqoS9kTc1I7QeP",
   "flags": {},

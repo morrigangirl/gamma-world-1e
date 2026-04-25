@@ -4,6 +4,7 @@
 
 import { applyMutationEffects, applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData } from "../mutation-rules.mjs";
 import { applyEquipmentEffects, applyEquipmentModifiers } from "../equipment-rules.mjs";
+import { armorIsInert } from "../artifact-power.mjs";
 import { applyTemporaryDerivedModifiers } from "../effect-state.mjs";
 import { actorInitiativeModifier } from "../initiative.mjs";
 import { applyRobotDerived, actorIsRobot } from "../robots.mjs";
@@ -31,11 +32,18 @@ function supportsGammaWorldActorData(actor) {
 export function buildActorDerived(actor) {
   const system = actor.system;
   const armor = actor.items.filter((item) => item.type === "armor" && item.system.equipped);
-  const wornArmor = armor.filter((item) => item.system.armorType !== "shield");
-  const shields = armor.filter((item) => item.system.armorType === "shield");
+  // 0.13.0 Batch 4 — split equipped armor by power state. An "inert"
+  // powered-armor (cells depleted) loses its acValue benefit, force
+  // field, mobility upgrades, and trait grants — but the wearer is
+  // still lugging the carcass around, so dxPenalty stays.
+  const poweredArmor = armor.filter((item) => !armorIsInert(item));
+  const wornArmor = poweredArmor.filter((item) => item.system.armorType !== "shield");
+  const shields = poweredArmor.filter((item) => item.system.armorType === "shield");
   const bestArmor = wornArmor.length
     ? Math.min(...wornArmor.map((item) => Number(item.system.acValue) || 10))
     : 10;
+  // dxPenalty reads from the full equipped set (inert armors still
+  // weigh on the wearer; the suit doesn't get lighter when it dies).
   const dxPenalty = armor.reduce((sum, item) => sum + Math.max(0, Number(item.system.dxPenalty) || 0), 0);
   const baseBonuses = baseCombatBonuses(actor);
 
@@ -162,7 +170,12 @@ export function buildActorDerived(actor) {
   // grants to the aggregated sets. Runs after applyEquipmentModifiers
   // so any legacy protection booleans the equipment layer already
   // translated are included too.
-  for (const armor of actor.items.filter((i) => i.type === "armor" && i.system?.equipped)) {
+  // 0.13.0 Batch 4 — inert powered armor (cells depleted) loses its
+  // grants; the force field has collapsed and the suit's resistances
+  // were dependent on the powered defenses.
+  for (const armor of actor.items.filter((i) =>
+    i.type === "armor" && i.system?.equipped && !armorIsInert(i)
+  )) {
     const t = armor.system?.traits ?? {};
     for (const v of t.grantsResistance    ?? []) if (v) derived.damageResistance.add(v);
     for (const v of t.grantsImmunity      ?? []) if (v) derived.damageImmunity.add(v);
