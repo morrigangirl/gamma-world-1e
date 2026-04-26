@@ -64,6 +64,40 @@ export function xpForNextLevel(level) {
   return LEVEL_THRESHOLDS[lvl - 1] ?? null;
 }
 
+/**
+ * 0.14.6 — XP value awarded by defeating a monster of N hit dice.
+ * Lookup table follows the GW1e DMG XP-by-HD progression. Used as a
+ * fallback when a monster's `system.details.xpValue` is 0; explicit
+ * overrides win.
+ *
+ * RAW table (rounded — RAW gives ranges; we pick the median):
+ *   1 HD  →   25 XP        7 HD  →   800 XP
+ *   2 HD  →   50 XP        8 HD  →  1200 XP
+ *   3 HD  →  100 XP        9 HD  →  1600 XP
+ *   4 HD  →  200 XP       10 HD  →  2400 XP
+ *   5 HD  →  400 XP       12 HD  →  3500 XP
+ *   6 HD  →  600 XP       15+ HD →  5000 XP (and ~+750/HD beyond)
+ */
+const XP_BY_HD = Object.freeze({
+   1:   25,  2:   50,  3:  100,  4:  200,  5:  400,
+   6:  600,  7:  800,  8: 1200,  9: 1600, 10: 2400,
+  11: 3000, 12: 3500, 13: 4000, 14: 4500, 15: 5000
+});
+
+export function xpForHitDice(hitDice) {
+  const hd = Math.max(0, Math.floor(Number(hitDice) || 0));
+  if (hd <= 0) return 0;
+  if (hd >= 15) return 5000 + (hd - 15) * 750;
+  return XP_BY_HD[hd] ?? 0;
+}
+
+/** Resolve XP an actor's defeat awards: explicit field wins, else HD table. */
+export function xpAwardForDefeated(actor) {
+  const explicit = Number(actor?.system?.details?.xpValue ?? 0);
+  if (explicit > 0) return Math.floor(explicit);
+  return xpForHitDice(actor?.system?.details?.hitDice ?? 0);
+}
+
 /** Does this character type level up? PSH + humanoids do; mutated-animal/plant and robots do not. */
 export function levelsByType(type) {
   return type === "psh" || type === "humanoid";

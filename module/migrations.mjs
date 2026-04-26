@@ -243,6 +243,20 @@ export function registerMigrationSettings() {
     default: true
   });
 
+  // 0.14.6 — encounter-close XP + loot summary card. When true (default),
+  // ending a combat (deleting it from the tracker) posts a GM-whisper
+  // chat card with a "Distribute XP" button + per-defeated-monster
+  // "Roll Loot" buttons. Disable for tables that prefer manual XP
+  // tracking.
+  game.settings.register(SYSTEM_ID, "encounterCloseSummary", {
+    name: "GAMMA_WORLD.Settings.EncounterCloseSummary.Name",
+    hint: "GAMMA_WORLD.Settings.EncounterCloseSummary.Hint",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register(SYSTEM_ID, "autoApplyOnHitConditions", {
     name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
     hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",

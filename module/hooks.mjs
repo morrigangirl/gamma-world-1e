@@ -44,6 +44,7 @@ export function registerHooks() {
   Hooks.on("renderChatMessageHTML", onRenderChatMessage);
   Hooks.on("renderChatLog", onRenderChatLog);
   Hooks.on("renderSidebarTab", onRenderSidebarTab);
+  Hooks.on("renderChatMessage", onRenderChatMessage);
   Hooks.on("createActor", onActorCreate);
   Hooks.on("preCreateItem", onPreCreateMutationRollVariant);
   Hooks.on("createItem", onMutationRelevantItemChange);
@@ -128,6 +129,19 @@ async function onCombatDelete(combat) {
     }
   } catch (error) {
     console.warn(`${SYSTEM_ID} | fatigue reset on combat end failed`, error);
+  }
+  // 0.14.6 — encounter-resolved chat card. Tally defeated monsters,
+  // sum XP, identify PC participants, post a GM-whisper card with
+  // Distribute XP + per-monster Roll Loot buttons. Loot rolling is
+  // gated behind buttons rather than auto-rolled so the GM can choose
+  // not to (or roll publicly vs privately).
+  try {
+    if (game.settings.get(SYSTEM_ID, "encounterCloseSummary")) {
+      const { postEncounterCloseSummary } = await import("./encounter-close.mjs");
+      await postEncounterCloseSummary(combat);
+    }
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | encounter-close summary failed`, error);
   }
 }
 
@@ -402,6 +416,22 @@ function injectChatRequestToolbar(html) {
 
 function onRenderChatLog(_app, html) {
   injectChatRequestToolbar(html);
+}
+
+/**
+ * 0.14.6 — wire encounter-close chat card buttons. Foundry passes the
+ * rendered HTML element (or a jQuery wrapper) for each chat message;
+ * we look for our `[data-action="distributeEncounterXp"]` /
+ * `[data-action="rollEncounterLoot"]` buttons and bind the click
+ * handlers from `encounter-close.mjs`.
+ */
+async function onRenderChatMessage(_message, html) {
+  const root = html?.[0] ?? html;
+  if (!root || typeof root.querySelectorAll !== "function") return;
+  if (!root.querySelector('[data-action="distributeEncounterXp"]')
+   && !root.querySelector('[data-action="rollEncounterLoot"]')) return;
+  const { registerEncounterCloseChatHandlers } = await import("./encounter-close.mjs");
+  registerEncounterCloseChatHandlers(root);
 }
 
 function onRenderSidebarTab(app, html) {

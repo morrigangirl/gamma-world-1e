@@ -59,6 +59,10 @@
         "Name": "Rests advance world time",
         "Hint": "When enabled (default), Short Rest advances world time by 1 hour and Long Rest by 6 hours. This causes hourly cell drain (Powered Plate, Energy Cloak, etc.) to tick during the rest. Disable for tables that prefer manual time control."
       },
+      "EncounterCloseSummary": {
+        "Name": "Encounter-close summary card",
+        "Hint": "When enabled (default), deleting a combat posts a GM-whisper chat card tallying XP from defeated monsters with a Distribute XP button + per-monster Roll Loot buttons. Disable for tables that prefer manual XP / loot tracking."
+      },
       "AutoApplyOnHitConditions": {
         "Name": "Auto-apply on-hit save and condition effects",
         "Hint": "When enabled, hits from weapons with a special on-hit effect (poison, paralysis, radiation, stun, etc.) auto-post a save card: NPCs resolve locally, PCs get a save dialog. On fail the matching timed status effect is applied. Disable to keep the manual Apply Effect follow-up button."
@@ -868,6 +872,15 @@
       "ActiveBadge": "active"
     },
     "Encounter": {
+      "Close": {
+        "Speaker":     "Encounter",
+        "Heading":     "Encounter resolved",
+        "XpHeading":   "Experience",
+        "Distribute":  "Distribute XP",
+        "LootHeading": "Loot",
+        "RollLoot":    "Roll",
+        "NoDefeated":  "No monsters defeated."
+      },
       "ReactionResult": {
         "2": "Extremely hostile",
         "3-5": "Hostile / distrustful",

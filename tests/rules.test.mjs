@@ -4920,6 +4920,101 @@ function setNested(obj, path, value) {
   cursor[segs.at(-1)] = value;
 }
 
+/* ------------------------------------------------------------------ */
+/* 0.14.6 — encounter-close XP + loot                                 */
+/* ------------------------------------------------------------------ */
+
+test("0.14.6 — xpForHitDice follows the GW1e progression with linear extension above 15 HD", async () => {
+  const { xpForHitDice } = await import("../module/experience.mjs");
+  // Spot-check the lookup table entries.
+  assert.equal(xpForHitDice(0),  0,  "0 HD = 0 XP (no defeat)");
+  assert.equal(xpForHitDice(1),  25);
+  assert.equal(xpForHitDice(4),  200);
+  assert.equal(xpForHitDice(8),  1200);
+  assert.equal(xpForHitDice(10), 2400);
+  assert.equal(xpForHitDice(12), 3500);
+  assert.equal(xpForHitDice(15), 5000);
+  // Linear extension above 15 HD: +750 per HD.
+  assert.equal(xpForHitDice(16), 5750);
+  assert.equal(xpForHitDice(20), 8750);
+  // Negative / NaN inputs floor to 0.
+  assert.equal(xpForHitDice(-3), 0);
+  assert.equal(xpForHitDice(NaN), 0);
+});
+
+test("0.14.6 — xpAwardForDefeated prefers explicit xpValue over the HD table", async () => {
+  const { xpAwardForDefeated } = await import("../module/experience.mjs");
+  // Explicit override wins.
+  const overridden = { system: { details: { hitDice: 4, xpValue: 1000 } } };
+  assert.equal(xpAwardForDefeated(overridden), 1000);
+  // Fallback to HD table when xpValue is 0.
+  const fallback = { system: { details: { hitDice: 4, xpValue: 0 } } };
+  assert.equal(xpAwardForDefeated(fallback), 200);
+  // Both 0 → 0.
+  const zero = { system: { details: { hitDice: 0, xpValue: 0 } } };
+  assert.equal(xpAwardForDefeated(zero), 0);
+});
+
+test("0.14.6 — postEncounterCloseSummary renders XP rows + loot buttons in chat", async () => {
+  const { postEncounterCloseSummary } = await import("../module/encounter-close.mjs");
+  // Stub the chat surface — capture the create() call.
+  const created = [];
+  const ChatStub = {
+    getSpeaker: () => ({}),
+    getWhisperRecipients: () => [],
+    create: async (data) => { created.push(data); return data; }
+  };
+  const originalChat = globalThis.ChatMessage;
+  const originalGame = globalThis.game;
+  globalThis.ChatMessage = ChatStub;
+  globalThis.game = {
+    user: { isGM: true },
+    i18n: { localize: (s) => s, format: (s) => s },
+    settings: { get: () => true }
+  };
+  try {
+    const fakeCombat = {
+      combatants: { contents: [
+        { actor: { type: "monster", name: "Howler",
+                   uuid: "Actor.howler",
+                   system: { resources: { hp: { value: 0 } },
+                             details: { hitDice: 4, xpValue: 0, lootTable: "RollTable.junk" } } },
+          defeated: true },
+        { actor: { type: "monster", name: "Borg",
+                   uuid: "Actor.borg",
+                   system: { resources: { hp: { value: 0 } },
+                             details: { hitDice: 8, xpValue: 0, lootTable: "" } } },
+          defeated: true },
+        { actor: { type: "character", name: "Sadie",  uuid: "Actor.sadie",
+                   system: { resources: { hp: { value: 22 } }, details: {} } } },
+        { actor: { type: "character", name: "Roxy",   uuid: "Actor.roxy",
+                   system: { resources: { hp: { value: 18 } }, details: {} } } }
+      ]}
+    };
+    await postEncounterCloseSummary(fakeCombat);
+    assert.equal(created.length, 1, "exactly one chat card posted");
+    const card = created[0];
+    // Total XP = 200 (Howler 4 HD) + 1200 (Borg 8 HD) = 1400. 2 PCs → 700 each.
+    const flagData = card.flags?.["gamma-world-1e"]?.encounterClose;
+    assert.equal(flagData.totalXp, 1400);
+    assert.equal(flagData.perPc, 700);
+    assert.equal(flagData.remainder, 0);
+    assert.equal(flagData.pcIds.length, 2);
+    assert.equal(flagData.defeated.length, 2);
+    // Loot button rendered only for the Howler (has lootTable).
+    assert.match(card.content, /data-action="rollEncounterLoot"/);
+    assert.match(card.content, /Howler/);
+    // No-defeated case yields a card with the empty-state message.
+    const empty = { combatants: { contents: [] } };
+    created.length = 0;
+    await postEncounterCloseSummary(empty);
+    assert.equal(created.length, 0, "no card when nothing defeated AND no PCs");
+  } finally {
+    globalThis.ChatMessage = originalChat;
+    globalThis.game = originalGame;
+  }
+});
+
 test("0.14.3 — every cell-driven studio JSON ships unloaded", async () => {
   const fs = await import("node:fs/promises");
   const path = await import("node:path");

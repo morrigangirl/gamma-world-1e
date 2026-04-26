@@ -79,6 +79,19 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         animalForm: str({ initial: "" }),
         level:      int({ initial: 1, min: 1 }),
         xp:         int({ initial: 0, min: 0 }),
+        // 0.14.6 — XP this actor's defeat awards to the encounter pool.
+        // Falls back to xpForHitDice(hitDice) when 0; overrides the
+        // table when set explicitly on a monster.
+        xpValue:    int({ initial: 0, min: 0 }),
+        // 0.14.6 — RollTable UUID rolled by the encounter-close chat
+        // card's "Roll Loot" button. Empty string = no loot rolled.
+        // Use the Foundry compendium UUID like
+        // `RollTable.<id>` or `Compendium.<pack>.<id>`.
+        lootTable:  str({ initial: "" }),
+        // 0.14.6 — pre-rolled hit dice for monsters; used by the XP
+        // fallback table when xpValue is 0. PCs leave at 0 — their
+        // level + xpForLevel handles their growth.
+        hitDice:    int({ initial: 0, min: 0 }),
         // 0.11.0: metric move. Default human 10 m/round (was 120 legacy).
         movement:   int({ initial: 10 }),
         alliance:   str({ initial: "" }),
