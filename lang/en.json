@@ -63,6 +63,10 @@
         "Name": "Encounter-close summary card",
         "Hint": "When enabled (default), deleting a combat posts a GM-whisper chat card tallying XP from defeated monsters with a Distribute XP button + per-monster Roll Loot buttons. Disable for tables that prefer manual XP / loot tracking."
       },
+      "AutoPickDamageMultiplier": {
+        "Name": "Auto-pick damage multiplier from target traits",
+        "Hint": "When enabled (default), the damage chat card pre-selects the right multiplier for each target based on the target's damage Resistance / Immunity / Vulnerability traits (×0 / ×½ / ×2; ×1 otherwise). Disable to force the GM to pick on every hit."
+      },
       "AutoApplyOnHitConditions": {
         "Name": "Auto-apply on-hit save and condition effects",
         "Hint": "When enabled, hits from weapons with a special on-hit effect (poison, paralysis, radiation, stun, etc.) auto-post a save card: NPCs resolve locally, PCs get a save dialog. On fail the matching timed status effect is applied. Disable to keep the manual Apply Effect follow-up button."

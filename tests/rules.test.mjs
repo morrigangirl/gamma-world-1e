@@ -4955,6 +4955,39 @@ test("0.14.6 — xpAwardForDefeated prefers explicit xpValue over the HD table",
   assert.equal(xpAwardForDefeated(zero), 0);
 });
 
+/* ------------------------------------------------------------------ */
+/* 0.14.8 — damage multiplier auto-pick from target traits            */
+/* ------------------------------------------------------------------ */
+
+test("0.14.8 — damageTraitMultiplier returns the right multiplier per trait", async () => {
+  const { damageTraitMultiplier } = await import("../module/effect-state.mjs");
+  // Immunity wins: 0.
+  const immune = { gw: { damageImmunity: new Set(["radiation"]),
+                          damageResistance: new Set(),
+                          damageVulnerability: new Set() } };
+  assert.equal(damageTraitMultiplier(immune, "radiation"), 0);
+  // Vulnerability beats resistance: 2.
+  const vulnerable = { gw: { damageImmunity: new Set(),
+                              damageResistance: new Set(["fire"]),
+                              damageVulnerability: new Set(["fire"]) } };
+  assert.equal(damageTraitMultiplier(vulnerable, "fire"), 2);
+  // Resistance only: 0.5.
+  const resistant = { gw: { damageImmunity: new Set(),
+                             damageResistance: new Set(["physical"]),
+                             damageVulnerability: new Set() } };
+  assert.equal(damageTraitMultiplier(resistant, "physical"), 0.5);
+  // Neutral: 1.
+  const neutral = { gw: { damageImmunity: new Set(),
+                           damageResistance: new Set(),
+                           damageVulnerability: new Set() } };
+  assert.equal(damageTraitMultiplier(neutral, "energy"), 1);
+  // Set-vs-Array tolerance: helper accepts plain arrays too.
+  const arrayShape = { gw: { damageImmunity: ["mental"],
+                              damageResistance: [],
+                              damageVulnerability: [] } };
+  assert.equal(damageTraitMultiplier(arrayShape, "mental"), 0);
+});
+
 test("0.14.7 — analyzeArtifact routes to openArtifactSession (re-export wiring)", async () => {
   const mod = await import("../module/artifacts.mjs");
   // The exports the item sheet's Analyze handler imports must exist

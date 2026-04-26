@@ -41,6 +41,13 @@ export function registerHelpers() {
   /** Equality comparator for {{#if (gwEq a b)}}...{{/if}}. */
   Handlebars.registerHelper("gwEq", (a, b) => a === b);
 
+  /** Default-value helper: {{gwDefault value fallback}} returns `fallback`
+   *  when `value` is null / undefined. Useful for legacy chat cards
+   *  rendered before a context field existed. */
+  Handlebars.registerHelper("gwDefault", (value, fallback) =>
+    (value === undefined || value === null) ? fallback : value
+  );
+
   /** Boolean negation. */
   Handlebars.registerHelper("gwNot", (v) => !v);
 

@@ -257,6 +257,20 @@ export function registerMigrationSettings() {
     default: true
   });
 
+  // 0.14.8 — auto-pick the damage multiplier pill based on the target's
+  // damage{Resistance,Immunity,Vulnerability} traits. When true (default),
+  // the damage card pre-selects ×0 for immunity, ×½ for resistance, ×2
+  // for vulnerability, ×1 otherwise. GMs can disable to force a manual
+  // pick on every damage card.
+  game.settings.register(SYSTEM_ID, "autoPickDamageMultiplier", {
+    name: "GAMMA_WORLD.Settings.AutoPickDamageMultiplier.Name",
+    hint: "GAMMA_WORLD.Settings.AutoPickDamageMultiplier.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register(SYSTEM_ID, "autoApplyOnHitConditions", {
     name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
     hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",

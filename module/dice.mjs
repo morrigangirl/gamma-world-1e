@@ -1,4 +1,5 @@
 import { SYSTEM_ID } from "./config.mjs";
+import { damageTraitMultiplier } from "./effect-state.mjs";
 import { addDiceToFormula, addFlatBonusToFormula, addPerDieBonusToFormula, doubleDiceInFormula, scaleFormula } from "./formulas.mjs";
 import { naturalAttackTarget, weaponAttackTarget } from "./tables/combat-matrix.mjs";
 import {
@@ -469,18 +470,33 @@ async function createDamageCard({
     ...(Array.isArray(targetUuids) ? targetUuids : [])
   ].filter(Boolean)));
   const templateTargets = [];
+  // 0.14.8 — auto-pick the multiplier pill from each target's traits.
+  // When the setting is on (default true), look up the target actor's
+  // damage{Resistance,Immunity,Vulnerability} and pre-select ×0 / ×½ / ×2
+  // accordingly. Otherwise default to ×1 (the legacy behavior). The
+  // helper `damageTraitMultiplier` already lives in effect-state.mjs
+  // — we reuse it instead of forking the logic.
+  const autoPick = (() => {
+    try {
+      return game.settings?.get?.(SYSTEM_ID, "autoPickDamageMultiplier") !== false;
+    } catch { return true; }
+  })();
   for (const uuid of combinedUuids) {
     let name = "Target";
+    let recommended = 1;
     try {
       const doc = await fromUuid(uuid);
       if (doc) {
         name = doc.name ?? doc?.actor?.name ?? name;
-        // Token documents expose their actor at `.actor`; use that name
-        // when available so unlinked tokens show the bespoke name.
         if (doc?.documentName === "Token") name = doc?.name ?? doc?.actor?.name ?? name;
+        if (autoPick && damageType) {
+          // Resolve to the actual actor (token → token.actor).
+          const targetActor = doc?.documentName === "Token" ? doc.actor : doc;
+          if (targetActor) recommended = damageTraitMultiplier(targetActor, damageType);
+        }
       }
-    } catch (_error) { /* leave fallback name */ }
-    templateTargets.push({ uuid, name });
+    } catch (_error) { /* leave fallback name + ×1 */ }
+    templateTargets.push({ uuid, name, recommendedMultiplier: recommended });
   }
 
   // Only surface the contributions section if there's more than just

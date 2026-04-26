@@ -38,7 +38,7 @@
           <span class="gw-damage-target__name">{{this.name}}</span>
           <span class="gw-damage-target__preview"
                 data-role="gw-damage-preview"
-                data-base-total="{{../total}}">&times;1</span>
+                data-base-total="{{../total}}">&times;{{gwDefault this.recommendedMultiplier 1}}</span>
         </div>
         <div class="gw-damage-target__multipliers">
           <button type="button"
@@ -47,31 +47,31 @@
                   data-target-uuid="{{this.uuid}}"
                   title="Skip this target (no damage applied, row dismissed)">&times;</button>
           <button type="button"
-                  class="gw-damage-mult"
+                  class="gw-damage-mult{{#if (gwEq this.recommendedMultiplier 0)}} is-active{{/if}}"
                   data-action="gw-damage-mult"
                   data-target-uuid="{{this.uuid}}"
                   data-multiplier="0"
                   title="Immune — no damage">0</button>
           <button type="button"
-                  class="gw-damage-mult"
+                  class="gw-damage-mult{{#if (gwEq this.recommendedMultiplier 0.25)}} is-active{{/if}}"
                   data-action="gw-damage-mult"
                   data-target-uuid="{{this.uuid}}"
                   data-multiplier="0.25"
                   title="Quarter damage">&frac14;</button>
           <button type="button"
-                  class="gw-damage-mult"
+                  class="gw-damage-mult{{#if (gwEq this.recommendedMultiplier 0.5)}} is-active{{/if}}"
                   data-action="gw-damage-mult"
                   data-target-uuid="{{this.uuid}}"
                   data-multiplier="0.5"
                   title="Half damage (resistance)">&frac12;</button>
           <button type="button"
-                  class="gw-damage-mult is-active"
+                  class="gw-damage-mult{{#if (gwEq (gwDefault this.recommendedMultiplier 1) 1)}} is-active{{/if}}"
                   data-action="gw-damage-mult"
                   data-target-uuid="{{this.uuid}}"
                   data-multiplier="1"
                   title="Full damage">1</button>
           <button type="button"
-                  class="gw-damage-mult"
+                  class="gw-damage-mult{{#if (gwEq this.recommendedMultiplier 2)}} is-active{{/if}}"
                   data-action="gw-damage-mult"
                   data-target-uuid="{{this.uuid}}"
                   data-multiplier="2"
@@ -81,7 +81,7 @@
                 class="gw-damage-apply-button"
                 data-action="gw-apply-damage"
                 data-target-uuid="{{this.uuid}}"
-                data-multiplier="1">
+                data-multiplier="{{gwDefault this.recommendedMultiplier 1}}">
           <i class="fa-solid fa-check"></i>
           Apply to {{this.name}}
         </button>
