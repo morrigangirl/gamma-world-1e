@@ -57,7 +57,15 @@ export const HOOK = Object.freeze({
   // 0.8.0; these hooks let the banner substitute the skill chat card
   // without duplicating it, and give macro authors a veto point.
   preSkillRoll:         "gammaWorld.v1.preSkillRoll",
-  skillRollComplete:    "gammaWorld.v1.skillRollComplete"
+  skillRollComplete:    "gammaWorld.v1.skillRollComplete",
+  // 0.14.1 — Rest pipeline. Pre-hooks are vetoable (return false to
+  // cancel the rest entirely). Post-hooks announce after the actor
+  // mutation lands; payload includes `type: "short" | "long"` so a
+  // single listener can branch.
+  preShortRest:         "gammaWorld.v1.preShortRest",
+  shortRest:            "gammaWorld.v1.shortRest",
+  preLongRest:          "gammaWorld.v1.preLongRest",
+  longRest:             "gammaWorld.v1.longRest"
 });
 
 export const HOOK_SURFACE_VERSION = 1;

@@ -55,6 +55,10 @@
         "Name": "Reset fatigue when combat ends",
         "Hint": "When enabled, every combatant's Fatigue round counter resets to 0 when the combat is deleted. Rest actions also clear fatigue regardless of this setting."
       },
+      "RestAdvancesWorldTime": {
+        "Name": "Rests advance world time",
+        "Hint": "When enabled (default), Short Rest advances world time by 1 hour and Long Rest by 6 hours. This causes hourly cell drain (Powered Plate, Energy Cloak, etc.) to tick during the rest. Disable for tables that prefer manual time control."
+      },
       "AutoApplyOnHitConditions": {
         "Name": "Auto-apply on-hit save and condition effects",
         "Hint": "When enabled, hits from weapons with a special on-hit effect (poison, paralysis, radiation, stun, etc.) auto-post a save card: NPCs resolve locally, PCs get a save dialog. On fail the matching timed status effect is applied. Disable to keep the manual Apply Effect follow-up button."
@@ -959,6 +963,21 @@
       "Rest": {
         "Label": "Rest",
         "Hint": "Rest for 24 hours. Heals per the natural healing rate."
+      },
+      "ShortRest": {
+        "Label": "Short Rest",
+        "Hint": "Take a 1-hour rest. Spend up to 1/3 of your Hit Dice (each = 1d6 healing).",
+        "DialogTitle": "Short Rest",
+        "Prompt": "Hit Dice to spend (0–{cap}; you have {available} available, level {level}):",
+        "Confirm": "Rest",
+        "NoHitDice": "No Hit Dice remaining for a Short Rest."
+      },
+      "LongRest": {
+        "Label": "Long Rest",
+        "Hint": "Take a 6-hour rest. Restores all HP and Hit Dice (unless poisoned or radiation-sick).",
+        "DialogTitle": "Long Rest",
+        "Prompt": "Take a 6-hour long rest? HP fully restores unless you are poisoned or suffering radiation sickness; Hit Dice refresh either way.",
+        "Confirm": "Long Rest"
       },
       "AwardXp": {
         "Label": "Award XP",

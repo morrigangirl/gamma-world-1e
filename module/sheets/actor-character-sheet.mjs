@@ -8,7 +8,7 @@ import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
 import { artifactNeedsPowerManagement, artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
-import { applyRest } from "../healing.mjs";
+import { applyRest, performShortRest, performLongRest, shortRestMaxHD, availableHitDice } from "../healing.mjs";
 import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
 import { overlayRadiationIndicatorState } from "../conditions.mjs";
 import { saveContextForActor } from "../save-flow.mjs";
@@ -473,6 +473,8 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       itemEdit:       GammaWorldCharacterSheet.#onItemEdit,
       itemDelete:     GammaWorldCharacterSheet.#onItemDelete,
       rest:           GammaWorldCharacterSheet.#onRest,
+      shortRest:      GammaWorldCharacterSheet.#onShortRest,
+      longRest:       GammaWorldCharacterSheet.#onLongRest,
       awardXp:        GammaWorldCharacterSheet.#onAwardXp,
       applyBonus:     GammaWorldCharacterSheet.#onApplyBonus,
       rollSkill:      GammaWorldCharacterSheet.#onRollSkill
@@ -1249,6 +1251,77 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     event.preventDefault();
     const hours = 24;
     await applyRest(this.document, { hours });
+  }
+
+  /**
+   * 0.14.1 — Short Rest. Prompts for HD count (0..min(available, level/3)),
+   * rolls Nd6 healing, drains HD, advances time +1h (per setting), fires
+   * `gammaWorld.v1.shortRest` hook.
+   */
+  static async #onShortRest(event, _target) {
+    event.preventDefault();
+    const actor = this.document;
+    const available = availableHitDice(actor);
+    const cap = Math.min(available, shortRestMaxHD(actor));
+
+    if (cap <= 0 && available <= 0) {
+      ui.notifications?.warn(game.i18n?.localize?.("GAMMA_WORLD.Action.ShortRest.NoHitDice")
+        ?? "No Hit Dice remaining for a Short Rest.");
+      // Still allow time-advance / hook fire with 0 HD spent.
+    }
+
+    const DialogV2 = foundry.applications.api.DialogV2;
+    const titleText  = game.i18n?.localize?.("GAMMA_WORLD.Action.ShortRest.DialogTitle") ?? "Short Rest";
+    const promptText = game.i18n?.format?.("GAMMA_WORLD.Action.ShortRest.Prompt", {
+      cap, available, level: Number(actor.system?.details?.level ?? 1)
+    }) ?? `Hit Dice to spend (0–${cap}, you have ${available}):`;
+    const buttonLabel = game.i18n?.localize?.("GAMMA_WORLD.Action.ShortRest.Confirm") ?? "Rest";
+
+    const result = await DialogV2.prompt({
+      window: { title: `${actor.name} — ${titleText}` },
+      content: `<form class="gw-short-rest-form">
+        <p>${promptText}</p>
+        <input type="number" name="hitDiceSpent" value="${Math.min(cap, available)}" min="0" max="${Math.max(0, cap)}" step="1" autofocus />
+      </form>`,
+      ok: {
+        label: buttonLabel,
+        callback: (_ev, button) => {
+          const form = button.form ?? button.closest("form") ?? button.closest(".window-content");
+          const input = form?.querySelector?.("input[name='hitDiceSpent']");
+          return Math.max(0, Math.floor(Number(input?.value ?? 0)));
+        }
+      },
+      rejectClose: false
+    });
+
+    if (result == null) return;   // cancelled
+    await performShortRest(actor, { hitDiceSpent: result });
+  }
+
+  /**
+   * 0.14.1 — Long Rest. Confirms (no parameters), restores all HP unless
+   * the actor is poisoned or radiation-sick, refills HD, advances time +6h,
+   * fires `gammaWorld.v1.longRest` hook.
+   */
+  static async #onLongRest(event, _target) {
+    event.preventDefault();
+    const actor = this.document;
+    const DialogV2 = foundry.applications.api.DialogV2;
+
+    const titleText = game.i18n?.localize?.("GAMMA_WORLD.Action.LongRest.DialogTitle") ?? "Long Rest";
+    const promptText = game.i18n?.localize?.("GAMMA_WORLD.Action.LongRest.Prompt")
+      ?? "Take a 6-hour long rest? HP will fully restore unless poisoned or radiation-sick.";
+    const buttonLabel = game.i18n?.localize?.("GAMMA_WORLD.Action.LongRest.Confirm") ?? "Long Rest";
+
+    const confirmed = await DialogV2.confirm({
+      window: { title: `${actor.name} — ${titleText}` },
+      content: `<p>${promptText}</p>`,
+      yes: { label: buttonLabel },
+      rejectClose: false
+    }).catch(() => null);
+
+    if (!confirmed) return;
+    await performLongRest(actor);
   }
 
   static async #onAwardXp(event, _target) {

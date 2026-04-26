@@ -3950,3 +3950,258 @@ test("0.11.0 — applyMutationEffects folds metric Wings + TK Flight into derive
     globalThis.foundry = originalFoundry;
   }
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.14.1 — Short / Long Rest homebrew                                */
+/* ------------------------------------------------------------------ */
+
+function makeRestActorStub({
+  level = 6,
+  hp = { value: 10, max: 30 },
+  hitDice = { value: 6, max: 6 },
+  statuses = []
+} = {}) {
+  const actor = {
+    name: "Test Survivor",
+    type: "character",
+    statuses: new Set(statuses),
+    system: {
+      details: { level },
+      resources: {
+        hp: { ...hp },
+        hitDice: { ...hitDice }
+      }
+    },
+    updates: [],
+    async update(diff, options = {}) {
+      this.updates.push({ diff, options });
+      for (const [path, value] of Object.entries(diff)) {
+        const segs = path.split(".");
+        let cursor = this;
+        for (let i = 0; i < segs.length - 1; i++) {
+          cursor = cursor[segs[i]] ??= {};
+        }
+        cursor[segs.at(-1)] = value;
+      }
+      return this;
+    }
+  };
+  return actor;
+}
+
+function stubDeterministicRoll(perDieFace = 4) {
+  const original = globalThis.Roll;
+  globalThis.Roll = class {
+    constructor(formula) {
+      this.formula = String(formula);
+      const match = /^(\d+)d6$/.exec(this.formula);
+      const n = match ? Number(match[1]) : 0;
+      this.total = n * perDieFace;
+    }
+    async evaluate() { return this; }
+  };
+  return () => { globalThis.Roll = original; };
+}
+
+function stubHooks({ vetoes = {} } = {}) {
+  const original = globalThis.Hooks;
+  const fired = [];
+  globalThis.Hooks = {
+    call(name, payload) { fired.push({ name, payload, vetoable: true }); return vetoes[name] ?? true; },
+    callAll(name, payload) { fired.push({ name, payload, vetoable: false }); }
+  };
+  return { fired, restore: () => { globalThis.Hooks = original; } };
+}
+
+function stubChatMessage() {
+  const original = globalThis.ChatMessage;
+  globalThis.ChatMessage = {
+    getSpeaker: () => ({}),
+    create: async () => ({})
+  };
+  return () => { globalThis.ChatMessage = original; };
+}
+
+function stubGame({ advanceTime = true, isGM = true } = {}) {
+  const original = globalThis.game;
+  const advanceCalls = [];
+  globalThis.game = {
+    settings: {
+      get: (system, key) => key === "restAdvancesWorldTime" ? advanceTime : null
+    },
+    time: { advance: async (seconds) => { advanceCalls.push(seconds); } },
+    user: { isGM },
+    i18n: { localize: (s) => s, format: (s) => s }
+  };
+  return { advanceCalls, restore: () => { globalThis.game = original; } };
+}
+
+test("0.14.1 — shortRestMaxHD = floor(level/3)", async () => {
+  const { shortRestMaxHD } = await import("../module/healing.mjs");
+  for (const [level, expected] of [[1, 0], [2, 0], [3, 1], [5, 1], [6, 2], [9, 3], [10, 3], [12, 4]]) {
+    assert.equal(shortRestMaxHD({ system: { details: { level } } }), expected,
+      `level ${level} → ${expected} HD cap`);
+  }
+});
+
+test("0.14.1 — performShortRest spends HD and heals (capped at max HP and HD cap)", async () => {
+  const { performShortRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame({ advanceTime: true });
+  try {
+    const actor = makeRestActorStub({ level: 9, hp: { value: 5, max: 30 }, hitDice: { value: 9, max: 9 } });
+    const result = await performShortRest(actor, { hitDiceSpent: 3 });
+    assert.equal(result.vetoed, false);
+    assert.equal(result.hitDiceSpent, 3);
+    assert.equal(result.healed, 12, "3 × 4 = 12 HP healed");
+    assert.equal(actor.system.resources.hp.value, 17);
+    assert.equal(actor.system.resources.hitDice.value, 6);
+
+    const overspend = await performShortRest(
+      makeRestActorStub({ level: 9, hp: { value: 0, max: 30 }, hitDice: { value: 9, max: 9 } }),
+      { hitDiceSpent: 99 }
+    );
+    assert.equal(overspend.hitDiceSpent, 3, "capped at floor(9/3) = 3 even when 99 requested");
+
+    const overheal = await performShortRest(
+      makeRestActorStub({ level: 6, hp: { value: 28, max: 30 }, hitDice: { value: 6, max: 6 } }),
+      { hitDiceSpent: 2 }
+    );
+    assert.equal(overheal.healed, 2, "8 rolled, only 2 missing → cap at 2");
+
+    assert.ok(hooks.fired.some((h) => h.name === "gammaWorld.v1.preShortRest" && h.vetoable));
+    assert.ok(hooks.fired.some((h) => h.name === "gammaWorld.v1.shortRest" && !h.vetoable));
+    assert.equal(gameStub.advanceCalls[0], 3600);
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — performShortRest with 0 HD requested still fires hooks + advances time", async () => {
+  const { performShortRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame();
+  try {
+    const actor = makeRestActorStub({ level: 6, hp: { value: 10, max: 30 }, hitDice: { value: 6, max: 6 } });
+    const result = await performShortRest(actor, { hitDiceSpent: 0 });
+    assert.equal(result.hitDiceSpent, 0);
+    assert.equal(result.healed, 0);
+    assert.equal(actor.system.resources.hp.value, 10);
+    assert.equal(actor.system.resources.hitDice.value, 6);
+    assert.equal(gameStub.advanceCalls[0], 3600);
+    assert.ok(hooks.fired.some((h) => h.name === "gammaWorld.v1.shortRest"));
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — performShortRest pre-hook veto cancels the rest", async () => {
+  const { performShortRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks({ vetoes: { "gammaWorld.v1.preShortRest": false } });
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame();
+  try {
+    const actor = makeRestActorStub({ level: 6, hp: { value: 10, max: 30 }, hitDice: { value: 6, max: 6 } });
+    const result = await performShortRest(actor, { hitDiceSpent: 2 });
+    assert.equal(result.vetoed, true);
+    assert.equal(actor.updates.length, 0, "no actor.update on veto");
+    assert.equal(gameStub.advanceCalls.length, 0, "no time advance on veto");
+    assert.ok(!hooks.fired.some((h) => h.name === "gammaWorld.v1.shortRest"), "post-hook does not fire on veto");
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — performLongRest restores all HP and refills HD when not blocked", async () => {
+  const { performLongRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame();
+  try {
+    const actor = makeRestActorStub({ level: 6, hp: { value: 4, max: 30 }, hitDice: { value: 1, max: 6 } });
+    const result = await performLongRest(actor);
+    assert.equal(result.vetoed, false);
+    assert.equal(result.healBlocked, false);
+    assert.equal(result.healed, 26);
+    assert.equal(result.hitDiceRefilled, 6);
+    assert.equal(actor.system.resources.hp.value, 30);
+    assert.equal(actor.system.resources.hitDice.value, 6);
+    assert.equal(gameStub.advanceCalls[0], 21600, "6 hours = 21600 seconds");
+    assert.ok(hooks.fired.some((h) => h.name === "gammaWorld.v1.longRest"));
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — performLongRest skips HP heal when poisoned, but still refills HD + advances time", async () => {
+  const { performLongRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame();
+  try {
+    const actor = makeRestActorStub({
+      level: 6, hp: { value: 4, max: 30 }, hitDice: { value: 1, max: 6 },
+      statuses: ["poisoned"]
+    });
+    const result = await performLongRest(actor);
+    assert.equal(result.healBlocked, true);
+    assert.equal(result.blockReason, "poisoned");
+    assert.equal(result.healed, 0);
+    assert.equal(result.hitDiceRefilled, 6, "HD still refresh");
+    assert.equal(actor.system.resources.hp.value, 4, "HP NOT restored");
+    assert.equal(actor.system.resources.hitDice.value, 6);
+    assert.equal(gameStub.advanceCalls[0], 21600, "time still advances");
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — performLongRest skips HP heal when radiation-sick", async () => {
+  const { performLongRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame();
+  try {
+    const actor = makeRestActorStub({
+      level: 6, hp: { value: 4, max: 30 }, hitDice: { value: 1, max: 6 },
+      statuses: ["radiation-sickness"]
+    });
+    const result = await performLongRest(actor);
+    assert.equal(result.healBlocked, true);
+    assert.equal(result.blockReason, "radiationSickness");
+    assert.equal(actor.system.resources.hp.value, 4);
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — restAdvancesWorldTime=false skips time advance", async () => {
+  const { performShortRest } = await import("../module/healing.mjs");
+  const unrollDice = stubDeterministicRoll(4);
+  const hooks = stubHooks();
+  const unstubChat = stubChatMessage();
+  const gameStub = stubGame({ advanceTime: false });
+  try {
+    const actor = makeRestActorStub({ level: 6, hp: { value: 10, max: 30 }, hitDice: { value: 6, max: 6 } });
+    await performShortRest(actor, { hitDiceSpent: 2 });
+    assert.equal(gameStub.advanceCalls.length, 0);
+  } finally {
+    unrollDice(); hooks.restore(); unstubChat(); gameStub.restore();
+  }
+});
+
+test("0.14.1 — HOOK constants exposed for the rest pipeline", async () => {
+  const { HOOK } = await import("../module/hook-surface.mjs");
+  assert.equal(HOOK.preShortRest, "gammaWorld.v1.preShortRest");
+  assert.equal(HOOK.shortRest, "gammaWorld.v1.shortRest");
+  assert.equal(HOOK.preLongRest, "gammaWorld.v1.preLongRest");
+  assert.equal(HOOK.longRest, "gammaWorld.v1.longRest");
+});

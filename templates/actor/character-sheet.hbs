@@ -858,8 +858,14 @@
       </div>
       {{#if isCharacterSheet}}
         <div class="gamma-world__summary-actions">
-          <button type="button" data-action="rest" title="{{localize 'GAMMA_WORLD.Action.Rest.Hint'}}">
-            {{localize "GAMMA_WORLD.Action.Rest.Label"}}
+          <button type="button" data-action="shortRest" title="{{localize 'GAMMA_WORLD.Action.ShortRest.Hint'}}">
+            {{localize "GAMMA_WORLD.Action.ShortRest.Label"}}
+            {{#if system.resources.hitDice}}
+              <span class="gw-hd-pill">HD {{system.resources.hitDice.value}}/{{system.resources.hitDice.max}}</span>
+            {{/if}}
+          </button>
+          <button type="button" data-action="longRest" title="{{localize 'GAMMA_WORLD.Action.LongRest.Hint'}}">
+            {{localize "GAMMA_WORLD.Action.LongRest.Label"}}
           </button>
           {{#if isGM}}
             <button type="button" data-action="awardXp" title="{{localize 'GAMMA_WORLD.Action.AwardXp.Hint'}}">

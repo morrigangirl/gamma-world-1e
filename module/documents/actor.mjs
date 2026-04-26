@@ -238,7 +238,29 @@ export function buildActorDerived(actor) {
 export class GammaWorldActor extends Actor {
   async _preUpdate(changed, options, user) {
     const result = await super._preUpdate(changed, options, user);
-    if (result === false || options?.gammaWorldSync || game.user?.isGM || !supportsGammaWorldActorData(this)) return result;
+    if (result === false || !supportsGammaWorldActorData(this)) return result;
+
+    // 0.14.1 — level changed: bump available Hit Dice by the level delta
+    // so leveling up gives the player back the freshly-gained HD. Skip when
+    // the caller is doing a sync update (avoid recursion) or when the
+    // hitDice resource isn't yet populated.
+    const nextLevel = foundry.utils.getProperty(changed, "system.details.level");
+    if (nextLevel != null && !options?.gammaWorldSync) {
+      const currentLevel = Number(this.system?.details?.level ?? 1);
+      const newLevel = Math.max(1, Math.floor(Number(nextLevel) || currentLevel));
+      const delta = newLevel - currentLevel;
+      if (delta > 0) {
+        const currentHd = Number(this.system?.resources?.hitDice?.value ?? 0);
+        const newHd = Math.max(0, Math.min(newLevel, currentHd + delta));
+        foundry.utils.setProperty(changed, "system.resources.hitDice.value", newHd);
+      } else if (delta < 0) {
+        // De-leveling (rare GM tool). Clamp value to new max.
+        const currentHd = Number(this.system?.resources?.hitDice?.value ?? 0);
+        foundry.utils.setProperty(changed, "system.resources.hitDice.value", Math.min(currentHd, newLevel));
+      }
+    }
+
+    if (options?.gammaWorldSync || game.user?.isGM) return result;
 
     const nextHp = foundry.utils.getProperty(changed, "system.resources.hp.value");
     if (nextHp == null) return result;
@@ -269,6 +291,17 @@ export class GammaWorldActor extends Actor {
     this.system.resources.mentalResistance = this.gw.mentalResistance;
     this.system.resources.radResistance = this.gw.radiationResistance;
     this.system.resources.poisonResistance = this.gw.poisonResistance;
+
+    // 0.14.1 — Hit Dice max derives from level. Persisted `value` is the
+    // spendable pool; clamp it to max so a stale save can't exceed the
+    // current cap. The persisted `max` field exists in the schema but
+    // is never authoritative — derived data wins.
+    if (this.system.resources.hitDice) {
+      const level = Math.max(1, Math.floor(Number(this.system?.details?.level ?? 1)));
+      this.system.resources.hitDice.max = level;
+      const value = Number(this.system.resources.hitDice.value ?? 0);
+      this.system.resources.hitDice.value = Math.max(0, Math.min(value, level));
+    }
 
     this._prepareEncumbrance();
   }

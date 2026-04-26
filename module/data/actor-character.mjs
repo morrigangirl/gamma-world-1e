@@ -133,6 +133,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           restDaily: int({ initial: 1, min: 0 }),
           medical:   int({ initial: 0 })
         }),
+        /**
+         * 0.14.1 — homebrew Hit Dice resource. `max` mirrors
+         * `details.level` (1 HD per level); `value` is the spendable
+         * pool, drained on Short Rest and refilled on Long Rest. Sync
+         * is handled by GammaWorldActor._preUpdate when level changes.
+         */
+        hitDice: new SchemaField({
+          value: int({ initial: 1, min: 0 }),
+          max:   int({ initial: 1, min: 0 })
+        }),
         ac:               int({ initial: 10 }),   // descending AC
         mentalResistance: int({ initial: 0 }),
         radResistance:    int({ initial: 0 }),

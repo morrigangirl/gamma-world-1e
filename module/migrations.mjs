@@ -230,6 +230,19 @@ export function registerMigrationSettings() {
     default: true
   });
 
+  // 0.14.1 — Short / Long Rest world-time advance. When true (default),
+  // a Short Rest advances world time +1h and a Long Rest +6h, which means
+  // hourly cell drain (Powered Plate, Energy Cloak) ticks while resting.
+  // GMs can disable for tables that prefer manual time control.
+  game.settings.register(SYSTEM_ID, "restAdvancesWorldTime", {
+    name: "GAMMA_WORLD.Settings.RestAdvancesWorldTime.Name",
+    hint: "GAMMA_WORLD.Settings.RestAdvancesWorldTime.Hint",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register(SYSTEM_ID, "autoApplyOnHitConditions", {
     name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
     hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",
@@ -1446,6 +1459,38 @@ export async function migrateWorld() {
       }
     } catch (error) {
       console.warn(`${SYSTEM_ID} | 0.13.2 self-install scrub failed`, error);
+    }
+  }
+
+  // 0.14.1 — Hit Dice resource backfill. Every character actor gets
+  // `system.resources.hitDice.value = level` so the new Short Rest
+  // dialog has a real spend pool to work from. `max` is derived from
+  // level on prepareDerivedData; persisting it just keeps the schema
+  // happy on first load.
+  if (compareSemver(storedVersion, "0.14.1") < 0) {
+    let updated = 0;
+    try {
+      for (const actor of game.actors.contents) {
+        if (actor.type !== "character") continue;
+        const level = Math.max(1, Math.floor(Number(actor.system?.details?.level ?? 1)));
+        const currentValue = Number(actor.system?.resources?.hitDice?.value ?? 0);
+        const currentMax = Number(actor.system?.resources?.hitDice?.max ?? 0);
+        if (currentMax >= level && currentValue > 0) continue;   // already migrated
+        await actor.update({
+          "system.resources.hitDice.value": level,
+          "system.resources.hitDice.max":   level
+        }, { gammaWorldSync: true });
+        updated += 1;
+      }
+      if (updated > 0 && game.user?.isGM) {
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.14.1:</strong> Hit Dice resource added to ${updated} character${updated === 1 ? "" : "s"}. Use the new Short Rest / Long Rest buttons on the character sheet.</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.14.1 hitDice backfill failed`, error);
     }
   }
 
