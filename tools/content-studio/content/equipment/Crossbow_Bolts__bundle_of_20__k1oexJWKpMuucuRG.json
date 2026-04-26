@@ -1,15 +1,16 @@
 {
-  "name": "Crossbow Bolts (bundle of 20)",
+  "name": "Crossbow Bolt",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 20,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "crossbow-bolt",
-      "rounds": 20
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Iron-headed crossbow bolts."

@@ -12,23 +12,22 @@
  * Map ammo-type slugs to the canonical ammo gear item names that the
  * compendium generator emits. Consumed by the inline-ammo migration to
  * figure out which gear item to create / merge into on the actor.
+ *
+ * 0.14.0 — bundle/pouch/clip suffixes dropped; each ammo gear is now a
+ * per-unit stack with `system.quantity` carrying the count. Six entries
+ * removed: the five orphan cartridges (energy-clip, blaster-pack,
+ * black-ray-cell, fusion-cell, stun-cell) plus `javelin` (now tracked
+ * as weapon quantity).
  */
 export const AMMO_GEAR_BY_TYPE = Object.freeze({
-  "arrow":             "Arrows (bundle of 20)",
-  "crossbow-bolt":     "Crossbow Bolts (bundle of 20)",
-  "sling-stone":       "Sling Stones (pouch of 30)",
-  "sling-bullet":      "Sling Bullets (pouch of 30)",
-  "slug":              "Slug-Thrower Rounds (clip of 15)",
-  "needler-paralysis": "Needler Darts, Paralysis (10)",
-  "needler-poison":    "Needler Darts, Poison (10)",
-  "stun-cell":         "Stun Rifle Cell (10 shots)",
-  "javelin":           "Javelin (single)",
-  "gyrojet":           "Gyrojet Slugs (clip of 10)",
-  // 0.8.1 energy-weapon cells
-  "energy-clip":       "Energy Clip (10 shots)",
-  "blaster-pack":      "Blaster Pack (5 shots)",
-  "black-ray-cell":    "Black Ray Cell (4 shots)",
-  "fusion-cell":       "Fusion Cell (10 shots)"
+  "arrow":             "Arrow",
+  "crossbow-bolt":     "Crossbow Bolt",
+  "sling-stone":       "Sling Stone",
+  "sling-bullet":      "Sling Bullet",
+  "slug":              "Slug",
+  "needler-paralysis": "Needler Dart, Paralysis",
+  "needler-poison":    "Needler Dart, Poison",
+  "gyrojet":           "Gyrojet Slug"
 });
 
 /**

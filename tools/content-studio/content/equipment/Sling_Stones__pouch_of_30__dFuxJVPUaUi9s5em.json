@@ -1,15 +1,16 @@
 {
-  "name": "Sling Stones (pouch of 30)",
+  "name": "Sling Stone",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 30,
     "weight": 3,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "sling-stone",
-      "rounds": 30
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "A pouch of river-smoothed stones for sling use."

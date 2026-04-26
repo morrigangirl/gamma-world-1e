@@ -258,7 +258,16 @@ export const GEAR_SUBTYPES = {
 
 export const GEAR_SUBTYPE_KEYS = Object.keys(GEAR_SUBTYPES);
 
-/** Canonical ammunition type keys referenced by weapons (`system.ammoType`). */
+/**
+ * Canonical ammunition type keys referenced by weapons (`system.ammoType`).
+ *
+ * 0.14.0 — six obsolete slugs dropped:
+ *   - `stun-cell`, `energy-clip`, `blaster-pack`, `black-ray-cell`,
+ *     `fusion-cell` were pre-0.13.0 named cartridges; energy weapons now
+ *     drain installed power cells, not these gear items.
+ *   - `javelin` was vestigial; javelins are tracked as weapon `quantity`
+ *     (matching dnd5e's thrown-weapon model).
+ */
 export const AMMO_TYPES = {
   "":                   "GAMMA_WORLD.Ammo.None",
   "arrow":              "GAMMA_WORLD.Ammo.Arrow",
@@ -268,14 +277,7 @@ export const AMMO_TYPES = {
   "slug":               "GAMMA_WORLD.Ammo.Slug",
   "needler-paralysis":  "GAMMA_WORLD.Ammo.NeedlerParalysis",
   "needler-poison":     "GAMMA_WORLD.Ammo.NeedlerPoison",
-  "stun-cell":          "GAMMA_WORLD.Ammo.StunCell",
-  "javelin":            "GAMMA_WORLD.Ammo.Javelin",
-  "gyrojet":            "GAMMA_WORLD.Ammo.Gyrojet",
-  // 0.8.1: energy-weapon cells.
-  "energy-clip":        "GAMMA_WORLD.Ammo.EnergyClip",
-  "blaster-pack":       "GAMMA_WORLD.Ammo.BlasterPack",
-  "black-ray-cell":     "GAMMA_WORLD.Ammo.BlackRayCell",
-  "fusion-cell":        "GAMMA_WORLD.Ammo.FusionCell"
+  "gyrojet":            "GAMMA_WORLD.Ammo.Gyrojet"
 };
 
 export const AMMO_TYPE_KEYS = Object.keys(AMMO_TYPES).filter((key) => key !== "");

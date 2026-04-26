@@ -1695,7 +1695,12 @@ export function inferWeaponCategory(item) {
 }
 
 const GEAR_SUBTYPE_PATTERNS = [
-  [/\barrow|crossbow bolt|sling stone|sling bullet|slug-?thrower round|needler dart|gyrojet|javelin \(bundle\)|stun rifle cell/i, "ammunition"],
+  // 0.14.0 — singular per-unit names. Whole-name match avoids `\bslug\b`
+  // false-matching the "Slug Thrower" weapon. Old bundle-style names
+  // ("Slug-Thrower Round", "Javelin (bundle)", "Stun Rifle Cell") were
+  // renamed or deleted in 0.14.0; the migration translates legacy stacks
+  // into these singular names before this regex sees them.
+  [/^arrow$|^crossbow bolt$|^sling stone$|^sling bullet$|^slug$|^needler dart, (paralysis|poison)$|^gyrojet slug$/i, "ammunition"],
   // 0.12.0 — "power-cell" subtype is reserved for items that actually
   // hold charge under the percent-charge model. The Energy Cell Charger
   // (a tool that refills cells) and a Spent Power Cell (depleted husk)

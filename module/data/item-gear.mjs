@@ -17,6 +17,21 @@ const str = (opts = {}) => new StringField({
 
 export class GearData extends foundry.abstract.TypeDataModel {
 
+  /**
+   * 0.14.0 — backfill `ammo.autoDestroy` to true on gear loaded outside
+   * the formal `migrateWorld` pipeline (e.g. dragged from a backup
+   * compendium, restored from a JSON dump). The schema's `initial: true`
+   * applies to fresh items; this catches stale data with the field
+   * absent so validation doesn't trip and the auto-destroy default
+   * stays consistent.
+   */
+  static migrateData(source) {
+    if (source?.ammo && source.ammo.autoDestroy === undefined) {
+      source.ammo.autoDestroy = true;
+    }
+    return super.migrateData(source);
+  }
+
   static defineSchema() {
     return {
       quantity: int({ initial: 1, min: 0 }),
@@ -36,10 +51,25 @@ export class GearData extends foundry.abstract.TypeDataModel {
         stored:   new ArrayField(new StringField({ nullable: false }))
       }),
 
-      /** Ammunition stack; only meaningful when subtype === "ammunition". */
+      /**
+       * Ammunition stack; only meaningful when subtype === "ammunition".
+       *
+       * 0.14.0 — `system.quantity` is now the per-unit count (e.g. an
+       * "Arrow" item with quantity 20 = 20 arrows). The legacy
+       * `ammo.rounds` field is retained for one cycle for rollback safety
+       * but is no longer read by the fire path. Set to 0 by the 0.14.0
+       * migration; remove the field entirely in 0.15.0.
+       *
+       * `ammo.autoDestroy` controls whether the stack deletes itself when
+       * `quantity` reaches zero. Defaults to true (matches dnd5e); GMs
+       * can toggle off per stack to keep an empty quiver in inventory
+       * for restocking.
+       */
       ammo: new SchemaField({
         type:   str({ initial: "" }),
-        rounds: int({ initial: 0, min: 0 })
+        /** @deprecated 0.14.0 — superseded by `system.quantity`. Remove in 0.15.0. */
+        rounds: int({ initial: 0, min: 0 }),
+        autoDestroy: new BooleanField({ initial: true })
       }),
 
       action: new SchemaField({

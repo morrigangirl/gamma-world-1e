@@ -207,9 +207,7 @@
       "system": {
         "weaponClass": 13,
         "category": "artifact",
-        "ammoType": [
-          "energy-clip"
-        ],
+        "ammoType": [],
         "damage": {
           "formula": "6d6",
           "type": "energy"

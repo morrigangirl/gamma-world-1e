@@ -1,15 +1,16 @@
 {
-  "name": "Arrows (bundle of 20)",
+  "name": "Arrow",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 20,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "arrow",
-      "rounds": 20
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Flight arrows for a bow. Stackable bundle."

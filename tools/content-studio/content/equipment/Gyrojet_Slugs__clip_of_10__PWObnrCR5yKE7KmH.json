@@ -1,15 +1,16 @@
 {
-  "name": "Gyrojet Slugs (clip of 10)",
+  "name": "Gyrojet Slug",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 10,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "gyrojet",
-      "rounds": 10
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Micro-rocket slugs for the pre-war gyrojet pistol."

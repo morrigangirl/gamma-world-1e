@@ -1298,7 +1298,9 @@ test("weapon category and gear subtype inference cover canonical items", async (
   assert.equal(inferWeaponCategory({ system: { weaponClass: 1, artifact: { isArtifact: true } } }), "artifact");
   assert.equal(inferWeaponCategory({ system: { weaponClass: 1 }, flags: { "gamma-world-1e": { naturalWeapon: true } } }), "natural");
 
-  assert.equal(inferGearSubtype({ name: "Arrows (bundle of 20)", system: {} }), "ammunition");
+  assert.equal(inferGearSubtype({ name: "Arrow", system: {} }), "ammunition");
+  assert.equal(inferGearSubtype({ name: "Slug", system: {} }), "ammunition");
+  assert.equal(inferGearSubtype({ name: "Needler Dart, Poison", system: {} }), "ammunition");
   assert.equal(inferGearSubtype({ name: "Small Backpack", system: {} }), "container");
   assert.equal(inferGearSubtype({ name: "Hydrogen Energy Cell", system: {} }), "power-cell");
   assert.equal(inferGearSubtype({ name: "Trail Rations (3 days)", system: {} }), "ration");
@@ -1316,12 +1318,15 @@ test("compendium generators include ammo items and every pregen type", async () 
   const equipment = await equipmentPackSources();
   const ammo = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "ammunition");
   const containers = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "container");
-  assert.ok(ammo.length >= 10, `expected at least 10 ammo items, got ${ammo.length}`);
+  // 0.14.0 — 8 ammo items now (5 cartridges + Javelin gear retired).
+  assert.ok(ammo.length >= 8, `expected at least 8 ammo items, got ${ammo.length}`);
   assert.ok(containers.length >= 7, `expected at least 7 container items, got ${containers.length}`);
-  // Every ammo item must have a type key and non-zero rounds.
+  // 0.14.0 — quantity is the per-unit count; ammo.rounds is deprecated.
   for (const a of ammo) {
     assert.ok(a.system.ammo?.type, `ammo item ${a.name} missing ammo.type`);
-    assert.ok((a.system.ammo?.rounds ?? 0) > 0, `ammo item ${a.name} has zero rounds`);
+    assert.ok((a.system.quantity ?? 0) > 0, `ammo item ${a.name} has zero quantity`);
+    assert.equal(a.system.ammo?.autoDestroy, true,
+      `ammo item ${a.name} should default autoDestroy=true`);
   }
   // Broadcast Power Station must be gone.
   assert.ok(!equipment.some((i) => i.name === "Broadcast Power Station"),
@@ -1919,15 +1924,17 @@ test("Phase 0.8.1 — weapon renames applied in the equipment pack", async () =>
   assert.ok(!weaponNames.has("Needler (Poison)"),   "legacy 'Needler (Poison)' weapon should be gone");
   assert.ok(!weaponNames.has("Needler (Paralysis)"),"legacy 'Needler (Paralysis)' weapon should be gone");
 
-  // Sling Bullets still shipped as ammo gear (the one-pouch-of-30 stack).
+  // 0.14.0 — sling bullets still ship as ammo gear, but as a per-unit
+  // "Sling Bullet" stack with quantity 30 (renamed from the legacy
+  // "Sling Bullets (pouch of 30)" bundle).
   const ammoNames = new Set(equipment
     .filter((i) => i.type === "gear" && i.system?.subtype === "ammunition")
     .map((i) => i.name));
-  assert.ok(ammoNames.has("Sling Bullets (pouch of 30)"),
-    "'Sling Bullets (pouch of 30)' ammo gear should still ship in the pack");
+  assert.ok(ammoNames.has("Sling Bullet"),
+    "'Sling Bullet' ammo gear should ship in the pack (0.14.0 singular rename)");
 });
 
-test("Phase 0.8.1 — ammoType is now a set with matching energy ammo gear", async () => {
+test("Phase 0.8.1 — ammoType is a SetField with physical-projectile slugs", async () => {
   const equipment = await equipmentPackSources();
   const byName = new Map(equipment.filter((i) => i.type === "weapon").map((i) => [i.name, i]));
 
@@ -1937,28 +1944,15 @@ test("Phase 0.8.1 — ammoType is now a set with matching energy ammo gear", asy
       `${weapon.name}: ammoType should be an array of slugs, got ${typeof weapon.system.ammoType}`);
   }
 
-  // Single-type weapons have exactly one slug. Needler has two.
+  // Physical-projectile weapons keep their slugs. Needler accepts two dart
+  // types. Energy weapons (Laser Pistol, Stun Rifle, Mark V/VII Blaster,
+  // Black Ray Gun, Fusion Rifle) had their slugs dropped in 0.14.0 — they
+  // draw exclusively from installed power cells now.
   assert.deepEqual(byName.get("Bow").system.ammoType,          ["arrow"]);
   assert.deepEqual(byName.get("Crossbow").system.ammoType,     ["crossbow-bolt"]);
   assert.deepEqual(byName.get("Slug Thrower").system.ammoType, ["slug"]);
   assert.deepEqual(byName.get("Sling").system.ammoType,        ["sling-stone", "sling-bullet"]);
   assert.deepEqual(byName.get("Needler").system.ammoType,      ["needler-poison", "needler-paralysis"]);
-
-  // Four new energy-weapon ammo types were added and have matching gear.
-  assert.deepEqual(byName.get("Laser Pistol").system.ammoType,          ["energy-clip"]);
-  assert.deepEqual(byName.get("Laser Rifle").system.ammoType,           ["energy-clip"]);
-  assert.deepEqual(byName.get("Mark V Blaster").system.ammoType,        ["blaster-pack"]);
-  assert.deepEqual(byName.get("Mark VII Blaster Rifle").system.ammoType,["blaster-pack"]);
-  assert.deepEqual(byName.get("Black Ray Gun").system.ammoType,         ["black-ray-cell"]);
-  assert.deepEqual(byName.get("Fusion Rifle").system.ammoType,          ["fusion-cell"]);
-
-  // Matching ammo gear items exist.
-  const ammoTypes = new Set(equipment
-    .filter((i) => i.type === "gear" && i.system?.subtype === "ammunition")
-    .map((i) => i.system?.ammo?.type));
-  for (const key of ["energy-clip", "blaster-pack", "black-ray-cell", "fusion-cell"]) {
-    assert.ok(ammoTypes.has(key), `no ammo gear item exists for new key '${key}'`);
-  }
 });
 
 test("Phase 0.8.1 — WEAPON_RENAMES_081 + Needler constants are well-formed", async () => {
@@ -2002,6 +1996,116 @@ test("Phase 0.8.1 — WEAPON_RENAMES_081 + Needler constants are well-formed", a
   assert.equal(legacyAmmoTypeString(null),                             "");
   assert.equal(legacyAmmoTypeString(undefined),                        "");
   assert.equal(legacyAmmoTypeString(""),                               "");
+});
+
+// ============================================================
+// 0.14.0 — ammunition refactor: per-unit quantity, singular names,
+// orphan cartridge cleanup, last-ammo persistence, autoDestroy default.
+// ============================================================
+
+test("0.14.0 — ammo items use per-unit quantity and ship singular names", async () => {
+  const equipment = await equipmentPackSources();
+  const ammo = equipment.filter((i) => i.type === "gear" && i.system?.subtype === "ammunition");
+  const names = new Set(ammo.map((a) => a.name));
+
+  for (const expected of ["Arrow", "Crossbow Bolt", "Sling Stone", "Sling Bullet",
+                          "Slug", "Needler Dart, Paralysis", "Needler Dart, Poison",
+                          "Gyrojet Slug"]) {
+    assert.ok(names.has(expected), `expected ammo item '${expected}' in pack`);
+  }
+  for (const legacy of ["Arrows (bundle of 20)", "Crossbow Bolts (bundle of 20)",
+                        "Sling Stones (pouch of 30)", "Sling Bullets (pouch of 30)",
+                        "Slug-Thrower Rounds (clip of 15)", "Javelin (single)",
+                        "Needler Darts, Paralysis (10)", "Needler Darts, Poison (10)",
+                        "Gyrojet Slugs (clip of 10)"]) {
+    assert.ok(!names.has(legacy), `legacy '${legacy}' should be removed`);
+  }
+  for (const dropped of ["Energy Clip (10 shots)", "Blaster Pack (5 shots)",
+                         "Black Ray Cell (4 shots)", "Fusion Cell (10 shots)",
+                         "Stun Rifle Cell (10 shots)"]) {
+    assert.ok(!names.has(dropped), `cartridge '${dropped}' should be removed`);
+  }
+
+  const byName = new Map(ammo.map((a) => [a.name, a]));
+  assert.equal(byName.get("Arrow").system.quantity,         20);
+  assert.equal(byName.get("Crossbow Bolt").system.quantity, 20);
+  assert.equal(byName.get("Sling Stone").system.quantity,   30);
+  assert.equal(byName.get("Sling Bullet").system.quantity,  30);
+  assert.equal(byName.get("Slug").system.quantity,          15);
+  assert.equal(byName.get("Needler Dart, Paralysis").system.quantity, 10);
+  assert.equal(byName.get("Needler Dart, Poison").system.quantity,    10);
+  assert.equal(byName.get("Gyrojet Slug").system.quantity,  10);
+
+  for (const item of ammo) {
+    assert.equal(item.system.ammo.rounds, 0,
+      `${item.name}: legacy ammo.rounds should be zeroed`);
+    assert.equal(item.system.ammo.autoDestroy, true,
+      `${item.name}: autoDestroy should default to true`);
+  }
+});
+
+test("0.14.0 — six obsolete slugs removed from AMMO_TYPES", async () => {
+  const { AMMO_TYPES } = await import("../module/config.mjs");
+  for (const slug of ["energy-clip", "blaster-pack", "black-ray-cell",
+                      "fusion-cell", "stun-cell", "javelin"]) {
+    assert.equal(AMMO_TYPES[slug], undefined, `slug '${slug}' should be removed`);
+  }
+  for (const slug of ["arrow", "crossbow-bolt", "sling-stone", "sling-bullet",
+                      "slug", "needler-paralysis", "needler-poison", "gyrojet"]) {
+    assert.ok(AMMO_TYPES[slug], `slug '${slug}' should remain`);
+  }
+});
+
+test("0.14.0 — pack weapons no longer reference dropped slugs", async () => {
+  const equipment = await equipmentPackSources();
+  const dropped = new Set(["energy-clip", "blaster-pack", "black-ray-cell",
+                           "fusion-cell", "stun-cell", "javelin"]);
+  for (const weapon of equipment.filter((i) => i.type === "weapon")) {
+    const slugs = Array.isArray(weapon.system.ammoType) ? weapon.system.ammoType : [];
+    for (const s of slugs) {
+      assert.ok(!dropped.has(s), `${weapon.name}: should not list dropped slug '${s}'`);
+    }
+  }
+});
+
+test("0.14.0 — AMMO_GEAR_BY_TYPE points at singular names", async () => {
+  const { AMMO_GEAR_BY_TYPE } = await import("../module/ammo-migration.mjs");
+  assert.equal(AMMO_GEAR_BY_TYPE.arrow, "Arrow");
+  assert.equal(AMMO_GEAR_BY_TYPE["crossbow-bolt"], "Crossbow Bolt");
+  assert.equal(AMMO_GEAR_BY_TYPE["sling-stone"], "Sling Stone");
+  assert.equal(AMMO_GEAR_BY_TYPE["sling-bullet"], "Sling Bullet");
+  assert.equal(AMMO_GEAR_BY_TYPE.slug, "Slug");
+  assert.equal(AMMO_GEAR_BY_TYPE["needler-paralysis"], "Needler Dart, Paralysis");
+  assert.equal(AMMO_GEAR_BY_TYPE["needler-poison"], "Needler Dart, Poison");
+  assert.equal(AMMO_GEAR_BY_TYPE.gyrojet, "Gyrojet Slug");
+  // Dropped entries.
+  assert.equal(AMMO_GEAR_BY_TYPE.javelin, undefined);
+  assert.equal(AMMO_GEAR_BY_TYPE["energy-clip"], undefined);
+  assert.equal(AMMO_GEAR_BY_TYPE["blaster-pack"], undefined);
+  assert.equal(AMMO_GEAR_BY_TYPE["black-ray-cell"], undefined);
+  assert.equal(AMMO_GEAR_BY_TYPE["fusion-cell"], undefined);
+  assert.equal(AMMO_GEAR_BY_TYPE["stun-cell"], undefined);
+});
+
+test("0.14.0 — sample-actor JSONs no longer reference dropped slugs or orphan cartridges", async () => {
+  const actors = await actorPackSources();
+  const dropped = new Set(["energy-clip", "blaster-pack", "black-ray-cell",
+                           "fusion-cell", "stun-cell", "javelin"]);
+  for (const actor of actors) {
+    for (const item of actor.items ?? []) {
+      if (item.type === "weapon") {
+        const slugs = Array.isArray(item.system?.ammoType) ? item.system.ammoType : [];
+        for (const s of slugs) {
+          assert.ok(!dropped.has(s),
+            `actor '${actor.name}' weapon '${item.name}' should not list dropped slug '${s}'`);
+        }
+      }
+      if (item.type === "gear" && item.system?.subtype === "ammunition") {
+        assert.ok(!dropped.has(item.system?.ammo?.type),
+          `actor '${actor.name}' carries ammo gear with dropped type '${item.system?.ammo?.type}'`);
+      }
+    }
+  }
 });
 
 test("Phase 0.8.1 — robot chassis catalog entries retain their shape in the committed pack", async () => {

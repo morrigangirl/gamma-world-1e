@@ -5,9 +5,7 @@
   "system": {
     "weaponClass": 15,
     "category": "artifact",
-    "ammoType": [
-      "black-ray-cell"
-    ],
+    "ammoType": [],
     "damage": {
       "formula": "0",
       "type": "energy"

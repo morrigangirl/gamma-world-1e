@@ -1,15 +1,16 @@
 {
-  "name": "Needler Darts, Paralysis (10)",
+  "name": "Needler Dart, Paralysis",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 10,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "needler-paralysis",
-      "rounds": 10
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Capsule darts loaded with intensity 17 paralytic."

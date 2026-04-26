@@ -1,15 +1,16 @@
 {
-  "name": "Slug-Thrower Rounds (clip of 15)",
+  "name": "Slug",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 15,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "slug",
-      "rounds": 15
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Pre-war .38 caliber rounds."

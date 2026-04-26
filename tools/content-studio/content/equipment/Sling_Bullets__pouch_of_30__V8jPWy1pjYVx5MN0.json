@@ -1,15 +1,16 @@
 {
-  "name": "Sling Bullets (pouch of 30)",
+  "name": "Sling Bullet",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 30,
     "weight": 4,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "sling-bullet",
-      "rounds": 30
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Cast-lead shaped bullets for superior sling damage."

@@ -590,6 +590,7 @@
       "Weight": "Weight",
       "Tech": "Tech Level",
       "Empty": "No gear.",
+      "SubtypeLabel": "Subtype",
       "Subtype": {
         "Ammunition": "Ammunition",
         "PowerCell": "Power Cell",
@@ -618,13 +619,10 @@
       "Slug": "Slug-thrower Round",
       "NeedlerParalysis": "Needler Dart (Paralysis)",
       "NeedlerPoison": "Needler Dart (Poison)",
-      "StunCell": "Stun Rifle Cell",
-      "Javelin": "Javelin (bundle)",
       "Gyrojet": "Gyrojet Slug",
-      "EnergyClip": "Energy Clip",
-      "BlasterPack": "Blaster Pack",
-      "BlackRayCell": "Black Ray Cell",
-      "FusionCell": "Fusion Cell"
+      "AmmoTypeLabel": "Ammo Type",
+      "AutoDestroy": "Destroy when empty",
+      "AutoDestroyHint": "When this stack reaches zero rounds, the gear item is automatically removed. Disable to keep an empty quiver/clip in inventory for restocking."
     },
     "Tech": {
       "None": "—",

@@ -5,9 +5,7 @@
   "system": {
     "weaponClass": 16,
     "category": "artifact",
-    "ammoType": [
-      "fusion-cell"
-    ],
+    "ammoType": [],
     "damage": {
       "formula": "0",
       "type": "energy"

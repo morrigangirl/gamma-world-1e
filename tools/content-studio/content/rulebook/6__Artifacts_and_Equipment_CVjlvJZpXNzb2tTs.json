@@ -142,7 +142,7 @@
       "type": "text",
       "text": {
         "format": 1,
-        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 20, 30-34</em></p><p>Ranged weapons require matching ammunition. Each ammo type is a stackable gear item (Arrows, Crossbow Bolts, Sling Stones, Sling Bullets, Slug-Thrower Rounds, Needler Darts, Stun Rifle Cells, Javelins, Gyrojet Slugs).</p><p>A ranged weapon's <em>Ammo Type</em> field is matched against the actor's ammo gear on fire; the corresponding gear item decrements by one. If no matching ammo is present, the attack is refused.</p>"
+        "content": "<p class=\"gw-rulebook__cite\"><em>Rulebook p. 20, 30-34</em></p><p>Ranged physical weapons require matching ammunition stacks. Each ammo type is a per-unit gear item (Arrow, Crossbow Bolt, Sling Stone, Sling Bullet, Slug, Needler Dart, Gyrojet Slug). Carry as many or as few as you like; <em>Quantity</em> on the gear is the count.</p><p>A weapon's <em>Ammo Type</em> field is matched against the actor's ammo gear on fire; the matching stack decrements by one. If multiple compatible stacks are loaded (e.g. Needler poison + paralysis), the player picks at fire time and the weapon remembers the choice. When a stack hits zero, it's removed from inventory unless the GM disabled auto-destroy on that stack. Energy weapons (Laser Pistol, Stun Rifle, Mark V/VII Blaster, Black Ray Gun, Fusion Rifle) draw exclusively from their installed power cell — see the Power chapter.</p>"
       },
       "_id": "NUwSttf5zV8VaHeP",
       "flags": {},

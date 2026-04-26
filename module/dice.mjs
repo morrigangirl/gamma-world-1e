@@ -670,6 +670,9 @@ function normalizeAmmoTypeList(value) {
  * Find the first ammo gear stack on the actor matching any of the supplied
  * ammo types (used by the pre-roll availability check). Accepts set / array
  * / string input. Returns `null` when no matching stack is loaded.
+ *
+ * 0.14.0 — filters on `system.quantity > 0` (per-unit count). The legacy
+ * `system.ammo.rounds` field is deprecated; the migration zeroes it out.
  */
 function findAmmoGearItem(actor, ammoTypes) {
   const types = normalizeAmmoTypeList(ammoTypes);
@@ -679,12 +682,12 @@ function findAmmoGearItem(actor, ammoTypes) {
     item?.type === "gear"
     && item.system?.subtype === "ammunition"
     && typeSet.has(item.system?.ammo?.type)
-    && Number(item.system?.ammo?.rounds ?? 0) > 0
+    && Number(item.system?.quantity ?? 0) > 0
   ) ?? null;
 }
 
 /**
- * Find every ammo gear stack matching any supplied type, with rounds > 0.
+ * Find every ammo gear stack matching any supplied type, with quantity > 0.
  * Returns an array (empty when no matches); callers distinguish the
  * zero / one / many cases explicitly.
  */
@@ -696,7 +699,7 @@ function findAllAmmoGearItems(actor, ammoTypes) {
     item?.type === "gear"
     && item.system?.subtype === "ammunition"
     && typeSet.has(item.system?.ammo?.type)
-    && Number(item.system?.ammo?.rounds ?? 0) > 0
+    && Number(item.system?.quantity ?? 0) > 0
   );
 }
 
@@ -707,18 +710,26 @@ function findAllAmmoGearItems(actor, ammoTypes) {
  * type weapons (or weapons with exactly one loaded stack), returns the
  * stack silently. Returns `null` when nothing matches or the dialog is
  * cancelled.
+ *
+ * 0.14.0 — pre-selects the last-chosen stack via
+ * `weapon.flags.<SYSTEM_ID>.lastAmmoId`. When the persisted id no longer
+ * resolves (stack depleted, deleted), falls back to the first match.
  */
 async function resolveAmmoGearChoice(actor, weapon, ammoTypes) {
   const matches = findAllAmmoGearItems(actor, ammoTypes);
   if (matches.length === 0) return null;
   if (matches.length === 1) return matches[0];
 
+  const lastId = weapon.flags?.[SYSTEM_ID]?.lastAmmoId ?? null;
+  const lastIdx = lastId ? matches.findIndex((m) => m.id === lastId) : -1;
+  const defaultIdx = lastIdx >= 0 ? lastIdx : 0;
+
   const optionsHtml = matches.map((item, idx) => {
-    const rounds = Number(item.system?.ammo?.rounds ?? 0);
-    const checked = idx === 0 ? "checked" : "";
+    const qty = Number(item.system?.quantity ?? 0);
+    const checked = idx === defaultIdx ? "checked" : "";
     return `<label style="display:block; padding: 0.2rem 0;">
       <input type="radio" name="ammoStackId" value="${item.id}" ${checked} />
-      ${item.name} — ${rounds} round${rounds === 1 ? "" : "s"}
+      ${item.name} — ${qty} remaining
     </label>`;
   }).join("");
 
@@ -890,6 +901,14 @@ export async function rollAttack(actor, weapon) {
   // of the cell, and their consumption unit isn't "shot" (Slug Thrower is
   // "clip", Needler is per-dart which is "shot" — flag via installedCellIds
   // below so each weapon specifies its own semantics).
+  //
+  // 0.14.0 — ammunition is per-unit (system.quantity, not system.ammo.rounds).
+  // Decrement quantity by 1; auto-destroy at 0 unless the user opted out via
+  // system.ammo.autoDestroy=false. Persist the chosen stack on the weapon as
+  // flags.<SYSTEM_ID>.lastAmmoId so multi-stack pickers (Needler, Sling)
+  // remember the last choice. Slug Thrower's per-clip cell drain is wired
+  // here too: every 15 slugs fired, debit the installed cell by 20% via
+  // accumulateDrain (catalog: usesPerFullCell=5, perUnit=20).
   const cellIds = Array.isArray(weapon.system?.artifact?.power?.installedCellIds)
     ? weapon.system.artifact.power.installedCellIds : [];
   const isEnergyShotWeapon =
@@ -898,11 +917,50 @@ export async function rollAttack(actor, weapon) {
     weapon.name !== "Needler";   // Needler's cell drains per dart alongside the dart-ammo.
 
   if (ammoItem && !isEnergyShotWeapon) {
-    // Ammo gear items track counts under system.ammo.rounds, not
-    // system.ammo.current — the consumeResource helper doesn't know
-    // about this shape. Keep the direct update here.
-    const remaining = Math.max(0, Number(ammoItem.system.ammo.rounds ?? 0) - 1);
-    await ammoItem.update({ "system.ammo.rounds": remaining });
+    const remaining = Math.max(0, Number(ammoItem.system.quantity ?? 0) - 1);
+    await ammoItem.update({ "system.quantity": remaining });
+
+    // Persist the choice on the weapon (only meaningful when multiple
+    // stacks are loadable). Set BEFORE the optional auto-destroy:
+    // setFlag on a deleted document throws.
+    if (ammoTypes.length > 1) {
+      try {
+        await weapon.setFlag(SYSTEM_ID, "lastAmmoId", ammoItem.id);
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | could not persist lastAmmoId on ${weapon.name}`, error);
+      }
+    }
+
+    // Slug Thrower auto-clip-drain — every 15 slugs, debit the installed
+    // cell by 20% (one "clip" worth, per rulebook). Counter persists via
+    // the weapon's Foundry flags so the cadence survives sessions.
+    if (weapon.system?.consumption?.unit === "clip" && cellIds.length > 0) {
+      const SHOTS_PER_CLIP = 15;
+      const prior = Number(weapon.flags?.[SYSTEM_ID]?.slugShotsSinceClip ?? 0) || 0;
+      const next = prior + 1;
+      try {
+        if (next >= SHOTS_PER_CLIP) {
+          const { accumulateDrain } = await import("./artifact-power.mjs");
+          await accumulateDrain(weapon, 1);   // 1 clip × perUnit (20%) = 20% drain
+          await weapon.setFlag(SYSTEM_ID, "slugShotsSinceClip", 0);
+        } else {
+          await weapon.setFlag(SYSTEM_ID, "slugShotsSinceClip", next);
+        }
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | clip-drain accumulator failed on ${weapon.name}`, error);
+      }
+    }
+
+    // Auto-destroy at zero unless the user disabled it. Last step so any
+    // earlier flag writes (lastAmmoId on the weapon, not the ammo item)
+    // have already landed.
+    if (remaining === 0 && ammoItem.system.ammo?.autoDestroy !== false) {
+      try {
+        await ammoItem.delete();
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | auto-destroy of empty ammo stack failed`, error);
+      }
+    }
   } else if (!isEnergyShotWeapon && weapon.system.ammo?.consumes) {
     await consumeResource(weapon, "ammo", 1, { context });
   }

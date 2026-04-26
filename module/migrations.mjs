@@ -1087,6 +1087,198 @@ function cellNameForPowerSource(source) {
   return CELL_NAMES_BY_SOURCE[source] ?? null;
 }
 
+/**
+ * 0.14.0 — Ammunition refactor maps. Bundle-style names ("Arrows
+ * (bundle of 20)") collapse to per-unit names ("Arrow") with
+ * `system.quantity` carrying the count. Five orphan cartridges and
+ * the Javelin gear are deleted entirely.
+ */
+const AMMO_RENAMES_0140 = Object.freeze({
+  "Arrows (bundle of 20)":            { name: "Arrow",                   roundsPerStack: 20 },
+  "Crossbow Bolts (bundle of 20)":    { name: "Crossbow Bolt",           roundsPerStack: 20 },
+  "Sling Stones (pouch of 30)":       { name: "Sling Stone",             roundsPerStack: 30 },
+  "Sling Bullets (pouch of 30)":      { name: "Sling Bullet",            roundsPerStack: 30 },
+  "Slug-Thrower Rounds (clip of 15)": { name: "Slug",                    roundsPerStack: 15 },
+  "Needler Darts, Paralysis (10)":    { name: "Needler Dart, Paralysis", roundsPerStack: 10 },
+  "Needler Darts, Poison (10)":       { name: "Needler Dart, Poison",    roundsPerStack: 10 },
+  "Gyrojet Slugs (clip of 10)":       { name: "Gyrojet Slug",            roundsPerStack: 10 }
+});
+
+const AMMO_DELETES_0140 = Object.freeze(new Set([
+  "Energy Clip (10 shots)",
+  "Blaster Pack (5 shots)",
+  "Black Ray Cell (4 shots)",
+  "Fusion Cell (10 shots)",
+  "Stun Rifle Cell (10 shots)",
+  "Javelin (single)"
+]));
+
+const AMMO_SLUGS_DROPPED_0140 = Object.freeze(new Set([
+  "energy-clip", "blaster-pack", "black-ray-cell", "fusion-cell", "stun-cell", "javelin"
+]));
+
+/**
+ * Per-actor 0.14.0 ammunition migration. Renames bundle gear to per-unit,
+ * merges multiple legacy stacks into one, deletes orphan cartridges,
+ * folds Javelin gear into the Javelin weapon's quantity, and prunes
+ * dropped slugs from every weapon's ammoType SetField.
+ *
+ * Returns counts: `{ renamed, deletedCartridges, javelinFolded, weaponsPruned }`.
+ */
+async function migrateAmmunition014(actor) {
+  const counts = { renamed: 0, deletedCartridges: 0, javelinFolded: 0, weaponsPruned: 0 };
+  if (!actor?.items) return counts;
+
+  const ammoItems = actor.items.filter((i) =>
+    i.type === "gear" && i.system?.subtype === "ammunition");
+  const weapons = actor.items.filter((i) => i.type === "weapon");
+
+  // Pass 1: classify each ammo item — rename target, javelin spare, or delete.
+  const merged = new Map();   // newName → { keeperId, totalQuantity, autoDestroy }
+  const toDelete = [];
+  let javelinSpareCount = 0;
+
+  for (const item of ammoItems) {
+    const rename = AMMO_RENAMES_0140[item.name];
+    if (rename) {
+      const legacyQty    = Math.max(1, Number(item.system.quantity ?? 1));
+      const legacyRounds = Math.max(0, Number(item.system.ammo?.rounds ?? 0));
+      const newQty = legacyQty * legacyRounds;
+      const slot = merged.get(rename.name);
+      if (slot) {
+        slot.totalQuantity += newQty;
+        toDelete.push(item.id);
+      } else {
+        merged.set(rename.name, {
+          keeperId: item.id,
+          totalQuantity: newQty,
+          autoDestroy: item.system.ammo?.autoDestroy ?? true
+        });
+      }
+      continue;
+    }
+    if (item.name === "Javelin (single)") {
+      javelinSpareCount += Math.max(1, Number(item.system.quantity ?? 1))
+                         * Math.max(1, Number(item.system.ammo?.rounds ?? 1));
+      toDelete.push(item.id);
+      counts.deletedCartridges += 1;
+      continue;
+    }
+    if (AMMO_DELETES_0140.has(item.name)) {
+      toDelete.push(item.id);
+      counts.deletedCartridges += 1;
+    }
+  }
+
+  // Pass 2: apply renames + quantity merges + autoDestroy default.
+  const updates = [];
+  for (const [newName, data] of merged) {
+    updates.push({
+      _id: data.keeperId,
+      name: newName,
+      "system.quantity": data.totalQuantity,
+      "system.ammo.rounds": 0,
+      "system.ammo.autoDestroy": data.autoDestroy
+    });
+    counts.renamed += 1;
+  }
+  if (updates.length) {
+    await actor.updateEmbeddedDocuments("Item", updates, { gammaWorldSync: true });
+  }
+
+  // Pass 3: javelin-as-quantity rollup. Fold spare gear into the Javelin
+  // weapon's quantity. Discard if no Javelin weapon (gear was unusable).
+  if (javelinSpareCount > 0) {
+    const javelinWeapon = weapons.find((w) => w.name === "Javelin");
+    if (javelinWeapon) {
+      const newQty = Math.max(1, Number(javelinWeapon.system.quantity ?? 1)) + javelinSpareCount;
+      await javelinWeapon.update({ "system.quantity": newQty }, { gammaWorldSync: true });
+      counts.javelinFolded = javelinSpareCount;
+    }
+  }
+
+  // Pass 4: prune dropped slugs from every weapon's ammoType SetField.
+  for (const weapon of weapons) {
+    const current = weapon.system?.ammoType;
+    const list = current instanceof Set ? [...current]
+              : Array.isArray(current) ? current
+              : [];
+    const filtered = list.filter((slug) => !AMMO_SLUGS_DROPPED_0140.has(slug));
+    if (filtered.length !== list.length) {
+      await weapon.update({ "system.ammoType": filtered }, { gammaWorldSync: true });
+      counts.weaponsPruned += 1;
+    }
+  }
+
+  // Pass 5: delete orphaned cartridge gear + javelin gear (and merged duplicates).
+  if (toDelete.length) {
+    await actor.deleteEmbeddedDocuments("Item", [...new Set(toDelete)]);
+  }
+
+  return counts;
+}
+
+/**
+ * World-level pass: same logic as the per-actor variant but operates on
+ * `game.items.contents` (no actor-bound weapon merge complexity).
+ */
+async function migrateAmmunition014World() {
+  const counts = { renamed: 0, deletedCartridges: 0, weaponsPruned: 0 };
+  for (const item of game.items.contents) {
+    if (item.type !== "gear" || item.system?.subtype !== "ammunition") continue;
+    const rename = AMMO_RENAMES_0140[item.name];
+    if (rename) {
+      const legacyQty    = Math.max(1, Number(item.system.quantity ?? 1));
+      const legacyRounds = Math.max(0, Number(item.system.ammo?.rounds ?? 0));
+      await item.update({
+        name: rename.name,
+        "system.quantity": legacyQty * legacyRounds,
+        "system.ammo.rounds": 0,
+        "system.ammo.autoDestroy": item.system.ammo?.autoDestroy ?? true
+      }, { gammaWorldSync: true });
+      counts.renamed += 1;
+    } else if (AMMO_DELETES_0140.has(item.name)) {
+      await item.delete();
+      counts.deletedCartridges += 1;
+    }
+  }
+  for (const item of game.items.contents) {
+    if (item.type !== "weapon") continue;
+    const current = item.system?.ammoType;
+    const list = current instanceof Set ? [...current]
+              : Array.isArray(current) ? current : [];
+    const filtered = list.filter((slug) => !AMMO_SLUGS_DROPPED_0140.has(slug));
+    if (filtered.length !== list.length) {
+      await item.update({ "system.ammoType": filtered }, { gammaWorldSync: true });
+      counts.weaponsPruned += 1;
+    }
+  }
+  return counts;
+}
+
+/**
+ * Unlinked-token pass: each unlinked token carries its own actor snapshot
+ * with its own item collection. Easy to forget; without this, NPCs on
+ * the canvas keep their pre-migration ammo names while world actors
+ * get fixed.
+ */
+async function migrateAmmunition014UnlinkedTokens() {
+  const totals = { renamed: 0, deletedCartridges: 0, javelinFolded: 0, weaponsPruned: 0 };
+  for (const scene of game.scenes?.contents ?? []) {
+    for (const tokenDoc of scene.tokens?.contents ?? []) {
+      if (tokenDoc.actorLink) continue;
+      const actor = tokenDoc.actor;
+      if (!actor) continue;
+      const counts = await migrateAmmunition014(actor);
+      totals.renamed += counts.renamed;
+      totals.deletedCartridges += counts.deletedCartridges;
+      totals.javelinFolded += counts.javelinFolded;
+      totals.weaponsPruned += counts.weaponsPruned;
+    }
+  }
+  return totals;
+}
+
 export async function migrateWorld() {
   if (!game.user?.isGM) return;
 
@@ -1254,6 +1446,56 @@ export async function migrateWorld() {
       }
     } catch (error) {
       console.warn(`${SYSTEM_ID} | 0.13.2 self-install scrub failed`, error);
+    }
+  }
+
+  // 0.14.0 — ammunition refactor. Rename bundle gear ("Arrows (bundle of
+  // 20)" → "Arrow", quantity 20), delete five orphan cartridges and the
+  // Javelin gear, prune dropped slugs from weapon ammoType SetFields,
+  // and fold spare javelin gear into the Javelin weapon's quantity.
+  if (compareSemver(storedVersion, "0.14.0") < 0) {
+    const totals = { renamed: 0, deletedCartridges: 0, javelinFolded: 0, weaponsPruned: 0 };
+    try {
+      const worldCounts = await migrateAmmunition014World();
+      totals.renamed += worldCounts.renamed;
+      totals.deletedCartridges += worldCounts.deletedCartridges;
+      totals.weaponsPruned += worldCounts.weaponsPruned;
+      for (const actor of game.actors.contents) {
+        const counts = await migrateAmmunition014(actor);
+        totals.renamed += counts.renamed;
+        totals.deletedCartridges += counts.deletedCartridges;
+        totals.javelinFolded += counts.javelinFolded;
+        totals.weaponsPruned += counts.weaponsPruned;
+      }
+      const tokenCounts = await migrateAmmunition014UnlinkedTokens();
+      totals.renamed += tokenCounts.renamed;
+      totals.deletedCartridges += tokenCounts.deletedCartridges;
+      totals.javelinFolded += tokenCounts.javelinFolded;
+      totals.weaponsPruned += tokenCounts.weaponsPruned;
+      if (game.user?.isGM) {
+        const summary = [
+          `<strong>Migration 0.14.0:</strong> ammunition refactored to per-unit stacks.`,
+          totals.renamed > 0
+            ? `${totals.renamed} ammo stack${totals.renamed === 1 ? "" : "s"} renamed (e.g. "Arrows (bundle of 20)" → "Arrow", quantity 20).`
+            : null,
+          totals.deletedCartridges > 0
+            ? `${totals.deletedCartridges} orphan cartridge${totals.deletedCartridges === 1 ? "" : "s"} removed (Energy Clip / Blaster Pack / Black Ray Cell / Fusion Cell / Stun Rifle Cell / Javelin gear).`
+            : null,
+          totals.javelinFolded > 0
+            ? `${totals.javelinFolded} javelin${totals.javelinFolded === 1 ? "" : "s"} folded into the Javelin weapon's quantity.`
+            : null,
+          totals.weaponsPruned > 0
+            ? `${totals.weaponsPruned} weapon${totals.weaponsPruned === 1 ? "" : "s"} had obsolete ammo slugs pruned.`
+            : null
+        ].filter(Boolean).join(" ");
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p>${summary}</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.14.0 ammo migration failed`, error);
     }
   }
 

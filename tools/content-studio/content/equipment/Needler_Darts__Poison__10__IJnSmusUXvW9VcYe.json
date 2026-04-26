@@ -1,15 +1,16 @@
 {
-  "name": "Needler Darts, Poison (10)",
+  "name": "Needler Dart, Poison",
   "type": "gear",
   "img": "icons/weapons/ammunition/arrow-simple.webp",
   "system": {
-    "quantity": 1,
+    "quantity": 10,
     "weight": 0.1,
     "subtype": "ammunition",
     "equipped": false,
     "ammo": {
       "type": "needler-poison",
-      "rounds": 10
+      "rounds": 0,
+      "autoDestroy": true
     },
     "description": {
       "value": "Capsule darts loaded with intensity 17 poison."

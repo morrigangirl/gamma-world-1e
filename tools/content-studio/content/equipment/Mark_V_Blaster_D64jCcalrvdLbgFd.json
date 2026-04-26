@@ -5,9 +5,7 @@
   "system": {
     "weaponClass": 14,
     "category": "artifact",
-    "ammoType": [
-      "blaster-pack"
-    ],
+    "ammoType": [],
     "damage": {
       "formula": "7d6",
       "type": "energy"

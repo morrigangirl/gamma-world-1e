@@ -242,6 +242,32 @@
         </select>
       </div>
       <div class="form-group">
+        <label>{{localize "GAMMA_WORLD.Gear.SubtypeLabel"}}</label>
+        <select name="system.subtype">
+          {{#each config.GEAR_SUBTYPES as |label key|}}
+            <option value="{{key}}" {{#if (gwEq key ../system.subtype)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      {{#if (gwEq system.subtype "ammunition")}}
+        <div class="form-group">
+          <label>{{localize "GAMMA_WORLD.Ammo.AmmoTypeLabel"}}</label>
+          <select name="system.ammo.type">
+            <option value="" {{#if (gwEq system.ammo.type "")}}selected{{/if}}>—</option>
+            {{#each config.AMMO_TYPES as |label key|}}
+              {{#if key}}
+                <option value="{{key}}" {{#if (gwEq key ../system.ammo.type)}}selected{{/if}}>{{localize label}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{localize "GAMMA_WORLD.Ammo.AutoDestroy"}}</label>
+          <input type="checkbox" name="system.ammo.autoDestroy" {{#if system.ammo.autoDestroy}}checked{{/if}} />
+          <p class="hint">{{localize "GAMMA_WORLD.Ammo.AutoDestroyHint"}}</p>
+        </div>
+      {{/if}}
+      <div class="form-group">
         <label>Action Mode</label>
         <select name="system.action.mode">
           <option value="none" {{#if (gwEq system.action.mode "none")}}selected{{/if}}>None</option>
