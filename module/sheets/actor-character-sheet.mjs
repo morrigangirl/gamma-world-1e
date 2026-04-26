@@ -9,6 +9,8 @@ import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
 import { artifactNeedsPowerManagement, artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
 import { applyRest, performShortRest, performLongRest, shortRestMaxHD, availableHitDice } from "../healing.mjs";
+import { mutationStatus, isMutationDashboardWorthy, MUTATION_STATUS } from "../mutation-status.mjs";
+import { formatEffectCountdown } from "../effect-countdown.mjs";
 import { awardXp, applyAttributeBonus, xpForNextLevel } from "../experience.mjs";
 import { overlayRadiationIndicatorState } from "../conditions.mjs";
 import { saveContextForActor } from "../save-flow.mjs";
@@ -334,10 +336,21 @@ function formatMutationItem(item) {
   const usageLine = item.system.usage?.limited
     ? `${item.system.usage.uses}/${item.system.usage.max} ${item.system.usage.per}`
     : game.i18n.localize("GAMMA_WORLD.Mutation.Usage.AtWill");
+  // 0.14.2 — drive the status pill from the dedicated helper so the
+  // "Active Now" dashboard and the mutation row share one source of
+  // truth for "is this currently running / cooling down / ready".
+  item.gwStatus = mutationStatus(item, {
+    localize: (key, fb) => {
+      const out = game.i18n?.localize?.(key);
+      return (out && out !== key) ? out : fb;
+    }
+  });
   item.gwBadges = compact(
     activation,
-    category,
-    item.system.activation?.enabled ? game.i18n.localize("GAMMA_WORLD.Mutation.ActiveNow") : ""
+    category
+    // Note: legacy "ActiveNow" badge intentionally dropped here — the
+    // gwStatus pill replaces it, and we don't want both rendering on the
+    // same row. Keep activation + category since they're invariant.
   );
   item.gwDetailLine = compact(
     truncate(plainText(item.system.description?.value ?? ""), 180),
@@ -395,16 +408,18 @@ function buildEffectsList(actor) {
     ? [...actor.allApplicableEffects()]
     : [...(actor.effects ?? [])];
 
+  // 0.14.2 — share the live i18n resolver with the effect-countdown
+  // helper so the displayed "3 rounds" / "12 min" text is localized.
+  const localize = (key, fb) => {
+    const out = game.i18n?.localize?.(key);
+    return (out && out !== key) ? out : fb;
+  };
+
   for (const effect of allEffects) {
     if (!effect) continue;
     const parent = effect.parent;
     const parentIsActor = parent === actor;
-    const duration = effect.duration ?? {};
-    let durationLabel = "";
-    if (duration.rounds) durationLabel = `${duration.rounds} round${duration.rounds === 1 ? "" : "s"}`;
-    else if (duration.turns) durationLabel = `${duration.turns} turn${duration.turns === 1 ? "" : "s"}`;
-    else if (duration.seconds) durationLabel = `${Math.round(duration.seconds / 60)} min`;
-    else durationLabel = "Passive";
+    const countdown = formatEffectCountdown(effect, { localize });
 
     const changeKeys = Array.isArray(effect.changes)
       ? effect.changes.map((c) => c.key).filter(Boolean)
@@ -418,7 +433,10 @@ function buildEffectsList(actor) {
       disabled: !!effect.disabled,
       sourceName: parentIsActor ? actor.name : (parent?.name ?? "Unknown"),
       sourceType: parentIsActor ? "actor" : (parent?.type ?? "item"),
-      durationLabel,
+      durationLabel:    countdown.label,
+      hasTimer:         countdown.hasTimer,
+      remainingRounds:  countdown.remainingRounds,
+      remainingSeconds: countdown.remainingSeconds,
       changesCount: changeKeys.length,
       changesSummary: changeKeys.slice(0, 3).join(", ") + (changeKeys.length > 3 ? "…" : "")
     });
@@ -681,6 +699,46 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     // effect's UUID so the toggle / edit / delete handlers can resolve
     // it via fromUuid regardless of which embedded document owns it.
     context.effectsList = buildEffectsList(actor);
+
+    // 0.14.2 — "Active Now" dashboard. Surfaces what's currently
+    // affecting the character right now: timed mutations, lasting
+    // toggles, mutation cooldowns, and any timed Active Effect
+    // (status conditions, hazard effects, equipment buffs). Empty
+    // sections collapse so the header stays compact for default
+    // characters with nothing running.
+    const dashboardMutations = grouped.mutation
+      .filter(isMutationDashboardWorthy)
+      .map((mut) => ({
+        id: mut.id,
+        name: mut.name,
+        status: mut.gwStatus,
+        canDeactivate: !!mut.system.activation?.enabled
+                    && mut.system.activation?.mode === "toggle"
+      }));
+    const activeMutationRows = dashboardMutations
+      .filter((row) => row.status.kind === MUTATION_STATUS.ACTIVE_TIMED
+                     || row.status.kind === MUTATION_STATUS.ACTIVE);
+    const cooldownMutationRows = dashboardMutations
+      .filter((row) => row.status.kind === MUTATION_STATUS.COOLDOWN);
+    // Effects worth surfacing: anything not disabled, with a finite
+    // timer, that isn't itself attached to a mutation we're already
+    // listing (avoid double-counting).
+    const mutationItemIds = new Set(grouped.mutation.map((i) => i.id));
+    const activeEffectRows = context.effectsList
+      .filter((row) => !row.disabled && row.hasTimer)
+      .filter((row) => {
+        // Skip effects whose source IS a mutation already in the
+        // mutations list (its own row has the countdown).
+        const ownerId = row.uuid?.split(".").slice(-3, -2)[0];
+        return !mutationItemIds.has(ownerId);
+      });
+    context.activeNow = {
+      mutations: activeMutationRows,
+      cooldowns: cooldownMutationRows,
+      effects:   activeEffectRows,
+      hasAny: activeMutationRows.length + cooldownMutationRows.length + activeEffectRows.length > 0
+    };
+
     context.tabNav = buildTabNav(context.tabs, {
       mutations: grouped.mutation.length,
       inventory: grouped.weapon.length + grouped.armor.length + grouped.gear.length,

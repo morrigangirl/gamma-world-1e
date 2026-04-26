@@ -423,13 +423,14 @@
                 <div class="gamma-world__item-body" data-action="showMutationChat" data-item-id="{{item.id}}">
                   <div class="gamma-world__item-head">
                     <span class="gamma-world__item-name">{{item.name}}</span>
-                    {{#if item.gwBadges.length}}
-                      <span class="gamma-world__badge-list">
-                        {{#each item.gwBadges as |badge|}}
-                          <span class="gamma-world__badge">{{badge}}</span>
-                        {{/each}}
-                      </span>
-                    {{/if}}
+                    <span class="gamma-world__badge-list">
+                      {{#if item.gwStatus.label}}
+                        <span class="gamma-world__badge {{item.gwStatus.css}}">{{item.gwStatus.label}}</span>
+                      {{/if}}
+                      {{#each item.gwBadges as |badge|}}
+                        <span class="gamma-world__badge">{{badge}}</span>
+                      {{/each}}
+                    </span>
                   </div>
                   {{#if item.gwDetailLine}}<div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>{{/if}}
                   {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
@@ -880,6 +881,61 @@
         </div>
       {{/if}}
     </section>
+
+    {{#if activeNow.hasAny}}
+      <section class="gamma-world__panel gw-active-now">
+        <header class="gamma-world__list-header">
+          <h3>{{localize "GAMMA_WORLD.ActiveNow.Title"}}</h3>
+        </header>
+        <div class="gw-active-now__grid">
+          {{#if activeNow.mutations.length}}
+            <div class="gw-active-now__group">
+              <h4 class="gw-active-now__group-title">{{localize "GAMMA_WORLD.ActiveNow.Mutations"}}</h4>
+              <ul class="gw-active-now__list">
+                {{#each activeNow.mutations as |row|}}
+                  <li class="gw-active-now__row" data-item-id="{{row.id}}">
+                    <span class="gw-active-now__name">{{row.name}}</span>
+                    <span class="gamma-world__badge {{row.status.css}}">{{row.status.label}}</span>
+                    {{#if row.canDeactivate}}
+                      <button type="button" class="gw-active-now__off" data-action="useMutation" data-item-id="{{row.id}}" title="{{localize 'GAMMA_WORLD.ActiveNow.Deactivate'}}">
+                        <i class="fas fa-power-off"></i>
+                      </button>
+                    {{/if}}
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/if}}
+          {{#if activeNow.cooldowns.length}}
+            <div class="gw-active-now__group">
+              <h4 class="gw-active-now__group-title">{{localize "GAMMA_WORLD.ActiveNow.Cooldowns"}}</h4>
+              <ul class="gw-active-now__list">
+                {{#each activeNow.cooldowns as |row|}}
+                  <li class="gw-active-now__row" data-item-id="{{row.id}}">
+                    <span class="gw-active-now__name">{{row.name}}</span>
+                    <span class="gamma-world__badge {{row.status.css}}">{{row.status.label}}</span>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/if}}
+          {{#if activeNow.effects.length}}
+            <div class="gw-active-now__group">
+              <h4 class="gw-active-now__group-title">{{localize "GAMMA_WORLD.ActiveNow.Effects"}}</h4>
+              <ul class="gw-active-now__list">
+                {{#each activeNow.effects as |row|}}
+                  <li class="gw-active-now__row">
+                    <img class="gw-active-now__icon" src="{{row.img}}" alt="" />
+                    <span class="gw-active-now__name">{{row.name}}</span>
+                    <span class="gamma-world__badge gw-active-now__timer">{{row.durationLabel}}</span>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/if}}
+        </div>
+      </section>
+    {{/if}}
 
     <section class="gamma-world__panel gw-damage-traits">
       <header class="gamma-world__list-header">

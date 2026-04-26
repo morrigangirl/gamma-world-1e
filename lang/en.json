@@ -483,6 +483,15 @@
       },
       "Active": "Active power",
       "ActiveNow": "Active now",
+      "Status": {
+        "Active": "Active",
+        "ActiveTimed": "Active ({n} rd)",
+        "Cooldown": "Cooldown ({n} rd)",
+        "Spent": "Spent",
+        "Ready": "Ready",
+        "Available": "Available",
+        "Passive": "Passive"
+      },
       "Activation": "Activation",
       "Code": "Code",
       "Cooldown": "Cooldown",
@@ -946,7 +955,30 @@
       }
     },
     "Effect": {
-      "Empty": "No temporary effects."
+      "Empty": "No temporary effects.",
+      "Countdown": {
+        "Permanent": "Permanent",
+        "Expired": "Expired",
+        "Round": "1 rd",
+        "Rounds": "{n} rd",
+        "Turn": "1 turn",
+        "Turns": "{n} turns",
+        "Second": "1 sec",
+        "Seconds": "{n} sec",
+        "Minute": "1 min",
+        "Minutes": "{n} min",
+        "Hour": "1 hr",
+        "Hours": "{n} hr",
+        "Day": "1 day",
+        "Days": "{n} days"
+      }
+    },
+    "ActiveNow": {
+      "Title": "Active Now",
+      "Mutations": "Mutations",
+      "Cooldowns": "Recharging",
+      "Effects": "Effects",
+      "Deactivate": "Deactivate"
     },
     "Button": {
       "Create": "Create",

@@ -4205,3 +4205,156 @@ test("0.14.1 — HOOK constants exposed for the rest pipeline", async () => {
   assert.equal(HOOK.preLongRest, "gammaWorld.v1.preLongRest");
   assert.equal(HOOK.longRest, "gammaWorld.v1.longRest");
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.14.2 — Active Now dashboard helpers                              */
+/* ------------------------------------------------------------------ */
+
+function makeMutation({
+  mode = "passive",
+  enabled = false,
+  remaining = 0,
+  cooldownCurrent = 0,
+  cooldownMax = 0,
+  usageLimited = false,
+  uses = 0,
+  usesMax = 0
+} = {}) {
+  return {
+    type: "mutation",
+    name: "Test Mutation",
+    system: {
+      activation: { mode, enabled, remaining },
+      cooldown: { current: cooldownCurrent, max: cooldownMax },
+      usage: { limited: usageLimited, uses, max: usesMax, per: "day" }
+    }
+  };
+}
+
+test("0.14.2 — mutationStatus active-timed wins when toggle ON + remaining > 0", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "toggle", enabled: true, remaining: 3 });
+  const status = mutationStatus(mut);
+  assert.equal(status.kind, MUTATION_STATUS.ACTIVE_TIMED);
+  assert.equal(status.countdown, 3);
+  assert.equal(status.countdownUnit, "rounds");
+  assert.match(status.label, /Active.*3/);
+  assert.equal(status.css, "gw-mutation-status--active-timed");
+});
+
+test("0.14.2 — mutationStatus active when toggle ON + no countdown", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "toggle", enabled: true, remaining: 0 });
+  const status = mutationStatus(mut);
+  assert.equal(status.kind, MUTATION_STATUS.ACTIVE);
+  assert.equal(status.countdown, null);
+});
+
+test("0.14.2 — mutationStatus cooldown takes priority over ready/spent", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({
+    mode: "action",
+    cooldownCurrent: 2,
+    cooldownMax: 4,
+    usageLimited: true, uses: 1, usesMax: 3
+  });
+  const status = mutationStatus(mut);
+  assert.equal(status.kind, MUTATION_STATUS.COOLDOWN);
+  assert.equal(status.countdown, 2);
+  assert.match(status.label, /Cooldown.*2/);
+});
+
+test("0.14.2 — mutationStatus spent when limited use and uses=0", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "action", usageLimited: true, uses: 0, usesMax: 3 });
+  assert.equal(mutationStatus(mut).kind, MUTATION_STATUS.SPENT);
+});
+
+test("0.14.2 — mutationStatus ready when action-mode + uses available + no cooldown", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "action", usageLimited: true, uses: 2, usesMax: 3 });
+  assert.equal(mutationStatus(mut).kind, MUTATION_STATUS.READY);
+
+  const unlimitedAction = makeMutation({ mode: "action", usageLimited: false });
+  assert.equal(mutationStatus(unlimitedAction).kind, MUTATION_STATUS.READY);
+});
+
+test("0.14.2 — mutationStatus available for toggle that's currently OFF", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "toggle", enabled: false });
+  assert.equal(mutationStatus(mut).kind, MUTATION_STATUS.AVAILABLE);
+});
+
+test("0.14.2 — mutationStatus passive for passive-mode mutations", async () => {
+  const { mutationStatus, MUTATION_STATUS } = await import("../module/mutation-status.mjs");
+  const mut = makeMutation({ mode: "passive" });
+  assert.equal(mutationStatus(mut).kind, MUTATION_STATUS.PASSIVE);
+});
+
+test("0.14.2 — isMutationDashboardWorthy filters to active + cooldown only", async () => {
+  const { isMutationDashboardWorthy } = await import("../module/mutation-status.mjs");
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "toggle", enabled: true, remaining: 5 })), true);
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "toggle", enabled: true })), true);
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "action", cooldownCurrent: 2 })), true);
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "action" })), false, "ready mutation excluded");
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "passive" })), false, "passive excluded");
+  assert.equal(isMutationDashboardWorthy(makeMutation({ mode: "action", usageLimited: true, uses: 0 })), false, "spent excluded");
+});
+
+test("0.14.2 — formatEffectCountdown rounds-based timer, mid-effect", async () => {
+  const { formatEffectCountdown } = await import("../module/effect-countdown.mjs");
+  const effect = { duration: { rounds: 5, startRound: 2 } };
+  const result = formatEffectCountdown(effect, { combatRound: 4 });
+  assert.equal(result.hasTimer, true);
+  assert.equal(result.expired, false);
+  assert.equal(result.remainingRounds, 3, "5 - (4 - 2) = 3 rounds left");
+  assert.match(result.label, /3.*rd/);
+});
+
+test("0.14.2 — formatEffectCountdown rounds expired", async () => {
+  const { formatEffectCountdown } = await import("../module/effect-countdown.mjs");
+  const effect = { duration: { rounds: 3, startRound: 1 } };
+  const result = formatEffectCountdown(effect, { combatRound: 6 });
+  assert.equal(result.expired, true);
+  assert.equal(result.remainingRounds, 0);
+});
+
+test("0.14.2 — formatEffectCountdown seconds picks the largest unit", async () => {
+  const { formatEffectCountdown } = await import("../module/effect-countdown.mjs");
+  // 3 hours remaining
+  const hours = formatEffectCountdown(
+    { duration: { seconds: 3 * 3600, startTime: 0 } },
+    { worldTime: 0 }
+  );
+  assert.equal(hours.remainingSeconds, 10800);
+  assert.match(hours.label, /3.*hr/);
+
+  // 5 minutes remaining
+  const minutes = formatEffectCountdown(
+    { duration: { seconds: 600, startTime: 0 } },
+    { worldTime: 300 }
+  );
+  assert.equal(minutes.remainingSeconds, 300);
+  assert.match(minutes.label, /5.*min/);
+
+  // 30 seconds remaining
+  const seconds = formatEffectCountdown(
+    { duration: { seconds: 30, startTime: 0 } },
+    { worldTime: 0 }
+  );
+  assert.match(seconds.label, /30.*sec/);
+
+  // 2 days remaining
+  const days = formatEffectCountdown(
+    { duration: { seconds: 2 * 86400, startTime: 0 } },
+    { worldTime: 0 }
+  );
+  assert.match(days.label, /2.*day/);
+});
+
+test("0.14.2 — formatEffectCountdown returns Permanent when no timer", async () => {
+  const { formatEffectCountdown } = await import("../module/effect-countdown.mjs");
+  const result = formatEffectCountdown({ duration: {} }, { combatRound: 0, worldTime: 0 });
+  assert.equal(result.hasTimer, false);
+  assert.equal(result.label, "Permanent");
+});

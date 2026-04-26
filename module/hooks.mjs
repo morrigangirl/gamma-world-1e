@@ -54,7 +54,34 @@ export function registerHooks() {
   Hooks.on("updateCombat", tickCombatActorState);
   Hooks.on("updateCombat", tickCombatPowerDrain);
   Hooks.on("updateWorldTime", tickWorldTimePowerDrain);
+  // 0.14.2 — refresh open character sheets when world time advances so
+  // the "Active Now" panel's seconds-based effect countdowns tick down
+  // visibly. Cheap when no sheets are open; throttled by Foundry's
+  // render scheduler when many are.
+  Hooks.on("updateWorldTime", refreshOpenCharacterSheetsForWorldTime);
   Hooks.on("deleteCombat", onCombatDelete);
+}
+
+/**
+ * 0.14.2 — re-render any open character sheet whose actor carries an
+ * Active Effect with a finite seconds-based timer. Round-based timers
+ * already trigger a re-render via tickCombatMutationState → updateActor,
+ * but pure world-time effects (status conditions applied with
+ * `duration.seconds`) need this nudge to refresh the countdown text.
+ */
+function refreshOpenCharacterSheetsForWorldTime() {
+  const apps = Object.values(globalThis.ui?.windows ?? {});
+  for (const app of apps) {
+    const actor = app?.document;
+    if (!actor || actor.documentName !== "Actor") continue;
+    if (!app.rendered) continue;
+    const effects = typeof actor.allApplicableEffects === "function"
+      ? [...actor.allApplicableEffects()]
+      : [...(actor.effects ?? [])];
+    const hasSecondsTimer = effects.some((e) => !e?.disabled
+      && Number.isFinite(e?.duration?.seconds) && e.duration.seconds > 0);
+    if (hasSecondsTimer) app.render(false);
+  }
 }
 
 /**
