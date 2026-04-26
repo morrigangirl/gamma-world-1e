@@ -67,6 +67,10 @@
         "Name": "Auto-pick damage multiplier from target traits",
         "Hint": "When enabled (default), the damage chat card pre-selects the right multiplier for each target based on the target's damage Resistance / Immunity / Vulnerability traits (×0 / ×½ / ×2; ×1 otherwise). Disable to force the GM to pick on every hit."
       },
+      "TravelLegHours": {
+        "Name": "Travel leg duration (hours)",
+        "Hint": "Travel runs in legs of this length, with one wandering-encounter check per leg. RAW splits the day into 4-hour watches so 4 is the default. Lower for more frequent encounter checks; higher for sparser ones."
+      },
       "AutoApplyOnHitConditions": {
         "Name": "Auto-apply on-hit save and condition effects",
         "Hint": "When enabled, hits from weapons with a special on-hit effect (poison, paralysis, radiation, stun, etc.) auto-post a save card: NPCs resolve locally, PCs get a save dialog. On fail the matching timed status effect is applied. Disable to keep the manual Apply Effect follow-up button."
@@ -881,6 +885,23 @@
       "Ignite": "Ignite",
       "Stow": "Stow",
       "ActiveBadge": "active"
+    },
+    "Travel": {
+      "Label":          "Travel",
+      "Hint":           "Travel for N hours. Rolls a wandering-encounter check per leg, advances world time, and consumes 1 ration per PC per 24 hours.",
+      "DialogTitle":    "Travel",
+      "Prompt":         "How far does the party travel before the next stop?",
+      "Terrain":        "Terrain",
+      "Hours":          "Hours",
+      "Period":         "Period",
+      "Confirm":        "Begin travel",
+      "BadInputs":      "Pick a terrain and duration before traveling.",
+      "CombatActive":   "Travel paused — finish the active combat first.",
+      "SummaryHeading": "Travel summary",
+      "StoppedAt":      "Stopped at leg {n} due to encounter.",
+      "ArrivedSafely":  "Travel completed without incident.",
+      "PausedCombat":   "Travel paused — combat is active.",
+      "Starving":       "Out of rations:"
     },
     "Encounter": {
       "Close": {

@@ -271,6 +271,19 @@ export function registerMigrationSettings() {
     default: true
   });
 
+  // 0.14.9 — travel-time mode controls. `travelLegHours` sets the
+  // granularity of the wandering-encounter cadence (1 check per leg);
+  // RAW splits the day into 4-hour watches so 4 is the default.
+  game.settings.register(SYSTEM_ID, "travelLegHours", {
+    name: "GAMMA_WORLD.Settings.TravelLegHours.Name",
+    hint: "GAMMA_WORLD.Settings.TravelLegHours.Hint",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 4,
+    range: { min: 1, max: 12, step: 1 }
+  });
+
   game.settings.register(SYSTEM_ID, "autoApplyOnHitConditions", {
     name: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Name",
     hint: "GAMMA_WORLD.Settings.AutoApplyOnHitConditions.Hint",

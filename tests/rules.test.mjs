@@ -4959,6 +4959,169 @@ test("0.14.6 — xpAwardForDefeated prefers explicit xpValue over the HD table",
 /* 0.14.8 — damage multiplier auto-pick from target traits            */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/* 0.14.9 — travel-time mode                                          */
+/* ------------------------------------------------------------------ */
+
+function makePartyActor({ name = "Sadie", rations = [] } = {}) {
+  const items = rations.map((qty, i) => ({
+    id: `ration-${i}`,
+    type: "gear",
+    name: `Ration ${i + 1}`,
+    system: { subtype: "ration", quantity: qty, ammo: { autoDestroy: true } },
+    update: async function(diff) {
+      for (const [k, v] of Object.entries(diff)) setRationNested(this, k, v);
+    },
+    delete: async function() { items.splice(items.indexOf(this), 1); }
+  }));
+  return {
+    name,
+    type: "character",
+    items: {
+      find: (pred) => items.find(pred),
+      filter: (pred) => items.filter(pred),
+      forEach: (fn) => items.forEach(fn),
+      get length() { return items.length; }
+    },
+    _rationItems: items
+  };
+}
+
+function setRationNested(obj, path, value) {
+  const segs = String(path).split(".");
+  let cursor = obj;
+  for (let i = 0; i < segs.length - 1; i++) cursor = cursor[segs[i]] ??= {};
+  cursor[segs.at(-1)] = value;
+}
+
+function stubTravelEnvironment({ encounterAt = null, advanceTime = true } = {}) {
+  const advanceCalls = [];
+  const original = {
+    game: globalThis.game,
+    ChatMessage: globalThis.ChatMessage,
+    foundry: globalThis.foundry,
+    ui: globalThis.ui,
+    CONFIG: globalThis.CONFIG
+  };
+  let legCounter = 0;
+  globalThis.game = {
+    user: { isGM: true },
+    i18n: { localize: (s) => s, format: (s) => s },
+    settings: { get: (system, key) => {
+      if (key === "travelLegHours") return 4;
+      if (key === "restAdvancesWorldTime") return advanceTime;
+      return null;
+    } },
+    time: { worldTime: 0, advance: async (s) => { advanceCalls.push(s); globalThis.game.time.worldTime += s; } },
+    actors: { contents: [] },
+    combat: null,
+    messages: { contents: [] }
+  };
+  globalThis.ChatMessage = {
+    getSpeaker: () => ({ alias: "Travel" }),
+    create: async () => ({})
+  };
+  globalThis.foundry = { utils: {} };
+  globalThis.ui = { notifications: { info: () => {}, warn: () => {} } };
+  globalThis.CONFIG = { GAMMA_WORLD: { ENCOUNTER_TERRAINS: { forest: "Forest", clear: "Clear" } } };
+  // Stub the encounter helper that travel calls.
+  const encMod = {
+    checkRouteEncounter: async () => {
+      legCounter += 1;
+      const encountered = encounterAt !== null && legCounter === encounterAt;
+      return { encountered, encounter: encountered ? { name: "Howler" } : null };
+    }
+  };
+  return {
+    encMod,
+    advanceCalls,
+    restore: () => {
+      globalThis.game = original.game;
+      globalThis.ChatMessage = original.ChatMessage;
+      globalThis.foundry = original.foundry;
+      globalThis.ui = original.ui;
+      globalThis.CONFIG = original.CONFIG;
+    }
+  };
+}
+
+test("0.14.9 — performTravel runs the requested number of legs without an encounter", async () => {
+  // We need to swap the import of checkRouteEncounter inside travel.mjs.
+  // Easiest path: import travel.mjs FRESH after stubbing the encounter
+  // module via dynamic-import substitution. But ESM imports cache; we
+  // can't easily monkey-patch. Instead, drive performTravel with a
+  // controllable game.combat / actor state and accept that the inner
+  // checkRouteEncounter will fire against the test-time game stub
+  // (it'll throw, get caught, and we move on).
+  const env = stubTravelEnvironment();
+  try {
+    const { performTravel } = await import("../module/travel.mjs");
+    const actor = { name: "Sadie", uuid: "Actor.sadie" };
+    const partyActors = [makePartyActor({ rations: [2] })];
+    const result = await performTravel(actor, {
+      terrain: "forest",
+      totalHours: 12,
+      partyActors,
+      period: "day"
+    });
+    // 12h / 4h legs = 3 legs.
+    assert.equal(result.legsCompleted, 3);
+    assert.equal(result.hoursElapsed, 12);
+    assert.equal(result.encounterAtLeg, null);
+    // 12h doesn't cross a 24h boundary → no rations consumed.
+    assert.equal(result.rationsConsumed, 0);
+    // World-time advanced for each leg (3 × 4h = 3 × 14400s).
+    assert.equal(env.advanceCalls.length, 3);
+    assert.deepEqual(env.advanceCalls, [14400, 14400, 14400]);
+  } finally { env.restore(); }
+});
+
+test("0.14.9 — performTravel deducts 1 ration per PC per 24h elapsed", async () => {
+  const env = stubTravelEnvironment();
+  try {
+    const { performTravel } = await import("../module/travel.mjs");
+    const partyActors = [
+      makePartyActor({ name: "Sadie", rations: [3] }),
+      makePartyActor({ name: "Roxy",  rations: [3] })
+    ];
+    const result = await performTravel({ name: "Sadie" }, {
+      terrain: "forest",
+      totalHours: 48,        // 2 days
+      partyActors,
+      period: "day"
+    });
+    assert.equal(result.legsCompleted, 12);
+    assert.equal(result.hoursElapsed, 48);
+    // 2 PCs × 2 days = 4 ration debits.
+    assert.equal(result.rationsConsumed, 4);
+    // Each PC's ration stack went from 3 → 1 (2 consumed each over 2 days).
+    assert.equal(partyActors[0]._rationItems[0].system.quantity, 1);
+    assert.equal(partyActors[1]._rationItems[0].system.quantity, 1);
+  } finally { env.restore(); }
+});
+
+test("0.14.9 — performTravel notes starving PCs when rations run out", async () => {
+  const env = stubTravelEnvironment();
+  try {
+    const { performTravel } = await import("../module/travel.mjs");
+    // Sadie has no rations; Roxy has one.
+    const partyActors = [
+      makePartyActor({ name: "Sadie", rations: [] }),
+      makePartyActor({ name: "Roxy",  rations: [1] })
+    ];
+    const result = await performTravel({ name: "Sadie" }, {
+      terrain: "forest",
+      totalHours: 48,
+      partyActors
+    });
+    // Sadie starves on both 24h ticks; Roxy starves on the second.
+    assert.ok(result.starving.includes("Sadie"));
+    assert.ok(result.starving.includes("Roxy"));
+    // Roxy consumed her one ration on day 1.
+    assert.equal(result.rationsConsumed, 1);
+  } finally { env.restore(); }
+});
+
 test("0.14.8 — damageTraitMultiplier returns the right multiplier per trait", async () => {
   const { damageTraitMultiplier } = await import("../module/effect-state.mjs");
   // Immunity wins: 0.

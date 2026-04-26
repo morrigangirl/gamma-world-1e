@@ -511,6 +511,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       rollMorale:     GammaWorldCharacterSheet.#onRollMorale,
       routeEncounter: GammaWorldCharacterSheet.#onRouteEncounter,
       randomEncounter: GammaWorldCharacterSheet.#onRandomEncounter,
+      travel:         GammaWorldCharacterSheet.#onTravel,
       rollAttack:     GammaWorldCharacterSheet.#onRollAttack,
       rollNaturalAttack: GammaWorldCharacterSheet.#onRollNaturalAttack,
       showMutationChat: GammaWorldCharacterSheet.#onShowMutationChat,
@@ -1034,6 +1035,19 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     });
     if (!setup) return;
     await rollTerrainEncounter(this.document, setup);
+  }
+
+  /**
+   * 0.14.9 — open the travel-time dialog. Loops 4-hour legs (configurable
+   * via `travelLegHours`), each rolling a wandering-encounter check via
+   * the existing route-check helper. Stops early when an encounter
+   * triggers; advances world time so cell drain ticks naturally; deducts
+   * 1 ration per PC per 24h elapsed.
+   */
+  static async #onTravel(event, _target) {
+    event.preventDefault();
+    const { openTravelDialog } = await import("../travel.mjs");
+    await openTravelDialog(this.document);
   }
 
   static #lockAction(sheet, target, action, itemId = "") {
