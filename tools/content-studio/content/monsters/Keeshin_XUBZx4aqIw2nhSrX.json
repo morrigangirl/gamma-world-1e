@@ -375,7 +375,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinetic-flight.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.6nQjkQPG9fikAJSA"
     },
     {
@@ -437,7 +437,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinesis.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.MXWEnAywg7TRoDsF"
     },
     {
@@ -499,7 +499,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinetic-arm.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.h2Ak8yhPr2NpMCk2"
     },
     {
@@ -560,7 +560,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/force-field-generation.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.oybcXUClfrNbXbrV"
     },
     {
@@ -623,7 +623,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/life-leech.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.SUPwZOcl7xv5hkNe"
     },
     {
@@ -685,7 +685,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/de-evolution.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.WHzpGs37jBncjKfk"
     },
     {
@@ -748,7 +748,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/mental-blast.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.XAkX4pJX5XdoQjlt"
     },
     {
@@ -810,7 +810,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/cryokinesis.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.f6HgGlAwU0jHezUw"
     },
     {
@@ -871,7 +871,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/reflection.png",
       "_key": "!actors.items!XUBZx4aqIw2nhSrX.cLlcdMF59wFOufEX"
     }
   ],

@@ -420,7 +420,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/electrical-generation.png",
       "_key": "!actors.items!AxoXSAFt0JEyh1rq.SidTI1LKZZb39ojC"
     },
     {
@@ -479,7 +479,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/attraction-odor.png",
       "_key": "!actors.items!AxoXSAFt0JEyh1rq.AMLwPzRv3ZkqS3Gx"
     },
     {
@@ -541,7 +541,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/radiated-eyes.png",
       "_key": "!actors.items!AxoXSAFt0JEyh1rq.kyFNo3fNG7UEiVrV"
     }
   ],

@@ -416,7 +416,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinesis.png",
       "_key": "!actors.items!JUUsapvtXTpk6P8Q.B78yr8KUxGkkWF9W"
     },
     {
@@ -475,7 +475,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/weather-manipulation.png",
       "_key": "!actors.items!JUUsapvtXTpk6P8Q.uI1i4ovjW6lvyipX"
     },
     {
@@ -538,7 +538,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/life-leech.png",
       "_key": "!actors.items!JUUsapvtXTpk6P8Q.o6ayqJA0qxObCiG3"
     }
   ],

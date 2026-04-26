@@ -1,7 +1,7 @@
 {
   "name": "Powered Alloyed Plate",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/powered-alloyed-plate.png",
   "system": {
     "acValue": 2,
     "armorType": "heavy",

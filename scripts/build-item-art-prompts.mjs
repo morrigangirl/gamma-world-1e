@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 import {
   equipmentPackSources,
   mutationPackSources,
-  robotMonsterSources
+  robotMonsterSources,
+  samplePackSources
 } from "./pack-readers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -44,6 +45,174 @@ function parseArgs(argv) {
     else if (arg.startsWith("--out=")) out.out = arg.slice("--out=".length);
   }
   return out;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category: armor — protective gear icons                            */
+/* ------------------------------------------------------------------ */
+
+function buildArmorPrompt(armor) {
+  const description = stripHtml(armor.system?.description?.value ?? "");
+  const armorType = armor.system?.armorType ?? "";
+  const acValue = armor.system?.acValue ?? "";
+  const isPowered = !!armor.system?.field?.mode && armor.system.field.mode !== "none";
+  const isShield = armorType === "shield";
+
+  const traitNotes = [
+    armorType ? `armor type: ${armorType}` : "",
+    acValue ? `descending AC ${acValue}` : "",
+    isPowered ? "powered force-field armor" : ""
+  ].filter(Boolean).join(", ");
+
+  const subjectIntro = isShield
+    ? `${armor.name} — a Gamma World shield, displayed flat-on with the strap face turned away.`
+    : `${armor.name} — a Gamma World ${isPowered ? "powered armor suit" : "set of body armor"}, displayed empty (no wearer).`;
+
+  const lines = [
+    "Use case: stylized item icon",
+    "Asset type: tabletop RPG armor icon, three-quarter or front view",
+    `Primary request: single-piece silhouette of ${armor.name}, rendered as a clean item icon suitable for a 512x512 inventory slot.`,
+    "Scene/backdrop: isolated subject on a transparent background for Foundry VTT use.",
+    `Subject: ${description || subjectIntro}${traitNotes ? ` Flavor hints: ${traitNotes}.` : ""}`,
+    "Style/medium: retro science-fantasy / post-apocalyptic illustration style, solid readable silhouette, crisp contours, painterly but detailed, no copyrighted characters or logos.",
+    "Composition/framing: centered square composition, subject occupies ~78% of the frame; armor displayed empty (no wearer / no figure inside).",
+    "Lighting/mood: neutral presentation lighting, soft rim highlight on metal edges or force-field surface, clean readable shapes.",
+    "Color palette: " + (isPowered
+      ? "burnished alloys, deep accent paint, faint energy-shield blue/green where the field generator runs."
+      : "weathered leather, riveted plate, scavenged ceramic, restrained rust accents."),
+    "Constraints: single piece only; transparent background; NO text, NO letters, NO numbers, NO labels, NO captions, NO writing of any kind anywhere in the image; no mannequin, no wearer, no hands, no head; no frame; no watermark.",
+    "Avoid: multiple armor pieces, scenery clutter, captions, logo marks, text overlays, decorative flourishes unrelated to function, action poses."
+  ];
+  return lines.join("\n");
+}
+
+/* ------------------------------------------------------------------ */
+/* Category: gear — subtype-flavored item icons                       */
+/* ------------------------------------------------------------------ */
+
+const GEAR_FLAVOR = {
+  ammunition: {
+    asset: "ammunition icon",
+    direction: "depict the projectile or stack — readable as ammo, displayed as if laid on a clean surface.",
+    palette: "weathered metal, dull brass, oiled leather binding, restrained earth tones."
+  },
+  "power-cell": {
+    asset: "power cell / battery icon",
+    direction: "depict the cell as a self-contained pre-Fall energy unit — chrome or matte canister with status window or vent ports.",
+    palette: "brushed chrome, dark casing, faint inner glow matching power source (chemical = orange, hydrogen = pale blue, solar = warm yellow, atomic = sickly green, nuclear = cold blue-white, antimatter = deep violet)."
+  },
+  container: {
+    asset: "container / pack icon",
+    direction: "depict the container empty and closed, ready to be carried — visible straps, buckles, or lid.",
+    palette: "tanned leather, woven cloth, salvaged canvas, worn metal fittings."
+  },
+  medical: {
+    asset: "medical / first-aid icon",
+    direction: "depict the medical item ready to use — vial, syringe, dose stick, kit, or compress, with hint of a clinical pre-Fall origin.",
+    palette: "off-white plastic, faded label colors (no text!), red cross or biological motif, slightly stained from age."
+  },
+  vehicle: {
+    asset: "vehicle silhouette icon",
+    direction: "depict the vehicle in 3/4 profile, parked, with all major hardpoints visible — read as a complete machine, not a fragment.",
+    palette: "industrial paint with peeling layers, exposed mechanism, weathered metal, restrained rust and oxidation."
+  },
+  tool: {
+    asset: "tool icon",
+    direction: "depict the tool ready for use — head, handle, and any moving parts visible.",
+    palette: "iron, oiled wood, leather wraps, traces of pre-Fall manufacture."
+  },
+  ration: {
+    asset: "food / ration icon",
+    direction: "depict the ration as a sealed package, wrapped bundle, or canteen — clearly preserved trail food.",
+    palette: "waxed paper, hessian wraps, dull green or brown labels (no text), faded surface."
+  },
+  "trade-good": {
+    asset: "trade-good / curio icon",
+    direction: "depict the item as a recognizable salvaged-Old-World curiosity — book, bottle, coin, trinket — with patina suggesting decades or centuries of disuse.",
+    palette: "aged paper, tarnished metal, sun-bleached pigments, organic browns and grays."
+  },
+  communication: {
+    asset: "communications device icon",
+    direction: "depict the comm device as a self-contained pre-Fall unit — antenna or speaker visible, switches and lights subdued.",
+    palette: "matte plastic case, dull metal accents, faded factory paint, faint lit indicator."
+  },
+  explosive: {
+    asset: "explosive ordnance icon",
+    direction: "depict the explosive as a self-contained device — cylinder, sphere, or canister with visible fuse, pin, or trigger mechanism.",
+    palette: "matte olive, painted steel, warning-yellow accents, scorched metal where appropriate."
+  },
+  misc: {
+    asset: "miscellaneous gear icon",
+    direction: "depict the item as a recognizable Gamma World object, rendered to match its description — choose the most distinctive silhouette.",
+    palette: "muted post-apocalyptic earth tones with a single bold accent color appropriate to the item's function."
+  }
+};
+
+function buildGearPrompt(gear) {
+  const description = stripHtml(gear.system?.description?.value ?? "");
+  const subtype = gear.system?.subtype ?? "misc";
+  const flavor = GEAR_FLAVOR[subtype] ?? GEAR_FLAVOR.misc;
+  const isArtifact = !!gear.system?.artifact?.isArtifact;
+
+  const lines = [
+    "Use case: stylized item icon",
+    `Asset type: tabletop RPG ${flavor.asset}`,
+    `Primary request: single-object silhouette of ${gear.name}, rendered as a clean item icon suitable for a 512x512 inventory slot.`,
+    "Scene/backdrop: isolated subject on a transparent background for Foundry VTT use.",
+    `Subject: ${description || `${gear.name} — a Gamma World gear item.`} ${flavor.direction}${isArtifact ? " The item should read as a pre-Fall artifact: precision-manufactured, slightly anachronistic compared to the post-apocalyptic setting." : ""}`,
+    "Style/medium: retro science-fantasy / post-apocalyptic illustration style, solid readable silhouette, crisp contours, painterly but detailed, no copyrighted characters or logos.",
+    "Composition/framing: centered square composition, item occupies ~78% of the frame, slight ground shadow only if it helps the silhouette read.",
+    "Lighting/mood: neutral presentation lighting, soft rim highlight on functional surfaces, clean readable shapes.",
+    `Color palette: ${flavor.palette}`,
+    "Constraints: single object only; transparent background; NO text, NO letters, NO numbers, NO labels, NO captions, NO brand names, NO writing of any kind anywhere in the image; no hands, no wearers, no operators; no frame; no watermark.",
+    "Avoid: multiple copies of the item, hands holding it, scenery clutter, captions, logo marks, text overlays, decorative flourishes unrelated to function."
+  ];
+  return lines.join("\n");
+}
+
+/* ------------------------------------------------------------------ */
+/* Category: sample-actors — bestiary-style portraits for pregens     */
+/* ------------------------------------------------------------------ */
+
+function buildSampleActorPrompt(actor) {
+  const biography = stripHtml(actor.system?.biography?.value ?? "");
+  const details = actor.system?.details ?? {};
+  const role = details.role ?? "";
+  const creatureClass = details.creatureClass ?? "";
+  const animalForm = details.animalForm && details.animalForm !== "Humanoid" ? details.animalForm : "";
+  const alliance = details.alliance ?? "";
+
+  const items = Array.isArray(actor.items) ? actor.items : [];
+  const mutations = unique(items.filter((i) => i.type === "mutation").map((i) => i.name)).slice(0, 4);
+  const weapons = unique(items.filter((i) => i.type === "weapon").map((i) => i.name)).slice(0, 3);
+  const armorPieces = unique(items.filter((i) => i.type === "armor").map((i) => i.name)).slice(0, 2);
+
+  const flavorBits = [
+    biography.slice(0, 400),
+    role ? `role: ${role}` : "",
+    creatureClass ? `class: ${creatureClass}` : "",
+    animalForm ? `mutated form: ${animalForm}` : "",
+    alliance ? `alliance: ${alliance}` : "",
+    mutations.length ? `Mutations: ${mutations.join(", ")}.` : "",
+    weapons.length ? `Carries: ${weapons.join(", ")}.` : "",
+    armorPieces.length ? `Wears: ${armorPieces.join(", ")}.` : ""
+  ].filter(Boolean);
+  const flavorText = unique(flavorBits).join(" ") || `${actor.name} — a Gamma World survivor.`;
+
+  const lines = [
+    "Use case: stylized-concept",
+    "Asset type: tabletop RPG character portrait",
+    `Primary request: full-body original science-fantasy portrait of ${actor.name}, a Gamma World survivor.`,
+    "Scene/backdrop: isolated subject on a transparent background for Foundry VTT use.",
+    `Subject: ${flavorText}`,
+    "Style/medium: original retro science-fantasy bestiary painting, crisp silhouette, detailed but readable at token size, no copyrighted characters or logos.",
+    "Composition/framing: centered square composition, full body visible, head to feet in frame, slight ground shadow, no cropping.",
+    "Lighting/mood: dramatic but neutral presentation lighting, subtle rim light, clean readable shapes.",
+    "Color palette: weathered post-apocalyptic earth tones with one or two bold accent colors appropriate to the character's role / mutations.",
+    "Constraints: single subject only; transparent background; respect the described mutations, gear, and signature weapons; no text; no frame; no watermark.",
+    "Avoid: multiple figures, scenery clutter, captions, logo marks, severed anatomy, extreme gore, decorative flourishes that contradict the description, modern military gear that contradicts the post-apocalyptic Gamma World setting."
+  ];
+  return lines.join("\n");
 }
 
 /* ------------------------------------------------------------------ */
@@ -154,6 +323,16 @@ const CATEGORIES = {
     sources: async () => (await equipmentPackSources()).filter((item) => item.type === "weapon"),
     promptFor: buildWeaponPrompt
   },
+  armor: {
+    default_out: path.join(repoRoot, "tmp", "imagegen", "armor-prompts.jsonl"),
+    sources: async () => (await equipmentPackSources()).filter((item) => item.type === "armor"),
+    promptFor: buildArmorPrompt
+  },
+  gear: {
+    default_out: path.join(repoRoot, "tmp", "imagegen", "gear-prompts.jsonl"),
+    sources: async () => (await equipmentPackSources()).filter((item) => item.type === "gear"),
+    promptFor: buildGearPrompt
+  },
   mutations: {
     default_out: path.join(repoRoot, "tmp", "imagegen", "mutation-prompts.jsonl"),
     sources: async () => mutationPackSources(),
@@ -163,6 +342,11 @@ const CATEGORIES = {
     default_out: path.join(repoRoot, "tmp", "imagegen", "robot-prompts.jsonl"),
     sources: async () => robotMonsterSources(),
     promptFor: buildRobotPrompt
+  },
+  "sample-actors": {
+    default_out: path.join(repoRoot, "tmp", "imagegen", "sample-actor-prompts.jsonl"),
+    sources: async () => samplePackSources(),
+    promptFor: buildSampleActorPrompt
   }
 };
 

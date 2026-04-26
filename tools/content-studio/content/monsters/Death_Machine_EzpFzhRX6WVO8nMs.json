@@ -203,7 +203,7 @@
     {
       "name": "Black ray gun",
       "type": "weapon",
-      "img": "icons/svg/sword.svg",
+      "img": "systems/gamma-world-1e/assets/weapons/black-ray-gun.png",
       "flags": {
         "gamma-world-1e": {
           "naturalWeapon": true

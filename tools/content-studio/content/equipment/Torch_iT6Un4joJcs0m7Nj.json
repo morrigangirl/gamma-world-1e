@@ -1,7 +1,7 @@
 {
   "name": "Torch",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/torch.png",
   "system": {
     "quantity": 1,
     "weight": 0.5,

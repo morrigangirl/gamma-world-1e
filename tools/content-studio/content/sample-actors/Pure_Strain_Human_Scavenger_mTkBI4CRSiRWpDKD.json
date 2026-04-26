@@ -1,7 +1,7 @@
 {
   "name": "Pure Strain Human Scavenger",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/pure-strain-human-scavenger.png",
   "prototypeToken": {
     "name": "Pure Strain Human Scavenger",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/pure-strain-human-scavenger.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -203,7 +203,7 @@
     {
       "name": "Plastic Armor",
       "type": "armor",
-      "img": "icons/svg/holy-shield.svg",
+      "img": "systems/gamma-world-1e/assets/armor/plastic-armor.png",
       "system": {
         "acValue": 3,
         "armorType": "medium",
@@ -353,7 +353,7 @@
     {
       "name": "Backpack and Woven Goods",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/backpack-and-woven-goods.png",
       "system": {
         "quantity": 1,
         "weight": 1,

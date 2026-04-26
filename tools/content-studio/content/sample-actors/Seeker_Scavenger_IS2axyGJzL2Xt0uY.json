@@ -1,7 +1,7 @@
 {
   "name": "Seeker Scavenger",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/seeker-scavenger.png",
   "prototypeToken": {
     "name": "Seeker Scavenger",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/seeker-scavenger.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -339,7 +339,7 @@
     {
       "name": "Torch",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/torch.png",
       "system": {
         "quantity": 1,
         "weight": 0.5,
@@ -412,7 +412,7 @@
     {
       "name": "Rope (10m coil)",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/rope-10m-coil.png",
       "system": {
         "quantity": 1,
         "weight": 2,
@@ -485,7 +485,7 @@
     {
       "name": "Grappling Hook",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/grappling-hook.png",
       "system": {
         "quantity": 1,
         "weight": 2,
@@ -558,7 +558,7 @@
     {
       "name": "Magnifying Glass",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/magnifying-glass.png",
       "system": {
         "quantity": 1,
         "weight": 0.2,

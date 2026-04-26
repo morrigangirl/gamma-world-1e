@@ -1,7 +1,7 @@
 {
   "name": "Matter Bomb",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/matter-bomb.png",
   "system": {
     "quantity": 1,
     "weight": 0,

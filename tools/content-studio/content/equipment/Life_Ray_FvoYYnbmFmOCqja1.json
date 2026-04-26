@@ -1,7 +1,7 @@
 {
   "name": "Life Ray",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/life-ray.png",
   "system": {
     "quantity": 1,
     "weight": 0,

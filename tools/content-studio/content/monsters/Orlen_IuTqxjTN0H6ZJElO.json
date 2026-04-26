@@ -417,7 +417,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telepathy.png",
       "_key": "!actors.items!IuTqxjTN0H6ZJElO.RbVN64IG12MLT4Kb"
     },
     {
@@ -479,7 +479,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinesis.png",
       "_key": "!actors.items!IuTqxjTN0H6ZJElO.5odAAvh2viAcFBIb"
     },
     {
@@ -841,7 +841,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/will-force.png",
       "_key": "!actors.items!IuTqxjTN0H6ZJElO.nG4F3u3OXugm6uiA"
     },
     {
@@ -900,7 +900,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/dual-brain.png",
       "_key": "!actors.items!IuTqxjTN0H6ZJElO.DrxH90kRjF5utRHb"
     }
   ],

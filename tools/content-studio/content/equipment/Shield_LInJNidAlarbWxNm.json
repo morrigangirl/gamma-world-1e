@@ -1,7 +1,7 @@
 {
   "name": "Shield",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/shield.png",
   "system": {
     "acValue": 10,
     "armorType": "shield",

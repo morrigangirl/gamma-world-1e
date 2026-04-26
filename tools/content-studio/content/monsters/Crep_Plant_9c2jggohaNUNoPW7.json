@@ -421,7 +421,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/death-field-generation.png",
       "_key": "!actors.items!9c2jggohaNUNoPW7.bVM4JysHHowqELuA"
     },
     {
@@ -480,7 +480,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/molecular-disruption.png",
       "_key": "!actors.items!9c2jggohaNUNoPW7.cZDsAOTO5SZRBEZF"
     },
     {
@@ -543,7 +543,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/life-leech.png",
       "_key": "!actors.items!9c2jggohaNUNoPW7.WimLGM7rjyrzXycP"
     },
     {

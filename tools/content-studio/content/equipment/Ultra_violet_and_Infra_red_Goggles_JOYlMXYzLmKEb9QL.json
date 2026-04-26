@@ -1,7 +1,7 @@
 {
   "name": "Ultra-violet and Infra-red Goggles",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/ultra-violet-and-infra-red-goggles.png",
   "system": {
     "quantity": 1,
     "weight": 0,

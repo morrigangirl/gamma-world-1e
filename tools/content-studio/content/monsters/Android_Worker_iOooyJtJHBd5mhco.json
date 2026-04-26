@@ -279,7 +279,7 @@
     {
       "name": "Slug Thrower",
       "type": "weapon",
-      "img": "icons/svg/sword.svg",
+      "img": "systems/gamma-world-1e/assets/weapons/slug-thrower.png",
       "flags": {},
       "system": {
         "weaponClass": 1,

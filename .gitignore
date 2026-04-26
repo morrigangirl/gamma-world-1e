@@ -13,6 +13,11 @@ ref/
 *.swp
 *.swo
 
+# Local secrets — never commit
+.env
+.env.local
+*.env
+
 # Node (in case we ever add tooling)
 node_modules/
 npm-debug.log

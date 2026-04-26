@@ -1,7 +1,7 @@
 {
   "name": "Mutated Beast Template",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/mutated-beast-template.png",
   "prototypeToken": {
     "name": "Mutated Beast Template",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/mutated-beast-template.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,

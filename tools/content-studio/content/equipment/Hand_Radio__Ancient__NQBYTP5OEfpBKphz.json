@@ -1,7 +1,7 @@
 {
   "name": "Hand Radio (Ancient)",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/hand-radio-ancient.png",
   "system": {
     "quantity": 1,
     "weight": 1,

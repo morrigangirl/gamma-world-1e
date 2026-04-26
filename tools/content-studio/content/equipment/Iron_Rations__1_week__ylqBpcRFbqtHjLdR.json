@@ -1,7 +1,7 @@
 {
   "name": "Iron Rations (1 week)",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/iron-rations-1-week.png",
   "system": {
     "quantity": 1,
     "weight": 7,

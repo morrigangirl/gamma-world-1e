@@ -1,7 +1,7 @@
 {
   "name": "Ambulatory Oak",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/ambulatory-oak.png",
   "prototypeToken": {
     "name": "Ambulatory Oak",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/ambulatory-oak.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -313,7 +313,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/new-plant-parts.png",
       "_key": "!actors.items!HQpH0V3osixkngWe.P5eylrxvD4UuqqiJ"
     },
     {
@@ -372,7 +372,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/manipulation-vines.png",
       "_key": "!actors.items!HQpH0V3osixkngWe.OUQaFg2v1dLTWRDL"
     },
     {
@@ -431,7 +431,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/increased-senses.png",
       "_key": "!actors.items!HQpH0V3osixkngWe.02CQtXwVhufvjakW"
     }
   ],

@@ -1,7 +1,7 @@
 {
   "name": "Powered Battle Armor",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/powered-battle-armor.png",
   "system": {
     "acValue": 2,
     "armorType": "heavy",
@@ -65,7 +65,7 @@
     },
     "effects": [
       {
-        "label": "Powered Battle Armor \u2014 flight",
+        "label": "Powered Battle Armor — flight",
         "condition": "equipped",
         "changes": [
           {
@@ -83,7 +83,7 @@
         ]
       },
       {
-        "label": "Powered Battle Armor \u2014 lift",
+        "label": "Powered Battle Armor — lift",
         "condition": "equipped",
         "changes": [
           {
@@ -149,7 +149,7 @@
   },
   "effects": [
     {
-      "name": "Powered Battle Armor \u2014 flight",
+      "name": "Powered Battle Armor — flight",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
@@ -194,7 +194,7 @@
       "_key": "!items.effects!jpeRN1gxkAgJROOg.5YRJNbEITAzAf7If"
     },
     {
-      "name": "Powered Battle Armor \u2014 lift",
+      "name": "Powered Battle Armor — lift",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,

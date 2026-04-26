@@ -1,7 +1,7 @@
 {
   "name": "Computer Terminal",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/computer-terminal.png",
   "system": {
     "quantity": 1,
     "weight": 0,

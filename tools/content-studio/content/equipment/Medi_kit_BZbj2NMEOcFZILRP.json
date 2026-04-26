@@ -1,7 +1,7 @@
 {
   "name": "Medi-kit",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/medi-kit.png",
   "system": {
     "quantity": 1,
     "weight": 0,

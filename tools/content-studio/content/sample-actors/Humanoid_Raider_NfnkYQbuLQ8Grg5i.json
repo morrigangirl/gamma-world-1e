@@ -1,7 +1,7 @@
 {
   "name": "Humanoid Raider",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/humanoid-raider.png",
   "prototypeToken": {
     "name": "Humanoid Raider",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/humanoid-raider.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -429,7 +429,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/mental-blast.png",
       "_key": "!actors.items!NfnkYQbuLQ8Grg5i.7XaTl3dVIB3EvaMN"
     },
     {
@@ -541,7 +541,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/intuition.png",
       "_key": "!actors.items!NfnkYQbuLQ8Grg5i.pkTBCzUhks7yxS37"
     }
   ],

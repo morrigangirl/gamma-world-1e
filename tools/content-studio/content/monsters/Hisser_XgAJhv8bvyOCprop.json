@@ -417,7 +417,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telepathy.png",
       "_key": "!actors.items!XgAJhv8bvyOCprop.JmhAGvAVgOU22n1E"
     },
     {
@@ -476,7 +476,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/mass-mind.png",
       "_key": "!actors.items!XgAJhv8bvyOCprop.Lp7DHOo84zqdyGW3"
     },
     {
@@ -539,7 +539,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/sonic-attack-ability.png",
       "_key": "!actors.items!XgAJhv8bvyOCprop.wg4m8DdYtMQxfHJb"
     },
     {
@@ -602,7 +602,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/mental-blast.png",
       "_key": "!actors.items!XgAJhv8bvyOCprop.4u35VFncl4xnPE9Y"
     }
   ],

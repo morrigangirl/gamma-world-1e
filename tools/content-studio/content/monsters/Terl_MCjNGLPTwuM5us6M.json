@@ -460,7 +460,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telekinetic-flight.png",
       "_key": "!actors.items!MCjNGLPTwuM5us6M.RtPjpYzT1bwPDsQb"
     },
     {
@@ -523,7 +523,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/sonic-attack-ability.png",
       "_key": "!actors.items!MCjNGLPTwuM5us6M.MHZZLNJcSVj8uV6q"
     },
     {
@@ -585,7 +585,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/cryokinesis.png",
       "_key": "!actors.items!MCjNGLPTwuM5us6M.B98jxtiqxhS2P9Ed"
     }
   ],

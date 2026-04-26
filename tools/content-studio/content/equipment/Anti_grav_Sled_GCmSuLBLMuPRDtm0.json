@@ -1,7 +1,7 @@
 {
   "name": "Anti-grav Sled",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/anti-grav-sled.png",
   "system": {
     "quantity": 1,
     "weight": 0,
@@ -64,7 +64,7 @@
     "actionTypes": {},
     "consumption": {
       "unit": "hour",
-      "perUnit": 1.0
+      "perUnit": 1
     }
   },
   "_id": "GCmSuLBLMuPRDtm0",

@@ -458,7 +458,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/heightened-strength.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.Mp1kszn0uwttYhZi"
     },
     {
@@ -521,7 +521,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/light-wave-manipulation.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.c1UwlTHYs0Exdyh8"
     },
     {
@@ -583,7 +583,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/density-control-others.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.TjQFNP9REMUhT8nV"
     },
     {
@@ -646,7 +646,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/life-leech.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.GFkMaQQPDD50FPCQ"
     },
     {
@@ -709,7 +709,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/death-field-generation.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.BmVce6MbetdyTDNj"
     },
     {
@@ -772,7 +772,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/mental-blast.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.VXWJPKLdgDiaPB7e"
     },
     {
@@ -831,7 +831,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/telepathy.png",
       "_key": "!actors.items!ZOA0mEaNhCGMuRqF.wKsjQpftlWWcmyp1"
     }
   ],

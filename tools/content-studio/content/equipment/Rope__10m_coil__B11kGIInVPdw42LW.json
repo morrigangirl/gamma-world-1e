@@ -1,7 +1,7 @@
 {
   "name": "Rope (10m coil)",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/rope-10m-coil.png",
   "system": {
     "quantity": 1,
     "weight": 2,

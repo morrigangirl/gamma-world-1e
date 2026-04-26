@@ -46,7 +46,7 @@ except ImportError:
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MODEL = "gpt-image-1"
+MODEL = "gpt-image-1.5"
 IMAGE_SIZE = "1024x1024"
 INTER_CALL_DELAY_SECONDS = 1.5
 
@@ -79,22 +79,60 @@ def category_paths(category: str) -> dict:
             "base":    REPO_ROOT / "output" / "imagegen" / "weapons" / "base",
             "finals":  [REPO_ROOT / "assets" / "weapons"],
         }
+    if category == "armor":
+        # 0.14.x — armor uses the same square-icon flow as weapons but
+        # writes to its own assets/armor/ directory.
+        return {
+            "prompts": REPO_ROOT / "tmp" / "imagegen" / "armor-prompts.jsonl",
+            "base":    REPO_ROOT / "output" / "imagegen" / "armor" / "base",
+            "finals":  [REPO_ROOT / "assets" / "armor"],
+        }
+    if category == "gear":
+        # 0.14.x — gear uses the same square-icon flow as weapons. One
+        # large category covering containers, medical, vehicles, tools,
+        # rations, communications, explosives, and misc artifacts.
+        return {
+            "prompts": REPO_ROOT / "tmp" / "imagegen" / "gear-prompts.jsonl",
+            "base":    REPO_ROOT / "output" / "imagegen" / "gear" / "base",
+            "finals":  [REPO_ROOT / "assets" / "gear"],
+        }
     if category == "mutations":
         return {
             "prompts": REPO_ROOT / "tmp" / "imagegen" / "mutation-prompts.jsonl",
             "base":    REPO_ROOT / "output" / "imagegen" / "mutations" / "base",
             "finals":  [REPO_ROOT / "assets" / "mutations"],
         }
+    if category == "sample-actors":
+        # 0.14.x — sample-actors render to the same portrait+token layout
+        # as monsters but write to assets/actors/ to keep them separate
+        # in the asset tree.
+        return {
+            "prompts": REPO_ROOT / "tmp" / "imagegen" / "sample-actor-prompts.jsonl",
+            "base":    REPO_ROOT / "output" / "imagegen" / "actors" / "base",
+            "finals":  [
+                REPO_ROOT / "assets" / "actors" / "portraits",
+                REPO_ROOT / "assets" / "actors" / "tokens",
+            ],
+        }
     raise SystemExit(f"Unknown category: {category!r}. "
-                     f"Valid: monsters, weapons, mutations, robots.")
+                     f"Valid: monsters, weapons, armor, gear, mutations, robots, sample-actors.")
 
 
 def read_prompts(path: Path, category: str) -> list[dict]:
     if not path.exists():
+        # 0.14.x — guidance string handles the new categories explicitly
+        # (sample-actors slug doesn't suffix-strip cleanly to "sample-actor").
+        guidance = {
+            "monsters":      "node scripts/build-monster-art-prompts.mjs",
+            "weapons":       "node scripts/build-item-art-prompts.mjs --category weapons",
+            "armor":         "node scripts/build-item-art-prompts.mjs --category armor",
+            "gear":          "node scripts/build-item-art-prompts.mjs --category gear",
+            "mutations":     "node scripts/build-item-art-prompts.mjs --category mutations",
+            "robots":        "node scripts/build-item-art-prompts.mjs --category robots",
+            "sample-actors": "node scripts/build-item-art-prompts.mjs --category sample-actors"
+        }.get(category, f"node scripts/build-item-art-prompts.mjs --category {category}")
         raise SystemExit(
-            f"Prompt JSONL not found at {path}. "
-            f"Run `npm run build:{category.rstrip('s')}-prompts` first "
-            f"(or `npm run build:monster-prompts` for monsters)."
+            f"Prompt JSONL not found at {path}. Run `{guidance}` first."
         )
     rows = []
     with path.open() as handle:
@@ -150,7 +188,8 @@ def filter_by_only(rows: list[dict], only: Iterable[str]) -> list[dict]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--category", required=True,
-                        choices=["monsters", "weapons", "mutations", "robots"],
+                        choices=["monsters", "weapons", "armor", "gear",
+                                 "mutations", "robots", "sample-actors"],
                         help="Which asset category to generate.")
     parser.add_argument("--force", action="store_true",
                         help="Re-generate every prompt even if art already exists.")
@@ -222,8 +261,10 @@ def main() -> int:
         return 2
 
     print("")
+    portrait_token_categories = ("monsters", "robots", "sample-actors")
+    shape = "portrait-token" if args.category in portrait_token_categories else "square-icon"
     print(f"Next step: run `python3 scripts/render-assets.py --category {args.category} "
-          f"--shape {'portrait-token' if args.category in ('monsters', 'robots') else 'square-icon'}` "
+          f"--shape {shape}` "
           f"to produce the final assets from these base PNGs.")
     return 0
 

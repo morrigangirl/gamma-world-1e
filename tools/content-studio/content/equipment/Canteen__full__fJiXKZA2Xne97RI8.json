@@ -1,7 +1,7 @@
 {
   "name": "Canteen (full)",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/canteen-full.png",
   "system": {
     "quantity": 1,
     "weight": 1,

@@ -279,7 +279,7 @@
     {
       "name": "Long Sword",
       "type": "weapon",
-      "img": "icons/svg/sword.svg",
+      "img": "systems/gamma-world-1e/assets/weapons/long-sword.png",
       "flags": {},
       "system": {
         "weaponClass": 1,
@@ -360,7 +360,7 @@
     {
       "name": "Bow",
       "type": "weapon",
-      "img": "icons/svg/sword.svg",
+      "img": "systems/gamma-world-1e/assets/weapons/bow.png",
       "flags": {},
       "system": {
         "weaponClass": 1,

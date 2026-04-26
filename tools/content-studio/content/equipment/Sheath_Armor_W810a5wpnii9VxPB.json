@@ -1,7 +1,7 @@
 {
   "name": "Sheath Armor",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/sheath-armor.png",
   "system": {
     "acValue": 4,
     "armorType": "light",

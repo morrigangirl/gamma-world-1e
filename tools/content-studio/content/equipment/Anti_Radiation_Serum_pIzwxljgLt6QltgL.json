@@ -1,7 +1,7 @@
 {
   "name": "Anti-Radiation Serum",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/anti-radiation-serum.png",
   "system": {
     "quantity": 1,
     "weight": 0,

@@ -1,7 +1,7 @@
 {
   "name": "Security Robotoid",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/security-robotoid.png",
   "prototypeToken": {
     "name": "Security Robotoid",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/security-robotoid.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -293,7 +293,7 @@
     {
       "name": "Control Baton",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/control-baton.png",
       "system": {
         "quantity": 1,
         "weight": 0,

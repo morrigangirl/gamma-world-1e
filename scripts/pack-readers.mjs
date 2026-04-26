@@ -130,6 +130,15 @@ export async function mutationPackSources() {
 }
 
 /**
+ * 0.14.x — sample-actors pack sources, hydrated so the art prompt
+ * builder can mention an actor's signature gear / weapons / mutations
+ * the same way the monster builder does.
+ */
+export async function samplePackSources() {
+  return readPackTopLevel("sample-actors", { hydrateEmbedded: true });
+}
+
+/**
  * Art-prompt builders enumerate a monster's embedded mutations /
  * weapons / gear, so pack docs come back with `items` hydrated to the
  * full child doc shape (not the id-string array Foundry stores).

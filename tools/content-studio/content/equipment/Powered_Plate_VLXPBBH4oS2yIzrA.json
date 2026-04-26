@@ -1,7 +1,7 @@
 {
   "name": "Powered Plate",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/powered-plate.png",
   "system": {
     "acValue": 3,
     "armorType": "heavy",
@@ -60,7 +60,7 @@
     "actionTypes": {},
     "consumption": {
       "unit": "hour",
-      "perUnit": 2.0
+      "perUnit": 2
     }
   },
   "_id": "VLXPBBH4oS2yIzrA",

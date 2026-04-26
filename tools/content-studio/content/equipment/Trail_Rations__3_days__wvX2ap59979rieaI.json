@@ -1,7 +1,7 @@
 {
   "name": "Trail Rations (3 days)",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/trail-rations-3-days.png",
   "system": {
     "quantity": 1,
     "weight": 3,

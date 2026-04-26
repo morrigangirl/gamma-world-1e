@@ -419,7 +419,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/force-field-generation.png",
       "_key": "!actors.items!NAtJuXSkOns7G1fm.VvMi79Ue2KtaJpa3"
     },
     {
@@ -478,7 +478,7 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/mutations/increased-metabolism.png",
       "_key": "!actors.items!NAtJuXSkOns7G1fm.JDLt8BKsTuFboOI5"
     }
   ],

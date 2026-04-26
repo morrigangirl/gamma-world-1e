@@ -1,7 +1,7 @@
 {
   "name": "Backpack and Woven Goods",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/backpack-and-woven-goods.png",
   "system": {
     "quantity": 1,
     "weight": 1,

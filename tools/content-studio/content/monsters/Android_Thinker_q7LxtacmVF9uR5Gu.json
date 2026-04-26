@@ -279,7 +279,7 @@
     {
       "name": "Laser Pistol",
       "type": "weapon",
-      "img": "icons/svg/sword.svg",
+      "img": "systems/gamma-world-1e/assets/weapons/laser-pistol.png",
       "flags": {},
       "system": {
         "weaponClass": 1,

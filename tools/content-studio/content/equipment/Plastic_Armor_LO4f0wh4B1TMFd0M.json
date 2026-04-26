@@ -1,7 +1,7 @@
 {
   "name": "Plastic Armor",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/plastic-armor.png",
   "system": {
     "acValue": 3,
     "armorType": "medium",

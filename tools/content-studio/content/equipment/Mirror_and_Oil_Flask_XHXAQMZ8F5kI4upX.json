@@ -1,7 +1,7 @@
 {
   "name": "Mirror and Oil Flask",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/gamma-world-1e/assets/gear/mirror-and-oil-flask.png",
   "system": {
     "quantity": 1,
     "weight": 1,

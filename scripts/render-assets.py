@@ -43,10 +43,28 @@ def category_paths(category: str) -> dict:
             "base":        REPO_ROOT / "output" / "imagegen" / "weapons" / "base",
             "square_dir":  REPO_ROOT / "assets" / "weapons",
         }
+    if category == "armor":
+        return {
+            "base":        REPO_ROOT / "output" / "imagegen" / "armor" / "base",
+            "square_dir":  REPO_ROOT / "assets" / "armor",
+        }
+    if category == "gear":
+        return {
+            "base":        REPO_ROOT / "output" / "imagegen" / "gear" / "base",
+            "square_dir":  REPO_ROOT / "assets" / "gear",
+        }
     if category == "mutations":
         return {
             "base":        REPO_ROOT / "output" / "imagegen" / "mutations" / "base",
             "square_dir":  REPO_ROOT / "assets" / "mutations",
+        }
+    if category == "sample-actors":
+        # 0.14.x — sample-actors render to portrait+token like monsters
+        # but write to assets/actors/ to keep them separate.
+        return {
+            "base":         REPO_ROOT / "output" / "imagegen" / "actors" / "base",
+            "portrait_dir": REPO_ROOT / "assets" / "actors" / "portraits",
+            "token_dir":    REPO_ROOT / "assets" / "actors" / "tokens",
         }
     raise SystemExit(f"Unknown category: {category!r}")
 
@@ -167,7 +185,8 @@ def render_square_icon(source: Path, target: Path):
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--category", required=True,
-                        choices=["monsters", "weapons", "mutations", "robots"])
+                        choices=["monsters", "weapons", "armor", "gear",
+                                 "mutations", "robots", "sample-actors"])
     parser.add_argument("--shape", required=True,
                         choices=["portrait-token", "square-icon"])
     args = parser.parse_args()

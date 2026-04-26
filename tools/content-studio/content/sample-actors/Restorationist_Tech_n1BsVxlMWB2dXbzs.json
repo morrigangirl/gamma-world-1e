@@ -1,7 +1,7 @@
 {
   "name": "Restorationist Tech",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/gamma-world-1e/assets/actors/portraits/restorationist-tech.png",
   "prototypeToken": {
     "name": "Restorationist Tech",
     "actorLink": true,
@@ -14,7 +14,7 @@
       "attribute": "resources.hp"
     },
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "systems/gamma-world-1e/assets/actors/tokens/restorationist-tech.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "offsetX": 0,
@@ -342,7 +342,7 @@
     {
       "name": "Wrench",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/wrench.png",
       "system": {
         "quantity": 1,
         "weight": 1,
@@ -472,7 +472,7 @@
     {
       "name": "Chemical Energy Cell",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/gamma-world-1e/assets/gear/chemical-energy-cell.png",
       "system": {
         "quantity": 1,
         "weight": 0,

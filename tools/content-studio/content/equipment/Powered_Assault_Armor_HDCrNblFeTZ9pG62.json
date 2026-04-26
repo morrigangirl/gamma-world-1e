@@ -1,7 +1,7 @@
 {
   "name": "Powered Assault Armor",
   "type": "armor",
-  "img": "icons/svg/holy-shield.svg",
+  "img": "systems/gamma-world-1e/assets/armor/powered-assault-armor.png",
   "system": {
     "acValue": 1,
     "armorType": "heavy",
@@ -65,7 +65,7 @@
     },
     "effects": [
       {
-        "label": "Powered Assault Armor \u2014 flight",
+        "label": "Powered Assault Armor — flight",
         "condition": "equipped",
         "changes": [
           {
@@ -83,7 +83,7 @@
         ]
       },
       {
-        "label": "Powered Assault Armor \u2014 lift",
+        "label": "Powered Assault Armor — lift",
         "condition": "equipped",
         "changes": [
           {
@@ -263,7 +263,7 @@
   },
   "effects": [
     {
-      "name": "Powered Assault Armor \u2014 flight",
+      "name": "Powered Assault Armor — flight",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
@@ -308,7 +308,7 @@
       "_key": "!items.effects!HDCrNblFeTZ9pG62.wPeUIXXOLLtFdL46"
     },
     {
-      "name": "Powered Assault Armor \u2014 lift",
+      "name": "Powered Assault Armor — lift",
       "img": "icons/svg/aura.svg",
       "transfer": true,
       "disabled": true,
