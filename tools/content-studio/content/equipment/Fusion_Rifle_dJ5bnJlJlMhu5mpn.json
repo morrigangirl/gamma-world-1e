@@ -26,7 +26,7 @@
       "mode": "radiation",
       "formula": "18",
       "status": "",
-      "notes": "Radiation save (1d20 + CN mod) vs. intensity 18. Miss by 1\u20133 \u2192 Radiation Sickness (mild); 4\u20136 \u2192 Sickness (severe) + new mutation; 7+ \u2192 Catastrophic Exposure (onset next day, \u221210% max HP/hour until ancient treatment or death)."
+      "notes": "Radiation save (1d20 + CN mod) vs. intensity 18. Miss by 1–3 → Radiation Sickness (mild); 4–6 → Sickness (severe) + new mutation; 7+ → Catastrophic Exposure (onset next day, −10% max HP/hour until ancient treatment or death)."
     },
     "quantity": 1,
     "weight": 0,
@@ -55,17 +55,17 @@
       "powerSource": "nuclear",
       "power": {
         "requirement": "cells",
-        "installedType": "nuclear",
+        "installedType": "none",
         "ambientSource": "none",
         "ambientAvailable": false,
         "compatibleCells": "nuclear",
         "cellSlots": 1,
-        "cellsInstalled": 1,
+        "cellsInstalled": 0,
         "installedCellIds": []
       },
       "charges": {
-        "current": 10,
-        "max": 10
+        "current": 0,
+        "max": 0
       },
       "functionChance": 40,
       "harmCallback": ""

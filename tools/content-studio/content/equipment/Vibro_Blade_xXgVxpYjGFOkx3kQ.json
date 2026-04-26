@@ -53,17 +53,17 @@
       "powerSource": "hydrogen",
       "power": {
         "requirement": "cells",
-        "installedType": "hydrogen",
+        "installedType": "none",
         "ambientSource": "none",
         "ambientAvailable": false,
         "compatibleCells": "hydrogen",
         "cellSlots": 1,
-        "cellsInstalled": 1,
+        "cellsInstalled": 0,
         "installedCellIds": []
       },
       "charges": {
-        "current": 20,
-        "max": 20
+        "current": 0,
+        "max": 0
       },
       "functionChance": 40,
       "harmCallback": "",
@@ -72,7 +72,7 @@
     "actionTypes": {},
     "consumption": {
       "unit": "minute",
-      "perUnit": 5.0
+      "perUnit": 5
     }
   },
   "_id": "xXgVxpYjGFOkx3kQ",

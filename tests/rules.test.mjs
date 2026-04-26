@@ -4358,3 +4358,131 @@ test("0.14.2 — formatEffectCountdown returns Permanent when no timer", async (
   assert.equal(result.hasTimer, false);
   assert.equal(result.label, "Permanent");
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.14.3 — cell-driven items refuse to fire when no cell installed   */
+/* ------------------------------------------------------------------ */
+
+test("0.14.3 — artifactPowerStatus derives cellsInstalled from installedCellIds for cell-driven items", async () => {
+  const { artifactPowerStatus } = await import("../module/artifact-power.mjs");
+  // Lying shape: studio-style "1 cell installed" (count) but empty UUID array.
+  const lyingPistol = {
+    name: "Laser Pistol",
+    system: {
+      consumption: { unit: "shot", perUnit: 10 },
+      artifact: {
+        isArtifact: true,
+        powerSource: "hydrogen",
+        power: {
+          requirement: "cells",
+          compatibleCells: "hydrogen",
+          installedType: "hydrogen",
+          cellSlots: 1,
+          cellsInstalled: 1,            // ← lies
+          installedCellIds: []          // ← truth
+        },
+        charges: { current: 10, max: 10 }
+      }
+    }
+  };
+  const status = artifactPowerStatus(lyingPistol);
+  assert.equal(status.cellsInstalled, 0,
+    "derived count must reflect the empty UUID array, not the stale legacy count");
+  assert.equal(status.powered, false, "unloaded gun must read as unpowered");
+  assert.equal(status.reason, "cells");
+});
+
+test("0.14.3 — artifactPowerStatus still trusts cellsInstalled for non-cell-driven items", async () => {
+  const { artifactPowerStatus } = await import("../module/artifact-power.mjs");
+  // A medi-kit-shaped legacy artifact: no consumption.perUnit, uses
+  // legacy own-charges. The legacy count path should still work.
+  const mediKit = {
+    name: "Medi-kit",
+    system: {
+      consumption: { unit: "", perUnit: 0 },
+      artifact: {
+        isArtifact: true,
+        powerSource: "none",
+        power: {
+          requirement: "none",
+          installedType: "none",
+          cellSlots: 0,
+          cellsInstalled: 0,
+          installedCellIds: []
+        },
+        charges: { current: 5, max: 10 }
+      }
+    }
+  };
+  const status = artifactPowerStatus(mediKit);
+  assert.equal(status.powered, true);
+  assert.equal(status.usesCellDrain, false);
+});
+
+test("0.14.3 — consumeArtifactCharge refuses cell-driven items with no installed cell", async () => {
+  const { consumeArtifactCharge } = await import("../module/artifact-power.mjs");
+  // Stub ui.notifications + Hooks so the helper's chat path is silent in tests.
+  const originalUi = globalThis.ui;
+  const originalHooks = globalThis.Hooks;
+  globalThis.ui = { notifications: { warn: () => {}, info: () => {} } };
+  globalThis.Hooks = { call: () => true, callAll: () => {} };
+  try {
+    const unloadedGun = {
+      name: "Laser Pistol",
+      uuid: "Item.test",
+      system: {
+        consumption: { unit: "shot", perUnit: 10 },
+        artifact: {
+          isArtifact: true,
+          power: {
+            requirement: "cells",
+            cellSlots: 1,
+            cellsInstalled: 0,
+            installedCellIds: []
+          },
+          charges: { current: 10, max: 10 }   // legacy lying counter
+        }
+      },
+      update: async () => {}
+    };
+    const result = await consumeArtifactCharge(unloadedGun, 1);
+    assert.equal(result.success, false);
+    assert.equal(result.unpowered, true);
+    assert.equal(result.reason, "no-cell");
+  } finally {
+    globalThis.ui = originalUi;
+    globalThis.Hooks = originalHooks;
+  }
+});
+
+test("0.14.3 — every cell-driven studio JSON ships unloaded", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "..", "tools", "content-studio", "content", "equipment");
+  const files = await fs.readdir(dir);
+  let checked = 0;
+  for (const filename of files) {
+    if (!filename.endsWith(".json")) continue;
+    const data = JSON.parse(await fs.readFile(path.join(dir, filename), "utf8"));
+    const perUnit = Number(data.system?.consumption?.perUnit ?? 0);
+    if (perUnit <= 0) continue;
+    if (data.system?.subtype === "power-cell") continue;
+    const power = data.system?.artifact?.power ?? {};
+    const charges = data.system?.artifact?.charges ?? {};
+    // Treat omitted fields as 0/empty: schema defaults fill them at load
+    // time. We're catching the lying shape (a non-zero number / non-empty
+    // array), not punishing JSONs that omit explicit zeros.
+    assert.equal(power.cellsInstalled ?? 0, 0,
+      `${filename}: cell-driven items must ship cellsInstalled=0`);
+    assert.deepEqual(power.installedCellIds ?? [], [],
+      `${filename}: installedCellIds must ship empty`);
+    assert.equal(charges.current ?? 0, 0,
+      `${filename}: charges.current must ship 0 (cell owns the charge once installed)`);
+    assert.equal(charges.max ?? 0, 0,
+      `${filename}: charges.max must ship 0`);
+    checked += 1;
+  }
+  assert.ok(checked >= 26, `expected at least 26 cell-driven studio items, checked ${checked}`);
+});

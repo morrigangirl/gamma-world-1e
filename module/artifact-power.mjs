@@ -99,7 +99,17 @@ export function artifactPowerStatus(item) {
   const power = powerData(item);
   const compatibleTypes = compatibleCellTypes(item);
   const cellSlots = normalizedCellSlotCount(item);
-  const cellsInstalled = Math.max(0, Number(power.cellsInstalled ?? 0));
+  const installedCellIds = Array.isArray(power.installedCellIds) ? power.installedCellIds : [];
+  // 0.14.3 — for cell-driven items (consumption.perUnit > 0), the
+  // authoritative count is `installedCellIds.length`. The legacy
+  // `power.cellsInstalled` field can drift (studio JSONs ship lying,
+  // mid-migration states, manual edits) and a stale count must not
+  // satisfy the fire gate when no real cell is installed. Reading
+  // off the array makes count + identity a single source of truth.
+  const perUnit = Number(item?.system?.consumption?.perUnit ?? 0);
+  const cellsInstalled = perUnit > 0
+    ? installedCellIds.length
+    : Math.max(0, Number(power.cellsInstalled ?? 0));
   const installedType = power.installedType && (power.installedType !== "none")
     ? power.installedType
     : compatibleTypes[0] ?? "none";
@@ -113,8 +123,6 @@ export function artifactPowerStatus(item) {
   // rate and installed at least one cell, it's considered "depleted"
   // only when every installed cell is at 0% charge. Drops the legacy
   // own-charges-current check for these items.
-  const perUnit = Number(item?.system?.consumption?.perUnit ?? 0);
-  const installedCellIds = Array.isArray(power.installedCellIds) ? power.installedCellIds : [];
   const usesCellDrain = perUnit > 0 && installedCellIds.length > 0;
 
   const cellsSatisfied = !requirement.includes("cells") || (cellSlots > 0 && cellsInstalled >= cellSlots);
@@ -792,7 +800,24 @@ export async function consumeArtifactCharge(item, amount = 1, { context = null }
     return drainInstalledCells(item, Math.max(0, Number(amount ?? 0)), perUnit, cellIds);
   }
 
-  // Legacy per-item counter path (medi-kit doses, pre-migration items).
+  // 0.14.3 — items with a positive per-use drain rate are cell-driven by
+  // contract. If no cell is in `installedCellIds`, the device cannot fire
+  // — refuse with a depletion notice instead of falling through to the
+  // legacy own-charges counter. Without this gate, a freshly-imported
+  // Laser Pistol (studio JSON ships pre-loaded charges) would let the
+  // player burn through its phantom counter without ever touching the
+  // cell sitting in inventory.
+  if (perUnit > 0) {
+    try {
+      ui.notifications?.warn(`${item.name}: no compatible cell installed.`);
+      const { postDepletedNotice } = await import("./resource-consumption.mjs");
+      await postDepletedNotice(item, "depleted");
+    } catch (_error) { /* swallow — UI/chat path failures shouldn't break the pipeline */ }
+    return { success: false, unpowered: true, reason: "no-cell" };
+  }
+
+  // Legacy per-item counter path (medi-kit doses, pre-migration items
+  // that don't declare a per-unit drain rate).
   const { consumeResource } = await import("./resource-consumption.mjs");
   return consumeResource(item, "artifactCharge", Math.max(0, Number(amount ?? 0)), { context });
 }

@@ -1494,6 +1494,63 @@ export async function migrateWorld() {
     }
   }
 
+  // 0.14.3 — heal cell-driven items that ship "lying" from the studio.
+  // Pre-0.14.3 studio JSONs set `power.cellsInstalled: 1` and a positive
+  // `charges.max` even though `installedCellIds: []`. The mismatch let
+  // unloaded weapons fire by satisfying the `cellsSatisfied` gate via
+  // the legacy count. Here we sweep every owned + world cell-driven
+  // item and force the unloaded shape: cellsInstalled = installedCellIds.length,
+  // charges.{current,max} zeroed when no cells are claimed.
+  if (compareSemver(storedVersion, "0.14.3") < 0) {
+    let healed = 0;
+    try {
+      const healItem = async (item) => {
+        if (!["weapon", "armor", "gear"].includes(item.type)) return;
+        const perUnit = Number(item.system?.consumption?.perUnit ?? 0);
+        if (perUnit <= 0) return;
+        const ids = Array.isArray(item.system?.artifact?.power?.installedCellIds)
+          ? item.system.artifact.power.installedCellIds : [];
+        const recordedCount = Number(item.system?.artifact?.power?.cellsInstalled ?? 0);
+        const chargesMax = Number(item.system?.artifact?.charges?.max ?? 0);
+        const chargesCur = Number(item.system?.artifact?.charges?.current ?? 0);
+        // Mismatch between count and array, OR a legacy charges counter
+        // sitting on a cell-driven item, both indicate the lying shape.
+        if (recordedCount === ids.length && chargesMax === 0 && chargesCur === 0) return;
+        const update = {
+          "system.artifact.power.cellsInstalled": ids.length,
+          "system.artifact.charges.current": 0,
+          "system.artifact.charges.max":     0
+        };
+        if (ids.length === 0) {
+          update["system.artifact.power.installedType"] = "none";
+        }
+        await item.update(update, { gammaWorldSync: true });
+        healed += 1;
+      };
+      for (const item of game.items.contents) await healItem(item);
+      for (const actor of game.actors.contents) {
+        for (const item of actor.items.contents) await healItem(item);
+      }
+      for (const scene of game.scenes?.contents ?? []) {
+        for (const tokenDoc of scene.tokens?.contents ?? []) {
+          if (tokenDoc.actorLink) continue;
+          const actor = tokenDoc.actor;
+          if (!actor) continue;
+          for (const item of actor.items.contents) await healItem(item);
+        }
+      }
+      if (healed > 0 && game.user?.isGM) {
+        await ChatMessage.create({
+          speaker: { alias: "Gamma World" },
+          whisper: ChatMessage.getWhisperRecipients("GM"),
+          content: `<div class="gw-chat-card"><p><strong>Migration 0.14.3:</strong> ${healed} cell-driven item${healed === 1 ? "" : "s"} healed (legacy phantom charges cleared; cellsInstalled now reflects actual installed cells). Players may need to install cells via the artifact's power-management dialog before firing.</p></div>`
+        });
+      }
+    } catch (error) {
+      console.warn(`${SYSTEM_ID} | 0.14.3 cell-shape heal failed`, error);
+    }
+  }
+
   // 0.14.0 — ammunition refactor. Rename bundle gear ("Arrows (bundle of
   // 20)" → "Arrow", quantity 20), delete five orphan cartridges and the
   // Javelin gear, prune dropped slugs from weapon ammoType SetFields,

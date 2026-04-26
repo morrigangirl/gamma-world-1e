@@ -45,17 +45,17 @@
       "powerSource": "solar",
       "power": {
         "requirement": "cells",
-        "installedType": "solar",
+        "installedType": "none",
         "ambientSource": "none",
         "ambientAvailable": false,
         "compatibleCells": "solar",
         "cellSlots": 2,
-        "cellsInstalled": 2,
+        "cellsInstalled": 0,
         "installedCellIds": []
       },
       "charges": {
-        "current": 24,
-        "max": 24
+        "current": 0,
+        "max": 0
       },
       "functionChance": 40,
       "harmCallback": ""
