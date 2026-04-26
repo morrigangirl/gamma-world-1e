@@ -464,6 +464,9 @@
       {{#if powerBadge}}
         <div class="gw-item-form__power-banner gamma-world__badge {{powerBadge.css}}" title="{{powerBadge.title}}">
           {{powerBadge.label}}
+          {{#if drainPreview}}
+            <span class="gw-item-form__power-banner-detail">· ~{{drainPreview.label}} remaining</span>
+          {{/if}}
         </div>
       {{/if}}
       <div class="form-group">

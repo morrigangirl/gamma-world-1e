@@ -99,7 +99,21 @@ export function artifactPowerStatus(item) {
   const power = powerData(item);
   const compatibleTypes = compatibleCellTypes(item);
   const cellSlots = normalizedCellSlotCount(item);
-  const installedCellIds = Array.isArray(power.installedCellIds) ? power.installedCellIds : [];
+  // 0.14.5 — built-in armor weapons inherit the host armor's cell pool
+  // for both the fire gate AND the drain. When `flags.gamma-world-1e
+  // .grantedBy` resolves to a host with cells, treat those as the
+  // effective pool. Falls through to the granted weapon's own list if
+  // the host can't be resolved (broken ref) or has no cells of its own.
+  const grantedBy = item?.flags?.[SYSTEM_ID]?.grantedBy;
+  let installedCellIds = Array.isArray(power.installedCellIds) ? power.installedCellIds : [];
+  if (grantedBy && item?.actor) {
+    const host = item.actor.items.get(grantedBy);
+    const hostIds = Array.isArray(host?.system?.artifact?.power?.installedCellIds)
+      ? host.system.artifact.power.installedCellIds : [];
+    if (host && hostIds.length > 0) {
+      installedCellIds = hostIds;
+    }
+  }
   // 0.14.3 — for cell-driven items (consumption.perUnit > 0), the
   // authoritative count is `installedCellIds.length`. The legacy
   // `power.cellsInstalled` field can drift (studio JSONs ship lying,
@@ -792,6 +806,23 @@ export async function tickCombatPowerDrain(combat, changed) {
  */
 export async function consumeArtifactCharge(item, amount = 1, { context = null } = {}) {
   const perUnit = Number(item?.system?.consumption?.perUnit ?? 0);
+
+  // 0.14.5 — Built-in armor weapons share their host's cells. When the
+  // item carries a `flags.gamma-world-1e.grantedBy` reference and the
+  // host has installed cells, route the drain to the HOST's cell pool
+  // using THIS weapon's perUnit rate. The 0.14.4 power-state UI already
+  // shows this inheritance; this finishes the mechanic so the visible
+  // pill matches the actual cell drain.
+  const grantedBy = item?.flags?.[SYSTEM_ID]?.grantedBy;
+  if (perUnit > 0 && grantedBy && item?.actor) {
+    const host = item.actor.items.get(grantedBy);
+    const hostCellIds = Array.isArray(host?.system?.artifact?.power?.installedCellIds)
+      ? host.system.artifact.power.installedCellIds : [];
+    if (host && hostCellIds.length > 0) {
+      return drainInstalledCells(host, Math.max(0, Number(amount ?? 0)), perUnit, hostCellIds);
+    }
+  }
+
   const cellIds = Array.isArray(item?.system?.artifact?.power?.installedCellIds)
     ? item.system.artifact.power.installedCellIds
     : [];

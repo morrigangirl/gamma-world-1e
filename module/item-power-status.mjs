@@ -191,6 +191,59 @@ export function isItemPowerCritical(item) {
   return state.state === POWER_STATE.EMPTY || state.state === POWER_STATE.NO_CELL;
 }
 
+/**
+ * 0.14.5 — Drain-time preview. Returns the remaining duration at the
+ * current min cell charge, in the device's native unit. For shot/clip
+ * weapons this is "remaining shots/clips"; for minute/hour/day items
+ * it's wall-clock time. Returns null when the helper can't compute a
+ * meaningful preview (no cells, no drain rate, etc.).
+ *
+ * Math: each unit-tick debits `perUnit` percent. A cell at P% can take
+ * `floor(P / perUnit)` more ticks before it hits 0. The "min cell"
+ * percentage is the right input because drain is parallel-equal across
+ * cells and the device fails when any cell empties.
+ *
+ * @returns {{ value: number, unit: string, label: string } | null}
+ */
+export function drainTimeRemaining(item, { localize = passthrough } = {}) {
+  if (!item) return null;
+  const perUnit = Number(item.system?.consumption?.perUnit ?? 0);
+  const unit    = String(item.system?.consumption?.unit ?? "");
+  if (perUnit <= 0 || !unit) return null;
+
+  const state = itemPowerState(item);
+  if (state.state === POWER_STATE.NO_CELL || state.state === POWER_STATE.N_A) return null;
+
+  const minPercent = Number(state.percent ?? 0);
+  if (!Number.isFinite(minPercent) || minPercent <= 0) {
+    return { value: 0, unit, label: localize("GAMMA_WORLD.Artifact.Power.State.Empty", "Empty") };
+  }
+
+  const remainingTicks = Math.floor(minPercent / perUnit);
+  const label = formatRemainingLabel(localize, remainingTicks, unit);
+  return { value: remainingTicks, unit, label };
+}
+
+function formatRemainingLabel(localize, ticks, unit) {
+  // Map unit → singular/plural i18n key + fallback short label.
+  const units = {
+    shot:   { one: "1 shot",   many: "{n} shots" },
+    clip:   { one: "1 clip",   many: "{n} clips" },
+    minute: { one: "1 min",    many: "{n} min" },
+    hour:   { one: "1 hr",     many: "{n} hr" },
+    day:    { one: "1 day",    many: "{n} days" }
+  };
+  const u = units[unit] ?? { one: `1 ${unit}`, many: `{n} ${unit}` };
+  if (ticks === 1) return localize(`GAMMA_WORLD.Artifact.Power.Remaining.${capitalize(unit)}One`, u.one);
+  return formatTemplated(localize,
+    `GAMMA_WORLD.Artifact.Power.Remaining.${capitalize(unit)}Many`,
+    u.many, { n: ticks });
+}
+
+function capitalize(s) {
+  return String(s).charAt(0).toUpperCase() + String(s).slice(1);
+}
+
 /* ------------------------------------------------------------------ */
 
 function makeState(stateKey, extras = {}) {

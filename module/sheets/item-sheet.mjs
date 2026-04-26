@@ -5,7 +5,7 @@
 
 import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, AMMO_TYPES, AMMO_TYPE_KEYS } from "../config.mjs";
 import { artifactPowerSummary, isPowerCell, cellChargePercent, uninstallCell as uninstallCellFn } from "../artifact-power.mjs";
-import { itemPowerBadge } from "../item-power-status.mjs";
+import { itemPowerBadge, drainTimeRemaining } from "../item-power-status.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -57,13 +57,19 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     // consistent across surfaces. Returns null for non-artifact items
     // and for legacy (non-cell-driven) artifacts so the existing
     // power summary line keeps rendering for medi-kits etc.
+    const sheetLocalize = (key, fb) => {
+      const out = game.i18n?.localize?.(key);
+      return (out && out !== key) ? out : (fb ?? key);
+    };
     context.powerBadge = item.system.artifact?.isArtifact
-      ? itemPowerBadge(item, {
-          localize: (key, fb) => {
-            const out = game.i18n?.localize?.(key);
-            return (out && out !== key) ? out : (fb ?? key);
-          }
-        })
+      ? itemPowerBadge(item, { localize: sheetLocalize })
+      : null;
+    // 0.14.5 — drain-time preview ("~23 hr remaining"). Computed only
+    // for cell-driven items with a current charge; skipped (null) for
+    // unloaded / depleted / non-cell-driven items where the pill
+    // already says "No cell" / "Empty" / nothing.
+    context.drainPreview = item.system.artifact?.isArtifact
+      ? drainTimeRemaining(item, { localize: sheetLocalize })
       : null;
 
     // 0.12.0 — cells carry a charge percentage instead of a shot count.

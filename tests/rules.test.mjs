@@ -4490,21 +4490,45 @@ function makePowerableItem({
   };
 }
 
-/** Stub fromUuidSync for the power-state helper to resolve cell pseudo-docs. */
+/** Stub fromUuid(Sync) + getProperty/setProperty for the cell-drain pipeline. */
 function stubCellResolver(cellsByUuid) {
   const originalFoundry = globalThis.foundry;
-  const originalFromUuid = globalThis.fromUuidSync;
+  const originalFromUuid = globalThis.fromUuid;
+  const originalFromUuidSync = globalThis.fromUuidSync;
+  const getProperty = (obj, path) => {
+    const segs = String(path).split(".");
+    let cursor = obj;
+    for (const seg of segs) {
+      if (cursor == null) return undefined;
+      cursor = cursor[seg];
+    }
+    return cursor;
+  };
+  const setProperty = (obj, path, value) => {
+    const segs = String(path).split(".");
+    let cursor = obj;
+    for (let i = 0; i < segs.length - 1; i++) {
+      cursor = cursor[segs[i]] ??= {};
+    }
+    cursor[segs.at(-1)] = value;
+  };
+  const lookup = (uuid) => cellsByUuid[uuid] ?? null;
+  const lookupAsync = async (uuid) => cellsByUuid[uuid] ?? null;
   globalThis.foundry = {
     ...(originalFoundry ?? {}),
     utils: {
       ...((originalFoundry?.utils) ?? {}),
-      fromUuidSync: (uuid) => cellsByUuid[uuid] ?? null
+      fromUuidSync: lookup,
+      getProperty,
+      setProperty
     }
   };
-  globalThis.fromUuidSync = (uuid) => cellsByUuid[uuid] ?? null;
+  globalThis.fromUuidSync = lookup;
+  globalThis.fromUuid = lookupAsync;
   return () => {
     globalThis.foundry = originalFoundry;
-    globalThis.fromUuidSync = originalFromUuid;
+    globalThis.fromUuid = originalFromUuid;
+    globalThis.fromUuidSync = originalFromUuidSync;
   };
 }
 
@@ -4700,6 +4724,201 @@ test("0.14.4 — built-in weapon inherits host armor's power state", async () =>
     assert.equal(result.hostUuid, hostArmor.uuid);
   } finally { restore(); }
 });
+
+/* ------------------------------------------------------------------ */
+/* 0.14.5 — drain-time preview + built-in cell-sharing drain          */
+/* ------------------------------------------------------------------ */
+
+test("0.14.5 — drainTimeRemaining shot weapons return shot count from min cell", async () => {
+  const { drainTimeRemaining } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(60) });
+  try {
+    // Laser Pistol: perUnit 10, unit "shot". 60% / 10 = 6 shots remaining.
+    const item = makePowerableItem({ perUnit: 10, installedCellIds: ["Item.cell1"] });
+    const result = drainTimeRemaining(item);
+    assert.equal(result.value, 6);
+    assert.equal(result.unit, "shot");
+    assert.match(result.label, /6.*shots/);
+  } finally { restore(); }
+});
+
+test("0.14.5 — drainTimeRemaining hour-driven items return hours", async () => {
+  const { drainTimeRemaining } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(48) });
+  try {
+    // Powered Plate: perUnit 2 (100/50), unit "hour". 48% / 2 = 24 hours.
+    const item = makePowerableItem({ perUnit: 2, installedCellIds: ["Item.cell1"] });
+    item.system.consumption.unit = "hour";
+    const result = drainTimeRemaining(item);
+    assert.equal(result.value, 24);
+    assert.equal(result.unit, "hour");
+    assert.match(result.label, /24.*hr/);
+  } finally { restore(); }
+});
+
+test("0.14.5 — drainTimeRemaining returns null for unloaded / non-cell-driven items", async () => {
+  const { drainTimeRemaining } = await import("../module/item-power-status.mjs");
+  // No cell.
+  assert.equal(drainTimeRemaining(makePowerableItem({ installedCellIds: [] })), null);
+  // Non-cell-driven (medi-kit shape).
+  const mediKit = {
+    type: "gear",
+    system: {
+      consumption: { unit: "", perUnit: 0 },
+      artifact: { isArtifact: true, charges: { current: 5, max: 10 }, power: {} }
+    }
+  };
+  assert.equal(drainTimeRemaining(mediKit), null);
+});
+
+test("0.14.5 — drainTimeRemaining returns 0 for empty cells", async () => {
+  const { drainTimeRemaining } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(0) });
+  try {
+    const item = makePowerableItem({ perUnit: 10, installedCellIds: ["Item.cell1"] });
+    const result = drainTimeRemaining(item);
+    assert.equal(result.value, 0);
+    assert.match(result.label, /Empty/i);
+  } finally { restore(); }
+});
+
+test("0.14.5 — artifactPowerStatus inherits host cells for built-in weapons", async () => {
+  const { artifactPowerStatus } = await import("../module/artifact-power.mjs");
+  // Stub the cells so the depletion check (anyCellHasCharge) can resolve them.
+  const restore = stubCellResolver({
+    "Item.cellA": makeCell(80),
+    "Item.cellB": makeCell(80)
+  });
+  try {
+    const hostArmor = {
+      id: "host-armor",
+      name: "Powered Battle Armor",
+      type: "armor",
+      system: {
+        consumption: { perUnit: 2, unit: "hour" },
+        artifact: {
+          power: {
+            requirement: "cells",
+            installedType: "nuclear",
+            cellSlots: 2,
+            cellsInstalled: 2,
+            installedCellIds: ["Item.cellA", "Item.cellB"],
+            compatibleCells: "nuclear"
+          },
+          charges: { current: 0, max: 0 }
+        }
+      }
+    };
+    const builtIn = {
+      id: "built-laser",
+      name: "Built-in Laser Pistol",
+      type: "weapon",
+      flags: { "gamma-world-1e": { grantedBy: "host-armor" } },
+      system: {
+        consumption: { perUnit: 10, unit: "shot" },
+        artifact: {
+          power: {
+            requirement: "cells",
+            installedType: "nuclear",
+            cellSlots: 1,
+            cellsInstalled: 0,
+            installedCellIds: [],         // own pool empty — should inherit
+            compatibleCells: "nuclear"
+          },
+          charges: { current: 0, max: 0 }
+        }
+      },
+      actor: { items: { get: (id) => id === "host-armor" ? hostArmor : null } }
+    };
+    const status = artifactPowerStatus(builtIn);
+    assert.deepEqual(status.installedCellIds, ["Item.cellA", "Item.cellB"],
+      "built-in's effective cell pool comes from the host");
+    assert.equal(status.cellsInstalled, 2,
+      "derived cellsInstalled reflects host's count");
+    assert.equal(status.powered, true,
+      "built-in fires when host has cells, even if its own pool is empty");
+  } finally { restore(); }
+});
+
+test("0.14.5 — consumeArtifactCharge redirects built-in weapon drain to host cells", async () => {
+  const { consumeArtifactCharge } = await import("../module/artifact-power.mjs");
+  // Track which item drainInstalledCells got — we observe via update calls.
+  const updates = [];
+  const cellById = {
+    "Item.cellA": { ...makeCell(80), uuid: "Item.cellA", id: "cellA",
+      update: async function(diff) { updates.push({ id: "cellA", diff }); for (const [k, v] of Object.entries(diff)) setNested(this, k, v); } },
+    "Item.cellB": { ...makeCell(80), uuid: "Item.cellB", id: "cellB",
+      update: async function(diff) { updates.push({ id: "cellB", diff }); for (const [k, v] of Object.entries(diff)) setNested(this, k, v); } }
+  };
+  const hostArmor = {
+    id: "host-armor",
+    name: "Powered Battle Armor",
+    type: "armor",
+    flags: {},
+    system: {
+      consumption: { perUnit: 2, unit: "hour" },
+      artifact: {
+        power: {
+          requirement: "cells",
+          cellSlots: 2,
+          cellsInstalled: 2,
+          installedCellIds: ["Item.cellA", "Item.cellB"]
+        },
+        charges: { current: 0, max: 0 }
+      }
+    },
+    update: async function(diff) { updates.push({ id: "host", diff }); for (const [k, v] of Object.entries(diff)) setNested(this, k, v); }
+  };
+  const builtIn = {
+    id: "built-laser",
+    name: "Built-in Laser Pistol",
+    type: "weapon",
+    flags: { "gamma-world-1e": { grantedBy: "host-armor" } },
+    system: {
+      consumption: { perUnit: 10, unit: "shot" },
+      artifact: {
+        power: { cellSlots: 1, cellsInstalled: 0, installedCellIds: [] },
+        charges: { current: 0, max: 0 }
+      }
+    },
+    actor: { items: { get: (id) => id === "host-armor" ? hostArmor : null } },
+    update: async function() { /* no-op — built-in shouldn't be touched */ }
+  };
+  const restore = stubCellResolver({
+    "Item.cellA": cellById["Item.cellA"],
+    "Item.cellB": cellById["Item.cellB"]
+  });
+  // Stub Hooks for any veto/announce calls inside drainInstalledCells.
+  const originalHooks = globalThis.Hooks;
+  globalThis.Hooks = { call: () => true, callAll: () => {} };
+  try {
+    await consumeArtifactCharge(builtIn, 1);
+    // 0.13.1 contract: drain is per-cell at full perUnit (parallel-equal),
+    // not split. Each shot debits 10% off each installed cell.
+    const cellAUpdate = updates.find((u) => u.id === "cellA"
+      && Object.prototype.hasOwnProperty.call(u.diff, "system.artifact.charges.current"));
+    assert.ok(cellAUpdate, "host cell A should be drained");
+    assert.equal(cellAUpdate.diff["system.artifact.charges.current"], 70,
+      "cellA: 80% - 10% (perUnit) = 70%");
+    const cellBUpdate = updates.find((u) => u.id === "cellB"
+      && Object.prototype.hasOwnProperty.call(u.diff, "system.artifact.charges.current"));
+    assert.ok(cellBUpdate, "host cell B should also drain (parallel)");
+    assert.equal(cellBUpdate.diff["system.artifact.charges.current"], 70);
+    // Built-in's own update should NOT fire for charges (its installedCellIds were empty).
+  } finally {
+    restore();
+    globalThis.Hooks = originalHooks;
+  }
+});
+
+function setNested(obj, path, value) {
+  const segs = String(path).split(".");
+  let cursor = obj;
+  for (let i = 0; i < segs.length - 1; i++) {
+    cursor = cursor[segs[i]] ??= {};
+  }
+  cursor[segs.at(-1)] = value;
+}
 
 test("0.14.3 — every cell-driven studio JSON ships unloaded", async () => {
   const fs = await import("node:fs/promises");
