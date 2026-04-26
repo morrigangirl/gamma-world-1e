@@ -28,6 +28,7 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     actions: {
       clearMalfunction: GammaWorldItemSheet.#onClearMalfunction,
       uninstallCell:    GammaWorldItemSheet.#onUninstallCell,
+      analyzeArtifact:  GammaWorldItemSheet.#onAnalyzeArtifact,
       createItemAE: GammaWorldItemSheet.#onCreateItemAE,
       toggleItemAE: GammaWorldItemSheet.#onToggleItemAE,
       editItemAE:   GammaWorldItemSheet.#onEditItemAE,
@@ -64,6 +65,13 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     context.powerBadge = item.system.artifact?.isArtifact
       ? itemPowerBadge(item, { localize: sheetLocalize })
       : null;
+    // 0.14.7 — Analyze button is shown on the item sheet's Artifact tab
+    // when the artifact isn't fully identified yet. The character sheet
+    // already exposes the same flow on inventory rows; this gives GMs
+    // and players a second entry point from the item sheet itself.
+    context.canAnalyze = !!(item.system.artifact?.isArtifact
+                          && (!item.system.artifact?.identified
+                           || !item.system.artifact?.operationKnown));
     // 0.14.5 — drain-time preview ("~23 hr remaining"). Computed only
     // for cell-driven items with a current charge; skipped (null) for
     // unloaded / depleted / non-cell-driven items where the pill
@@ -291,6 +299,37 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
       await uninstallCellFn(item, cellUuid);
     } catch (error) {
       console.warn(`gamma-world-1e | uninstall cell failed for ${item?.uuid}`, error);
+      ui.notifications?.error(error?.message ?? String(error));
+    }
+  }
+
+  /**
+   * 0.14.7 — open the artifact-analysis session from the item sheet.
+   * Mirrors the existing actor-sheet "Analyze" button (`analyzeItem`)
+   * but lets a player or GM start the flow without opening the actor
+   * sheet first. Routes through `analyzeArtifact` → `openArtifactSession`,
+   * the same multi-step UI used elsewhere.
+   */
+  static async #onAnalyzeArtifact(event, _target) {
+    event?.preventDefault?.();
+    const item = this.document;
+    if (!item || !item.system?.artifact?.isArtifact) {
+      ui.notifications?.info(game.i18n?.localize?.("GAMMA_WORLD.Artifact.NotArtifact")
+        ?? "This is not a Gamma World artifact.");
+      return;
+    }
+    // Prefer the owner actor; fall back to the user's selected actor.
+    const actor = item.actor ?? game.user?.character ?? null;
+    if (!actor) {
+      ui.notifications?.warn(game.i18n?.localize?.("GAMMA_WORLD.Artifact.AnalyzeNeedsActor")
+        ?? "Open this artifact from a character's inventory to analyze it.");
+      return;
+    }
+    try {
+      const { analyzeArtifact } = await import("../artifacts.mjs");
+      await analyzeArtifact(actor, item);
+    } catch (error) {
+      console.warn(`gamma-world-1e | analyzeArtifact failed for ${item?.uuid}`, error);
       ui.notifications?.error(error?.message ?? String(error));
     }
   }

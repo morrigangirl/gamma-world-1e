@@ -469,6 +469,23 @@
           {{/if}}
         </div>
       {{/if}}
+      {{#if canAnalyze}}
+        <div class="gw-item-form__analyze-row">
+          <button type="button" data-action="analyzeArtifact" title="{{localize 'GAMMA_WORLD.Artifact.Analyze.Hint'}}">
+            <i class="fas fa-magnifying-glass"></i>
+            {{localize "GAMMA_WORLD.Artifact.Analyze.Label"}}
+          </button>
+          <span class="gw-item-form__analyze-state">
+            {{#unless system.artifact.identified}}
+              {{localize "GAMMA_WORLD.Artifact.Analyze.Unidentified"}}
+            {{else}}
+              {{#unless system.artifact.operationKnown}}
+                {{localize "GAMMA_WORLD.Artifact.Analyze.OperationUnknown"}}
+              {{/unless}}
+            {{/unless}}
+          </span>
+        </div>
+      {{/if}}
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Artifact.Title"}}</label>
         <span>

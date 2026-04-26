@@ -757,6 +757,13 @@
       "ClearMalfunctionDone": "Malfunction cleared — the artifact can be used again.",
       "ClearMalfunctionGmOnly": "Only the GM can clear an artifact malfunction.",
       "NotArtifact": "Not an artifact.",
+      "AnalyzeNeedsActor": "Open this artifact from a character's inventory to analyze it.",
+      "Analyze": {
+        "Label":              "Analyze",
+        "Hint":               "Open the artifact-analysis session to learn what this device is and how to operate it.",
+        "Unidentified":       "Function unknown — analyze to learn what this artifact does.",
+        "OperationUnknown":   "Operation unknown — analyze to learn how to use it."
+      },
       "Session": {
         "Title": "Artifact Identification",
         "UnknownOperator": "Unknown Operator",

@@ -4955,6 +4955,33 @@ test("0.14.6 — xpAwardForDefeated prefers explicit xpValue over the HD table",
   assert.equal(xpAwardForDefeated(zero), 0);
 });
 
+test("0.14.7 — analyzeArtifact routes to openArtifactSession (re-export wiring)", async () => {
+  const mod = await import("../module/artifacts.mjs");
+  // The exports the item sheet's Analyze handler imports must exist
+  // and be callable. We don't drive the full session here (it would
+  // require a full Foundry environment); we just confirm the surface
+  // contract.
+  assert.equal(typeof mod.analyzeArtifact, "function");
+  assert.equal(typeof mod.openArtifactSession, "function");
+});
+
+test("0.14.7 — artifact identification field set is the same on weapon, armor, gear", async () => {
+  // Schema-level invariant: all three artifact-bearing item types
+  // expose `identified`, `operationKnown`, `attempts` so the analyze
+  // flow can flip the same fields regardless of item type.
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const dataDir = path.resolve(__dirname, "..", "module", "data");
+  for (const file of ["item-weapon.mjs", "item-armor.mjs", "item-gear.mjs"]) {
+    const src = await fs.readFile(path.join(dataDir, file), "utf8");
+    assert.match(src, /identified:\s+new BooleanField/, `${file}: identified field`);
+    assert.match(src, /operationKnown:\s+new BooleanField/, `${file}: operationKnown field`);
+    assert.match(src, /attempts:\s+int/, `${file}: attempts counter`);
+  }
+});
+
 test("0.14.6 — postEncounterCloseSummary renders XP rows + loot buttons in chat", async () => {
   const { postEncounterCloseSummary } = await import("../module/encounter-close.mjs");
   // Stub the chat surface — capture the create() call.
