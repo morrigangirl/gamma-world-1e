@@ -461,6 +461,11 @@
   {{#if (gwOr (gwEq type "weapon") (gwEq type "armor") (gwEq type "gear"))}}
     <fieldset>
       <legend>{{localize "GAMMA_WORLD.Artifact.Title"}}</legend>
+      {{#if powerBadge}}
+        <div class="gw-item-form__power-banner gamma-world__badge {{powerBadge.css}}" title="{{powerBadge.title}}">
+          {{powerBadge.label}}
+        </div>
+      {{/if}}
       <div class="form-group">
         <label>{{localize "GAMMA_WORLD.Artifact.Title"}}</label>
         <span>

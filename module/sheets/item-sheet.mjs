@@ -5,6 +5,7 @@
 
 import { SYSTEM_ID, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, AMMO_TYPES, AMMO_TYPE_KEYS } from "../config.mjs";
 import { artifactPowerSummary, isPowerCell, cellChargePercent, uninstallCell as uninstallCellFn } from "../artifact-power.mjs";
+import { itemPowerBadge } from "../item-power-status.mjs";
 import { isRichEditorChange, wireRichEditorToggles } from "./actor-character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -51,6 +52,19 @@ export class GammaWorldItemSheet extends HandlebarsApplicationMixin(ItemSheetV2)
     context.type   = item.type;
     context.isGM   = !!game.user?.isGM;
     context.artifactPowerSummary = item.system.artifact?.isArtifact ? artifactPowerSummary(item) : "";
+    // 0.14.4 — colored banner for the Artifact tab. Reuses the same
+    // helper that drives the inventory-row pill so signal stays
+    // consistent across surfaces. Returns null for non-artifact items
+    // and for legacy (non-cell-driven) artifacts so the existing
+    // power summary line keeps rendering for medi-kits etc.
+    context.powerBadge = item.system.artifact?.isArtifact
+      ? itemPowerBadge(item, {
+          localize: (key, fb) => {
+            const out = game.i18n?.localize?.(key);
+            return (out && out !== key) ? out : (fb ?? key);
+          }
+        })
+      : null;
 
     // 0.12.0 — cells carry a charge percentage instead of a shot count.
     // Template branches on `isPowerCell` to render the Charge row.

@@ -6,7 +6,8 @@ import { SYSTEM_ID, ATTRIBUTE_KEYS, CRYPTIC_ALLIANCES, DAMAGE_TYPES, DAMAGE_TYPE
 import { computeSkillModifier, countProficientSkills, rollSkill } from "../skills.mjs";
 import { mutationActionLabel, mutationHasAction } from "../mutations.mjs";
 import { itemActionLabel, itemHasUseAction } from "../item-actions.mjs";
-import { artifactNeedsPowerManagement, artifactPowerSummary, isPowerCell, cellChargePercent } from "../artifact-power.mjs";
+import { artifactNeedsPowerManagement, artifactPowerSummary, isPowerCell, cellChargePercent, isItemActiveForDrain, armorIsInert } from "../artifact-power.mjs";
+import { itemPowerBadge, isItemPowerCritical, POWER_STATE } from "../item-power-status.mjs";
 import { artifactDisplayName, artifactOperationKnown, itemIsArtifact } from "../artifact-rules.mjs";
 import { applyRest, performShortRest, performLongRest, shortRestMaxHD, availableHitDice } from "../healing.mjs";
 import { mutationStatus, isMutationDashboardWorthy, MUTATION_STATUS } from "../mutation-status.mjs";
@@ -179,6 +180,15 @@ function prepareArtifactPresentation(item) {
   return { isArtifact, operationKnown, unknownArtifact };
 }
 
+// 0.14.4 — shared i18n resolver for the format helpers below. Returns
+// the fallback string when the key is missing or the resolver itself
+// isn't available (e.g. early in render lifecycle). Mirrors the pattern
+// already used in `formatMutationItem` (~line 367).
+function localizeOrFallback(key, fallback) {
+  const out = game.i18n?.localize?.(key);
+  return (out && out !== key) ? out : (fallback ?? key);
+}
+
 function formatWeaponItem(item) {
   const { isArtifact, operationKnown, unknownArtifact } = prepareArtifactPresentation(item);
   const effectMode = item.system.effect?.mode ?? "damage";
@@ -215,7 +225,20 @@ function formatWeaponItem(item) {
     : "";
   item.gwPowerLine = isArtifact && operationKnown ? artifactPowerSummary(item) : "";
   item.gwHasPowerControls = !!(isArtifact && operationKnown && artifactNeedsPowerManagement(item));
+  // 0.14.4 — colored pill driven by the new power-status helper. Returns
+  // null for non-cell-driven items so the legacy `gwPowerLine` keeps
+  // rendering for medi-kits etc.
+  item.gwPowerBadge = isArtifact && operationKnown
+    ? itemPowerBadge(item, { localize: localizeOrFallback })
+    : null;
   item.gwCanAttack = !isArtifact || operationKnown;
+  // 0.14.4 — power-blocked attack: button stays rendered but is HTML
+  // disabled with a tooltip when the cell-driven weapon has no cell or
+  // every cell is empty. Severity 2 = EMPTY or NO_CELL. Player sees the
+  // affordance is there but greyed out; the colored pill explains why.
+  // The defensive `consumeArtifactCharge` refusal stays for macro / API
+  // callers who bypass the UI.
+  item.gwAttackDisabled = !!(item.gwPowerBadge && item.gwPowerBadge.severity >= 2);
   item.gwCanToggleEquipped = !isArtifact || operationKnown || !!item.system.equipped;
   return item;
 }
@@ -234,7 +257,15 @@ function formatArmorItem(item) {
   item.gwBadges = compact(
     item.system.equipped ? "equipped" : "",
     unknownArtifact ? "" : (fieldMode !== "none" ? `${fieldMode} field` : ""),
-    unknownArtifact ? game.i18n.localize("GAMMA_WORLD.Artifact.UnknownBadge") : (isArtifact ? "Artifact" : "")
+    unknownArtifact ? game.i18n.localize("GAMMA_WORLD.Artifact.UnknownBadge") : (isArtifact ? "Artifact" : ""),
+    // 0.14.4 — surface armor that's lost power. armorIsInert is true
+    // when every installed cell is at 0% (or no cells at all). Players
+    // need this mid-combat: AC reverts to base, flight stops, force
+    // field collapses. Plain string in the badge list for legibility;
+    // the colored pill below carries the cell percentage.
+    isArtifact && operationKnown && armorIsInert(item)
+      ? game.i18n.localize("GAMMA_WORLD.Artifact.Power.State.Inert")
+      : ""
   );
   item.gwDetailLine = unknownArtifact
     ? unknownArtifactSummary()
@@ -259,6 +290,11 @@ function formatArmorItem(item) {
     : "";
   item.gwPowerLine = isArtifact && operationKnown ? artifactPowerSummary(item) : "";
   item.gwHasPowerControls = !!(isArtifact && operationKnown && artifactNeedsPowerManagement(item));
+  // 0.14.4 — same colored pill as weapons, so a powered armor's cell
+  // state shows in the inventory list at a glance.
+  item.gwPowerBadge = isArtifact && operationKnown
+    ? itemPowerBadge(item, { localize: localizeOrFallback })
+    : null;
   item.gwCanToggleEquipped = !isArtifact || operationKnown || !!item.system.equipped;
   return item;
 }
@@ -327,6 +363,12 @@ function formatGearItem(item) {
     : "";
   item.gwPowerLine = isArtifact && operationKnown ? artifactPowerSummary(item) : "";
   item.gwHasPowerControls = !!(isArtifact && operationKnown && artifactNeedsPowerManagement(item));
+  // 0.14.4 — power pill for cell-driven gear (Energy Cloak, Anti-grav
+  // Sled, Communications Sender, Portent, Micro Missile). Returns null
+  // for non-cell-driven gear so medi-kits etc. don't get a stray pill.
+  item.gwPowerBadge = isArtifact && operationKnown
+    ? itemPowerBadge(item, { localize: localizeOrFallback })
+    : null;
   return item;
 }
 
@@ -732,11 +774,38 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
         const ownerId = row.uuid?.split(".").slice(-3, -2)[0];
         return !mutationItemIds.has(ownerId);
       });
+    // 0.14.4 — "Powered items" group. Surfaces equipped cell-driven
+    // items that are EITHER actively draining (ignited weapons,
+    // equipped powered armor) OR in a critical state (no cell / all
+    // cells empty). Filtering by "draining or broken" keeps the panel
+    // useful without becoming an inventory list — a passive Vibro
+    // Dagger sitting equipped-but-not-ignited won't clutter it.
+    const cellDriven = (i) =>
+      Number(i?.system?.consumption?.perUnit ?? 0) > 0;
+    const poweredItemRows = actor.items
+      .filter((i) => ["weapon", "armor", "gear"].includes(i.type))
+      .filter(cellDriven)
+      .filter((i) => i.system?.equipped || isItemActiveForDrain(i) || isItemPowerCritical(i))
+      .filter((i) => isItemActiveForDrain(i) || isItemPowerCritical(i))
+      .map((i) => ({
+        id: i.id,
+        name: i.name,
+        type: i.type,
+        badge: itemPowerBadge(i, { localize: localizeOrFallback }),
+        active: isItemActiveForDrain(i),
+        critical: isItemPowerCritical(i)
+      }))
+      .filter((row) => row.badge);   // skip if helper returned null
+
     context.activeNow = {
       mutations: activeMutationRows,
       cooldowns: cooldownMutationRows,
       effects:   activeEffectRows,
-      hasAny: activeMutationRows.length + cooldownMutationRows.length + activeEffectRows.length > 0
+      poweredItems: poweredItemRows,
+      hasAny: activeMutationRows.length
+            + cooldownMutationRows.length
+            + activeEffectRows.length
+            + poweredItemRows.length > 0
     };
 
     context.tabNav = buildTabNav(context.tabs, {

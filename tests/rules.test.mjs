@@ -4455,6 +4455,252 @@ test("0.14.3 — consumeArtifactCharge refuses cell-driven items with no install
   }
 });
 
+/* ------------------------------------------------------------------ */
+/* 0.14.4 — Power-state pill helpers                                  */
+/* ------------------------------------------------------------------ */
+
+function makePowerableItem({
+  perUnit = 10,
+  installedCellIds = [],
+  installedType = "hydrogen",
+  cellSlots = 1,
+  charges = { current: 0, max: 0 },
+  flags = {}
+} = {}) {
+  return {
+    type: "weapon",
+    name: "Test Pistol",
+    flags,
+    system: {
+      consumption: { unit: "shot", perUnit },
+      artifact: {
+        isArtifact: true,
+        powerSource: installedType,
+        power: {
+          requirement: "cells",
+          compatibleCells: installedType,
+          installedType,
+          cellSlots,
+          cellsInstalled: installedCellIds.length,
+          installedCellIds: [...installedCellIds]
+        },
+        charges: { ...charges }
+      }
+    }
+  };
+}
+
+/** Stub fromUuidSync for the power-state helper to resolve cell pseudo-docs. */
+function stubCellResolver(cellsByUuid) {
+  const originalFoundry = globalThis.foundry;
+  const originalFromUuid = globalThis.fromUuidSync;
+  globalThis.foundry = {
+    ...(originalFoundry ?? {}),
+    utils: {
+      ...((originalFoundry?.utils) ?? {}),
+      fromUuidSync: (uuid) => cellsByUuid[uuid] ?? null
+    }
+  };
+  globalThis.fromUuidSync = (uuid) => cellsByUuid[uuid] ?? null;
+  return () => {
+    globalThis.foundry = originalFoundry;
+    globalThis.fromUuidSync = originalFromUuid;
+  };
+}
+
+function makeCell(pct) {
+  return {
+    type: "gear",
+    system: {
+      subtype: "power-cell",
+      artifact: { charges: { current: pct, max: 100 } }
+    }
+  };
+}
+
+test("0.14.4 — itemPowerState NO_CELL when cell-driven with empty installedCellIds", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const item = makePowerableItem({ installedCellIds: [] });
+  const result = itemPowerState(item);
+  assert.equal(result.state, POWER_STATE.NO_CELL);
+  assert.equal(result.percent, null);
+  assert.equal(result.severity, 2);
+  assert.deepEqual(result.cellPercents, []);
+});
+
+test("0.14.4 — itemPowerState HEALTHY for single cell at 80%", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(80) });
+  try {
+    const item = makePowerableItem({ installedCellIds: ["Item.cell1"] });
+    const result = itemPowerState(item);
+    assert.equal(result.state, POWER_STATE.HEALTHY);
+    assert.equal(result.percent, 80);
+    assert.equal(result.severity, 0);
+  } finally { restore(); }
+});
+
+test("0.14.4 — itemPowerState LOW for cell at 30%", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(30) });
+  try {
+    const item = makePowerableItem({ installedCellIds: ["Item.cell1"] });
+    const result = itemPowerState(item);
+    assert.equal(result.state, POWER_STATE.LOW);
+    assert.equal(result.percent, 30);
+    assert.equal(result.severity, 1);
+  } finally { restore(); }
+});
+
+test("0.14.4 — itemPowerState EMPTY for cell at 0%", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({ "Item.cell1": makeCell(0) });
+  try {
+    const item = makePowerableItem({ installedCellIds: ["Item.cell1"] });
+    const result = itemPowerState(item);
+    assert.equal(result.state, POWER_STATE.EMPTY);
+    assert.equal(result.percent, 0);
+    assert.equal(result.severity, 2);
+  } finally { restore(); }
+});
+
+test("0.14.4 — itemPowerState multi-cell uses MIN with cellPercents array", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({
+    "Item.a": makeCell(60),
+    "Item.b": makeCell(80)
+  });
+  try {
+    const item = makePowerableItem({
+      installedCellIds: ["Item.a", "Item.b"],
+      cellSlots: 2
+    });
+    const result = itemPowerState(item);
+    assert.equal(result.state, POWER_STATE.HEALTHY);
+    assert.equal(result.percent, 60, "MIN of [60, 80]");
+    assert.deepEqual(result.cellPercents, [60, 80]);
+  } finally { restore(); }
+});
+
+test("0.14.4 — itemPowerState mixed-fresh edge: [0, 80] → LOW with cellPercents preserved", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({
+    "Item.empty": makeCell(0),
+    "Item.fresh": makeCell(80)
+  });
+  try {
+    const item = makePowerableItem({
+      installedCellIds: ["Item.empty", "Item.fresh"],
+      cellSlots: 2
+    });
+    const result = itemPowerState(item);
+    assert.equal(result.state, POWER_STATE.LOW,
+      "min=0 with at least one nonzero cell → LOW (not EMPTY)");
+    assert.equal(result.percent, 0);
+    assert.deepEqual(result.cellPercents, [0, 80]);
+  } finally { restore(); }
+});
+
+test("0.14.4 — itemPowerState N_A for non-cell-driven items", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  // Medi-kit shape: legacy charges, no perUnit drain rule.
+  const mediKit = {
+    type: "gear",
+    system: {
+      consumption: { unit: "", perUnit: 0 },
+      artifact: { isArtifact: true, charges: { current: 5, max: 10 }, power: {} }
+    }
+  };
+  assert.equal(itemPowerState(mediKit).state, POWER_STATE.N_A);
+});
+
+test("0.14.4 — itemPowerBadge returns sheet-ready shape", async () => {
+  const { itemPowerBadge } = await import("../module/item-power-status.mjs");
+  const restore = stubCellResolver({});
+  // Keep ui stub for artifactPowerFailureMessage's downstream notifications.
+  const originalUi = globalThis.ui;
+  globalThis.ui = { notifications: { warn: () => {}, info: () => {} } };
+  try {
+    const item = makePowerableItem({ installedCellIds: [] });
+    const badge = itemPowerBadge(item);
+    assert.ok(badge);
+    assert.equal(badge.css, "gw-power-status--no-cell");
+    assert.equal(badge.label, "No cell");
+    assert.equal(badge.severity, 2);
+    assert.equal(badge.state, "no-cell");
+  } finally { restore(); globalThis.ui = originalUi; }
+});
+
+test("0.14.4 — itemPowerBadge returns null for non-cell-driven items", async () => {
+  const { itemPowerBadge } = await import("../module/item-power-status.mjs");
+  const mediKit = {
+    type: "gear",
+    system: {
+      consumption: { unit: "", perUnit: 0 },
+      artifact: { isArtifact: true, charges: { current: 5, max: 10 }, power: {} }
+    }
+  };
+  assert.equal(itemPowerBadge(mediKit), null);
+});
+
+test("0.14.4 — isItemPowerCritical true for EMPTY/NO_CELL only", async () => {
+  const { isItemPowerCritical } = await import("../module/item-power-status.mjs");
+  // No cell.
+  assert.equal(isItemPowerCritical(makePowerableItem({ installedCellIds: [] })), true);
+  // Healthy.
+  const restore = stubCellResolver({ "Item.cell1": makeCell(80) });
+  try {
+    assert.equal(
+      isItemPowerCritical(makePowerableItem({ installedCellIds: ["Item.cell1"] })),
+      false
+    );
+  } finally { restore(); }
+  // Empty cell.
+  const restore2 = stubCellResolver({ "Item.cell1": makeCell(0) });
+  try {
+    assert.equal(
+      isItemPowerCritical(makePowerableItem({ installedCellIds: ["Item.cell1"] })),
+      true
+    );
+  } finally { restore2(); }
+  // Non-cell-driven artifact (medi-kit) → not critical.
+  const mediKit = {
+    type: "gear",
+    system: {
+      consumption: { unit: "", perUnit: 0 },
+      artifact: { isArtifact: true, charges: { current: 5, max: 10 }, power: {} }
+    }
+  };
+  assert.equal(isItemPowerCritical(mediKit), false);
+});
+
+test("0.14.4 — built-in weapon inherits host armor's power state", async () => {
+  const { itemPowerState, POWER_STATE } = await import("../module/item-power-status.mjs");
+  const hostArmor = makePowerableItem({
+    installedCellIds: [],
+    installedType: "nuclear",
+    cellSlots: 2
+  });
+  hostArmor.uuid = "Actor.a.Item.host";
+  hostArmor.type = "armor";
+  const builtIn = makePowerableItem({
+    installedCellIds: ["Item.unused"],
+    installedType: "nuclear",
+    cellSlots: 1,
+    flags: { "gamma-world-1e": { grantedBy: hostArmor.uuid } }
+  });
+  const restore = stubCellResolver({
+    [hostArmor.uuid]: hostArmor,
+    "Item.unused": makeCell(100)   // shouldn't be consulted — host inheritance wins
+  });
+  try {
+    const result = itemPowerState(builtIn);
+    assert.equal(result.state, POWER_STATE.NO_CELL,
+      "built-in inherits host's NO_CELL state, ignoring its own (unused) cells");
+    assert.equal(result.hostUuid, hostArmor.uuid);
+  } finally { restore(); }
+});
+
 test("0.14.3 — every cell-driven studio JSON ships unloaded", async () => {
   const fs = await import("node:fs/promises");
   const path = await import("node:path");

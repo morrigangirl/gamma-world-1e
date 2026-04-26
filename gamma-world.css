@@ -979,6 +979,53 @@ body.system-gamma-world-1e,
   color: rgba(248, 242, 214, 0.65);
 }
 
+/* 0.14.4 — Power-state pills for cell-driven items (weapons, armor,
+ * wearables). Parallel namespace to gw-mutation-status so the two
+ * palettes can evolve independently. Severity climbs healthy → low
+ * → empty → no-cell. The dashed border on no-cell distinguishes
+ * "broken / missing hardware" from "depleted but reloadable." */
+.gamma-world__badge.gw-power-status--healthy {
+  background: rgba(46, 110, 64, 0.92);
+  border-color: rgba(126, 220, 140, 0.6);
+  color: rgba(220, 248, 220, 0.96);
+}
+.gamma-world__badge.gw-power-status--low {
+  background: rgba(124, 50, 30, 0.9);
+  border-color: rgba(244, 154, 102, 0.6);
+  color: rgba(252, 224, 200, 0.96);
+}
+.gamma-world__badge.gw-power-status--empty {
+  background: rgba(110, 30, 24, 0.92);
+  border-color: rgba(220, 96, 80, 0.6);
+  color: rgba(252, 220, 220, 0.98);
+}
+.gamma-world__badge.gw-power-status--no-cell {
+  background: rgba(60, 60, 64, 0.85);
+  border: 1px dashed rgba(220, 96, 80, 0.65);
+  color: rgba(248, 220, 220, 0.92);
+}
+/* Item-sheet Artifact-tab top banner. Reuses the badge color via the
+ * cascade; this rule just controls the layout (full-row, centered). */
+.gw-item-form__power-banner {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  margin: 0 0 0.75rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: none;
+}
+/* Disabled attack button when power is critically blocked. The button
+ * stays rendered (so players see the affordance) but is non-clickable
+ * with a hover tooltip explaining why. */
+button[disabled].gw-attack-button,
+button[aria-disabled="true"].gw-attack-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: auto;   /* keep tooltip / hover working */
+}
+
 /* "Active Now" dashboard panel — sits in the sheet header between the
  * resource summary and damage traits sections. Hidden when nothing is
  * currently active or cooling down (via {{#if activeNow.hasAny}}). */

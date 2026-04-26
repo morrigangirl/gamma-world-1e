@@ -288,13 +288,16 @@
                   <div class="gamma-world__item-body">
                     <div class="gamma-world__item-head">
                       <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
+                      {{#if item.gwPowerBadge}}
+                        <span class="gamma-world__badge {{item.gwPowerBadge.css}}" title="{{item.gwPowerBadge.title}}">{{item.gwPowerBadge.label}}</span>
+                      {{/if}}
                       {{#if item.gwRuleLine}}<span class="gamma-world__item-meta">{{item.gwRuleLine}}</span>{{/if}}
                     </div>
                     <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
                   </div>
                   <span class="gamma-world__item-actions">
                     {{#if item.gwCanAttack}}
-                      <button type="button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Weapon.RollAttack"}}">
+                      <button type="button" class="gw-attack-button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{#if item.gwAttackDisabled}}{{item.gwPowerBadge.title}}{{else}}{{localize "GAMMA_WORLD.Weapon.RollAttack"}}{{/if}}" {{#if item.gwAttackDisabled}}disabled aria-disabled="true"{{/if}}>
                         <i class="fas fa-crosshairs"></i>
                       </button>
                     {{/if}}
@@ -562,13 +565,14 @@
               <div class="gamma-world__item-body">
                 <div class="gamma-world__item-head">
                   <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
-                  {{#if item.gwBadges.length}}
-                    <span class="gamma-world__badge-list">
-                      {{#each item.gwBadges as |badge|}}
-                        <span class="gamma-world__badge">{{badge}}</span>
-                      {{/each}}
-                    </span>
-                  {{/if}}
+                  <span class="gamma-world__badge-list">
+                    {{#if item.gwPowerBadge}}
+                      <span class="gamma-world__badge {{item.gwPowerBadge.css}}" title="{{item.gwPowerBadge.title}}">{{item.gwPowerBadge.label}}</span>
+                    {{/if}}
+                    {{#each item.gwBadges as |badge|}}
+                      <span class="gamma-world__badge">{{badge}}</span>
+                    {{/each}}
+                  </span>
                 </div>
                 <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
                 {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
@@ -578,7 +582,7 @@
               </div>
               <span class="gamma-world__item-actions">
                 {{#if item.gwCanAttack}}
-                  <button type="button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{localize "GAMMA_WORLD.Weapon.RollAttack"}}">
+                  <button type="button" class="gw-attack-button" data-action="rollAttack" data-item-id="{{item.id}}" title="{{#if item.gwAttackDisabled}}{{item.gwPowerBadge.title}}{{else}}{{localize "GAMMA_WORLD.Weapon.RollAttack"}}{{/if}}" {{#if item.gwAttackDisabled}}disabled aria-disabled="true"{{/if}}>
                     <i class="fas fa-crosshairs"></i>
                   </button>
                 {{/if}}
@@ -630,13 +634,14 @@
               <div class="gamma-world__item-body">
                 <div class="gamma-world__item-head">
                   <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
-                  {{#if item.gwBadges.length}}
-                    <span class="gamma-world__badge-list">
-                      {{#each item.gwBadges as |badge|}}
-                        <span class="gamma-world__badge">{{badge}}</span>
-                      {{/each}}
-                    </span>
-                  {{/if}}
+                  <span class="gamma-world__badge-list">
+                    {{#if item.gwPowerBadge}}
+                      <span class="gamma-world__badge {{item.gwPowerBadge.css}}" title="{{item.gwPowerBadge.title}}">{{item.gwPowerBadge.label}}</span>
+                    {{/if}}
+                    {{#each item.gwBadges as |badge|}}
+                      <span class="gamma-world__badge">{{badge}}</span>
+                    {{/each}}
+                  </span>
                 </div>
                 <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
                 {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
@@ -692,13 +697,14 @@
               <div class="gamma-world__item-body">
                 <div class="gamma-world__item-head">
                   <span class="gamma-world__item-name">{{item.gwDisplayName}}</span>
-                  {{#if item.gwBadges.length}}
-                    <span class="gamma-world__badge-list">
-                      {{#each item.gwBadges as |badge|}}
-                        <span class="gamma-world__badge">{{badge}}</span>
-                      {{/each}}
-                    </span>
-                  {{/if}}
+                  <span class="gamma-world__badge-list">
+                    {{#if item.gwPowerBadge}}
+                      <span class="gamma-world__badge {{item.gwPowerBadge.css}}" title="{{item.gwPowerBadge.title}}">{{item.gwPowerBadge.label}}</span>
+                    {{/if}}
+                    {{#each item.gwBadges as |badge|}}
+                      <span class="gamma-world__badge">{{badge}}</span>
+                    {{/each}}
+                  </span>
                 </div>
                 <div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>
                 {{#if item.gwRuleLine}}<div class="gamma-world__item-meta">{{item.gwRuleLine}}</div>{{/if}}
@@ -928,6 +934,21 @@
                     <img class="gw-active-now__icon" src="{{row.img}}" alt="" />
                     <span class="gw-active-now__name">{{row.name}}</span>
                     <span class="gamma-world__badge gw-active-now__timer">{{row.durationLabel}}</span>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/if}}
+          {{#if activeNow.poweredItems.length}}
+            <div class="gw-active-now__group">
+              <h4 class="gw-active-now__group-title">{{localize "GAMMA_WORLD.ActiveNow.PoweredItems"}}</h4>
+              <ul class="gw-active-now__list">
+                {{#each activeNow.poweredItems as |row|}}
+                  <li class="gw-active-now__row {{#if row.critical}}gw-active-now__row--critical{{/if}}" data-item-id="{{row.id}}">
+                    <span class="gw-active-now__name">{{row.name}}</span>
+                    {{#if row.badge}}
+                      <span class="gamma-world__badge {{row.badge.css}}" title="{{row.badge.title}}">{{row.badge.label}}</span>
+                    {{/if}}
                   </li>
                 {{/each}}
               </ul>

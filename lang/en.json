@@ -700,6 +700,15 @@
           "Broadcast": "Broadcast power",
           "LineOrBroadcast": "Line or broadcast power",
           "Available": "Available now"
+        },
+        "State": {
+          "Healthy":   "{n}%",
+          "Low":       "{n}% low",
+          "Empty":     "Empty",
+          "NoCell":    "No cell",
+          "Inert":     "Inert",
+          "InertHost": "Host inert",
+          "ViaHost":   "via {host}"
         }
       },
       "Category": {
@@ -978,6 +987,7 @@
       "Mutations": "Mutations",
       "Cooldowns": "Recharging",
       "Effects": "Effects",
+      "PoweredItems": "Powered items",
       "Deactivate": "Deactivate"
     },
     "Button": {
