@@ -44,7 +44,6 @@ export function registerHooks() {
   Hooks.on("renderChatMessageHTML", onRenderChatMessage);
   Hooks.on("renderChatLog", onRenderChatLog);
   Hooks.on("renderSidebarTab", onRenderSidebarTab);
-  Hooks.on("renderChatMessage", onRenderChatMessage);
   Hooks.on("createActor", onActorCreate);
   Hooks.on("preCreateItem", onPreCreateMutationRollVariant);
   Hooks.on("createItem", onMutationRelevantItemChange);
@@ -202,6 +201,22 @@ function scheduleActorMaintenance(actor, {
 }
 
 function onRenderChatMessage(message, html) {
+  // 0.14.6 — wire encounter-close chat card buttons. Runs first so it
+  // fires regardless of system-flag presence (the encounter-close card
+  // carries its own flags namespace and is independent of attack-card
+  // / undo-snapshot wiring below).
+  const root = html?.[0] ?? html;
+  if (root && typeof root.querySelectorAll === "function") {
+    if (root.querySelector('[data-action="distributeEncounterXp"]')
+     || root.querySelector('[data-action="rollEncounterLoot"]')) {
+      import("./encounter-close.mjs").then(({ registerEncounterCloseChatHandlers }) => {
+        registerEncounterCloseChatHandlers(root);
+      }).catch((error) => {
+        console.warn(`${SYSTEM_ID} | encounter-close chat handlers failed to load`, error);
+      });
+    }
+  }
+
   const flags = message.flags?.[SYSTEM_ID];
   if (!flags) return;
 
@@ -416,22 +431,6 @@ function injectChatRequestToolbar(html) {
 
 function onRenderChatLog(_app, html) {
   injectChatRequestToolbar(html);
-}
-
-/**
- * 0.14.6 — wire encounter-close chat card buttons. Foundry passes the
- * rendered HTML element (or a jQuery wrapper) for each chat message;
- * we look for our `[data-action="distributeEncounterXp"]` /
- * `[data-action="rollEncounterLoot"]` buttons and bind the click
- * handlers from `encounter-close.mjs`.
- */
-async function onRenderChatMessage(_message, html) {
-  const root = html?.[0] ?? html;
-  if (!root || typeof root.querySelectorAll !== "function") return;
-  if (!root.querySelector('[data-action="distributeEncounterXp"]')
-   && !root.querySelector('[data-action="rollEncounterLoot"]')) return;
-  const { registerEncounterCloseChatHandlers } = await import("./encounter-close.mjs");
-  registerEncounterCloseChatHandlers(root);
 }
 
 function onRenderSidebarTab(app, html) {

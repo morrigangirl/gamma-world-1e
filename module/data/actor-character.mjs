@@ -87,7 +87,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // card's "Roll Loot" button. Empty string = no loot rolled.
         // Use the Foundry compendium UUID like
         // `RollTable.<id>` or `Compendium.<pack>.<id>`.
-        lootTable:  str({ initial: "" }),
+        // 0.14.11 — `blank: true` required because Foundry's StringField
+        // defaults `blank: false` and rejects "" as the initial value
+        // when validating an existing actor's data on load.
+        lootTable:  str({ initial: "", blank: true }),
         // 0.14.6 — pre-rolled hit dice for monsters; used by the XP
         // fallback table when xpValue is 0. PCs leave at 0 — their
         // level + xpForLevel handles their growth.
