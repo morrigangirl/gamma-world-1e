@@ -48,7 +48,7 @@
   <div class="gamma-world__header-bar">
     <div class="gamma-world__hp">
       <label>{{localize "GAMMA_WORLD.Resource.HPShort"}}
-        <input type="number" name="system.resources.hp.value" value="{{system.resources.hp.value}}" />
+        <input type="number" name="system.resources.hp.value" value="{{system.resources.hp.value}}" min="0" max="{{derived.hpMax}}" />
         <span class="gamma-world__sep">/</span>
         <input type="number" value="{{derived.hpMax}}" readonly />
       </label>

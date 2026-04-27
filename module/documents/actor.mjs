@@ -12,6 +12,7 @@ import { charismaReactionAdjustment, resolveEncounterIntelligence } from "../tab
 import { runAsGM } from "../gm-executor.mjs";
 import { artifactUseProfile } from "../artifact-rules.mjs";
 import { shouldRouteHpReduction } from "../save-flow.mjs";
+import { clampHpUpdate } from "../hp-clamp.mjs";
 
 function clampArmorClass(value) {
   return Math.max(1, Math.min(10, Math.round(Number(value) || 10)));
@@ -259,6 +260,13 @@ export class GammaWorldActor extends Actor {
         foundry.utils.setProperty(changed, "system.resources.hitDice.value", Math.min(currentHd, newLevel));
       }
     }
+
+    // 0.14.12 — enforce the HP invariant `value <= max` for every editor
+    // (player, GM, macro, API) before the GM short-circuit below. Uses
+    // the incoming `max` if the same update changes both fields; else
+    // falls back to the actor's current effective max. Also pulls a
+    // stranded `value` down when only `max` is being lowered.
+    clampHpUpdate(changed, this.system?.resources?.hp);
 
     if (options?.gammaWorldSync || game.user?.isGM) return result;
 

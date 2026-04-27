@@ -5334,3 +5334,98 @@ test("0.14.3 — every cell-driven studio JSON ships unloaded", async () => {
   }
   assert.ok(checked >= 26, `expected at least 26 cell-driven studio items, checked ${checked}`);
 });
+
+// ---------------------------------------------------------------------------
+// 0.14.12 — clampHpUpdate enforces value <= max on actor updates
+// ---------------------------------------------------------------------------
+
+function withFoundryUtilsStub(fn) {
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    ...(originalFoundry ?? {}),
+    utils: {
+      ...(originalFoundry?.utils ?? {}),
+      getProperty: (obj, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj),
+      setProperty: (obj, path, value) => {
+        const segs = path.split(".");
+        let cursor = obj;
+        for (let i = 0; i < segs.length - 1; i += 1) {
+          if (cursor[segs[i]] == null) cursor[segs[i]] = {};
+          cursor = cursor[segs[i]];
+        }
+        cursor[segs.at(-1)] = value;
+        return true;
+      }
+    }
+  };
+  try { return fn(); } finally { globalThis.foundry = originalFoundry; }
+}
+
+test("0.14.12 — clampHpUpdate caps value at the actor's current max when only value changes", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { resources: { hp: { value: 999 } } } };
+    const clamped = clampHpUpdate(changed, { value: 30, max: 40 });
+    assert.equal(clamped, 40, "returned the clamped value");
+    assert.equal(changed.system.resources.hp.value, 40, "wrote clamped value back into changed");
+  });
+});
+
+test("0.14.12 — clampHpUpdate caps to the new max when both value and max are in the same update", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { resources: { hp: { value: 100, max: 60 } } } };
+    const clamped = clampHpUpdate(changed, { value: 30, max: 40 });
+    assert.equal(clamped, 60, "uses incoming max, not stale current max");
+    assert.equal(changed.system.resources.hp.value, 60);
+  });
+});
+
+test("0.14.12 — clampHpUpdate leaves a legal value alone (no-op when value <= max)", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { resources: { hp: { value: 25 } } } };
+    const clamped = clampHpUpdate(changed, { value: 30, max: 40 });
+    assert.equal(clamped, null, "returns null when no clamp needed");
+    assert.equal(changed.system.resources.hp.value, 25, "value untouched");
+  });
+});
+
+test("0.14.12 — clampHpUpdate pulls stranded value down when only max is lowered", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // Actor at 35/40; an update lowers max to 20 without touching value.
+    // The clamp should write value=20 into the same update so the
+    // post-update state honors the invariant.
+    const changed = { system: { resources: { hp: { max: 20 } } } };
+    const clamped = clampHpUpdate(changed, { value: 35, max: 40 });
+    assert.equal(clamped, 20);
+    assert.equal(changed.system.resources.hp.value, 20);
+  });
+});
+
+test("0.14.12 — clampHpUpdate is a true no-op when neither value nor max is in the update", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { details: { level: 4 } } };
+    const clamped = clampHpUpdate(changed, { value: 30, max: 40 });
+    assert.equal(clamped, null);
+    assert.deepEqual(changed, { system: { details: { level: 4 } } }, "unrelated update untouched");
+  });
+});
+
+test("0.14.12 — clampHpUpdate floors fractional incoming values before comparing", async () => {
+  const { clampHpUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // 40.9 floors to 40, which equals max — no clamp needed.
+    const a = { system: { resources: { hp: { value: 40.9 } } } };
+    assert.equal(clampHpUpdate(a, { value: 30, max: 40 }), null);
+    // 40.1 floors to 40 — no clamp.
+    const b = { system: { resources: { hp: { value: 40.1 } } } };
+    assert.equal(clampHpUpdate(b, { value: 30, max: 40 }), null);
+    // 41.5 floors to 41 — over max, clamp to 40.
+    const c = { system: { resources: { hp: { value: 41.5 } } } };
+    assert.equal(clampHpUpdate(c, { value: 30, max: 40 }), 40);
+    assert.equal(c.system.resources.hp.value, 40);
+  });
+});
