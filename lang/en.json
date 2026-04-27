@@ -375,7 +375,10 @@
       "FatigueRound": "round",
       "CriticalHit": "Critical Hit",
       "CriticalMiss": "Critical Miss",
-      "Range": "Range"
+      "Range": "Range",
+      "RollDetails": "Roll details",
+      "RollBonusHeading": "Attack bonus",
+      "RollTargetHeading": "Target lookup"
     },
     "Status": {
       "Irradiated": "Irradiated",

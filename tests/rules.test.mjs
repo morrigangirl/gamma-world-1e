@@ -5122,6 +5122,71 @@ test("0.14.9 — performTravel notes starving PCs when rations run out", async (
   } finally { env.restore(); }
 });
 
+/* ------------------------------------------------------------------ */
+/* 0.14.10 — Attack-card target breakdown                             */
+/* ------------------------------------------------------------------ */
+
+test("0.14.10 — buildAttackTargetBreakdown surfaces base WC, fatigue, effective WC, AC, target", async () => {
+  // We import dice.mjs lazily because it pulls in foundry.* refs at the
+  // top of `effect-state.mjs`. Stub the shapes the import touches.
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: { getProperty: () => null, setProperty: () => null },
+    applications: { api: { DialogV2: class {} }, handlebars: { renderTemplate: async () => "" } },
+    documents: {}
+  };
+  try {
+    const { buildAttackTargetBreakdown } = await import("../module/dice.mjs");
+    // Fatigue-free shot: no Fatigue row, no separate Effective row.
+    const fresh = buildAttackTargetBreakdown({
+      baseWeaponClass: 13, fatigueFactor: 0, effectiveWeaponClass: 13,
+      targetAc: 7, rollTarget: 8
+    });
+    const labels = fresh.map((p) => p.label);
+    assert.ok(labels.includes("Base weapon class"));
+    assert.ok(!labels.includes("Fatigue"), "no fatigue row when factor is 0");
+    assert.ok(!labels.includes("Effective weapon class"),
+      "no separate effective WC row when it equals base");
+    assert.ok(labels.includes("Target AC"));
+    assert.ok(labels.includes("Roll target"));
+    // Roll target carries the `+` suffix.
+    const rollTargetRow = fresh.find((p) => p.label === "Roll target");
+    assert.equal(rollTargetRow.signed, "8+");
+
+    // Fatigued shot: Fatigue + Effective WC rows surface.
+    const fatigued = buildAttackTargetBreakdown({
+      baseWeaponClass: 16, fatigueFactor: -3, effectiveWeaponClass: 13,
+      targetAc: 1, rollTarget: 12
+    });
+    const fatigueRow = fatigued.find((p) => p.label === "Fatigue");
+    assert.ok(fatigueRow, "Fatigue row appears when factor is non-zero");
+    assert.equal(fatigueRow.signed, "-3");
+    const effRow = fatigued.find((p) => p.label === "Effective weapon class");
+    assert.ok(effRow, "Effective WC row surfaces when it diverges from base");
+    assert.equal(effRow.signed, "13");
+  } finally { globalThis.foundry = originalFoundry; }
+});
+
+test("0.14.10 — buildNaturalAttackTargetBreakdown carries HD bucket + AC + target", async () => {
+  const originalFoundry = globalThis.foundry;
+  globalThis.foundry = {
+    utils: { getProperty: () => null, setProperty: () => null },
+    applications: { api: { DialogV2: class {} }, handlebars: { renderTemplate: async () => "" } },
+    documents: {}
+  };
+  try {
+    const { buildNaturalAttackTargetBreakdown } = await import("../module/dice.mjs");
+    const breakdown = buildNaturalAttackTargetBreakdown({
+      attackerLevel: 4, hdBucket: "4-5", targetAc: 5, rollTarget: 14
+    });
+    const labels = breakdown.map((p) => p.label);
+    assert.deepEqual(labels,
+      ["Attacker level", "HD bucket", "Target AC", "Roll target"]);
+    assert.equal(breakdown.find((p) => p.label === "HD bucket").signed, "4-5");
+    assert.equal(breakdown.find((p) => p.label === "Roll target").signed, "14+");
+  } finally { globalThis.foundry = originalFoundry; }
+});
+
 test("0.14.8 — damageTraitMultiplier returns the right multiplier per trait", async () => {
   const { damageTraitMultiplier } = await import("../module/effect-state.mjs");
   // Immunity wins: 0.

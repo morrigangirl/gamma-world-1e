@@ -1,7 +1,7 @@
 import { SYSTEM_ID } from "./config.mjs";
 import { damageTraitMultiplier } from "./effect-state.mjs";
 import { addDiceToFormula, addFlatBonusToFormula, addPerDieBonusToFormula, doubleDiceInFormula, scaleFormula } from "./formulas.mjs";
-import { naturalAttackTarget, weaponAttackTarget } from "./tables/combat-matrix.mjs";
+import { naturalAttackTarget, weaponAttackTarget, hitDiceBucket } from "./tables/combat-matrix.mjs";
 import {
   combinedFatigueFactor,
   resolveWeaponFatigueFamily
@@ -343,6 +343,62 @@ function buildAttackBonusBreakdown({ dxToHit = 0, psToHit = 0, closeRangeBonus =
       signed: rangePenalty > 0 ? `+${rangePenalty}` : `${rangePenalty}`
     });
   }
+  return parts;
+}
+
+/**
+ * 0.14.10 — Target-side breakdown rows for the chat card's "Roll details"
+ * collapsible block. Mirrors `buildAttackBonusBreakdown`'s shape so the
+ * template can render both with the same row template.
+ *
+ * Surfaces the GW1e weapon-class lookup the matrix performed:
+ *   Base WC → fatigue → Effective WC → Target AC → Roll target
+ * so players can audit why a particular hit number was needed.
+ */
+export function buildAttackTargetBreakdown({
+  baseWeaponClass = 0,
+  fatigueFactor = 0,
+  effectiveWeaponClass = 0,
+  targetAc = null,
+  rollTarget = null
+} = {}) {
+  const parts = [];
+  const push = (label, value, opts = {}) => {
+    if (value === null || value === undefined || (typeof value === "number" && Number.isNaN(value))) return;
+    const display = opts.signed
+      ? (Number(value) > 0 ? `+${value}` : `${value}`)
+      : (opts.suffix ? `${value}${opts.suffix}` : `${value}`);
+    parts.push({ label, value, signed: display });
+  };
+  push("Base weapon class", baseWeaponClass);
+  if (fatigueFactor) push("Fatigue", fatigueFactor, { signed: true });
+  if (effectiveWeaponClass !== baseWeaponClass) push("Effective weapon class", effectiveWeaponClass);
+  push("Target AC", targetAc);
+  push("Roll target", rollTarget, { suffix: "+" });
+  return parts;
+}
+
+/**
+ * 0.14.10 — Natural-attack target breakdown. Surfaces the HD bucket
+ * the matrix lookup used so players see how a HD-3 monster's odds
+ * differ from a HD-9 monster's against the same AC.
+ */
+export function buildNaturalAttackTargetBreakdown({
+  attackerLevel = 0,
+  hdBucket = "",
+  targetAc = null,
+  rollTarget = null
+} = {}) {
+  const parts = [];
+  const push = (label, value, opts = {}) => {
+    if (value === null || value === undefined || value === "") return;
+    const display = opts.suffix ? `${value}${opts.suffix}` : `${value}`;
+    parts.push({ label, value, signed: display });
+  };
+  push("Attacker level", attackerLevel);
+  push("HD bucket", hdBucket);
+  push("Target AC", targetAc);
+  push("Roll target", rollTarget, { suffix: "+" });
   return parts;
 }
 
@@ -876,6 +932,20 @@ export async function rollAttack(actor, weapon) {
 
   const rollTooltip = await roll.getTooltip();
 
+  // 0.14.10 — surface the weapon-class lookup the matrix performed.
+  // Players see the terse one-line summary always; the collapsible
+  // "Roll details" block on the chat card spells out base WC →
+  // fatigue → effective WC → target AC → matrix target so the math
+  // behind the hit number is auditable.
+  const baseWeaponClass = Number(weapon.system?.weaponClass ?? 1);
+  const targetBreakdown = buildAttackTargetBreakdown({
+    baseWeaponClass,
+    fatigueFactor,
+    effectiveWeaponClass,
+    targetAc: target.armorClass,
+    rollTarget: targetNumber
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -899,7 +969,10 @@ export async function rollAttack(actor, weapon) {
       rollTooltip,
       rollFormula: roll.formula,
       attackBonusContributions,
-      showAttackBonusBreakdown: attackBonusContributions.length > 0
+      showAttackBonusBreakdown: attackBonusContributions.length > 0,
+      targetBreakdown,
+      showTargetBreakdown: targetBreakdown.length > 0,
+      hasDetails: attackBonusContributions.length > 0 || targetBreakdown.length > 0
     }
   );
 
@@ -1120,6 +1193,18 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
 
   const rollTooltip = await roll.getTooltip();
 
+  // 0.14.10 — natural attacks use the HD-bucket matrix (`MATRIX_II`)
+  // not the weapon-class one. Surface bucket / level / AC / target so
+  // players see why a HD-3 creature has different odds than a HD-9 one
+  // against the same AC.
+  const naturalLevel = Number(actor.system.details.level ?? 1);
+  const naturalBreakdown = buildNaturalAttackTargetBreakdown({
+    attackerLevel: naturalLevel,
+    hdBucket: hitDiceBucket(naturalLevel),
+    targetAc: target.armorClass,
+    rollTarget: targetNumber
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -1143,7 +1228,10 @@ export async function rollNaturalWeaponAttack(actor, weapon) {
       rollTooltip,
       rollFormula: roll.formula,
       attackBonusContributions,
-      showAttackBonusBreakdown: attackBonusContributions.length > 0
+      showAttackBonusBreakdown: attackBonusContributions.length > 0,
+      targetBreakdown: naturalBreakdown,
+      showTargetBreakdown: naturalBreakdown.length > 0,
+      hasDetails: attackBonusContributions.length > 0 || naturalBreakdown.length > 0
     }
   );
 
@@ -1254,6 +1342,18 @@ export async function rollNaturalAttack(actor) {
 
   const rollTooltip = await roll.getTooltip();
 
+  // 0.14.10 — natural-attack target breakdown for the second render
+  // path (the one used by the "Roll Natural Attack" header button).
+  // Same matrix as `rollNaturalWeaponAttack` so the chat card surface
+  // stays consistent regardless of which entry point fired.
+  const naturalLevel2 = Number(actor.system.details.level ?? 1);
+  const naturalBreakdown2 = buildNaturalAttackTargetBreakdown({
+    attackerLevel: naturalLevel2,
+    hdBucket: hitDiceBucket(naturalLevel2),
+    targetAc: target.armorClass,
+    rollTarget: targetNumber
+  });
+
   const content = await renderTemplate(
     `systems/${SYSTEM_ID}/templates/chat/attack-card.hbs`,
     {
@@ -1277,7 +1377,10 @@ export async function rollNaturalAttack(actor) {
       rollTooltip,
       rollFormula: roll.formula,
       attackBonusContributions,
-      showAttackBonusBreakdown: attackBonusContributions.length > 0
+      showAttackBonusBreakdown: attackBonusContributions.length > 0,
+      targetBreakdown: naturalBreakdown2,
+      showTargetBreakdown: naturalBreakdown2.length > 0,
+      hasDetails: attackBonusContributions.length > 0 || naturalBreakdown2.length > 0
     }
   );
 

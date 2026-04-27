@@ -2655,6 +2655,40 @@ button[aria-disabled="true"].gw-attack-button {
   padding: 0.3rem 0.5rem;
 }
 
+/* 0.14.10 — Roll details collapsible. Default-closed <details> wraps
+   both the attack-bonus breakdown and the new target breakdown so
+   the chat card stays compact at a glance and expands on demand. */
+.system-gamma-world-1e .gw-chat-card .gw-attack-card__details {
+  margin-top: 0.2rem;
+}
+.system-gamma-world-1e .gw-chat-card .gw-attack-card__details > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.7));
+  padding: 0.18rem 0.1rem;
+  list-style: revert;   /* keep the disclosure triangle */
+  user-select: none;
+}
+.system-gamma-world-1e .gw-chat-card .gw-attack-card__details[open] > summary {
+  color: var(--gw-ink, #1f2428);
+}
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions__heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gw-ink-soft, rgba(31, 36, 40, 0.55));
+  margin-bottom: 0.2rem;
+}
+.system-gamma-world-1e .gw-chat-card .gw-damage-contributions--target {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(199, 166, 0, 0.06);
+  border-left-color: rgba(199, 166, 0, 0.4);
+}
+
 /* ----- Fatigue klaxon (80s alert-bulb, pinned to the right gutter of   */
 /*       the identity strip so Level / XP / Type stay on one baseline). */
 
