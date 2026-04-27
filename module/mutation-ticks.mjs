@@ -225,6 +225,74 @@ export async function tickRegenerationWorldTime(actor, worldTime) {
   return { healed: newHp - currentHp, days };
 }
 
+/* ------------------------------------------------------------------ */
+/* 0.14.16 — Anti-Reflection: 25% chance a mental mutation reverses    */
+/* ------------------------------------------------------------------ */
+
+/** Pure: return true with 25% probability. Caller passes `rng` for tests. */
+export function antiReflectionTriggers({ rng = Math.random } = {}) {
+  return rng() < 0.25;
+}
+
+/** Pure: should we even roll? Only for mental mutations on actors that
+ *  carry Anti-Reflection. */
+export function shouldCheckAntiReflection(actor, item) {
+  if (!actor || !item) return false;
+  if (item.type !== "mutation") return false;
+  if (item.system?.subtype !== "mental") return false;
+  return !!activeMutation(actor, "Anti-Reflection");
+}
+
+/** Async: roll the 25% gate; if it fires, post a chat card warning the
+ *  GM to reverse the mutation's effect. The mutation still runs — this
+ *  hook informs rather than blocks, because the reversal semantics
+ *  (attack rebounds, defense protects opponent) are too heterogeneous
+ *  to apply cleanly in code. */
+export async function checkAntiReflectionOnUse(actor, item, { rng = Math.random } = {}) {
+  if (!shouldCheckAntiReflection(actor, item)) return false;
+  const triggers = antiReflectionTriggers({ rng });
+  if (!triggers) return false;
+  await postMutationChatCard(actor, "Anti-Reflection",
+    `Anti-Reflection triggers (25%) on <strong>${item.name}</strong>. The mutation reverses: a mental attack rebounds onto ${actor.name}; a mental defense protects the opponent instead. (GM reverses target / effect manually.)`);
+  return true;
+}
+
+/* ------------------------------------------------------------------ */
+/* 0.14.16 — Epilepsy: per-round paralysis chance during combat        */
+/* ------------------------------------------------------------------ */
+
+/** Pure: probability gate for the round. 25% on round 1 (pre-fight
+ *  jitters) and 10% on each subsequent round. */
+export function epilepsyTriggers({ round, rng = Math.random }) {
+  const r = Math.max(0, Number(round) || 0);
+  if (r <= 0) return false;
+  const threshold = (r === 1) ? 0.25 : 0.10;
+  return rng() < threshold;
+}
+
+/** Pure: should we even roll? Only when actor has the mutation and
+ *  isn't already paralyzed (don't compound the lock). */
+export function shouldCheckEpilepsy({ hasMutation, alreadyParalyzed }) {
+  if (!hasMutation) return false;
+  if (alreadyParalyzed) return false;
+  return true;
+}
+
+/** Async: roll the per-round chance, apply paralyzed if it fires. */
+export async function tickEpilepsyCombat(actor, combat, { rng = Math.random } = {}) {
+  if (!activeMutation(actor, "Epilepsy")) return null;
+  const round = Number(combat?.round) || 0;
+  const alreadyParalyzed = !!actor?.statuses?.has?.("paralyzed");
+  if (!shouldCheckEpilepsy({ hasMutation: true, alreadyParalyzed })) return null;
+  if (!epilepsyTriggers({ round, rng })) return null;
+  if (typeof actor.toggleStatusEffect === "function") {
+    await actor.toggleStatusEffect("paralyzed", { active: true });
+  }
+  await postMutationChatCard(actor, "Epilepsy",
+    `${actor.name} suffers a sudden seizure and is paralyzed this round. (Recovers on the GM's next status update.)`);
+  return { round };
+}
+
 /**
  * Toggle the paralyzed status for plants with Daylight Stasis based on
  * the world clock. Only flips status when crossing a day/night

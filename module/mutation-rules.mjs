@@ -156,6 +156,42 @@ const MUTATION_VARIANT_POOLS = Object.freeze({
   "Skin Structure Change":   ["+1 damage taken when hurt", "1 damage per turn in water", "1d3 damage per turn in bright light"]
 });
 
+/**
+ * 0.14.16 — declarative damage-trait grants from mutations.
+ *
+ * Maps a mutation's canonical name to a `{ vulnerability?, immunity?,
+ * resistance? }` triple of damage-type slugs. Folded into
+ * `derived.damageVulnerability/Immunity/Resistance` in
+ * `buildActorDerived` after armor-grants have been applied. The same
+ * canonical type strings (heat / cold / energy / radiation / poison /
+ * laser / etc.) used elsewhere in the trait pipeline.
+ *
+ * Variant-driven mutations (e.g. Skin Structure Change) consult
+ * `mutationDamageTraitsForVariant(name, variant)` instead — the static
+ * map below covers the unconditional cases.
+ */
+export const MUTATION_DAMAGE_TRAITS = Object.freeze({
+  "Temperature Sensitivity": { vulnerability: ["heat", "cold", "energy"] },
+  "Photosynthetic Skin":     { vulnerability: ["heat", "cold"] }
+});
+
+/**
+ * 0.14.16 — variant lookup for Skin Structure Change. Returns the
+ * vulnerability/immunity/resistance grant for the rolled variant
+ * stored on `mutation.system.reference.variant`. The "+1 damage
+ * taken when hurt" variant marks a broad damage spread as vulnerable
+ * (translates the per-die addend into the closer ×2 multiplier
+ * already in the trait pipeline). The other two variants are
+ * environmental ticks handled by `tickSkinStructureWorldTime`.
+ */
+export function mutationDamageTraitsForVariant(name, variant) {
+  if (name !== "Skin Structure Change") return null;
+  if (variant === "+1 damage taken when hurt") {
+    return { vulnerability: ["physical", "heat", "cold", "energy", "laser"] };
+  }
+  return null;
+}
+
 function mutationVariant(name, rng = Math.random) {
   const pool = MUTATION_VARIANT_POOLS[name];
   if (pool) return randomChoice(pool, rng);
@@ -643,6 +679,117 @@ export const MUTATION_RULES = {
     action: "restrain"
   },
 
+  /* ------------------------------------------------------------------ */
+  /* 0.14.16 — Plant attack mutations                                   */
+  /*                                                                    */
+  /* All single-target / area damage plant attacks that previously fell */
+  /* through to inferred passive behavior. Each entry uses an existing  */
+  /* action handler (damage / area-damage / ramping-damage) so we don't */
+  /* introduce new dispatch arms. Damage formulas come from the GW1e    */
+  /* text; ranges are GW1e canon ("dagger damage" interpreted as 1d4).  */
+  /* ------------------------------------------------------------------ */
+
+  "Squeeze Vines": {
+    // 2d6/round to gripped targets — modeled as ramping-damage so the
+    // damage handler produces the per-round chat card with the running
+    // total when the GM keeps tapping Use.
+    mode: "action",
+    range: "Melee",
+    duration: "Concentration, per round while gripping",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "2d6", saveType: "", notes: "Constricting vines deal 2d6 damage per round to each gripped target." },
+    action: "ramping-damage"
+  },
+
+  "Throwing Thorns": {
+    // 10m range, dagger damage (1d4) per thorn. RAW says 1-100 thorns
+    // per "load" but in practice each Use is one volley — the GM
+    // tracks ammo separately if it matters.
+    mode: "action",
+    range: "10 m",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d4", saveType: "", notes: "Fire dart-like thorns up to 10m. Each hit inflicts dagger damage. Replacements regrow over 1 week." },
+    action: "damage"
+  },
+
+  "Poison Throwing Thorns": {
+    // Same shape as Throwing Thorns but the hit also forces a poison
+    // save (handled by the area-damage flow's save dialog with
+    // single-target scope).
+    mode: "action",
+    range: "10 m",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d4", saveType: "poison", notes: "Fire poison-coated thorns up to 10m. Each hit inflicts dagger damage and forces a poison save (random intensity)." },
+    action: "damage"
+  },
+
+  "Spore Cloud": {
+    // 4m radius, 1d6 damage save vs poison (text says "reproductive
+    // or poison spores"; we model the harmful side here, using poison
+    // as the canonical save type).
+    mode: "action",
+    range: "Self",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d6", saveType: "poison", notes: "Release a 4m-radius cloud of reproductive or poison spores; everyone in the cloud takes 1d6 (poison save halves)." },
+    action: "area-damage"
+  },
+
+  "Explosive Fruit": {
+    // 5m radius, 2d6 damage. No canonical save type; the area-damage
+    // flow uses radiation when none is specified (placeholder); set
+    // explicit "" to skip the save dialog.
+    mode: "action",
+    range: "Throw 10 m",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "2d6", saveType: "", notes: "Throw or trigger a fruit; detonates for 2d6 in a 5m radius." },
+    action: "area-damage"
+  },
+
+  "Razor-edged Leaves": {
+    // Per the text, smaller/sharper variant of Saw-edged. Uses 1d4
+    // slash damage, attacking anything thrust among the leaves.
+    mode: "action",
+    range: "Melee",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d4", saveType: "", notes: "Razor-edged leaves slash anything thrust among them for 1d4 damage." },
+    action: "damage"
+  },
+
+  "Saw-edged Leaves": {
+    // Larger toothed leaves; "1d8 per branch" from the GW1e text.
+    mode: "action",
+    range: "Melee",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d8", saveType: "", notes: "A branch fitted with saw-edged leaves slashes for 1d8 damage when triggered." },
+    action: "damage"
+  },
+
+  "Barbed Leaves": {
+    // 1d6 damage + grip when mounted on a movable plant part.
+    mode: "action",
+    range: "Melee",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "1d6", saveType: "", notes: "Barbed leaves slash for 1d6 damage and may also grip the target if mounted on a movable limb." },
+    action: "damage"
+  },
+
+  "Dissolving Juices": {
+    // 5d6 damage per turn to organic matter in contact.
+    mode: "action",
+    range: "Melee",
+    duration: "Per turn while in contact",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: { formula: "5d6", saveType: "", notes: "Secreted fluids dissolve organic matter for 5d6 damage per melee turn of contact." },
+    action: "ramping-damage"
+  },
+
   // 0.8.4 Category C gap fixes — three mental mutations that the rule-
   // inference keyword matcher classified as activated abilities are
   // actually declarative / reactive passives. Summary text describes
@@ -819,6 +966,25 @@ export const MUTATION_RULES = {
           { key: "system.skills.stealth.bonus",           mode: AE_MODE.ADD, value: "2", priority: 20 }
         ] }
     ]
+  },
+
+  // 0.14.16 — Fear Impulse: variant rolled at item-create (fire /
+  // darkness / water / robots / heights). The defect mechanic is
+  // narrative ("drop everything, flee") with no canonical save type
+  // in GW1e. We surface it as an "info" action: the GM clicks Use
+  // when the triggering category appears in the scene; the chat card
+  // names the trigger and prompts a save (mental, by convention).
+  "Fear Impulse": {
+    mode: "action",
+    range: "Self",
+    duration: "1d6 rounds (panic)",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: {
+      formula: "",
+      saveType: "mental",
+      notes: "When the rolled fear trigger appears in sight, drop everything carried and flee for 1d6 rounds. The GM may allow a Mental save to resist."
+    },
+    action: "info"
   },
 
   /* ------------------------------------------------------------------ */

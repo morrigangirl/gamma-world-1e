@@ -779,6 +779,16 @@ export async function useMutation(actor, item) {
     return true;
   }
 
+  // 0.14.16 — Anti-Reflection: actors with the defect have a 25% chance
+  // for any mental mutation use to reverse. Posts a warning chat card
+  // and then continues — the GM applies the reversal manually.
+  try {
+    const { checkAntiReflectionOnUse } = await import("./mutation-ticks.mjs");
+    await checkAntiReflectionOnUse(actor, item);
+  } catch (error) {
+    console.warn("gamma-world-1e | Anti-Reflection check failed", error);
+  }
+
   const rule = getMutationRule(item);
   const isToggleAction = ["toggle", "toggle-density"].includes(rule.action);
   const enabling = isToggleAction ? !item.system.activation.enabled : true;

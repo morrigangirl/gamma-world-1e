@@ -2,7 +2,7 @@
  * Gamma World actor document with derived combat / mutation data helpers.
  */
 
-import { applyMutationEffects, applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData } from "../mutation-rules.mjs";
+import { applyMutationEffects, applyMutationModifiers, baseCombatBonuses, enrichMutationSystemData, MUTATION_DAMAGE_TRAITS, mutationDamageTraitsForVariant } from "../mutation-rules.mjs";
 import { applyEquipmentEffects, applyEquipmentModifiers } from "../equipment-rules.mjs";
 import { armorIsInert } from "../artifact-power.mjs";
 import { applyTemporaryDerivedModifiers } from "../effect-state.mjs";
@@ -190,6 +190,22 @@ export function buildActorDerived(actor) {
     if (p.poisonImmune)    derived.damageImmunity.add("poison");
     if (p.laserImmune)     derived.damageImmunity.add("laser");
     if (p.mentalImmune)    derived.damageImmunity.add("mental");
+  }
+
+  // 0.14.16 — fold mutation-driven damage traits into the same sets.
+  // Static grants (Temperature Sensitivity, Photosynthetic Skin) come
+  // from MUTATION_DAMAGE_TRAITS; Skin Structure Change reads the
+  // rolled variant via mutationDamageTraitsForVariant.
+  for (const mut of actor.items.filter((i) => i.type === "mutation" && (i.system?.activation?.enabled ?? true))) {
+    const staticGrant = MUTATION_DAMAGE_TRAITS[mut.name];
+    const variant = mut.system?.reference?.variant ?? "";
+    const variantGrant = variant ? mutationDamageTraitsForVariant(mut.name, variant) : null;
+    for (const grant of [staticGrant, variantGrant]) {
+      if (!grant) continue;
+      for (const t of grant.vulnerability ?? []) derived.damageVulnerability.add(t);
+      for (const t of grant.immunity      ?? []) derived.damageImmunity.add(t);
+      for (const t of grant.resistance    ?? []) derived.damageResistance.add(t);
+    }
   }
 
   // Keep the legacy convenience flags in sync with the aggregated set

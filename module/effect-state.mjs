@@ -1127,18 +1127,21 @@ export async function tickCombatActorState(combat, changed) {
     await tickActorStateForActor(actor);
   }
 
-  // 0.14.15 — per-mutation combat-round ticks. Deferred import keeps the
-  // dependency graph flat (mutation-ticks.mjs imports SYSTEM_ID only).
+  // 0.14.15 / 0.14.16 — per-mutation combat-round ticks. Deferred import
+  // keeps the dependency graph flat (mutation-ticks.mjs imports
+  // SYSTEM_ID only).
   try {
     const {
       tickHemophiliaCombat,
       tickIncreasedMetabolismCombat,
-      tickPoorRespiratoryCombat
+      tickPoorRespiratoryCombat,
+      tickEpilepsyCombat
     } = await import("./mutation-ticks.mjs");
     for (const actor of actors) {
       await tickHemophiliaCombat(actor);
       await tickIncreasedMetabolismCombat(actor, combat);
       await tickPoorRespiratoryCombat(actor, combat);
+      await tickEpilepsyCombat(actor, combat);
     }
   } catch (error) {
     console.warn(`${SYSTEM_ID} | mutation combat tick failed`, error);

@@ -5807,3 +5807,124 @@ test("0.14.15 — isDaytime maps world time to a 06:00–18:00 daytime window", 
   assert.equal(isDaytime(8 * 3600, { startHour: 8, endHour: 17 }), true);
 });
 
+// ---------------------------------------------------------------------------
+// 0.14.16 — Damage-trait mutations, Anti-Reflection, Epilepsy, Fear Impulse,
+// plant attack mutation entries
+// ---------------------------------------------------------------------------
+
+test("0.14.16 — MUTATION_DAMAGE_TRAITS lists Temperature Sensitivity and Photosynthetic Skin vulnerabilities", async () => {
+  const { MUTATION_DAMAGE_TRAITS } = await import("../module/mutation-rules.mjs");
+  assert.deepEqual(MUTATION_DAMAGE_TRAITS["Temperature Sensitivity"].vulnerability, ["heat", "cold", "energy"]);
+  assert.deepEqual(MUTATION_DAMAGE_TRAITS["Photosynthetic Skin"].vulnerability, ["heat", "cold"]);
+});
+
+test("0.14.16 — mutationDamageTraitsForVariant returns vulnerability spread for Skin Structure Change +1/die", async () => {
+  const { mutationDamageTraitsForVariant } = await import("../module/mutation-rules.mjs");
+  const grant = mutationDamageTraitsForVariant("Skin Structure Change", "+1 damage taken when hurt");
+  assert.ok(grant);
+  assert.ok(grant.vulnerability.includes("heat"));
+  assert.ok(grant.vulnerability.includes("physical"));
+  // Other variants and unrelated mutations return null.
+  assert.equal(mutationDamageTraitsForVariant("Skin Structure Change", "1 damage per turn in water"), null);
+  assert.equal(mutationDamageTraitsForVariant("Hemophilia", ""), null);
+});
+
+test("0.14.16 — antiReflectionTriggers fires below 0.25, holds at/above", async () => {
+  const { antiReflectionTriggers } = await import("../module/mutation-ticks.mjs");
+  assert.equal(antiReflectionTriggers({ rng: () => 0.10 }), true);
+  assert.equal(antiReflectionTriggers({ rng: () => 0.24 }), true);
+  assert.equal(antiReflectionTriggers({ rng: () => 0.25 }), false, "exactly 0.25 is not a hit (< threshold)");
+  assert.equal(antiReflectionTriggers({ rng: () => 0.99 }), false);
+});
+
+test("0.14.16 — shouldCheckAntiReflection only fires for mental mutations on actors with the defect", async () => {
+  const { shouldCheckAntiReflection } = await import("../module/mutation-ticks.mjs");
+  const reflectActor = (extra = {}) => ({
+    items: [{
+      type: "mutation", name: "Anti-Reflection",
+      system: { activation: { enabled: true } }
+    }],
+    ...extra
+  });
+
+  // Mental mutation on actor with Anti-Reflection → check
+  assert.equal(shouldCheckAntiReflection(
+    reflectActor(),
+    { type: "mutation", system: { subtype: "mental" } }
+  ), true);
+
+  // Physical mutation: skip
+  assert.equal(shouldCheckAntiReflection(
+    reflectActor(),
+    { type: "mutation", system: { subtype: "physical" } }
+  ), false);
+
+  // No Anti-Reflection mutation: skip
+  assert.equal(shouldCheckAntiReflection(
+    { items: [] },
+    { type: "mutation", system: { subtype: "mental" } }
+  ), false);
+
+  // Non-mutation item: skip
+  assert.equal(shouldCheckAntiReflection(
+    reflectActor(),
+    { type: "weapon", system: { subtype: "mental" } }
+  ), false);
+});
+
+test("0.14.16 — epilepsyTriggers uses 25% on round 1 and 10% on later rounds", async () => {
+  const { epilepsyTriggers } = await import("../module/mutation-ticks.mjs");
+  // Round 1: threshold 0.25
+  assert.equal(epilepsyTriggers({ round: 1, rng: () => 0.20 }), true);
+  assert.equal(epilepsyTriggers({ round: 1, rng: () => 0.24 }), true);
+  assert.equal(epilepsyTriggers({ round: 1, rng: () => 0.25 }), false);
+  // Round 2+: threshold 0.10
+  assert.equal(epilepsyTriggers({ round: 2, rng: () => 0.05 }), true);
+  assert.equal(epilepsyTriggers({ round: 2, rng: () => 0.09 }), true);
+  assert.equal(epilepsyTriggers({ round: 2, rng: () => 0.10 }), false);
+  assert.equal(epilepsyTriggers({ round: 5, rng: () => 0.20 }), false);
+  // Round 0: never fires (combat hasn't started)
+  assert.equal(epilepsyTriggers({ round: 0, rng: () => 0.01 }), false);
+});
+
+test("0.14.16 — shouldCheckEpilepsy gates by mutation presence and existing paralysis", async () => {
+  const { shouldCheckEpilepsy } = await import("../module/mutation-ticks.mjs");
+  assert.equal(shouldCheckEpilepsy({ hasMutation: true,  alreadyParalyzed: false }), true);
+  assert.equal(shouldCheckEpilepsy({ hasMutation: true,  alreadyParalyzed: true  }), false, "don't compound paralysis");
+  assert.equal(shouldCheckEpilepsy({ hasMutation: false, alreadyParalyzed: false }), false);
+});
+
+test("0.14.16 — Fear Impulse MUTATION_RULES uses the info action with a mental save type", async () => {
+  const { MUTATION_RULES } = await import("../module/mutation-rules.mjs");
+  const rule = MUTATION_RULES["Fear Impulse"];
+  assert.ok(rule);
+  assert.equal(rule.mode, "action");
+  assert.equal(rule.action, "info");
+  assert.equal(rule.effect.saveType, "mental");
+});
+
+test("0.14.16 — plant attack mutations are wired with appropriate action handlers", async () => {
+  const { MUTATION_RULES } = await import("../module/mutation-rules.mjs");
+  const expected = {
+    "Squeeze Vines":          { action: "ramping-damage", formula: "2d6" },
+    "Throwing Thorns":        { action: "damage",         formula: "1d4" },
+    "Poison Throwing Thorns": { action: "damage",         formula: "1d4", saveType: "poison" },
+    "Spore Cloud":            { action: "area-damage",    formula: "1d6", saveType: "poison" },
+    "Explosive Fruit":        { action: "area-damage",    formula: "2d6" },
+    "Razor-edged Leaves":     { action: "damage",         formula: "1d4" },
+    "Saw-edged Leaves":       { action: "damage",         formula: "1d8" },
+    "Barbed Leaves":          { action: "damage",         formula: "1d6" },
+    "Dissolving Juices":      { action: "ramping-damage", formula: "5d6" }
+  };
+  for (const [name, want] of Object.entries(expected)) {
+    const rule = MUTATION_RULES[name];
+    assert.ok(rule, `${name} entry exists`);
+    assert.equal(rule.mode, "action", `${name} mode`);
+    assert.equal(rule.action, want.action, `${name} action`);
+    assert.equal(rule.effect.formula, want.formula, `${name} formula`);
+    if (want.saveType) {
+      assert.equal(rule.effect.saveType, want.saveType, `${name} saveType`);
+    }
+  }
+});
+
