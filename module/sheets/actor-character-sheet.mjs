@@ -715,6 +715,23 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
     grouped.gear.sort(sortInventory).forEach(formatGearItem);
     grouped.mutation.sort(sortInventory).forEach(formatMutationItem);
 
+    // 0.14.17 — incapacitating-status gate. When the actor carries any
+    // of unconscious / paralyzed / sleeping / stunned, every quick-action
+    // button (Attack, Use Mutation, Roll Save, Roll Skill) gets the
+    // HTML disabled attribute + a tooltip explaining why. The defensive
+    // dice / mutation flow guards stay in place for macro / API callers.
+    const { actorIsIncapacitated } = await import("../hp-clamp.mjs");
+    const incapacitated = actorIsIncapacitated(actor);
+    context.actorIncapacitated = incapacitated;
+    context.actorIncapacitatedReason = incapacitated
+      ? localize("GAMMA_WORLD.Sheet.IncapacitatedTooltip", "Cannot act while stunned, paralyzed, sleeping, or unconscious.")
+      : "";
+    if (incapacitated) {
+      for (const item of grouped.weapon) {
+        if (item.gwCanAttack) item.gwAttackDisabled = true;
+      }
+    }
+
     // Mutations split by subtype for the mutations tab.
     const mutationsBySubtype = { physical: [], mental: [], defect: [] };
     for (const mut of grouped.mutation) {
@@ -722,6 +739,7 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       mut.gwActionLabel = mutationActionLabel(mut);
       mut.gwHasAction = mutationHasAction(mut);
       mut.gwIsEnabled = !!mut.system.activation?.enabled;
+      mut.gwUseDisabled = incapacitated && mut.gwHasAction;
       if (mutationsBySubtype[st]) mutationsBySubtype[st].push(mut);
     }
     for (const gear of grouped.gear) {

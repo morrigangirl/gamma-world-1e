@@ -487,6 +487,15 @@ export const GAMMA_WORLD_STATUS_EFFECTS = [
     id: "restrained",
     name: "GAMMA_WORLD.Status.Restrained",
     img: "icons/svg/net.svg"
+  },
+  {
+    // 0.14.17: visual indicator at HP <= configurable threshold (default
+    // 50%). Auto-toggled by GammaWorldActor._onUpdate alongside the dead
+    // status. Players see "this token is hurting" without needing the
+    // sheet open.
+    id: "bloodied",
+    name: "GAMMA_WORLD.Status.Bloodied",
+    img: "icons/svg/blood.svg"
   }
 ];
 

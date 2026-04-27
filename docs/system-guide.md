@@ -104,8 +104,20 @@ Each new combat round (`updateCombat` hook):
 - `tickCombatMutationState` decrements `cooldown.current` and `activation.remaining` per mutation.
 - `tickCombatActorState` increments `combat.fatigue.round` per combatant (controlled by `autoTickFatigue`).
 - `tickCombatPowerDrain` debits cells on actively-drained items (ignited Vibro Dagger drains its hydrogen cell each minute = each round at default `MINUTES_PER_ROUND = 1`).
+- **0.14.15 / 0.14.16** — per-mutation ticks: Hemophilia bleed, Increased Metabolism warning, Poor Respiratory faint, Epilepsy paralysis chance.
+- **0.14.17** — `postCombatRoundSummary` whispers a GM-only chat card with initiative order, current HP (bloodied/defeated tagged), and fatigue level for each combatant (controlled by `combatRoundSummary`).
 
 When a combat is deleted, fatigue resets (controlled by `resetFatigueOnCombatEnd`) **and** the encounter-close XP/loot summary card posts (controlled by `encounterCloseSummary`, see §12).
+
+### Combat-UX automation (0.14.17)
+
+| Feature | Setting | Effect |
+|---|---|---|
+| Bloodied auto-status | `bloodiedThreshold` (default 0.5) | When HP / max HP drops to or below the threshold, the Foundry-core "bloodied" status auto-applies on the actor; clears when HP rises above. Dead actors are never bloodied (the dead-status auto-toggle from 0.14.13 handles that side). |
+| Incapacitated action gate | (always on) | When the actor carries any of `unconscious / paralyzed / sleeping / stunned` statuses, every quick-action button (Attack, Use Mutation, Roll Save, Roll Skill) gets HTML `disabled` + a tooltip explaining why. Defensive guards in the dice / mutation flow still catch macro / API callers. |
+| Auto-roll initiative | `autoRollNewCombatantInitiative` (default on) | A combatant added to a started combat without a rolled initiative gets one automatically (GM-side). |
+| Round summary card | `combatRoundSummary` (default on) | Per-round GM whisper with initiative + HP + fatigue for every combatant. |
+| Token fatigue overlay | `tokenFatigueOverlay` (default on) | Renders a small "F-N" badge in the top-right of any token whose actor has `fatigue.round > 0`. Updates on round tick + status changes. |
 
 ---
 

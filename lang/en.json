@@ -161,13 +161,30 @@
       "SoundCueConditionApplied": { "Name": "Cue — condition applied",  "Hint": "Played when a timed condition is applied to an actor (paralysis, poison, stun, blind, etc.)." },
       "SoundCueCinematicIntro":   { "Name": "Cue — cinematic intro",    "Hint": "Played when a Cinematic Roll Request banner opens on every client." },
       "SoundCueCinematicSuccess": { "Name": "Cue — cinematic success",  "Hint": "Played at the outro phase when the aggregate cinematic result is a success." },
-      "SoundCueCinematicFailure": { "Name": "Cue — cinematic failure",  "Hint": "Played at the outro phase when the aggregate cinematic result is a failure or mixed." }
+      "SoundCueCinematicFailure": { "Name": "Cue — cinematic failure",  "Hint": "Played at the outro phase when the aggregate cinematic result is a failure or mixed." },
+      "BloodiedThreshold": {
+        "Name": "Bloodied threshold (HP fraction)",
+        "Hint": "Auto-apply the Bloodied status when current HP / max HP drops to or below this value. Default 0.5 (50%)."
+      },
+      "AutoRollInitiative": {
+        "Name": "Auto-roll initiative for new combatants",
+        "Hint": "When a combatant is added to an active combat tracker without a rolled initiative, the GM client rolls it automatically."
+      },
+      "CombatRoundSummary": {
+        "Name": "Post combat round summary card",
+        "Hint": "On every round advance, whisper a chat card to the GM with initiative order, current HP, and fatigue level for each combatant."
+      },
+      "TokenFatigueOverlay": {
+        "Name": "Show fatigue level on tokens",
+        "Hint": "Render a small \"F-N\" badge in the top-right corner of any token whose actor has fatigue.round > 0."
+      }
     },
     "Sheet": {
       "Character": "Character Sheet",
       "Monster": "Monster Sheet",
       "Item": "Item Sheet",
       "QuickActions": "Quick Actions",
+      "IncapacitatedTooltip": "Cannot act while stunned, paralyzed, sleeping, or unconscious.",
       "InventorySummary": "Inventory Summary",
       "Loadout": "Loadout",
       "Protections": "Protections",
@@ -389,7 +406,8 @@
       "Blinded": "Blinded",
       "Deafened": "Deafened",
       "Sleeping": "Sleeping",
-      "Restrained": "Restrained"
+      "Restrained": "Restrained",
+      "Bloodied": "Bloodied"
     },
     "AOE": {
       "Target": "Target",

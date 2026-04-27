@@ -1163,6 +1163,16 @@ export async function tickCombatActorState(combat, changed) {
   } catch (error) {
     console.warn(`${SYSTEM_ID} | AOE template cleanup failed`, error);
   }
+
+  // 0.14.17 — GM-whispered round summary (initiative order, HP, fatigue).
+  // Setting-gated; default on. Runs after fatigue/mutation ticks so the
+  // values it reads are post-tick.
+  try {
+    const { postCombatRoundSummary } = await import("./round-summary.mjs");
+    await postCombatRoundSummary(combat);
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | round summary post failed`, error);
+  }
 }
 
 /**

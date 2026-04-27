@@ -5928,3 +5928,114 @@ test("0.14.16 — plant attack mutations are wired with appropriate action handl
   }
 });
 
+// ---------------------------------------------------------------------------
+// 0.14.17 — Combat-UX automation: bloodied auto-status, incapacitated gate,
+// round-summary card, fatigue token overlay
+// ---------------------------------------------------------------------------
+
+test("0.14.17 — bloodiedStatusTransition signals 'set' at or below the threshold", async () => {
+  const { bloodiedStatusTransition } = await import("../module/hp-clamp.mjs");
+  // Default 50% threshold: 5/10 → bloodied, 6/10 → not.
+  assert.equal(bloodiedStatusTransition({ currentHp: 5,  maxHp: 10, hasBloodiedStatus: false }), "set");
+  assert.equal(bloodiedStatusTransition({ currentHp: 6,  maxHp: 10, hasBloodiedStatus: false }), null);
+  // Custom threshold: 25% — 3/10 → bloodied, 4/10 → not.
+  assert.equal(bloodiedStatusTransition({ currentHp: 2,  maxHp: 10, hasBloodiedStatus: false, threshold: 0.25 }), "set");
+  assert.equal(bloodiedStatusTransition({ currentHp: 3,  maxHp: 10, hasBloodiedStatus: false, threshold: 0.25 }), null,
+    "30% > 25%, not bloodied");
+});
+
+test("0.14.17 — bloodiedStatusTransition signals 'clear' when HP recovers above the threshold", async () => {
+  const { bloodiedStatusTransition } = await import("../module/hp-clamp.mjs");
+  assert.equal(bloodiedStatusTransition({ currentHp: 8, maxHp: 10, hasBloodiedStatus: true }), "clear");
+});
+
+test("0.14.17 — bloodiedStatusTransition does NOT mark dead actors as bloodied", async () => {
+  const { bloodiedStatusTransition } = await import("../module/hp-clamp.mjs");
+  // HP <= 0: dead, not bloodied. If bloodied was set, it should clear.
+  assert.equal(bloodiedStatusTransition({ currentHp: 0,  maxHp: 10, hasBloodiedStatus: true  }), "clear");
+  assert.equal(bloodiedStatusTransition({ currentHp: 0,  maxHp: 10, hasBloodiedStatus: false }), null);
+  assert.equal(bloodiedStatusTransition({ currentHp: -3, maxHp: 10, hasBloodiedStatus: true  }), "clear");
+});
+
+test("0.14.17 — bloodiedStatusTransition is null when state already matches", async () => {
+  const { bloodiedStatusTransition } = await import("../module/hp-clamp.mjs");
+  assert.equal(bloodiedStatusTransition({ currentHp: 8, maxHp: 10, hasBloodiedStatus: false }), null);
+  assert.equal(bloodiedStatusTransition({ currentHp: 3, maxHp: 10, hasBloodiedStatus: true  }), null);
+});
+
+test("0.14.17 — actorIsIncapacitated returns true for any blocking status", async () => {
+  const { actorIsIncapacitated } = await import("../module/hp-clamp.mjs");
+  const actor = (statuses) => ({ statuses: new Set(statuses) });
+  assert.equal(actorIsIncapacitated(actor([])), false);
+  assert.equal(actorIsIncapacitated(actor(["unconscious"])), true);
+  assert.equal(actorIsIncapacitated(actor(["paralyzed"])), true);
+  assert.equal(actorIsIncapacitated(actor(["sleeping"])), true);
+  assert.equal(actorIsIncapacitated(actor(["stunned"])), true);
+  // Multiple statuses, at least one blocking
+  assert.equal(actorIsIncapacitated(actor(["bloodied", "stunned"])), true);
+  // Non-blocking statuses
+  assert.equal(actorIsIncapacitated(actor(["bloodied", "irradiated"])), false);
+  // Custom blocking list
+  assert.equal(actorIsIncapacitated(actor(["confused"]), { blocking: ["confused"] }), true);
+  assert.equal(actorIsIncapacitated(actor(["confused"])), false, "default list excludes confused");
+  // Null actor / no statuses
+  assert.equal(actorIsIncapacitated(null), false);
+  assert.equal(actorIsIncapacitated({}), false);
+});
+
+test("0.14.17 — buildRoundSummaryRows pulls initiative + HP + fatigue from each combatant", async () => {
+  const { buildRoundSummaryRows } = await import("../module/round-summary.mjs");
+  const combat = {
+    turns: [
+      { initiative: 17, isDefeated: false, actor: {
+        name: "Sadie",
+        system: { resources: { hp: { value: 25, max: 30 } }, combat: { fatigue: { round: 2 } } }
+      } },
+      { initiative: 12, isDefeated: false, actor: {
+        name: "Howler",
+        system: { resources: { hp: { value: 0, max: 12 } }, combat: { fatigue: { round: 0 } } }
+      } },
+      { initiative: 9, defeated: true, actor: {
+        name: "Junk Pile",
+        system: { resources: { hp: { value: -5, max: 8 } }, combat: { fatigue: { round: 1 } } }
+      } }
+    ]
+  };
+  const rows = buildRoundSummaryRows(combat);
+  assert.equal(rows.length, 3);
+  assert.equal(rows[0].name, "Sadie");
+  assert.equal(rows[0].hp, 25);
+  assert.equal(rows[0].hpMax, 30);
+  assert.equal(rows[0].fatigue, 2);
+  assert.equal(rows[0].defeated, false);
+  assert.equal(rows[2].defeated, true);
+});
+
+test("0.14.17 — renderRoundSummaryHtml escapes names and tags bloodied / defeated rows", async () => {
+  const { renderRoundSummaryHtml } = await import("../module/round-summary.mjs");
+  const html = renderRoundSummaryHtml([
+    { initiative: 18, name: "Pristine", hp: 30, hpMax: 30, fatigue: 0, defeated: false },
+    { initiative: 12, name: "Hurt One", hp: 5,  hpMax: 30, fatigue: 1, defeated: false },
+    { initiative: 1,  name: "Dead <bot>", hp: -2, hpMax: 8, fatigue: 0, defeated: true }
+  ], 3);
+  assert.match(html, /Round 3/);
+  assert.match(html, /Pristine/);
+  assert.match(html, /F-1/);
+  assert.match(html, /gw-round-summary__row--bloodied/);
+  assert.match(html, /gw-round-summary__row--defeated/);
+  assert.match(html, /Dead &lt;bot&gt;/, "name escaping");
+  assert.doesNotMatch(html, /Dead <bot>/, "raw angle brackets stripped");
+});
+
+test("0.14.17 — fatigueOverlayText returns null at 0 and 'F-N' for positive levels", async () => {
+  const { fatigueOverlayText } = await import("../module/token-overlay.mjs");
+  assert.equal(fatigueOverlayText(0), null);
+  assert.equal(fatigueOverlayText(-2), null, "negative treated as 0");
+  assert.equal(fatigueOverlayText(1), "F-1");
+  assert.equal(fatigueOverlayText(7), "F-7");
+  assert.equal(fatigueOverlayText("3"), "F-3", "string coercion");
+  assert.equal(fatigueOverlayText(null), null);
+  assert.equal(fatigueOverlayText(undefined), null);
+  assert.equal(fatigueOverlayText(2.7), "F-2", "fractional floors");
+});
+

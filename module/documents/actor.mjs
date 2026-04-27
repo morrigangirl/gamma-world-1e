@@ -12,7 +12,7 @@ import { charismaReactionAdjustment, resolveEncounterIntelligence } from "../tab
 import { runAsGM } from "../gm-executor.mjs";
 import { artifactUseProfile } from "../artifact-rules.mjs";
 import { shouldRouteHpReduction } from "../save-flow.mjs";
-import { clampHpUpdate, clampHitDiceUpdate, deadStatusTransition } from "../hp-clamp.mjs";
+import { clampHpUpdate, clampHitDiceUpdate, deadStatusTransition, bloodiedStatusTransition } from "../hp-clamp.mjs";
 import { computeEncumbrance } from "../encumbrance.mjs";
 
 function clampArmorClass(value) {
@@ -331,16 +331,37 @@ export class GammaWorldActor extends Actor {
     if (!game.user?.isGM) return;
     if (foundry.utils.getProperty(changed, "system.resources.hp.value") == null) return;
 
-    const action = deadStatusTransition({
+    const deadAction = deadStatusTransition({
       currentHp: this.system?.resources?.hp?.value,
       hasDeadStatus: !!this.statuses?.has?.("dead")
     });
-    if (action == null) return;
+    if (deadAction != null) {
+      try {
+        await this.toggleStatusEffect("dead", { active: deadAction === "set" });
+      } catch (error) {
+        console.warn(`gamma-world-1e | dead status auto-toggle failed for ${this.name}`, error);
+      }
+    }
 
-    try {
-      await this.toggleStatusEffect("dead", { active: action === "set" });
-    } catch (error) {
-      console.warn(`gamma-world-1e | dead status auto-toggle failed for ${this.name}`, error);
+    // 0.14.17 — bloodied status auto-toggle. Threshold is configurable
+    // via the world setting (default 0.5 = 50% HP). Same transition-only
+    // contract as dead-status: a manual GM toggle on a healthy actor
+    // sticks until HP changes.
+    let threshold = 0.5;
+    try { threshold = Number(game.settings?.get?.("gamma-world-1e", "bloodiedThreshold")) || 0.5; }
+    catch { /* settings may not be ready in early lifecycle; fall through */ }
+    const bloodiedAction = bloodiedStatusTransition({
+      currentHp: this.system?.resources?.hp?.value,
+      maxHp:     this.system?.resources?.hp?.max,
+      hasBloodiedStatus: !!this.statuses?.has?.("bloodied"),
+      threshold
+    });
+    if (bloodiedAction != null) {
+      try {
+        await this.toggleStatusEffect("bloodied", { active: bloodiedAction === "set" });
+      } catch (error) {
+        console.warn(`gamma-world-1e | bloodied status auto-toggle failed for ${this.name}`, error);
+      }
     }
   }
 

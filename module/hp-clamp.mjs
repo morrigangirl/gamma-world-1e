@@ -142,3 +142,61 @@ export function deadStatusTransition({ currentHp, hasDeadStatus }) {
   if (!isDead && hasDeadStatus) return "clear";
   return null;
 }
+
+/**
+ * 0.14.17 — decide whether the "bloodied" status effect should be
+ * toggled given the new HP value, max HP, and the actor's current
+ * bloodied-status state.
+ *
+ * Bloodied = alive (HP > 0) AND HP fraction <= threshold (default
+ * 50%). Dead actors are never bloodied — when HP crosses to 0 the
+ * dead-status helper handles it and bloodied gets cleared here.
+ *
+ * Same transition-only contract as deadStatusTransition: returns null
+ * when no toggle is needed, so a GM who manually toggles bloodied on
+ * a fresh actor stays in control until HP changes.
+ *
+ * @param {{
+ *   currentHp: number|string|null|undefined,
+ *   maxHp: number|string|null|undefined,
+ *   hasBloodiedStatus: boolean,
+ *   threshold?: number
+ * }} input
+ * @returns {"set"|"clear"|null}
+ */
+export function bloodiedStatusTransition({ currentHp, maxHp, hasBloodiedStatus, threshold = 0.5 }) {
+  const hp = Number(currentHp ?? 0) || 0;
+  const max = Math.max(1, Number(maxHp ?? 1) || 1);
+  const t = Math.max(0, Math.min(1, Number(threshold) || 0.5));
+  const isBloodied = hp > 0 && (hp / max) <= t;
+  if (isBloodied && !hasBloodiedStatus) return "set";
+  if (!isBloodied && hasBloodiedStatus) return "clear";
+  return null;
+}
+
+/**
+ * 0.14.17 — pure predicate: is the actor incapacitated and therefore
+ * unable to take quick-actions (Attack, Use Mutation, Roll Save)?
+ *
+ * Reads from the standard `actor.statuses` Set populated by Foundry
+ * after status-effect toggles. Any of the configured incapacitating
+ * conditions returns true.
+ *
+ * Default blocking statuses match the GW1e text on each condition:
+ *   - unconscious — knocked out (stunning damage / Poor Respiratory)
+ *   - paralyzed   — frozen (Daylight Stasis, Epilepsy, paralysis rays)
+ *   - sleeping    — Sleep mutation effect
+ *   - stunned     — stun damage tier below unconscious
+ *
+ * @param {{statuses?: Set<string>}|null|undefined} actor
+ * @param {{blocking?: Iterable<string>}} options
+ * @returns {boolean}
+ */
+export function actorIsIncapacitated(actor, { blocking = ["unconscious", "paralyzed", "sleeping", "stunned"] } = {}) {
+  const statuses = actor?.statuses;
+  if (!statuses || typeof statuses.has !== "function") return false;
+  for (const id of blocking) {
+    if (statuses.has(id)) return true;
+  }
+  return false;
+}

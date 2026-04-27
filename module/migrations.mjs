@@ -364,6 +364,41 @@ export function registerMigrationSettings() {
   registerSoundCue("soundCueCinematicFailure",
     "GAMMA_WORLD.Settings.SoundCueCinematicFailure.Name",
     "GAMMA_WORLD.Settings.SoundCueCinematicFailure.Hint");
+
+  // 0.14.17 — combat-UX automation toggles.
+  game.settings.register(SYSTEM_ID, "bloodiedThreshold", {
+    name: "GAMMA_WORLD.Settings.BloodiedThreshold.Name",
+    hint: "GAMMA_WORLD.Settings.BloodiedThreshold.Hint",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 0.5,
+    range: { min: 0.1, max: 0.9, step: 0.05 }
+  });
+  game.settings.register(SYSTEM_ID, "autoRollNewCombatantInitiative", {
+    name: "GAMMA_WORLD.Settings.AutoRollInitiative.Name",
+    hint: "GAMMA_WORLD.Settings.AutoRollInitiative.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+  game.settings.register(SYSTEM_ID, "combatRoundSummary", {
+    name: "GAMMA_WORLD.Settings.CombatRoundSummary.Name",
+    hint: "GAMMA_WORLD.Settings.CombatRoundSummary.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+  game.settings.register(SYSTEM_ID, "tokenFatigueOverlay", {
+    name: "GAMMA_WORLD.Settings.TokenFatigueOverlay.Name",
+    hint: "GAMMA_WORLD.Settings.TokenFatigueOverlay.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
 }
 
 function mutationUpdateData(item) {

@@ -3594,3 +3594,32 @@ button[aria-disabled="true"].gw-attack-button {
   color: rgba(31, 36, 40, 0.5);
   font-style: italic;
 }
+
+/* 0.14.17 — combat round summary chat card. */
+.gw-round-summary__list {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+}
+.gw-round-summary__row {
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px dotted rgba(31, 36, 40, 0.15);
+  font-size: 0.92rem;
+}
+.gw-round-summary__row:last-child { border-bottom: none; }
+.gw-round-summary__init {
+  display: inline-block;
+  min-width: 1.6rem;
+  text-align: right;
+  margin-right: 0.4rem;
+  color: rgba(31, 36, 40, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+.gw-round-summary__row--bloodied {
+  background: rgba(220, 96, 80, 0.12);
+}
+.gw-round-summary__row--defeated {
+  background: rgba(80, 80, 80, 0.18);
+  color: rgba(31, 36, 40, 0.55);
+  text-decoration: line-through;
+}

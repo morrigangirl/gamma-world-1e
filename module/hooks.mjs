@@ -53,6 +53,18 @@ export function registerHooks() {
   Hooks.on("updateCombat", tickCombatMutationState);
   Hooks.on("updateCombat", tickCombatActorState);
   Hooks.on("updateCombat", tickCombatPowerDrain);
+  // 0.14.17 — auto-roll initiative when a combatant is added to an
+  // already-started combat without one. GM-side only; gated behind
+  // setting `autoRollNewCombatantInitiative`.
+  Hooks.on("createCombatant", onCreateCombatantAutoInit);
+  // 0.14.17 — fatigue overlay on tokens. The `refreshToken` hook
+  // fires on every token redraw (after combat tick, AE toggle,
+  // movement, etc.); the helper is idempotent so this is safe.
+  Hooks.on("refreshToken", onRefreshTokenOverlay);
+  // Also refresh visible tokens for an actor when its fatigue.round
+  // changes — `updateActor` lets us catch combat-tick HP / fatigue
+  // updates without waiting for an unrelated render.
+  Hooks.on("updateActor", onActorFatigueOverlayUpdate);
   Hooks.on("updateWorldTime", tickWorldTimePowerDrain);
   // 0.14.2 — refresh open character sheets when world time advances so
   // the "Active Now" panel's seconds-based effect countdowns tick down
@@ -117,6 +129,59 @@ function onPreCreateMutationRollVariant(item, data, _options, _userId) {
     console.info(`gamma-world-1e | rolled "${rolled}" for ${name} on ${item.parent?.name ?? "actor"}`);
   } catch (error) {
     console.warn(`gamma-world-1e | preCreateItem variant roll failed for ${name}`, error);
+  }
+}
+
+/**
+ * 0.14.17 — auto-roll initiative when a combatant is added to a
+ * running combat without one. The originating client (the GM who
+ * dragged the token in) handles the roll so we don't double-fire on
+ * other GM clients.
+ */
+async function onCreateCombatantAutoInit(combatant, _options, userId) {
+  if (!game.user?.isGM) return;
+  if (game.user.id !== userId) return;
+  try {
+    if (!game.settings.get(SYSTEM_ID, "autoRollNewCombatantInitiative")) return;
+  } catch { return; }
+  if (combatant?.initiative != null) return;
+  const combat = combatant?.combat;
+  if (!combat?.started) return;
+  try {
+    await combat.rollInitiative([combatant.id]);
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | auto-roll initiative failed for ${combatant?.name}`, error);
+  }
+}
+
+/**
+ * 0.14.17 — token render hook: attach / update / remove the fatigue
+ * "F-N" badge on every token redraw. Idempotent and cheap; the heavy
+ * work happens in `attachFatigueOverlay` only when the value actually
+ * changed.
+ */
+function onRefreshTokenOverlay(token) {
+  try {
+    // Lazy-import keeps the module load order clean and lets the
+    // helper be unit-tested in isolation.
+    import("./token-overlay.mjs").then(({ attachFatigueOverlay }) => {
+      attachFatigueOverlay(token);
+    });
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | fatigue overlay refresh failed`, error);
+  }
+}
+
+/** When an actor's fatigue.round changes, refresh any visible tokens. */
+function onActorFatigueOverlayUpdate(actor, changed) {
+  if (foundry.utils.getProperty(changed, "system.combat.fatigue.round") == null) return;
+  try {
+    const tokens = actor?.getActiveTokens?.() ?? [];
+    import("./token-overlay.mjs").then(({ attachFatigueOverlay }) => {
+      for (const token of tokens) attachFatigueOverlay(token);
+    });
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | fatigue overlay update failed`, error);
   }
 }
 

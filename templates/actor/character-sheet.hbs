@@ -155,9 +155,9 @@
     <div class="gamma-world__saves">
       <h3>{{localize "GAMMA_WORLD.Save.Mental"}} / {{localize "GAMMA_WORLD.Save.Radiation"}} / {{localize "GAMMA_WORLD.Save.Poison"}}</h3>
       <div class="gamma-world__save-buttons">
-        <button type="button" data-action="rollSave" data-save-type="mental">{{localize "GAMMA_WORLD.Save.RollMental"}}</button>
-        <button type="button" data-action="rollSave" data-save-type="radiation">{{localize "GAMMA_WORLD.Save.RollRadiation"}}</button>
-        <button type="button" data-action="rollSave" data-save-type="poison">{{localize "GAMMA_WORLD.Save.RollPoison"}}</button>
+        <button type="button" data-action="rollSave" data-save-type="mental" {{#if actorIncapacitated}}disabled aria-disabled="true" title="{{actorIncapacitatedReason}}"{{/if}}>{{localize "GAMMA_WORLD.Save.RollMental"}}</button>
+        <button type="button" data-action="rollSave" data-save-type="radiation" {{#if actorIncapacitated}}disabled aria-disabled="true" title="{{actorIncapacitatedReason}}"{{/if}}>{{localize "GAMMA_WORLD.Save.RollRadiation"}}</button>
+        <button type="button" data-action="rollSave" data-save-type="poison" {{#if actorIncapacitated}}disabled aria-disabled="true" title="{{actorIncapacitatedReason}}"{{/if}}>{{localize "GAMMA_WORLD.Save.RollPoison"}}</button>
         {{#if isMonsterSheet}}
           <button type="button" data-action="rollReaction">{{localize "GAMMA_WORLD.Combat.RollReaction"}}</button>
           <button type="button" data-action="rollMorale">{{localize "GAMMA_WORLD.Encounter.RollMorale"}}</button>
@@ -324,7 +324,7 @@
                     {{#if item.gwDetailLine}}<div class="gamma-world__item-meta">{{item.gwDetailLine}}</div>{{/if}}
                   </div>
                   <span class="gamma-world__item-actions">
-                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{#if item.gwUseDisabled}}{{@root.actorIncapacitatedReason}}{{else}}{{item.gwActionLabel}}{{/if}}" {{#if item.gwUseDisabled}}disabled aria-disabled="true"{{/if}}>
                       {{item.gwActionLabel}}
                     </button>
                   </span>
@@ -441,7 +441,7 @@
                 </div>
                 <span class="gamma-world__item-actions">
                   {{#if item.gwHasAction}}
-                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{item.gwActionLabel}}">
+                    <button type="button" data-action="useMutation" data-item-id="{{item.id}}" title="{{#if item.gwUseDisabled}}{{@root.actorIncapacitatedReason}}{{else}}{{item.gwActionLabel}}{{/if}}" {{#if item.gwUseDisabled}}disabled aria-disabled="true"{{/if}}>
                       {{item.gwActionLabel}}
                     </button>
                   {{/if}}
@@ -496,7 +496,8 @@
                 <button type="button"
                         class="gw-skill-row__roll"
                         data-action="rollSkill"
-                        data-skill-key="{{this.key}}">
+                        data-skill-key="{{this.key}}"
+                        {{#if @root.actorIncapacitated}}disabled aria-disabled="true" title="{{@root.actorIncapacitatedReason}}"{{/if}}>
                   {{localize "GAMMA_WORLD.SkillSheet.Roll"}}
                 </button>
               </div>
