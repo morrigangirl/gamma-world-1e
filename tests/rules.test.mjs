@@ -5728,3 +5728,82 @@ test("0.14.14 — useMutation routes 'info' action mode to handleNote (chat-card
   assert.match(switchBlock[0], /case "info":\s*\n\s*return handleNote\(actor, item\);/);
 });
 
+// ---------------------------------------------------------------------------
+// 0.14.15 — Mutation tick handlers (Hemophilia, Increased Metabolism, Poor
+// Respiratory System, Regeneration, Photosynthetic Skin, Daylight Stasis)
+// ---------------------------------------------------------------------------
+
+test("0.14.15 — hemophiliaBleedAmount returns 2 only when wounded and alive", async () => {
+  const { hemophiliaBleedAmount } = await import("../module/mutation-ticks.mjs");
+  // No mutation: zero
+  assert.equal(hemophiliaBleedAmount({ hp: { value: 5, max: 10 }, hasMutation: false }), 0);
+  // Has mutation, full HP: zero
+  assert.equal(hemophiliaBleedAmount({ hp: { value: 10, max: 10 }, hasMutation: true }), 0);
+  // Has mutation, wounded: 2
+  assert.equal(hemophiliaBleedAmount({ hp: { value: 5, max: 10 }, hasMutation: true }), 2);
+  // Has mutation, at 0 HP (already incapacitated): zero
+  assert.equal(hemophiliaBleedAmount({ hp: { value: 0, max: 10 }, hasMutation: true }), 0);
+  // Negative HP (overkill): zero (not "more bleeding")
+  assert.equal(hemophiliaBleedAmount({ hp: { value: -3, max: 10 }, hasMutation: true }), 0);
+});
+
+test("0.14.15 — increasedMetabolismDue triggers on every 5th round", async () => {
+  const { increasedMetabolismDue } = await import("../module/mutation-ticks.mjs");
+  // No mutation: never
+  assert.equal(increasedMetabolismDue({ round: 5, hasMutation: false }), false);
+  // Below first interval
+  assert.equal(increasedMetabolismDue({ round: 4, hasMutation: true }), false);
+  // First interval
+  assert.equal(increasedMetabolismDue({ round: 5, hasMutation: true }), true);
+  // Between intervals
+  assert.equal(increasedMetabolismDue({ round: 7, hasMutation: true }), false);
+  // Subsequent interval
+  assert.equal(increasedMetabolismDue({ round: 10, hasMutation: true }), true);
+  assert.equal(increasedMetabolismDue({ round: 15, hasMutation: true }), true);
+});
+
+test("0.14.15 — poorRespiratoryDue triggers at round 6 unless already unconscious", async () => {
+  const { poorRespiratoryDue } = await import("../module/mutation-ticks.mjs");
+  assert.equal(poorRespiratoryDue({ round: 5, hasMutation: true, alreadyUnconscious: false }), false);
+  assert.equal(poorRespiratoryDue({ round: 6, hasMutation: true, alreadyUnconscious: false }), true);
+  assert.equal(poorRespiratoryDue({ round: 6, hasMutation: true, alreadyUnconscious: true }), false,
+    "already unconscious — don't refire");
+  assert.equal(poorRespiratoryDue({ round: 10, hasMutation: false, alreadyUnconscious: false }), false);
+});
+
+test("0.14.15 — regenerationHpPerDay returns floor(weight_kg / 5)", async () => {
+  const { regenerationHpPerDay } = await import("../module/mutation-ticks.mjs");
+  assert.equal(regenerationHpPerDay({ bodyWeightKg: 75 }), 15, "default human 75kg → 15 HP/day");
+  assert.equal(regenerationHpPerDay({ bodyWeightKg: 50 }), 10);
+  assert.equal(regenerationHpPerDay({ bodyWeightKg: 12 }), 2, "12/5 = 2 (floor)");
+  assert.equal(regenerationHpPerDay({ bodyWeightKg: 4 }),  0, "4/5 = 0 floor — too small to regen");
+  assert.equal(regenerationHpPerDay({}), 15, "default applies when weight not passed");
+});
+
+test("0.14.15 — photosyntheticHealMultiplier returns 4× only when basking with the mutation", async () => {
+  const { photosyntheticHealMultiplier } = await import("../module/mutation-ticks.mjs");
+  assert.equal(photosyntheticHealMultiplier({ hasMutation: true,  isBasking: true  }), 4);
+  assert.equal(photosyntheticHealMultiplier({ hasMutation: true,  isBasking: false }), 1, "no basking, no bonus");
+  assert.equal(photosyntheticHealMultiplier({ hasMutation: false, isBasking: true  }), 1, "no mutation, no bonus");
+  assert.equal(photosyntheticHealMultiplier({ hasMutation: false, isBasking: false }), 1);
+});
+
+test("0.14.15 — isDaytime maps world time to a 06:00–18:00 daytime window", async () => {
+  const { isDaytime } = await import("../module/mutation-ticks.mjs");
+  // 6 AM = 21600 seconds into a day
+  assert.equal(isDaytime(21600), true, "6:00 AM exactly is daytime");
+  // 12 PM = 43200
+  assert.equal(isDaytime(43200), true, "noon is daytime");
+  // 6 PM = 64800 (exclusive boundary)
+  assert.equal(isDaytime(64800), false, "6 PM is no longer daytime");
+  // 5:59 AM = 21540
+  assert.equal(isDaytime(21540), false, "just before 6 AM");
+  // Midnight
+  assert.equal(isDaytime(0), false);
+  // Day 2 noon (86400 + 43200)
+  assert.equal(isDaytime(86400 + 43200), true, "wraps via modulo");
+  // Custom window
+  assert.equal(isDaytime(7 * 3600, { startHour: 8, endHour: 17 }), false, "before 8 AM in custom window");
+  assert.equal(isDaytime(8 * 3600, { startHour: 8, endHour: 17 }), true);
+});
+

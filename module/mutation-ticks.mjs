@@ -1,0 +1,251 @@
+/**
+ * 0.14.15 — Mutation tick handlers.
+ *
+ * Six mutations whose mechanics fire on the existing combat-round
+ * (`updateCombat`) or world-time (`updateWorldTime`) hooks:
+ *
+ *   Combat-round:
+ *     - Hemophilia              — bleed 2 HP/round while wounded
+ *     - Increased Metabolism    — every 5th round, must rest or lose -1 PS / -2 HP
+ *     - Poor Respiratory System — after 6 rounds of combat, faint 1d6 minutes
+ *
+ *   World-time:
+ *     - Regeneration            — 1 HP/day per 5kg body weight
+ *     - Daylight Stasis         — paralyzed during daytime hours (plant defect)
+ *
+ *   Rest-flow modifier:
+ *     - Photosynthetic Skin     — 4× daily heal rate while basking (see
+ *                                  applyRest in healing.mjs)
+ *
+ * Pure helpers are exported for unit-testing without Foundry globals.
+ * The async `tick*` wrappers call the helpers, perform the actor
+ * update, and post the chat card.
+ */
+
+import { SYSTEM_ID } from "./config.mjs";
+
+const SECONDS_PER_DAY = 86400;
+export const HEMOPHILIA_BLEED_PER_ROUND = 2;
+export const RESPIRATORY_FATIGUE_THRESHOLD = 6;
+export const METABOLISM_REST_INTERVAL = 5;
+export const REGEN_DEFAULT_BODY_WEIGHT_KG = 75;
+export const REGEN_HP_PER_KG_PER_DAY = 1 / 5;
+export const DAYTIME_START_HOUR = 6;
+export const DAYTIME_END_HOUR = 18;
+
+/* ------------------------------------------------------------------ */
+/* Pure helpers — no Foundry globals                                  */
+/* ------------------------------------------------------------------ */
+
+/**
+ * How much HP does a Hemophilia-afflicted actor lose this round?
+ * Returns 0 if the actor isn't wounded, isn't carrying the mutation,
+ * or is already at 0 HP (already incapacitated; no further bleed).
+ */
+export function hemophiliaBleedAmount({ hp, hasMutation }) {
+  if (!hasMutation) return 0;
+  if (!hp) return 0;
+  const value = Number(hp.value ?? 0);
+  const max = Number(hp.max ?? 0);
+  if (value <= 0) return 0;
+  if (value >= max) return 0;
+  return HEMOPHILIA_BLEED_PER_ROUND;
+}
+
+/**
+ * Should the Increased Metabolism eat-or-lose warning fire this round?
+ * GW1e text: "must stop every 5th melee turn and spend 1 full turn
+ * eating before it can rejoin the fight."
+ */
+export function increasedMetabolismDue({ round, hasMutation }) {
+  if (!hasMutation) return false;
+  const r = Math.max(0, Number(round) || 0);
+  if (r < METABOLISM_REST_INTERVAL) return false;
+  return r % METABOLISM_REST_INTERVAL === 0;
+}
+
+/**
+ * Should Poor Respiratory System collapse the actor this round?
+ * GW1e text: "must rest after 5 melee turns of combat. If it keeps
+ * fighting beyond that point, it faints for 1-6 minutes immediately
+ * after the 6th melee turn."
+ */
+export function poorRespiratoryDue({ round, hasMutation, alreadyUnconscious }) {
+  if (!hasMutation) return false;
+  if (alreadyUnconscious) return false;
+  return Math.max(0, Number(round) || 0) >= RESPIRATORY_FATIGUE_THRESHOLD;
+}
+
+/**
+ * GW1e: 1 HP/day per 5kg body weight. Default body weight assumed 75kg
+ * (yields 15 HP/day) when the actor doesn't carry an explicit weight
+ * flag. Returns the integer HP gained over `daysElapsed` whole days.
+ */
+export function regenerationHpPerDay({ bodyWeightKg = REGEN_DEFAULT_BODY_WEIGHT_KG } = {}) {
+  const kg = Math.max(0, Number(bodyWeightKg) || 0);
+  return Math.floor(kg * REGEN_HP_PER_KG_PER_DAY);
+}
+
+/**
+ * GW1e: while basking in sunlight without moving, Photosynthetic Skin
+ * heals at 4× normal. The basking flag is a per-actor toggle the
+ * GM/player sets manually (no auto-detection). Without basking, no
+ * special bonus.
+ */
+export function photosyntheticHealMultiplier({ hasMutation, isBasking }) {
+  if (!hasMutation) return 1;
+  if (!isBasking) return 1;
+  return 4;
+}
+
+/**
+ * Is the given world time in the configured daytime range?
+ * Default 06:00–18:00 (6 AM to 6 PM exclusive). World time is seconds
+ * since epoch; we modulo into a 24h cycle and convert to hours.
+ */
+export function isDaytime(worldTime, { startHour = DAYTIME_START_HOUR, endHour = DAYTIME_END_HOUR } = {}) {
+  const t = Math.max(0, Number(worldTime) || 0);
+  const secondsIntoDay = t % SECONDS_PER_DAY;
+  const hour = secondsIntoDay / 3600;
+  return hour >= startHour && hour < endHour;
+}
+
+/* ------------------------------------------------------------------ */
+/* Async tick wrappers — wire into combat / world-time hooks          */
+/* ------------------------------------------------------------------ */
+
+function activeMutation(actor, name) {
+  return Array.from(actor?.items ?? []).find(
+    (item) => item?.type === "mutation"
+      && item?.name === name
+      && (item?.system?.activation?.enabled ?? true)
+  ) ?? null;
+}
+
+async function postMutationChatCard(actor, title, body) {
+  if (typeof globalThis.ChatMessage?.create !== "function") return;
+  const speaker = ChatMessage.getSpeaker?.({ actor }) ?? {};
+  await ChatMessage.create({
+    speaker,
+    content: `<div class="gw-chat-card gw-mutation-tick-card"><h3>${title}</h3><p>${body}</p></div>`
+  });
+}
+
+/** Apply Hemophilia bleed for one combat round. */
+export async function tickHemophiliaCombat(actor) {
+  if (!activeMutation(actor, "Hemophilia")) return null;
+  const hp = actor?.system?.resources?.hp;
+  const amount = hemophiliaBleedAmount({ hp, hasMutation: true });
+  if (!amount) return null;
+  const next = Math.max(0, Number(hp.value ?? 0) - amount);
+  await actor.update({ "system.resources.hp.value": next }, { gammaWorldSync: true });
+  await postMutationChatCard(actor, "Hemophilia bleeding",
+    `${actor.name} loses ${amount} HP from uncontrolled bleeding (${next}/${hp.max} HP). Bind the wound to halt further loss.`);
+  return { delta: -amount, hp: next };
+}
+
+/** Post Increased Metabolism warning when round count is divisible by 5. */
+export async function tickIncreasedMetabolismCombat(actor, combat) {
+  if (!activeMutation(actor, "Increased Metabolism")) return null;
+  const round = Number(combat?.round) || 0;
+  if (!increasedMetabolismDue({ round, hasMutation: true })) return null;
+  await postMutationChatCard(actor, "Increased Metabolism",
+    `${actor.name} must spend the next round eating or lose -1 Physical Strength and -2 HP.`);
+  return { round };
+}
+
+/**
+ * Apply Poor Respiratory System collapse. Posts a chat card and
+ * toggles Foundry's "unconscious" status; the duration (1d6 minutes)
+ * is recorded as a flag for downstream world-time-tick recovery.
+ */
+export async function tickPoorRespiratoryCombat(actor, combat) {
+  if (!activeMutation(actor, "Poor Respiratory System")) return null;
+  const round = Number(combat?.round) || 0;
+  const alreadyUnconscious = !!actor?.statuses?.has?.("unconscious");
+  if (!poorRespiratoryDue({ round, hasMutation: true, alreadyUnconscious })) return null;
+
+  const Roll = globalThis.Roll;
+  let minutes = 3;
+  if (Roll) {
+    try {
+      const roll = await new Roll("1d6").evaluate({ async: true });
+      minutes = Math.max(1, Math.round(Number(roll.total) || 3));
+    } catch { /* fall through to default */ }
+  }
+
+  if (typeof actor.toggleStatusEffect === "function") {
+    await actor.toggleStatusEffect("unconscious", { active: true });
+  }
+  const expiresAt = (Number(globalThis.game?.time?.worldTime) || 0) + minutes * 60;
+  if (typeof actor.setFlag === "function") {
+    await actor.setFlag(SYSTEM_ID, "poorRespiratoryFaint", { expiresAt, minutes, round });
+  }
+  await postMutationChatCard(actor, "Poor Respiratory System",
+    `${actor.name} can no longer keep up the pace and collapses unconscious for ${minutes} minute(s).`);
+  return { minutes, round };
+}
+
+/**
+ * Apply Regeneration daily heal. Tracks last-tick time on a per-actor
+ * flag; only fires on whole-day boundaries. Body weight defaults to
+ * 75kg when the actor doesn't carry a `bodyWeightKg` flag.
+ */
+export async function tickRegenerationWorldTime(actor, worldTime) {
+  if (!activeMutation(actor, "Regeneration")) return null;
+  const now = Math.max(0, Number(worldTime) || 0);
+  const lastTick = Math.max(0, Number(actor.getFlag?.(SYSTEM_ID, "regenLastTick") ?? now) || now);
+  if (lastTick === now) {
+    // First-time observation; mark the start so subsequent ticks compute
+    // a real elapsed window rather than treating epoch as the baseline.
+    await actor.setFlag?.(SYSTEM_ID, "regenLastTick", now);
+    return null;
+  }
+  const elapsed = now - lastTick;
+  if (elapsed < SECONDS_PER_DAY) return null;
+  const days = Math.floor(elapsed / SECONDS_PER_DAY);
+  const bodyWeight = Number(actor.getFlag?.(SYSTEM_ID, "bodyWeightKg") ?? REGEN_DEFAULT_BODY_WEIGHT_KG);
+  const hpPerDay = regenerationHpPerDay({ bodyWeightKg: bodyWeight });
+  if (hpPerDay <= 0) {
+    await actor.setFlag?.(SYSTEM_ID, "regenLastTick", lastTick + days * SECONDS_PER_DAY);
+    return null;
+  }
+  const totalHeal = hpPerDay * days;
+  const hp = actor.system?.resources?.hp;
+  if (!hp) return null;
+  const currentHp = Number(hp.value ?? 0);
+  const maxHp = Number(hp.max ?? currentHp);
+  const newHp = Math.min(maxHp, currentHp + totalHeal);
+  if (newHp !== currentHp) {
+    await actor.update({ "system.resources.hp.value": newHp }, { gammaWorldSync: true });
+    await postMutationChatCard(actor, "Regeneration",
+      `${actor.name} regenerates ${newHp - currentHp} HP over ${days} day${days === 1 ? "" : "s"} (${newHp}/${maxHp} HP).`);
+  }
+  await actor.setFlag?.(SYSTEM_ID, "regenLastTick", lastTick + days * SECONDS_PER_DAY);
+  return { healed: newHp - currentHp, days };
+}
+
+/**
+ * Toggle the paralyzed status for plants with Daylight Stasis based on
+ * the world clock. Only flips status when crossing a day/night
+ * boundary so player-set paralyzed (e.g., from an attack) at night
+ * stays in place during the day window.
+ */
+export async function tickDaylightStasisWorldTime(actor, worldTime) {
+  if (!activeMutation(actor, "Daylight Stasis")) return null;
+  const day = isDaytime(worldTime);
+  const isParalyzed = !!actor?.statuses?.has?.("paralyzed");
+  if (day && !isParalyzed) {
+    await actor.toggleStatusEffect?.("paralyzed", { active: true });
+    await postMutationChatCard(actor, "Daylight Stasis",
+      `${actor.name} falls inert under direct daylight.`);
+    return { action: "set" };
+  }
+  if (!day && isParalyzed) {
+    await actor.toggleStatusEffect?.("paralyzed", { active: false });
+    await postMutationChatCard(actor, "Daylight Stasis",
+      `${actor.name} stirs as darkness falls.`);
+    return { action: "clear" };
+  }
+  return null;
+}

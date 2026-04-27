@@ -317,15 +317,27 @@ export async function applyRest(actor, { hours = 24 } = {}) {
   if (!actor) return 0;
   const daily = Number(actor.system.resources?.hp?.restDaily ?? 1);
   const days = Math.max(0, hours / 24);
-  const heal = Math.floor(daily * days);
+  // 0.14.15 — Photosynthetic Skin: 4× heal rate while basking. The
+  // "basking" flag is a manual GM/player toggle (no auto-detection from
+  // scene lighting). Without basking the multiplier stays at 1.
+  const { photosyntheticHealMultiplier } = await import("./mutation-ticks.mjs");
+  const hasPhoto = Array.from(actor.items ?? []).some(
+    (item) => item?.type === "mutation"
+      && item?.name === "Photosynthetic Skin"
+      && (item?.system?.activation?.enabled ?? true)
+  );
+  const isBasking = !!actor.getFlag?.(SYSTEM_ID, "basking");
+  const photoMult = photosyntheticHealMultiplier({ hasMutation: hasPhoto, isBasking });
+  const heal = Math.floor(daily * days * photoMult);
   // Rest always clears fatigue per RAW, regardless of whether any HP is gained.
   await resetActorFatigue(actor);
   if (heal <= 0) return 0;
   await actor.heal?.(heal) ?? applyHealFallback(actor, heal);
+  const photoNote = (photoMult > 1) ? ` (Photosynthetic Skin ×${photoMult})` : "";
   await postHealingChat(actor, {
     label: `Rested ${Math.round(hours)} hour(s)`,
     amount: heal,
-    message: `Natural rest: regained ${heal} HP.`
+    message: `Natural rest: regained ${heal} HP${photoNote}.`
   });
   return heal;
 }

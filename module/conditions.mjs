@@ -171,10 +171,28 @@ export function registerConditionTicker() {
 }
 
 async function tickAllActors(worldTime) {
+  // 0.14.15 — mutation world-time ticks share the same loop. Deferred
+  // import keeps the dependency cycle clean (mutation-ticks imports only
+  // SYSTEM_ID at the top level).
+  let mutationTicks = null;
+  try {
+    mutationTicks = await import("./mutation-ticks.mjs");
+  } catch (error) {
+    console.warn(`${SYSTEM_ID} | mutation world-time ticks failed to load`, error);
+  }
+
   for (const actor of game.actors?.contents ?? []) {
     if (!["character", "monster"].includes(actor.type)) continue;
     await tickRadiationSickness(actor, worldTime);
     await tickCatastrophicRadiation(actor, worldTime);
+    if (mutationTicks) {
+      try {
+        await mutationTicks.tickRegenerationWorldTime(actor, worldTime);
+        await mutationTicks.tickDaylightStasisWorldTime(actor, worldTime);
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | mutation world-time tick failed for ${actor.name}`, error);
+      }
+    }
   }
 }
 
