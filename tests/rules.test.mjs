@@ -5429,3 +5429,237 @@ test("0.14.12 — clampHpUpdate floors fractional incoming values before compari
     assert.equal(c.system.resources.hp.value, 40);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 0.14.13 — HD clamp, charges clamp, dead-status transition, encumbrance,
+// fatigue tick predicate
+// ---------------------------------------------------------------------------
+
+test("0.14.13 — clampHitDiceUpdate caps value at the actor's level", async () => {
+  const { clampHitDiceUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // Player edits HD value to 99 on a level-5 character → clamp to 5.
+    const changed = { system: { resources: { hitDice: { value: 99 } } } };
+    const clamped = clampHitDiceUpdate(changed, { value: 3, max: 5 });
+    assert.equal(clamped, 5);
+    assert.equal(changed.system.resources.hitDice.value, 5);
+  });
+});
+
+test("0.14.13 — clampHitDiceUpdate honors the new level when level is in the same update", async () => {
+  const { clampHitDiceUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // Level-up handler set value=5 alongside the level=5 change. New
+    // level is the ceiling, value is at the ceiling — no clamp.
+    const changed = {
+      system: {
+        details: { level: 5 },
+        resources: { hitDice: { value: 5 } }
+      }
+    };
+    const clamped = clampHitDiceUpdate(changed, { value: 3, max: 4 });
+    assert.equal(clamped, null, "ceiling moved up; no clamp needed");
+    assert.equal(changed.system.resources.hitDice.value, 5);
+  });
+});
+
+test("0.14.13 — clampHitDiceUpdate pulls value down when only level decreases", async () => {
+  const { clampHitDiceUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // GM de-levels from 5 to 3 without touching HD value (5).
+    const changed = { system: { details: { level: 3 } } };
+    const clamped = clampHitDiceUpdate(changed, { value: 5, max: 5 });
+    assert.equal(clamped, 3);
+    assert.equal(changed.system.resources.hitDice.value, 3);
+  });
+});
+
+test("0.14.13 — clampHitDiceUpdate is a no-op when neither value nor level is in the update", async () => {
+  const { clampHitDiceUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { resources: { hp: { value: 10 } } } };
+    assert.equal(clampHitDiceUpdate(changed, { value: 3, max: 5 }), null);
+  });
+});
+
+test("0.14.13 — clampArtifactChargesUpdate caps current at max", async () => {
+  const { clampArtifactChargesUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    const changed = { system: { artifact: { charges: { current: 200 } } } };
+    const clamped = clampArtifactChargesUpdate(changed, { value: 50, max: 100 });
+    assert.equal(clamped, 100);
+    assert.equal(changed.system.artifact.charges.current, 100);
+  });
+});
+
+test("0.14.13 — clampArtifactChargesUpdate uses incoming max when both fields change", async () => {
+  const { clampArtifactChargesUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // Cell upgraded: max raised to 150, current set to 200 — clamp to 150.
+    const changed = { system: { artifact: { charges: { current: 200, max: 150 } } } };
+    const clamped = clampArtifactChargesUpdate(changed, { value: 50, max: 100 });
+    assert.equal(clamped, 150);
+  });
+});
+
+test("0.14.13 — clampArtifactChargesUpdate pulls current down when only max is lowered", async () => {
+  const { clampArtifactChargesUpdate } = await import("../module/hp-clamp.mjs");
+  withFoundryUtilsStub(() => {
+    // Damaged cell: max reduced to 40 while current was at 75.
+    const changed = { system: { artifact: { charges: { max: 40 } } } };
+    const clamped = clampArtifactChargesUpdate(changed, { value: 75, max: 100 });
+    assert.equal(clamped, 40);
+    assert.equal(changed.system.artifact.charges.current, 40);
+  });
+});
+
+test("0.14.13 — deadStatusTransition signals 'set' when HP drops to 0", async () => {
+  const { deadStatusTransition } = await import("../module/hp-clamp.mjs");
+  assert.equal(deadStatusTransition({ currentHp: 0,  hasDeadStatus: false }), "set");
+  assert.equal(deadStatusTransition({ currentHp: -5, hasDeadStatus: false }), "set");
+});
+
+test("0.14.13 — deadStatusTransition signals 'clear' when HP recovers above 0", async () => {
+  const { deadStatusTransition } = await import("../module/hp-clamp.mjs");
+  assert.equal(deadStatusTransition({ currentHp: 5,  hasDeadStatus: true }), "clear");
+  assert.equal(deadStatusTransition({ currentHp: 1,  hasDeadStatus: true }), "clear");
+});
+
+test("0.14.13 — deadStatusTransition is null when state already matches", async () => {
+  const { deadStatusTransition } = await import("../module/hp-clamp.mjs");
+  // Already alive, still alive
+  assert.equal(deadStatusTransition({ currentHp: 25, hasDeadStatus: false }), null);
+  // Already dead, still dead (no double-set on every HP edit while down)
+  assert.equal(deadStatusTransition({ currentHp: -3, hasDeadStatus: true }), null);
+});
+
+test("0.14.13 — deadStatusTransition treats null/undefined HP as 0 (dead)", async () => {
+  const { deadStatusTransition } = await import("../module/hp-clamp.mjs");
+  assert.equal(deadStatusTransition({ currentHp: null,      hasDeadStatus: false }), "set");
+  assert.equal(deadStatusTransition({ currentHp: undefined, hasDeadStatus: false }), "set");
+});
+
+test("0.14.13 — computeEncumbrance sums weights and flags encumbered/overloaded", async () => {
+  const { computeEncumbrance } = await import("../module/encumbrance.mjs");
+
+  // PS 10 → baseCarry 100. No items → 0/100, not penalized.
+  const empty = computeEncumbrance({ items: [], physStrength: 10 });
+  assert.equal(empty.carried, 0);
+  assert.equal(empty.max, 100);
+  assert.equal(empty.encumbered, false);
+  assert.equal(empty.overloaded, false);
+  assert.equal(empty.penalized, false);
+
+  // 50kg of gear under cap.
+  const light = computeEncumbrance({
+    items: [{ type: "gear", system: { quantity: 1, weight: 50 } }],
+    physStrength: 10
+  });
+  assert.equal(light.carried, 50);
+  assert.equal(light.encumbered, false);
+
+  // 120kg → encumbered (over 100, under 200).
+  const heavy = computeEncumbrance({
+    items: [{ type: "gear", system: { quantity: 3, weight: 40 } }],
+    physStrength: 10
+  });
+  assert.equal(heavy.carried, 120);
+  assert.equal(heavy.encumbered, true);
+  assert.equal(heavy.overloaded, false);
+  assert.equal(heavy.penalized, true);
+
+  // 250kg → overloaded.
+  const overloaded = computeEncumbrance({
+    items: [{ type: "gear", system: { quantity: 5, weight: 50 } }],
+    physStrength: 10
+  });
+  assert.equal(overloaded.carried, 250);
+  assert.equal(overloaded.overloaded, true);
+  assert.equal(overloaded.penalized, true);
+});
+
+test("0.14.13 — computeEncumbrance adds equipped container capacity to carry max", async () => {
+  const { computeEncumbrance } = await import("../module/encumbrance.mjs");
+  // PS 10 baseCarry 100; an equipped backpack with capacity 50 lifts max to 150.
+  const result = computeEncumbrance({
+    items: [
+      { type: "gear", system: { quantity: 1, weight: 2, subtype: "container", equipped: true, container: { capacity: 50 } } },
+      { type: "gear", system: { quantity: 1, weight: 120 } }
+    ],
+    physStrength: 10
+  });
+  assert.equal(result.containerCap, 50);
+  assert.equal(result.max, 150);
+  assert.equal(result.carried, 122);
+  assert.equal(result.encumbered, false, "122 carried < 150 max with container bonus");
+});
+
+test("0.14.13 — computeEncumbrance ignores unequipped containers", async () => {
+  const { computeEncumbrance } = await import("../module/encumbrance.mjs");
+  const result = computeEncumbrance({
+    items: [
+      { type: "gear", system: { quantity: 1, weight: 2, subtype: "container", equipped: false, container: { capacity: 50 } } }
+    ],
+    physStrength: 10
+  });
+  assert.equal(result.containerCap, 0);
+  assert.equal(result.max, 100);
+});
+
+test("0.14.13 — shouldTickFatigue accepts an active combatant with positive HP", async () => {
+  const { shouldTickFatigue } = await import("../module/effect-state.mjs");
+  const ok = shouldTickFatigue({
+    combatant: { isDefeated: false, defeated: false },
+    actor: { type: "character", system: { combat: { fatigue: { round: 0 } }, resources: { hp: { value: 10 } } } }
+  });
+  assert.equal(ok, true);
+});
+
+test("0.14.13 — shouldTickFatigue rejects defeated combatants and 0-HP actors", async () => {
+  const { shouldTickFatigue } = await import("../module/effect-state.mjs");
+  const baseActor = { type: "character", system: { combat: { fatigue: { round: 2 } }, resources: { hp: { value: 10 } } } };
+
+  assert.equal(shouldTickFatigue({
+    combatant: { isDefeated: true },
+    actor: baseActor
+  }), false, "isDefeated stops the tick");
+
+  assert.equal(shouldTickFatigue({
+    combatant: { defeated: true },
+    actor: baseActor
+  }), false, "legacy `defeated` flag also stops the tick");
+
+  assert.equal(shouldTickFatigue({
+    combatant: {},
+    actor: { ...baseActor, system: { ...baseActor.system, resources: { hp: { value: 0 } } } }
+  }), false, "0 HP stops the tick");
+
+  assert.equal(shouldTickFatigue({
+    combatant: {},
+    actor: { ...baseActor, system: { ...baseActor.system, resources: { hp: { value: -3 } } } }
+  }), false, "negative HP stops the tick");
+});
+
+test("0.14.13 — shouldTickFatigue rejects non-character/monster actor types", async () => {
+  const { shouldTickFatigue } = await import("../module/effect-state.mjs");
+  const ok = shouldTickFatigue({
+    combatant: {},
+    actor: { type: "vehicle", system: { combat: { fatigue: { round: 0 } }, resources: { hp: { value: 10 } } } }
+  });
+  assert.equal(ok, false);
+});
+
+test("0.14.13 — shouldTickFatigue rejects actors missing the fatigue sub-schema", async () => {
+  const { shouldTickFatigue } = await import("../module/effect-state.mjs");
+  const ok = shouldTickFatigue({
+    combatant: {},
+    actor: { type: "character", system: { combat: {}, resources: { hp: { value: 10 } } } }
+  });
+  assert.equal(ok, false);
+});
+
+test("0.14.13 — shouldTickFatigue handles missing combatant or actor", async () => {
+  const { shouldTickFatigue } = await import("../module/effect-state.mjs");
+  assert.equal(shouldTickFatigue({ combatant: null, actor: null }), false);
+  assert.equal(shouldTickFatigue({}), false);
+});

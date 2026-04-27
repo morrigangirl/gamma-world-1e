@@ -12,7 +12,8 @@ import { charismaReactionAdjustment, resolveEncounterIntelligence } from "../tab
 import { runAsGM } from "../gm-executor.mjs";
 import { artifactUseProfile } from "../artifact-rules.mjs";
 import { shouldRouteHpReduction } from "../save-flow.mjs";
-import { clampHpUpdate } from "../hp-clamp.mjs";
+import { clampHpUpdate, clampHitDiceUpdate, deadStatusTransition } from "../hp-clamp.mjs";
+import { computeEncumbrance } from "../encumbrance.mjs";
 
 function clampArmorClass(value) {
   return Math.max(1, Math.min(10, Math.round(Number(value) || 10)));
@@ -268,6 +269,16 @@ export class GammaWorldActor extends Actor {
     // stranded `value` down when only `max` is being lowered.
     clampHpUpdate(changed, this.system?.resources?.hp);
 
+    // 0.14.13 — same invariant for the Hit Dice pool. Ceiling is the
+    // actor's level (the schema's `hitDice.max` is rebuilt from level
+    // in prepareDerivedData every cycle, so it isn't authoritative).
+    // The level-up branch above already wrote a leveled `hitDice.value`
+    // when level changed; this clamp catches direct-edit paths.
+    clampHitDiceUpdate(changed, {
+      value: this.system?.resources?.hitDice?.value,
+      max:   this.system?.details?.level
+    });
+
     if (options?.gammaWorldSync || game.user?.isGM) return result;
 
     const nextHp = foundry.utils.getProperty(changed, "system.resources.hp.value");
@@ -283,6 +294,38 @@ export class GammaWorldActor extends Actor {
     }
 
     return result;
+  }
+
+  /**
+   * 0.14.13 — auto-toggle the core "dead" status effect when an HP
+   * update crosses the 0 threshold either way. The toggle is gated to
+   * one client (the GM who issued / received the update) to keep the
+   * status flip from firing N times in N-player worlds, and short-
+   * circuits when HP isn't in the update so manual GM status toggles
+   * on healthy actors aren't overwritten on the next unrelated edit.
+   *
+   * The "dead" status is Foundry core's default condition (skull
+   * overlay); it isn't redefined in `GAMMA_WORLD_STATUS_EFFECTS`. GW1e
+   * treats 0 HP as killed; resurrection / stabilization is a GM call
+   * (manual untoggle, or heal back to >0 HP which auto-untoggles here).
+   */
+  async _onUpdate(changed, options, userId) {
+    await super._onUpdate?.(changed, options, userId);
+    if (!supportsGammaWorldActorData(this)) return;
+    if (!game.user?.isGM) return;
+    if (foundry.utils.getProperty(changed, "system.resources.hp.value") == null) return;
+
+    const action = deadStatusTransition({
+      currentHp: this.system?.resources?.hp?.value,
+      hasDeadStatus: !!this.statuses?.has?.("dead")
+    });
+    if (action == null) return;
+
+    try {
+      await this.toggleStatusEffect("dead", { active: action === "set" });
+    } catch (error) {
+      console.warn(`gamma-world-1e | dead status auto-toggle failed for ${this.name}`, error);
+    }
   }
 
   prepareDerivedData() {
@@ -330,42 +373,27 @@ export class GammaWorldActor extends Actor {
    */
   _prepareEncumbrance() {
     const system = this.system;
-    const physStrength = Number(system.attributes?.ps?.value ?? 10);
-    const baseCarry = physStrength * 10;
-
-    let containerCap = 0;
-    let carried = 0;
-    for (const item of this.items) {
-      const qty = Math.max(0, Number(item.system?.quantity ?? 1));
-      const weight = Math.max(0, Number(item.system?.weight ?? 0));
-      carried += qty * weight;
-      if (item.type === "gear"
-          && item.system?.subtype === "container"
-          && item.system?.equipped) {
-        containerCap += Math.max(0, Number(item.system?.container?.capacity ?? 0));
-      }
-    }
-
-    const carryMax = baseCarry + containerCap;
-    const encumbered = carried > carryMax;
-    const overloaded = carried > (carryMax * 2);
+    const result = computeEncumbrance({
+      items: [...this.items],
+      physStrength: Number(system.attributes?.ps?.value ?? 10)
+    });
 
     system.encumbrance = {
-      carried: Math.round(carried * 100) / 100,
-      max: carryMax,
-      penalized: encumbered || overloaded
+      carried: result.carried,
+      max: result.max,
+      penalized: result.penalized
     };
 
     this.gw = this.gw ?? {};
     this.gw.encumbrance = {
-      carried: system.encumbrance.carried,
-      max: carryMax,
-      encumbered,
-      overloaded
+      carried: result.carried,
+      max: result.max,
+      encumbered: result.encumbered,
+      overloaded: result.overloaded
     };
 
-    if (encumbered || overloaded) {
-      const moveFactor = overloaded ? 0 : 0.5;
+    if (result.encumbered || result.overloaded) {
+      const moveFactor = result.overloaded ? 0 : 0.5;
       // 0.11.0: metric move — default human 10 m/round (was 120 legacy).
       this.gw.movement = Math.round((this.gw.movement ?? system.details.movement ?? 10) * moveFactor);
       this.gw.movementMultiplier = (this.gw.movementMultiplier ?? 1) * moveFactor;

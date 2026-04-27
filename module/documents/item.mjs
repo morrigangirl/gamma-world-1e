@@ -2,7 +2,29 @@
  * Gamma World item document helpers.
  */
 
+import { clampArtifactChargesUpdate } from "../hp-clamp.mjs";
+
 export class GammaWorldItem extends Item {
+  /**
+   * 0.14.13 — enforce `system.artifact.charges.current <=
+   * system.artifact.charges.max` for every editor (sheet, macro, API,
+   * drain ticks). Mirrors the actor HP clamp: power cells, charged
+   * artifacts, and any future capacity-bearing item all share this
+   * invariant. The helper is in `module/hp-clamp.mjs`; this hook is the
+   * one wiring point.
+   */
+  async _preUpdate(changed, options, user) {
+    const result = await super._preUpdate(changed, options, user);
+    if (result === false) return result;
+
+    clampArtifactChargesUpdate(changed, {
+      value: this.system?.artifact?.charges?.current,
+      max:   this.system?.artifact?.charges?.max
+    });
+
+    return result;
+  }
+
   get actorOwner() {
     return this.parent instanceof Actor ? this.parent : null;
   }

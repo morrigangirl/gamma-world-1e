@@ -1,25 +1,64 @@
 /**
- * 0.14.12 — HP invariant helper.
+ * 0.14.12 — Resource invariant helpers.
  *
- * Enforces `system.resources.hp.value <= system.resources.hp.max` on
- * actor updates regardless of who's editing (player, GM, macro, API).
- * Pure function: depends only on `foundry.utils.get/setProperty`, so it
- * imports cleanly into Node-based unit tests without needing the Foundry
- * Actor base class.
+ * Enforces `value <= max` on actor / item updates regardless of who's
+ * editing (player, GM, macro, API). Pure functions: depend only on
+ * `foundry.utils.get/setProperty`, so they import cleanly into
+ * Node-based unit tests without needing the Foundry Actor or Item base
+ * class.
  *
- * Used by `GammaWorldActor._preUpdate` before the GM short-circuit so
- * the invariant holds for every code path that mutates HP.
+ * Used by `GammaWorldActor._preUpdate` (HP, HD) and `GammaWorldItem.
+ * _preUpdate` (artifact charges) before any GM short-circuit so the
+ * invariants hold for every code path that mutates the resource.
+ *
+ * Two named exports today:
+ *   - `clampHpUpdate(changed, current)`           — `value <= max`
+ *   - `clampHitDiceUpdate(changed, current)`      — `value <= details.level`
+ *
+ * Both delegate to the same `clampValueAtCeiling` core. The HD ceiling
+ * is `system.details.level`, not `hitDice.max`, because the schema's
+ * persisted `hitDice.max` is rebuilt from level in
+ * `prepareDerivedData`; level is the authoritative source.
  */
 
 /**
- * Clamp HP value in an update payload to the effective max.
+ * Internal core. Reads `paths.value` and `paths.max` from the update
+ * payload, falls back to `current.value` / `current.max` when absent,
+ * and writes a clamped `paths.value` back into `changed` when the
+ * proposed value exceeds the effective ceiling.
  *
- * Mutates `changed` in place when the proposed value would exceed max.
+ * @param {object} changed
+ * @param {{value: string, max: string}} paths
+ * @param {{value?: number, max?: number}} current
+ * @returns {number|null}
+ */
+function clampValueAtCeiling(changed, paths, current) {
+  const nextValueIn = foundry.utils.getProperty(changed, paths.value);
+  const nextMaxIn   = foundry.utils.getProperty(changed, paths.max);
+  if (nextValueIn == null && nextMaxIn == null) return null;
+
+  const effectiveMax = nextMaxIn != null
+    ? Math.max(0, Math.floor(Number(nextMaxIn) || 0))
+    : Math.max(0, Math.floor(Number(current?.max ?? 0) || 0));
+  const proposedValue = nextValueIn != null
+    ? Math.floor(Number(nextValueIn) || 0)
+    : Math.floor(Number(current?.value ?? 0) || 0);
+
+  if (proposedValue > effectiveMax) {
+    foundry.utils.setProperty(changed, paths.value, effectiveMax);
+    return effectiveMax;
+  }
+  return null;
+}
+
+/**
+ * Clamp HP value in an update payload to the effective HP max.
+ *
  * Behavior:
- *   - If both `value` and `max` are in the update, the new `max` is used
- *     as the ceiling.
+ *   - If both `value` and `max` are in the update, the new `max` is the
+ *     ceiling.
  *   - If only `value` is in the update, the actor's current `max` is
- *     used as the ceiling.
+ *     the ceiling.
  *   - If only `max` is in the update (and the new max is below the
  *     current value), `value` is pulled down to the new max so the
  *     post-update state honors the invariant.
@@ -27,24 +66,79 @@
  *
  * @param {object} changed                Foundry update payload (mutated).
  * @param {{value?: number, max?: number}} current  Actor's pre-update HP.
- * @returns {number|null}  The clamped value when a clamp was applied,
- *                         otherwise `null`.
+ * @returns {number|null}  Clamped value when a clamp was applied; else null.
  */
 export function clampHpUpdate(changed, current) {
-  const nextHpInChange  = foundry.utils.getProperty(changed, "system.resources.hp.value");
-  const nextMaxInChange = foundry.utils.getProperty(changed, "system.resources.hp.max");
-  if (nextHpInChange == null && nextMaxInChange == null) return null;
+  return clampValueAtCeiling(changed, {
+    value: "system.resources.hp.value",
+    max:   "system.resources.hp.max"
+  }, current);
+}
 
-  const effectiveMax = nextMaxInChange != null
-    ? Math.max(0, Math.floor(Number(nextMaxInChange) || 0))
-    : Math.max(0, Math.floor(Number(current?.max ?? 0) || 0));
-  const proposedValue = nextHpInChange != null
-    ? Math.floor(Number(nextHpInChange) || 0)
-    : Math.floor(Number(current?.value ?? 0) || 0);
+/**
+ * Clamp Hit Dice value in an update payload to the actor's level.
+ *
+ * The Hit Dice ceiling is `system.details.level` rather than
+ * `system.resources.hitDice.max` because `prepareDerivedData` rebuilds
+ * `hitDice.max` from level on every data prep — level is the source of
+ * truth. The level-up branch in `GammaWorldActor._preUpdate` already
+ * handles the level-change case; this helper guards direct edits to
+ * `hitDice.value` (sheet number input, macro, API).
+ *
+ * @param {object} changed                Foundry update payload (mutated).
+ * @param {{value?: number, max?: number}} current  Pre-update HD pool.
+ *        Pass `{ value: <hitDice.value>, max: <details.level> }`.
+ * @returns {number|null}  Clamped value when a clamp was applied; else null.
+ */
+export function clampHitDiceUpdate(changed, current) {
+  return clampValueAtCeiling(changed, {
+    value: "system.resources.hitDice.value",
+    max:   "system.details.level"
+  }, current);
+}
 
-  if (proposedValue > effectiveMax) {
-    foundry.utils.setProperty(changed, "system.resources.hp.value", effectiveMax);
-    return effectiveMax;
-  }
+/**
+ * Clamp an item's `system.artifact.charges.current` to
+ * `system.artifact.charges.max` (or the legacy
+ * `system.consumption.charges` shape if the item uses it). Used by
+ * `GammaWorldItem._preUpdate` so direct edits / macros can't push a
+ * power cell or charged artifact above its capacity.
+ *
+ * @param {object} changed                Foundry update payload (mutated).
+ * @param {{value?: number, max?: number}} current  Item's pre-update
+ *        charges. Pass `{ value: <charges.current>, max: <charges.max> }`.
+ * @returns {number|null}  Clamped value when a clamp was applied; else null.
+ */
+export function clampArtifactChargesUpdate(changed, current) {
+  return clampValueAtCeiling(changed, {
+    value: "system.artifact.charges.current",
+    max:   "system.artifact.charges.max"
+  }, current);
+}
+
+/**
+ * 0.14.13 — decide whether the "dead" status effect should be toggled
+ * given a new HP value and the actor's current dead-status state.
+ *
+ * Returns:
+ *   - "set"   when HP <= 0 and the status isn't already on (just died)
+ *   - "clear" when HP > 0 and the status is on (revived)
+ *   - null    otherwise (no transition needed)
+ *
+ * Pure: no Foundry globals. The caller (GammaWorldActor._onUpdate) is
+ * responsible for calling `actor.toggleStatusEffect("dead", ...)` when
+ * this returns a non-null action. The transition-only contract means
+ * a GM who manually toggles "dead" on a healthy actor stays in
+ * control: that toggle didn't change HP, so this helper is never asked
+ * about it.
+ *
+ * @param {{currentHp: number|string|null|undefined, hasDeadStatus: boolean}} input
+ * @returns {"set"|"clear"|null}
+ */
+export function deadStatusTransition({ currentHp, hasDeadStatus }) {
+  const hp = Number(currentHp ?? 0) || 0;
+  const isDead = hp <= 0;
+  if (isDead && !hasDeadStatus) return "set";
+  if (!isDead && hasDeadStatus) return "clear";
   return null;
 }

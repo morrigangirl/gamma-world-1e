@@ -1146,6 +1146,33 @@ export async function tickCombatActorState(combat, changed) {
 }
 
 /**
+ * 0.14.13 — pure predicate: should this combatant's actor get its
+ * fatigue.round incremented on the current round advance?
+ *
+ * Skips:
+ *   - defeated combatants (combat-end housekeeping handles them)
+ *   - non-character/monster actors (NPCs without combat fatigue schema)
+ *   - actors without the `combat.fatigue` sub-schema
+ *   - actors at 0 HP or below (already incapacitated; fatigue is moot)
+ *
+ * Pure: caller passes `{ combatant, actor }`; returns boolean.
+ * Extracted so the filter can be unit-tested without a full Foundry
+ * Combat / Combatant stub graph.
+ *
+ * @param {{combatant: object, actor: object}} input
+ * @returns {boolean}
+ */
+export function shouldTickFatigue({ combatant, actor }) {
+  if (!combatant || !actor) return false;
+  if (combatant.isDefeated || combatant.defeated) return false;
+  if (!["character", "monster"].includes(actor.type)) return false;
+  if (!actor.system?.combat?.fatigue) return false;
+  const hpValue = Number(actor.system?.resources?.hp?.value ?? 0);
+  if (hpValue <= 0) return false;
+  return true;
+}
+
+/**
  * Increment `system.combat.fatigue.round` by 1 on every combatant whose actor
  * can fatigue. Skips defeated combatants and actors at 0 HP or below.
  * Only called on the GM client; invoked from the `updateCombat` hook.
@@ -1155,14 +1182,9 @@ export async function advanceCombatFatigue(combat) {
   if (!combat?.combatants) return;
 
   for (const combatant of combat.combatants) {
-    if (combatant.isDefeated || combatant.defeated) continue;
     const actor = combatant.actor;
-    if (!actor) continue;
-    if (!["character", "monster"].includes(actor.type)) continue;
-    const fatigue = actor.system?.combat?.fatigue;
-    if (!fatigue) continue;
-    const hpValue = Number(actor.system?.resources?.hp?.value ?? 0);
-    if (hpValue <= 0) continue;
+    if (!shouldTickFatigue({ combatant, actor })) continue;
+    const fatigue = actor.system.combat.fatigue;
     const next = Math.max(0, Number(fatigue.round ?? 0)) + 1;
     await actor.update(
       { "system.combat.fatigue.round": next },
