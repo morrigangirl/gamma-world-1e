@@ -768,6 +768,59 @@ export const MUTATION_RULES = {
     ]
   },
 
+  // 0.14.14 — Heightened Touch: GW1e text says it "improves the chance to
+  // figure out ancient devices" (artifact analysis -1, applied via the
+  // existing artifactUseProfile switch in artifact-rules.mjs) and is
+  // useful for "opening locks, working safes, or escaping confinement"
+  // — those translate to bonuses on juryRigging (jury-rigged opening)
+  // and salvage (taking apart safes / fastenings).
+  "Heightened Touch": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Touch — fine-manipulation skills",
+        changes: [
+          { key: "system.skills.juryRigging.bonus", mode: AE_MODE.ADD, value: "2", priority: 20 },
+          { key: "system.skills.salvage.bonus",     mode: AE_MODE.ADD, value: "2", priority: 20 }
+        ] }
+    ]
+  },
+
+  // 0.14.14 — Heightened Taste: a single at-will utility action. Tapping
+  // "Use" posts a chat card requesting the GM identify the substance
+  // (poison? edible?). No mechanical bonuses — the value is the on-demand
+  // information channel. Routed through the new "info" action handler
+  // (handleNote) so it doesn't ask for a target / round-tracking.
+  "Heightened Taste": {
+    mode: "action",
+    range: "Self",
+    duration: "Instant",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: {
+      formula: "",
+      saveType: "",
+      notes: "Touch a substance to your tongue to automatically detect whether it is poisonous and whether it is edible. Ask the GM for the result."
+    },
+    action: "info"
+  },
+
+  // 0.14.14 — Heightened Balance: GW1e text says the mutant "does not
+  // tumble into pits, trip over ropes or wires, or land anywhere but on
+  // its feet" and "can climb sheer walls and cross tightropes with no
+  // chance of falling." Translates to skill bonuses on climbingTraversal
+  // (the climb / tightrope skill) and stealth (silent footing / not
+  // tripping). Auto-pass on falling damage stays a GM call — no save
+  // type currently models "falling save" cleanly.
+  "Heightened Balance": {
+    mode: "passive",
+    effects: [
+      { label: "Heightened Balance — sure-footed skills",
+        changes: [
+          { key: "system.skills.climbingTraversal.bonus", mode: AE_MODE.ADD, value: "3", priority: 20 },
+          { key: "system.skills.stealth.bonus",           mode: AE_MODE.ADD, value: "2", priority: 20 }
+        ] }
+    ]
+  },
+
   /* ------------------------------------------------------------------ */
   /* 0.8.5 Tier 2 — AE pilot expansion                                  */
   /*                                                                    */
@@ -1109,6 +1162,7 @@ const MUTATION_ACTION_TYPE_DEFAULTS = Object.freeze({
   "radiation-eyes":           ["attack", "damage"],
   "full-heal":                ["heal"],
   "guided":                   ["utility"],
+  "info":                     ["utility"],
   "restrain":                 ["attack", "save"]
 });
 

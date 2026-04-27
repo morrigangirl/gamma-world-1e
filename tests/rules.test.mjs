@@ -477,16 +477,17 @@ test("artifact use profile applies RAW modifiers, instant charts, and timing", (
   assert.equal(clampArtifactUseRoll(-2), 1);
   assert.equal(clampArtifactUseRoll(17), 10);
 
-  // INT 18 → -3, Dual Brain → -1, Heightened Intelligence → -2, Scientific Genius AE → -1 = -7.
+  // INT 18 → -3, Dual Brain → -1, Heightened Intelligence → -2, Scientific Genius AE → -1,
+  // Heightened Touch → -1 (added in 0.14.14) = -8.
   const profileA = artifactUseProfileForChart(actor, "A");
-  assert.equal(profileA.modifier, -7);
+  assert.equal(profileA.modifier, -8);
   assert.equal(profileA.speedMultiplier, 3);
   assert.equal(profileA.instantCharts.has("A"), true);
   assert.equal(profileA.notes.includes("Heightened Touch"), true);
 
-  // Chart B adds -2 from Molecular Understanding on top = -9.
+  // Chart B adds -2 from Molecular Understanding on top = -10.
   const profileB = artifactUseProfileForChart(actor, "B");
-  assert.equal(profileB.modifier, -9);
+  assert.equal(profileB.modifier, -10);
   assert.equal(artifactElapsedMinutes({ rollsThisAttempt: 10, helperCount: 0, speedMultiplier: profileB.speedMultiplier }), 40);
   assert.equal(artifactElapsedMinutes({ rollsThisAttempt: 12, helperCount: 1, speedMultiplier: 1 }), 120);
 });
@@ -5663,3 +5664,67 @@ test("0.14.13 — shouldTickFatigue handles missing combatant or actor", async (
   assert.equal(shouldTickFatigue({ combatant: null, actor: null }), false);
   assert.equal(shouldTickFatigue({}), false);
 });
+
+// ---------------------------------------------------------------------------
+// 0.14.14 — Heightened Touch / Taste / Balance mutation automation
+// ---------------------------------------------------------------------------
+
+test("0.14.14 — artifactUseProfile applies -1 modifier when Heightened Touch is active", async () => {
+  const { artifactUseProfile } = await import("../module/artifact-rules.mjs");
+  const actor = {
+    system: { attributes: { in: { value: 12 } } },  // INT 12 → 0 baseline modifier
+    items: [{ type: "mutation", name: "Heightened Touch", system: { activation: { enabled: true }, reference: {} } }]
+  };
+  const profile = artifactUseProfile(actor);
+  assert.equal(profile.modifier, -1, "Heightened Touch contributes -1 to artifact analysis");
+  assert.ok(profile.notes.includes("Heightened Touch"));
+});
+
+test("0.14.14 — Heightened Touch MUTATION_RULES grants +2 to juryRigging and salvage", async () => {
+  const { MUTATION_RULES } = await import("../module/mutation-rules.mjs");
+  const rule = MUTATION_RULES["Heightened Touch"];
+  assert.ok(rule, "rule exists");
+  assert.equal(rule.mode, "passive");
+  const changes = rule.effects?.[0]?.changes ?? [];
+  const findChange = (key) => changes.find((c) => c.key === key);
+  assert.equal(findChange("system.skills.juryRigging.bonus")?.value, "2");
+  assert.equal(findChange("system.skills.salvage.bonus")?.value, "2");
+});
+
+test("0.14.14 — Heightened Taste is an at-will info action with utility tag", async () => {
+  const { MUTATION_RULES, resolveMutationActionTypes } = await import("../module/mutation-rules.mjs");
+  const rule = MUTATION_RULES["Heightened Taste"];
+  assert.ok(rule, "rule exists");
+  assert.equal(rule.mode, "action");
+  assert.equal(rule.action, "info");
+  assert.equal(rule.usage.per, "at-will");
+  assert.equal(rule.usage.limited, false);
+  // resolveMutationActionTypes uses the internal MUTATION_ACTION_TYPE_DEFAULTS
+  // map to derive tags for the sheet's action sections; the new "info" mode
+  // surfaces under utility actions.
+  assert.deepEqual(resolveMutationActionTypes(rule), ["utility"]);
+});
+
+test("0.14.14 — Heightened Balance MUTATION_RULES grants climbingTraversal +3 and stealth +2", async () => {
+  const { MUTATION_RULES } = await import("../module/mutation-rules.mjs");
+  const rule = MUTATION_RULES["Heightened Balance"];
+  assert.ok(rule, "rule exists");
+  assert.equal(rule.mode, "passive");
+  const changes = rule.effects?.[0]?.changes ?? [];
+  const findChange = (key) => changes.find((c) => c.key === key);
+  assert.equal(findChange("system.skills.climbingTraversal.bonus")?.value, "3");
+  assert.equal(findChange("system.skills.stealth.bonus")?.value, "2");
+});
+
+test("0.14.14 — useMutation routes 'info' action mode to handleNote (chat-card commit)", async () => {
+  // We can't import mutations.mjs directly without Foundry globals because
+  // the file uses ChatMessage at module-init time elsewhere. Instead we
+  // verify the dispatch mapping via a lightweight regex sweep — the switch
+  // needs an `case "info":` arm above the default that returns handleNote.
+  const fs = await import("node:fs/promises");
+  const src = await fs.readFile("module/mutations.mjs", "utf8");
+  const switchBlock = src.match(/switch \(rule\.action\) \{[\s\S]+?\n  \}/);
+  assert.ok(switchBlock, "located useMutation switch block");
+  assert.match(switchBlock[0], /case "info":\s*\n\s*return handleNote\(actor, item\);/);
+});
+

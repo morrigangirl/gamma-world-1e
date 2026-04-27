@@ -816,6 +816,12 @@ export async function useMutation(actor, item) {
       return handleRestrain(actor, item);
     case "guided":
       return handleGuided(actor, item);
+    // 0.14.14 — "info" is the lightweight at-will utility flow used by
+    // Heightened Taste and any other mutation that just posts a one-shot
+    // descriptive chat card (no targeting, no tracked effect). Reuses
+    // handleNote which commits the use + posts the description.
+    case "info":
+      return handleNote(actor, item);
     case "note":
     default:
       return handleGuided(actor, item);

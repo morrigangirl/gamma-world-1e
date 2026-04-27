@@ -129,6 +129,12 @@ export function artifactUseProfile(actor) {
         profile.notes.push("Molecular Understanding");
         break;
       case "Heightened Touch":
+        // 0.14.14 — actually apply the bonus we'd been advertising via the
+        // notes line. -1 mirrors Dual Brain's contribution (the GW1e text
+        // says it "improves the mutant's chance to figure out ancient
+        // devices"); skill bonuses for opening locks / safes are wired
+        // via the MUTATION_RULES AE entry on juryRigging and salvage.
+        profile.modifier -= 1;
         profile.notes.push("Heightened Touch");
         break;
       default:
