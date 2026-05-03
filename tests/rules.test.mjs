@@ -6039,3 +6039,122 @@ test("0.14.17 — fatigueOverlayText returns null at 0 and 'F-N' for positive le
   assert.equal(fatigueOverlayText(2.7), "F-2", "fractional floors");
 });
 
+// ---------------------------------------------------------------------------
+// 0.14.18 — Mutation polish: bind-wound, basking, Skin Structure environmental
+// ticks, day/night helper reuse
+// ---------------------------------------------------------------------------
+
+test("0.14.18 — tickHemophiliaCombat skips when the actor's bound flag is set", async () => {
+  const { tickHemophiliaCombat } = await import("../module/mutation-ticks.mjs");
+  // Stub actor: has Hemophilia, is wounded, but the bound flag is set.
+  let updateCalled = false;
+  const actor = {
+    name: "Bound One",
+    items: [{
+      type: "mutation", name: "Hemophilia",
+      system: { activation: { enabled: true } }
+    }],
+    system: { resources: { hp: { value: 5, max: 10 } } },
+    getFlag: (ns, key) => (ns === "gamma-world-1e" && key === "hemophiliaBound") ? true : null,
+    update: async () => { updateCalled = true; }
+  };
+  const result = await tickHemophiliaCombat(actor);
+  assert.equal(result, null, "no bleed when bound");
+  assert.equal(updateCalled, false, "no actor.update call");
+});
+
+test("0.14.18 — Photosynthetic Skin is wired as an at-will 'bask' utility action", async () => {
+  const { MUTATION_RULES, resolveMutationActionTypes } = await import("../module/mutation-rules.mjs");
+  const rule = MUTATION_RULES["Photosynthetic Skin"];
+  assert.ok(rule, "rule entry exists");
+  assert.equal(rule.mode, "action");
+  assert.equal(rule.action, "bask");
+  assert.equal(rule.usage.per, "at-will");
+  assert.deepEqual(resolveMutationActionTypes(rule), ["utility"]);
+});
+
+test("0.14.18 — useMutation routes 'bask' to handleToggleBasking (sweep)", async () => {
+  const fs = await import("node:fs/promises");
+  const src = await fs.readFile("module/mutations.mjs", "utf8");
+  const switchBlock = src.match(/switch \(rule\.action\) \{[\s\S]+?\n  \}/);
+  assert.ok(switchBlock, "located useMutation switch block");
+  assert.match(switchBlock[0], /case "bask":\s*\n\s*return handleToggleBasking\(actor, item\);/);
+});
+
+test("0.14.18 — skinStructureTickKind classifies the two environmental variants", async () => {
+  const { skinStructureTickKind } = await import("../module/mutation-ticks.mjs");
+  assert.equal(skinStructureTickKind("1 damage per turn in water"),       "water");
+  assert.equal(skinStructureTickKind("1d3 damage per turn in bright light"), "light");
+  // The "+1/die when hurt" variant is handled by MUTATION_DAMAGE_TRAITS,
+  // not the tick — return null here.
+  assert.equal(skinStructureTickKind("+1 damage taken when hurt"), null);
+  assert.equal(skinStructureTickKind(""), null);
+  assert.equal(skinStructureTickKind(undefined), null);
+});
+
+test("0.14.18 — tickSkinStructureCombat skips actors without the relevant environmental flag", async () => {
+  const { tickSkinStructureCombat } = await import("../module/mutation-ticks.mjs");
+  let updateCalled = false;
+  const actor = {
+    name: "Dry One",
+    items: [{
+      type: "mutation", name: "Skin Structure Change",
+      system: {
+        activation: { enabled: true },
+        reference: { variant: "1 damage per turn in water" }
+      }
+    }],
+    system: { resources: { hp: { value: 10, max: 10 } } },
+    getFlag: () => null, // no inWater flag
+    update: async () => { updateCalled = true; }
+  };
+  const result = await tickSkinStructureCombat(actor);
+  assert.equal(result, null);
+  assert.equal(updateCalled, false);
+});
+
+test("0.14.18 — tickSkinStructureCombat ticks 1 HP for water variant when inWater flag is set", async () => {
+  const { tickSkinStructureCombat } = await import("../module/mutation-ticks.mjs");
+  const updates = [];
+  let chatCount = 0;
+  const originalChat = globalThis.ChatMessage;
+  const originalSpeaker = originalChat?.getSpeaker;
+  globalThis.ChatMessage = {
+    getSpeaker: () => ({}),
+    create: async () => { chatCount += 1; }
+  };
+  try {
+    const actor = {
+      name: "Water Skin",
+      items: [{
+        type: "mutation", name: "Skin Structure Change",
+        system: {
+          activation: { enabled: true },
+          reference: { variant: "1 damage per turn in water" }
+        }
+      }],
+      system: { resources: { hp: { value: 8, max: 10 } } },
+      getFlag: (ns, key) => (ns === "gamma-world-1e" && key === "inWater") ? true : null,
+      update: async (data) => { updates.push(data); }
+    };
+    const result = await tickSkinStructureCombat(actor);
+    assert.equal(result.kind, "water");
+    assert.equal(result.amount, 1);
+    assert.equal(result.hp, 7);
+    assert.deepEqual(updates[0], { "system.resources.hp.value": 7 });
+    assert.equal(chatCount, 1);
+  } finally {
+    globalThis.ChatMessage = originalChat;
+  }
+});
+
+test("0.14.18 — sheet context exposes a timeOfDay badge derived from isDaytime", async () => {
+  // We can't import the sheet module without Foundry globals, so we
+  // verify the wiring via a regex sweep — _prepareContext should set
+  // context.timeOfDay using isDaytime + a localized label.
+  const fs = await import("node:fs/promises");
+  const src = await fs.readFile("module/sheets/actor-character-sheet.mjs", "utf8");
+  assert.match(src, /context\.timeOfDay = \{/, "timeOfDay is assigned in the sheet context");
+  assert.match(src, /isDaytime\(worldTime\)/, "uses the same isDaytime helper Daylight Stasis consumes");
+});
+

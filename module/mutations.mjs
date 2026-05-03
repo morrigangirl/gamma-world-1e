@@ -630,6 +630,24 @@ async function handleNote(actor, item) {
 }
 
 /**
+ * 0.14.18 — Photosynthetic Skin "Bask" handler. Toggles the actor's
+ * `flags.gamma-world-1e.basking` boolean and posts a chat card noting
+ * the new state. The basking flag is consumed by `healing.mjs::
+ * applyRest`, multiplying the daily heal rate by 4 while basking.
+ */
+async function handleToggleBasking(actor, item) {
+  if (!actor || typeof actor.setFlag !== "function") return false;
+  const current = !!actor.getFlag(SYSTEM_ID, "basking");
+  await actor.setFlag(SYSTEM_ID, "basking", !current);
+  // Don't consume a "use" — basking is at-will and toggleable.
+  const stateLine = current
+    ? `${actor.name} stops basking.`
+    : `${actor.name} begins basking in sunlight (4× rest-heal rate while motionless).`;
+  await postMutationMessage(actor, item, `${describeMutationHtml(item)}<p>${stateLine}</p>`);
+  return true;
+}
+
+/**
  * 0.8.4 — "restrain" handler.
  *
  * Applies a Restrained temporary effect to the primary target with a
@@ -832,6 +850,11 @@ export async function useMutation(actor, item) {
     // handleNote which commits the use + posts the description.
     case "info":
       return handleNote(actor, item);
+    // 0.14.18 — "bask" toggles the actor's `flags.basking` boolean for
+    // Photosynthetic Skin. The flag drives the 4× rest-heal multiplier
+    // in healing.mjs::applyRest.
+    case "bask":
+      return handleToggleBasking(actor, item);
     case "note":
     default:
       return handleGuided(actor, item);

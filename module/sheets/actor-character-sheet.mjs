@@ -732,6 +732,24 @@ export class GammaWorldCharacterSheet extends HandlebarsApplicationMixin(ActorSh
       }
     }
 
+    // 0.14.18 — day/night badge in the sheet header. `isDaytime` is the
+    // same source of truth Daylight Stasis consumes, so the badge is
+    // always in sync with that mutation's auto-toggle.
+    try {
+      const { isDaytime } = await import("../mutation-ticks.mjs");
+      const worldTime = Number(game?.time?.worldTime ?? 0) || 0;
+      const day = isDaytime(worldTime);
+      context.timeOfDay = {
+        isDaytime: day,
+        label:    localize(day ? "GAMMA_WORLD.TimeOfDay.Day"     : "GAMMA_WORLD.TimeOfDay.Night",     day ? "Daylight" : "Night"),
+        tooltip:  localize(day ? "GAMMA_WORLD.TimeOfDay.DayTip"  : "GAMMA_WORLD.TimeOfDay.NightTip",  day ? "World clock shows daytime hours (06:00–18:00)." : "World clock shows night hours."),
+        icon:     day ? "fa-sun" : "fa-moon",
+        cssClass: day ? "gw-time-of-day--day" : "gw-time-of-day--night"
+      };
+    } catch (error) {
+      context.timeOfDay = null;
+    }
+
     // Mutations split by subtype for the mutations tab.
     const mutationsBySubtype = { physical: [], mental: [], defect: [] };
     for (const mut of grouped.mutation) {

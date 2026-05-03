@@ -122,26 +122,72 @@ function activeMutation(actor, name) {
   ) ?? null;
 }
 
-async function postMutationChatCard(actor, title, body) {
+async function postMutationChatCard(actor, title, body, { extraHtml = "" } = {}) {
   if (typeof globalThis.ChatMessage?.create !== "function") return;
   const speaker = ChatMessage.getSpeaker?.({ actor }) ?? {};
   await ChatMessage.create({
     speaker,
-    content: `<div class="gw-chat-card gw-mutation-tick-card"><h3>${title}</h3><p>${body}</p></div>`
+    content: `<div class="gw-chat-card gw-mutation-tick-card"><h3>${title}</h3><p>${body}</p>${extraHtml}</div>`
   });
 }
 
-/** Apply Hemophilia bleed for one combat round. */
+/**
+ * Apply Hemophilia bleed for one combat round.
+ *
+ * 0.14.18 — skips when the actor's `flags.gamma-world-1e.hemophiliaBound`
+ * flag is set (the wound has been bound). The flag is set by clicking
+ * the "Bind Wound" button on the bleed chat card, and auto-cleared by
+ * GammaWorldActor._onUpdate when HP returns to max.
+ */
 export async function tickHemophiliaCombat(actor) {
   if (!activeMutation(actor, "Hemophilia")) return null;
+  if (actor?.getFlag?.(SYSTEM_ID, "hemophiliaBound")) return null;
   const hp = actor?.system?.resources?.hp;
   const amount = hemophiliaBleedAmount({ hp, hasMutation: true });
   if (!amount) return null;
   const next = Math.max(0, Number(hp.value ?? 0) - amount);
   await actor.update({ "system.resources.hp.value": next }, { gammaWorldSync: true });
+  // 0.14.18 — chat card includes a "Bind Wound" button; clicking it
+  // sets the bound flag (handled by registerHemophiliaChatHandlers).
+  const escUuid = String(actor.uuid ?? "").replace(/[<>&"]/g, (ch) => ({
+    "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;"
+  })[ch]);
+  const button = `<button type="button" class="gw-bind-wound-btn" data-action="bindHemophiliaWound" data-actor-uuid="${escUuid}">Bind Wound</button>`;
   await postMutationChatCard(actor, "Hemophilia bleeding",
-    `${actor.name} loses ${amount} HP from uncontrolled bleeding (${next}/${hp.max} HP). Bind the wound to halt further loss.`);
+    `${actor.name} loses ${amount} HP from uncontrolled bleeding (${next}/${hp.max} HP). Bind the wound to halt further loss.`,
+    { extraHtml: button });
   return { delta: -amount, hp: next };
+}
+
+/**
+ * 0.14.18 — wire the "Bind Wound" button on Hemophilia bleed chat
+ * cards. Setting the bound flag halts further bleed ticks until the
+ * actor heals back to max HP, at which point GammaWorldActor._onUpdate
+ * auto-clears the flag.
+ *
+ * Intended to be called from the renderChatMessage hook in hooks.mjs.
+ */
+export function registerHemophiliaChatHandlers(rootElement) {
+  if (!rootElement || typeof rootElement.querySelectorAll !== "function") return;
+  rootElement.querySelectorAll('[data-action="bindHemophiliaWound"]').forEach((btn) => {
+    if (btn.dataset.gwBound) return; // idempotent — Foundry rebinds on render
+    btn.dataset.gwBound = "1";
+    btn.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const uuid = btn.dataset.actorUuid;
+      if (!uuid) return;
+      try {
+        const actor = await fromUuid(uuid);
+        if (!actor) return;
+        if (typeof actor.setFlag !== "function") return;
+        await actor.setFlag(SYSTEM_ID, "hemophiliaBound", true);
+        btn.disabled = true;
+        btn.textContent = "Wound bound";
+      } catch (error) {
+        console.warn(`${SYSTEM_ID} | bind-wound handler failed`, error);
+      }
+    });
+  });
 }
 
 /** Post Increased Metabolism warning when round count is divisible by 5. */
@@ -223,6 +269,68 @@ export async function tickRegenerationWorldTime(actor, worldTime) {
   }
   await actor.setFlag?.(SYSTEM_ID, "regenLastTick", lastTick + days * SECONDS_PER_DAY);
   return { healed: newHp - currentHp, days };
+}
+
+/* ------------------------------------------------------------------ */
+/* 0.14.18 — Skin Structure Change: per-round environmental damage    */
+/*                                                                    */
+/* Variant-driven tick. The defect's static-vulnerability variant is  */
+/* handled by MUTATION_DAMAGE_TRAITS in 0.14.16; this covers the two  */
+/* environmental variants:                                            */
+/*   - "1 damage per turn in water"           — when actor's          */
+/*       `flags.inWater` is set, lose 1 HP per combat round           */
+/*   - "1d3 damage per turn in bright light"  — when actor's          */
+/*       `flags.inBrightLight` is set, lose 1d3 HP per combat round   */
+/*                                                                    */
+/* The flags are toggled manually by the GM (or via macro) when the   */
+/* environmental condition applies — there's no scene-introspection.  */
+/* ------------------------------------------------------------------ */
+
+/** Pure: which kind of environmental damage applies to the variant? */
+export function skinStructureTickKind(variant) {
+  if (variant === "1 damage per turn in water") return "water";
+  if (variant === "1d3 damage per turn in bright light") return "light";
+  return null;
+}
+
+/** Async: apply Skin Structure Change environmental damage for one round. */
+export async function tickSkinStructureCombat(actor) {
+  const mutation = activeMutation(actor, "Skin Structure Change");
+  if (!mutation) return null;
+  const variant = mutation.system?.reference?.variant ?? "";
+  const kind = skinStructureTickKind(variant);
+  if (!kind) return null;
+
+  const flagName = kind === "water" ? "inWater" : "inBrightLight";
+  if (!actor?.getFlag?.(SYSTEM_ID, flagName)) return null;
+
+  const hp = actor?.system?.resources?.hp;
+  if (!hp) return null;
+  const value = Number(hp.value ?? 0);
+  if (value <= 0) return null;
+
+  // Roll 1d3 for the light variant; fixed 1 for water.
+  let amount = 1;
+  if (kind === "light") {
+    const Roll = globalThis.Roll;
+    if (Roll) {
+      try {
+        const roll = await new Roll("1d3").evaluate({ async: true });
+        amount = Math.max(1, Math.round(Number(roll.total) || 2));
+      } catch { amount = 2; }
+    } else {
+      amount = 2; // average when Roll isn't loaded (test environment)
+    }
+  }
+
+  const next = Math.max(0, value - amount);
+  await actor.update({ "system.resources.hp.value": next }, { gammaWorldSync: true });
+  const reason = kind === "water"
+    ? "skin dissolves in water"
+    : "phosphorescent skin damaged by bright light";
+  await postMutationChatCard(actor, "Skin Structure Change",
+    `${actor.name} loses ${amount} HP from ${reason} (${next}/${hp.max} HP).`);
+  return { kind, amount, hp: next };
 }
 
 /* ------------------------------------------------------------------ */

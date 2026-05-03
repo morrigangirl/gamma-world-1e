@@ -968,6 +968,25 @@ export const MUTATION_RULES = {
     ]
   },
 
+  // 0.14.18 — Photosynthetic Skin: at-will "Bask" / "Stop Basking"
+  // toggle that flips the actor's `flags.basking` boolean. The flag
+  // is consumed by `applyRest` (healing.mjs) — when set during a rest,
+  // the daily heal rate multiplies by 4. Damage vulnerability to heat
+  // and cold is unconditional (handled by MUTATION_DAMAGE_TRAITS in
+  // buildActorDerived); only the heal-rate bonus depends on basking.
+  "Photosynthetic Skin": {
+    mode: "action",
+    range: "Self",
+    duration: "While motionless in sunlight",
+    usage: { limited: false, per: "at-will", uses: 0, max: 0 },
+    effect: {
+      formula: "",
+      saveType: "",
+      notes: "Basking in sunlight without moving heals 4× normal HP per day. Heat / cold attacks deal +1 HP per die. Toggle on / off with this action."
+    },
+    action: "bask"
+  },
+
   // 0.14.16 — Fear Impulse: variant rolled at item-create (fire /
   // darkness / water / robots / heights). The defect mechanic is
   // narrative ("drop everything, flee") with no canonical save type
@@ -1329,6 +1348,7 @@ const MUTATION_ACTION_TYPE_DEFAULTS = Object.freeze({
   "full-heal":                ["heal"],
   "guided":                   ["utility"],
   "info":                     ["utility"],
+  "bask":                     ["utility"],
   "restrain":                 ["attack", "save"]
 });
 

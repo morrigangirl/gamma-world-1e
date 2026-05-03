@@ -118,6 +118,7 @@ When a combat is deleted, fatigue resets (controlled by `resetFatigueOnCombatEnd
 | Auto-roll initiative | `autoRollNewCombatantInitiative` (default on) | A combatant added to a started combat without a rolled initiative gets one automatically (GM-side). |
 | Round summary card | `combatRoundSummary` (default on) | Per-round GM whisper with initiative + HP + fatigue for every combatant. |
 | Token fatigue overlay | `tokenFatigueOverlay` (default on) | Renders a small "F-N" badge in the top-right of any token whose actor has `fatigue.round > 0`. Updates on round tick + status changes. |
+| Day/night badge (0.14.18) | (always on) | Sheet header carries a sun/moon pill driven by `isDaytime(game.time.worldTime)` — the same source of truth Daylight Stasis consumes. Updates when world time advances. |
 
 ---
 
@@ -287,17 +288,19 @@ Each entry has a `system.activation.mode = "action"` row; clicking **Use** runs 
 | **Dissolving Juices (0.14.16)** | Melee | 5d6/turn | ramping-damage | Per-turn while in contact |
 | **Heightened Taste (0.14.14)** | Self | — | info | At-will GM identify-substance prompt |
 | **Fear Impulse (0.14.16)** | Self | — | info | Mental save when trigger appears |
+| **Photosynthetic Skin (0.14.18)** | Self | — | bask | Toggles `flags.basking`; 4× rest-heal multiplier |
 
-#### Combat-round ticks (0.14.15 / 0.14.16)
+#### Combat-round ticks (0.14.15 / 0.14.16 / 0.14.18)
 
 Fired from `tickCombatActorState` on every `updateCombat` round change. See `module/mutation-ticks.mjs`.
 
 | Mutation | Trigger | Effect |
 |---|---|---|
-| Hemophilia | actor wounded | −2 HP/round, chat prompt to bind wound |
+| Hemophilia | actor wounded, **bound flag clear** (0.14.18) | −2 HP/round, chat card with **"Bind Wound"** button that sets the bound flag (auto-cleared when HP returns to max) |
 | Increased Metabolism | every 5th round | warning chat (−1 PS / −2 HP if ignored) |
 | Poor Respiratory System | round ≥ 6 | 1d6 minutes unconscious + wake-up flag |
 | Epilepsy (0.14.16) | round 1 (25%) / round 2+ (10%) | apply paralyzed status |
+| Skin Structure Change (0.14.18) | per-actor `inWater` / `inBrightLight` flag set + matching variant | 1 HP/round (water variant) or 1d3 HP/round (light variant) |
 
 #### World-time ticks (0.14.15)
 
@@ -325,7 +328,10 @@ Fired from `tickAllActors` on every `updateWorldTime` advance. See `module/condi
 | Flag | Purpose |
 |---|---|
 | `flags["gamma-world-1e"].bodyWeightKg` | Overrides 75kg default for Regeneration |
-| `flags["gamma-world-1e"].basking` | Turns on Photosynthetic Skin's 4× heal multiplier |
+| `flags["gamma-world-1e"].basking` | Turns on Photosynthetic Skin's 4× heal multiplier (toggle via the "Bask" mutation action) |
+| `flags["gamma-world-1e"].hemophiliaBound` (0.14.18) | When true, halts the Hemophilia bleed tick. Set by the "Bind Wound" chat-card button; auto-cleared by `_onUpdate` when HP reaches max |
+| `flags["gamma-world-1e"].inWater` (0.14.18) | When true, the Skin Structure Change "1 dmg/turn in water" variant ticks 1 HP per combat round |
+| `flags["gamma-world-1e"].inBrightLight` (0.14.18) | When true, the Skin Structure Change "1d3 dmg/turn in bright light" variant ticks 1d3 HP per combat round |
 | `flags["gamma-world-1e"].regenLastTick` | Internal: last regen tick timestamp |
 | `flags["gamma-world-1e"].poorRespiratoryFaint` | Internal: faint expiry tracker |
 

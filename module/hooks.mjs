@@ -280,6 +280,15 @@ function onRenderChatMessage(message, html) {
         console.warn(`${SYSTEM_ID} | encounter-close chat handlers failed to load`, error);
       });
     }
+    // 0.14.18 — wire the "Bind Wound" button on Hemophilia bleed chat
+    // cards. Same lazy-import pattern as encounter-close.
+    if (root.querySelector('[data-action="bindHemophiliaWound"]')) {
+      import("./mutation-ticks.mjs").then(({ registerHemophiliaChatHandlers }) => {
+        registerHemophiliaChatHandlers(root);
+      }).catch((error) => {
+        console.warn(`${SYSTEM_ID} | hemophilia chat handlers failed to load`, error);
+      });
+    }
   }
 
   const flags = message.flags?.[SYSTEM_ID];

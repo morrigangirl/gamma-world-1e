@@ -409,6 +409,12 @@
       "Restrained": "Restrained",
       "Bloodied": "Bloodied"
     },
+    "TimeOfDay": {
+      "Day": "Daylight",
+      "Night": "Night",
+      "DayTip": "World clock shows daytime hours (06:00–18:00).",
+      "NightTip": "World clock shows night hours."
+    },
     "AOE": {
       "Target": "Target",
       "Owner": "Owner",

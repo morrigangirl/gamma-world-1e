@@ -363,6 +363,19 @@ export class GammaWorldActor extends Actor {
         console.warn(`gamma-world-1e | bloodied status auto-toggle failed for ${this.name}`, error);
       }
     }
+
+    // 0.14.18 — auto-clear the Hemophilia "bound" flag when HP returns
+    // to max. Mirrors the dead/bloodied transition contract: only acts
+    // on real HP changes, doesn't second-guess manual GM toggles.
+    const newHp = Number(this.system?.resources?.hp?.value ?? 0);
+    const maxHp = Number(this.system?.resources?.hp?.max ?? 0);
+    if (newHp >= maxHp && this.getFlag?.("gamma-world-1e", "hemophiliaBound")) {
+      try {
+        await this.unsetFlag("gamma-world-1e", "hemophiliaBound");
+      } catch (error) {
+        console.warn(`gamma-world-1e | hemophilia bound auto-clear failed for ${this.name}`, error);
+      }
+    }
   }
 
   prepareDerivedData() {

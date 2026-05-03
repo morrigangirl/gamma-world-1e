@@ -67,6 +67,12 @@
         <span class="gamma-world__chargen-done">{{localize "GAMMA_WORLD.Chargen.Rerolled"}}</span>
       {{/if}}
     {{/if}}
+    {{#if timeOfDay}}
+      <span class="gw-time-of-day {{timeOfDay.cssClass}}" title="{{timeOfDay.tooltip}}">
+        <i class="fa-solid {{timeOfDay.icon}}" aria-hidden="true"></i>
+        <span class="gw-time-of-day__label">{{timeOfDay.label}}</span>
+      </span>
+    {{/if}}
   </div>
 </header>
 
