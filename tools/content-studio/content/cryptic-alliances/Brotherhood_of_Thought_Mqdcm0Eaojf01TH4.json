@@ -6,7 +6,7 @@
       "type": "text",
       "text": {
         "format": 1,
-        "content": "<p><strong>Purpose:</strong> Preserve pre-Shadow-Years knowledge and champion peaceful coexistence among mutants and PSH.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant.</p><p><strong>Allies:</strong> The Seekers, The Healers.</p><p><strong>Enemies:</strong> Ranks of the Fit, Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+        "content": "<figure data-gw-alliance-banner=\"brotherhood-of-thought\" style=\"margin:0 0 0.75rem 0;text-align:center;\"><img src=\"systems/gamma-world-1e/assets/cryptic-alliances/brotherhood-of-thought.png\" alt=\"Brotherhood of Thought banner\" style=\"max-width:100%;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.25);\" /></figure><p><strong>Purpose:</strong> Preserve pre-Shadow-Years knowledge and champion peaceful coexistence among mutants and PSH.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant.</p><p><strong>Allies:</strong> The Seekers, The Healers.</p><p><strong>Enemies:</strong> Ranks of the Fit, Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
       },
       "_id": "ofhiUE2uF0Vl9j5v",
       "flags": {},

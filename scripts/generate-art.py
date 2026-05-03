@@ -7,11 +7,14 @@ final asset is already on disk so re-runs are free.
 Pipeline per category:
     1. Read prompts JSONL from `tmp/imagegen/<category>-prompts.jsonl`
        (produced by `npm run build:<category>-prompts`).
-    2. Write a 1024x1024 transparent-background PNG via `gpt-image-2`
+    2. Write a 1024x1024 PNG via the per-category model
+       (icon categories use gpt-image-1.5 + transparent background;
+       banner categories use gpt-image-2 + opaque background)
        to `output/imagegen/<category>/base/<slug>.png`.
     3. Skip any slug whose FINAL asset (portrait+token for
-       monsters/robots, single square for weapons/mutations) already
-       exists under `assets/`.
+       monsters/robots, single square for weapons/mutations,
+       banner-square for cryptic-alliances) already exists under
+       `assets/`.
 
 After this runs, the companion `render-assets.py` script rasterizes the
 base PNGs into the final Foundry assets.
@@ -46,7 +49,32 @@ except ImportError:
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MODEL = "gpt-image-2"
+# 0.14.19 — per-category model. gpt-image-2 is the current default but
+# does NOT support `background='transparent'`, which the icon pipeline
+# (monsters / robots / weapons / mutations / armor / gear / sample-actors)
+# relies on for trim-and-center rendering. Those categories stay on
+# gpt-image-1.5 until the renderer learns saliency-based trimming.
+# Banner categories (cryptic-alliances) want opaque output anyway and
+# use gpt-image-2.
+MODEL_BY_CATEGORY = {
+    # 0.14.19 — robots use gpt-image-2 paired with the new opaque-source
+    # render flow (`render_token_opaque` etc.). The opaque flow does
+    # center-crop + circular mask in render-assets.py rather than
+    # depending on the model's transparent background. Other icon
+    # categories (weapons/armor/etc.) keep gpt-image-1.5 because they
+    # depend on the alpha-trim subject silhouette for square-icon
+    # layout — switching them would re-render to a circle-cropped icon
+    # which doesn't fit the square-icon visual style.
+    "monsters":          "gpt-image-1.5",
+    "robots":            "gpt-image-2",
+    "weapons":           "gpt-image-1.5",
+    "armor":             "gpt-image-1.5",
+    "gear":              "gpt-image-1.5",
+    "mutations":         "gpt-image-1.5",
+    "sample-actors":     "gpt-image-1.5",
+    "cryptic-alliances": "gpt-image-2"
+}
+DEFAULT_MODEL = "gpt-image-2"
 IMAGE_SIZE = "1024x1024"
 INTER_CALL_DELAY_SECONDS = 1.5
 
@@ -179,17 +207,30 @@ def needs_generation(slug: str, base_dir: Path, finals: list[Path],
     return None
 
 
-def generate_one(client: OpenAI, prompt: str, target: Path) -> None:
-    response = client.images.generate(
-        model=MODEL,
-        prompt=prompt,
-        size=IMAGE_SIZE,
-        background="transparent",
-        n=1
-    )
+def generate_one(client: OpenAI, prompt: str, target: Path, *, model: str, transparent: bool) -> None:
+    """0.14.19 — `model` and `transparent` are opt-in per category.
+    gpt-image-2 does NOT support `background='transparent'`; banner
+    categories (alliance headers, etc.) explicitly want an opaque
+    scene. Icon categories rely on the transparent flag for the
+    trim-and-center renderer, so they stay on gpt-image-1.5 until the
+    renderer learns saliency-based trimming."""
+    kwargs = dict(model=model, prompt=prompt, size=IMAGE_SIZE, n=1)
+    if transparent:
+        kwargs["background"] = "transparent"
+    response = client.images.generate(**kwargs)
     image_b64 = response.data[0].b64_json
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(base64.b64decode(image_b64))
+
+
+# 0.14.19 — categories whose API call should request a transparent
+# background. Robots are NOT in this set: they're on gpt-image-2
+# (which doesn't accept the transparent flag) and rely on the
+# opaque-source token renderer added in render-assets.py. Banner
+# categories (cryptic-alliances) are also opaque by design.
+TRANSPARENT_CATEGORIES = frozenset({
+    "monsters", "weapons", "armor", "gear", "mutations", "sample-actors"
+})
 
 
 def filter_by_only(rows: list[dict], only: Iterable[str]) -> list[dict]:
@@ -201,7 +242,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--category", required=True,
                         choices=["monsters", "weapons", "armor", "gear",
-                                 "mutations", "robots", "sample-actors"],
+                                 "mutations", "robots", "sample-actors",
+                                 "cryptic-alliances"],
                         help="Which asset category to generate.")
     parser.add_argument("--force", action="store_true",
                         help="Re-generate every prompt even if art already exists.")
@@ -250,12 +292,16 @@ def main() -> int:
         return 0
 
     client = OpenAI()
+    model = MODEL_BY_CATEGORY.get(args.category, DEFAULT_MODEL)
+    transparent = args.category in TRANSPARENT_CATEGORIES
+    print(f"Model:                 {model}")
+    print(f"Transparent bg:        {transparent}")
     success = 0
     failures = []
     for idx, (slug, prompt, target) in enumerate(planned, start=1):
         print(f"[{idx}/{len(planned)}] generating {slug}...", flush=True)
         try:
-            generate_one(client, prompt, target)
+            generate_one(client, prompt, target, model=model, transparent=transparent)
             success += 1
             print(f"    saved {target.relative_to(REPO_ROOT)}")
         except Exception as exc:  # noqa: BLE001

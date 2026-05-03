@@ -85,6 +85,90 @@ def trimmed_bounds(image: Image.Image):
     return (0, 0, image.width, image.height)
 
 
+def has_meaningful_alpha(image: Image.Image) -> bool:
+    """0.14.19 — return True when the source PNG carries a real alpha
+    channel with transparent pixels (gpt-image-1.5 + transparent flow).
+    Returns False for opaque RGB-or-RGBA-with-all-255-alpha sources
+    (gpt-image-2 default), which routes through the new opaque flow
+    that does a center-crop + circular mask instead of an alpha-trim."""
+    if image.mode not in ("RGBA", "LA"):
+        return False
+    extrema = image.getchannel("A").getextrema()
+    if not extrema:
+        return False
+    return extrema[0] < 250  # tolerate a few near-opaque edge pixels
+
+
+def _corner_samples(image: Image.Image, inset: int = 4):
+    """Return RGB tuples sampled from the four corners (slightly inset
+    so we don't pick up JPEG artefacts on the very edge)."""
+    w, h = image.size
+    coords = [
+        (inset, inset),
+        (w - inset - 1, inset),
+        (inset, h - inset - 1),
+        (w - inset - 1, h - inset - 1)
+    ]
+    return [image.getpixel(c)[:3] for c in coords]
+
+
+def _color_distance(a, b) -> float:
+    """Euclidean RGB distance, returning 0..~441 (3-channel max)."""
+    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2) ** 0.5
+
+
+def detect_flat_backdrop(image: Image.Image, max_corner_spread: float = 22.0):
+    """0.14.19 — return the average RGB of the source's four corners
+    when they're consistent (within `max_corner_spread` Euclidean
+    distance of each other), or None when the corners disagree (true
+    scene image, e.g., an alliance banner). The opaque-source robot
+    prompt asks the model for a flat medium-gray backdrop, so the
+    corners should match closely; banners explicitly show different
+    content in each corner and won't pass this gate."""
+    rgb = image.convert("RGB")
+    samples = _corner_samples(rgb)
+    avg = (
+        sum(s[0] for s in samples) / 4,
+        sum(s[1] for s in samples) / 4,
+        sum(s[2] for s in samples) / 4
+    )
+    spread = max(_color_distance(s, avg) for s in samples)
+    if spread > max_corner_spread:
+        return None
+    return tuple(round(c) for c in avg)
+
+
+def extract_subject_from_flat_bg(image: Image.Image, bg_rgb,
+                                  tolerance: float = 36.0,
+                                  feather_falloff: float = 18.0) -> Image.Image:
+    """0.14.19 — turn a flat-bg opaque source into RGBA with the
+    backdrop pixels alpha-zeroed, so the result can flow through the
+    same alpha-aware renderer the existing assets use.
+
+    Uses a soft band: pixels within `tolerance` of the backdrop go
+    fully transparent; pixels within `tolerance + feather_falloff`
+    fade linearly. Anything farther stays fully opaque. Keeps subject
+    edges clean without halos.
+    """
+    rgb = image.convert("RGB")
+    pixels = list(rgb.getdata())
+    alpha = bytearray(len(pixels))
+    bg_r, bg_g, bg_b = bg_rgb
+    for idx, (r, g, b) in enumerate(pixels):
+        dist = ((r - bg_r) ** 2 + (g - bg_g) ** 2 + (b - bg_b) ** 2) ** 0.5
+        if dist <= tolerance:
+            alpha[idx] = 0
+        elif dist >= tolerance + feather_falloff:
+            alpha[idx] = 255
+        else:
+            t = (dist - tolerance) / feather_falloff
+            alpha[idx] = int(round(t * 255))
+    rgba = rgb.convert("RGBA")
+    alpha_band = Image.frombytes("L", rgb.size, bytes(alpha))
+    rgba.putalpha(alpha_band)
+    return rgba
+
+
 def fit_image(image: Image.Image, box_width: int, box_height: int) -> Image.Image:
     scaled = image.copy()
     scaled.thumbnail((box_width, box_height), Image.Resampling.LANCZOS)
@@ -118,7 +202,28 @@ def add_shadow(base: Image.Image, subject: Image.Image, x: int, y: int,
 
 
 def render_portrait(source: Path, target: Path):
+    """Dispatch path:
+      1. Source already has real transparency (gpt-image-1.5 + alpha
+         flag) → existing _render_portrait_alpha.
+      2. Source is opaque BUT has a flat uniform backdrop (gpt-image-2
+         + the new flat-gray prompt) → extract backdrop to alpha →
+         _render_portrait_alpha for the same warm-tan radial
+         composition the existing monsters use.
+      3. Source is opaque with mixed corners (true scene, e.g., an
+         alliance banner) → _render_portrait_opaque, full source as-is.
+    """
     image = Image.open(source).convert("RGBA")
+    if has_meaningful_alpha(image):
+        _render_portrait_alpha(image, target)
+        return
+    bg = detect_flat_backdrop(image)
+    if bg is not None:
+        _render_portrait_alpha(extract_subject_from_flat_bg(image, bg), target)
+        return
+    _render_portrait_opaque(image, target)
+
+
+def _render_portrait_alpha(image: Image.Image, target: Path):
     cropped = image.crop(trimmed_bounds(image))
     fitted = fit_image(cropped, 760, 760)
 
@@ -140,8 +245,34 @@ def render_portrait(source: Path, target: Path):
     canvas.save(target)
 
 
+def _render_portrait_opaque(image: Image.Image, target: Path):
+    """0.14.19 — opaque-source portrait flow: the gpt-image-2 source IS
+    a portrait. Resize to PORTRAIT_SIZE square and save. The model's
+    framing (subject centered, full-frame composition) carries through
+    untouched."""
+    rgb = image.convert("RGB")
+    resized = rgb.resize((PORTRAIT_SIZE, PORTRAIT_SIZE), Image.Resampling.LANCZOS)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    resized.save(target, format="PNG", optimize=True)
+
+
 def render_token(source: Path, target: Path):
+    """Same dispatch tree as render_portrait but for tokens.
+    Flat-bg gpt-image-2 sources flow through extraction so they hit
+    the green-disc alpha flow used by the existing tokens, keeping the
+    visual identity consistent across new and old monster art."""
     image = Image.open(source).convert("RGBA")
+    if has_meaningful_alpha(image):
+        _render_token_alpha(image, target)
+        return
+    bg = detect_flat_backdrop(image)
+    if bg is not None:
+        _render_token_alpha(extract_subject_from_flat_bg(image, bg), target)
+        return
+    _render_token_opaque(image, target)
+
+
+def _render_token_alpha(image: Image.Image, target: Path):
     cropped = image.crop(trimmed_bounds(image))
     fitted = fit_image(cropped, 360, 360)
 
@@ -172,6 +303,34 @@ def render_token(source: Path, target: Path):
 
     target.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(target)
+
+
+def _render_token_opaque(image: Image.Image, target: Path):
+    """0.14.19 — opaque-source token flow: take a filled-frame source,
+    resize to TOKEN_SIZE, mask to a circle (alpha=0 outside), and
+    overlay the same gold/brown ring used by the alpha flow so the
+    visual identity stays consistent. The model's centered-subject
+    composition does the work the alpha-trim used to do."""
+    rgb = image.convert("RGB").resize((TOKEN_SIZE, TOKEN_SIZE),
+                                       Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", (TOKEN_SIZE, TOKEN_SIZE), (0, 0, 0, 0))
+
+    mask = Image.new("L", (TOKEN_SIZE, TOKEN_SIZE), 0)
+    draw_mask = ImageDraw.Draw(mask)
+    draw_mask.ellipse((26, 26, TOKEN_SIZE - 26, TOKEN_SIZE - 26), fill=255)
+
+    rgba = rgb.convert("RGBA")
+    rgba.putalpha(mask)
+    canvas.alpha_composite(rgba)
+
+    ring = ImageDraw.Draw(canvas)
+    ring.ellipse((18, 18, TOKEN_SIZE - 18, TOKEN_SIZE - 18),
+                 outline=(188, 154, 88, 255), width=14)
+    ring.ellipse((32, 32, TOKEN_SIZE - 32, TOKEN_SIZE - 32),
+                 outline=(77, 59, 33, 220), width=4)
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(target, format="PNG", optimize=True)
 
 
 def render_square_icon(source: Path, target: Path):

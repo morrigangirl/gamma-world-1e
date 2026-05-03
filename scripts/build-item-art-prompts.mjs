@@ -406,14 +406,20 @@ function buildRobotPrompt(robot) {
     "Use case: stylized-concept",
     "Asset type: tabletop RPG robot portrait",
     `Primary request: full-body original science-fiction bestiary illustration of ${robot.name}, a pre-Fall robotic unit. SHAPE: ${factor.form}.`,
-    "Scene/backdrop: isolated subject on a transparent background for Foundry VTT use.",
+    // 0.14.19 — gpt-image-2 doesn't accept the transparent flag, so we
+    // ask for a flat uniform solid-color backdrop the renderer can
+    // extract via corner-sampled color thresholding. The renderer then
+    // composites the extracted subject onto the same warm-tan radial
+    // backdrop the alpha-flow monster portraits use, keeping the
+    // visual identity consistent across the bestiary.
+    "Scene/backdrop: subject ISOLATED on a flat uniform medium-gray solid-color backdrop (RGB approximately 128/128/128). NO scenery, NO floor, NO walls, NO environmental details, NO ground shadow, NO atmospheric haze — only the robot and the flat gray backdrop. The backdrop must be a single solid color so it can be removed in post-processing.",
     `Subject: ${flavorText}`,
     "Style/medium: original retro-future industrial illustration, worn metal surfaces, exposed cabling, crisp silhouette, detailed but readable at token size, no copyrighted characters or logos.",
     `Composition/framing: ${factor.framing}.`,
-    "Lighting/mood: dramatic but neutral presentation lighting, subtle rim light, clean readable shapes.",
+    "Lighting/mood: dramatic but neutral presentation lighting, subtle rim light, clean readable shapes; the subject is lit but the backdrop stays flat and uniform with NO falloff or vignette.",
     `Color palette: ${factor.palette}.`,
-    "Constraints: single subject only; transparent background; NO text, NO letters, NO numbers, NO labels, NO captions, NO serial numbers, NO writing of any kind anywhere in the image; respect the described chassis, sensors, and armament; no frame; no watermark.",
-    "Avoid: bipedal humanoid silhouette UNLESS the SHAPE line above explicitly says humanoid; multiple robots; scenery clutter; captions; logo marks; text overlays; decorative armor flourishes that are not described; pilot operators riding the machine."
+    "Constraints: single subject only; flat uniform medium-gray backdrop covering everything except the robot; NO text, NO letters, NO numbers, NO labels, NO captions, NO serial numbers, NO writing of any kind anywhere in the image; respect the described chassis, sensors, and armament; no frame; no watermark.",
+    "Avoid: bipedal humanoid silhouette UNLESS the SHAPE line above explicitly says humanoid; multiple robots; scenery clutter; environmental backgrounds; gradient or textured backdrops; captions; logo marks; text overlays; decorative armor flourishes that are not described; pilot operators riding the machine."
   ];
   return lines.join("\n");
 }

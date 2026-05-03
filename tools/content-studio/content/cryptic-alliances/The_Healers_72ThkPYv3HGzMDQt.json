@@ -6,7 +6,7 @@
       "type": "text",
       "text": {
         "format": 1,
-        "content": "<p><strong>Purpose:</strong> Treat the wounded and dispossessed of the wastes without preference.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant, robot.</p><p><strong>Allies:</strong> Brotherhood of Thought.</p><p><strong>Enemies:</strong> —.</p><p><strong>Default reaction bonus to recognised kin:</strong> +1.</p>"
+        "content": "<figure data-gw-alliance-banner=\"the-healers\" style=\"margin:0 0 0.75rem 0;text-align:center;\"><img src=\"systems/gamma-world-1e/assets/cryptic-alliances/the-healers.png\" alt=\"The Healers banner\" style=\"max-width:100%;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.25);\" /></figure><p><strong>Purpose:</strong> Treat the wounded and dispossessed of the wastes without preference.</p><p><strong>Welcomes:</strong> psh, humanoid, mutated-animal, mutated-plant, robot.</p><p><strong>Allies:</strong> Brotherhood of Thought.</p><p><strong>Enemies:</strong> —.</p><p><strong>Default reaction bonus to recognised kin:</strong> +1.</p>"
       },
       "_id": "s90tJHBfPzlGV38p",
       "flags": {},

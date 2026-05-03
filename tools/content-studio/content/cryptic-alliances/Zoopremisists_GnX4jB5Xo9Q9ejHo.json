@@ -6,7 +6,7 @@
       "type": "text",
       "text": {
         "format": 1,
-        "content": "<p><strong>Purpose:</strong> Hold that mutated animals are the rightful heirs of the world.</p><p><strong>Welcomes:</strong> mutated-animal.</p><p><strong>Allies:</strong> Ranks of the Fit.</p><p><strong>Enemies:</strong> Restorationists, Ranks of the Fit.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+        "content": "<figure data-gw-alliance-banner=\"zoopremisists\" style=\"margin:0 0 0.75rem 0;text-align:center;\"><img src=\"systems/gamma-world-1e/assets/cryptic-alliances/zoopremisists.png\" alt=\"Zoopremisists banner\" style=\"max-width:100%;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.25);\" /></figure><p><strong>Purpose:</strong> Hold that mutated animals are the rightful heirs of the world.</p><p><strong>Welcomes:</strong> mutated-animal.</p><p><strong>Allies:</strong> Ranks of the Fit.</p><p><strong>Enemies:</strong> Restorationists, Ranks of the Fit.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
       },
       "_id": "Et6dsY27iHY2dWVO",
       "flags": {},

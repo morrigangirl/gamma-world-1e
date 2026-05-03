@@ -6,7 +6,7 @@
       "type": "text",
       "text": {
         "format": 1,
-        "content": "<p><strong>Purpose:</strong> Militant purity — humans and hardy humanoids only; cleanse the world of deviants.</p><p><strong>Welcomes:</strong> psh, humanoid.</p><p><strong>Allies:</strong> Restorationists.</p><p><strong>Enemies:</strong> Zoopremisists, The Created, Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
+        "content": "<figure data-gw-alliance-banner=\"ranks-of-the-fit\" style=\"margin:0 0 0.75rem 0;text-align:center;\"><img src=\"systems/gamma-world-1e/assets/cryptic-alliances/ranks-of-the-fit.png\" alt=\"Ranks of the Fit banner\" style=\"max-width:100%;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.25);\" /></figure><p><strong>Purpose:</strong> Militant purity — humans and hardy humanoids only; cleanse the world of deviants.</p><p><strong>Welcomes:</strong> psh, humanoid.</p><p><strong>Allies:</strong> Restorationists.</p><p><strong>Enemies:</strong> Zoopremisists, The Created, Radiationists.</p><p><strong>Default reaction bonus to recognised kin:</strong> +2.</p>"
       },
       "_id": "7ImucCglSuosDNjg",
       "flags": {},
