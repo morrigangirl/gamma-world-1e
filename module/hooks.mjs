@@ -155,33 +155,39 @@ async function onCreateCombatantAutoInit(combatant, _options, userId) {
 }
 
 /**
- * 0.14.17 — token render hook: attach / update / remove the fatigue
- * "F-N" badge on every token redraw. Idempotent and cheap; the heavy
- * work happens in `attachFatigueOverlay` only when the value actually
- * changed.
+ * 0.14.17 / 0.14.21 — token render hook: attach / update / remove the
+ * fatigue ("F-N"), HP, and AC badges on every token redraw.
+ * Idempotent and cheap; each `attach*Overlay` no-ops when its setting
+ * is off, when the value didn't change, or when there's no PIXI.
  */
 function onRefreshTokenOverlay(token) {
   try {
-    // Lazy-import keeps the module load order clean and lets the
-    // helper be unit-tested in isolation.
-    import("./token-overlay.mjs").then(({ attachFatigueOverlay }) => {
-      attachFatigueOverlay(token);
+    import("./token-overlay.mjs").then(({ attachTokenOverlays }) => {
+      attachTokenOverlays(token);
     });
   } catch (error) {
-    console.warn(`${SYSTEM_ID} | fatigue overlay refresh failed`, error);
+    console.warn(`${SYSTEM_ID} | token overlay refresh failed`, error);
   }
 }
 
-/** When an actor's fatigue.round changes, refresh any visible tokens. */
+/**
+ * When an actor's HP / fatigue / AC changes, refresh visible tokens
+ * out-of-band so the overlay matches even if Foundry's render
+ * scheduler hasn't fired refreshToken yet.
+ */
 function onActorFatigueOverlayUpdate(actor, changed) {
-  if (foundry.utils.getProperty(changed, "system.combat.fatigue.round") == null) return;
+  const hpChanged = foundry.utils.getProperty(changed, "system.resources.hp.value") != null
+                  || foundry.utils.getProperty(changed, "system.resources.hp.max")   != null;
+  const acChanged = foundry.utils.getProperty(changed, "system.resources.ac") != null;
+  const fatigueChanged = foundry.utils.getProperty(changed, "system.combat.fatigue.round") != null;
+  if (!hpChanged && !acChanged && !fatigueChanged) return;
   try {
     const tokens = actor?.getActiveTokens?.() ?? [];
-    import("./token-overlay.mjs").then(({ attachFatigueOverlay }) => {
-      for (const token of tokens) attachFatigueOverlay(token);
+    import("./token-overlay.mjs").then(({ attachTokenOverlays }) => {
+      for (const token of tokens) attachTokenOverlays(token);
     });
   } catch (error) {
-    console.warn(`${SYSTEM_ID} | fatigue overlay update failed`, error);
+    console.warn(`${SYSTEM_ID} | token overlay update failed`, error);
   }
 }
 

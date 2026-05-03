@@ -399,6 +399,38 @@ export function registerMigrationSettings() {
     type: Boolean,
     default: true
   });
+
+  // 0.14.21 — optional HP / AC token decorations. Off by default; turn
+  // on to surface "12/30" or "40%" in the top-left and "AC 4" in the
+  // bottom-left. Pairs with the 0.14.17 fatigue badge in the top-right.
+  game.settings.register(SYSTEM_ID, "tokenHpOverlay", {
+    name: "GAMMA_WORLD.Settings.TokenHpOverlay.Name",
+    hint: "GAMMA_WORLD.Settings.TokenHpOverlay.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+  game.settings.register(SYSTEM_ID, "tokenHpOverlayMode", {
+    name: "GAMMA_WORLD.Settings.TokenHpOverlayMode.Name",
+    hint: "GAMMA_WORLD.Settings.TokenHpOverlayMode.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      fraction: "GAMMA_WORLD.Settings.TokenHpOverlayMode.Choice.Fraction",
+      percent:  "GAMMA_WORLD.Settings.TokenHpOverlayMode.Choice.Percent"
+    },
+    default: "fraction"
+  });
+  game.settings.register(SYSTEM_ID, "tokenAcOverlay", {
+    name: "GAMMA_WORLD.Settings.TokenAcOverlay.Name",
+    hint: "GAMMA_WORLD.Settings.TokenAcOverlay.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
 }
 
 function mutationUpdateData(item) {

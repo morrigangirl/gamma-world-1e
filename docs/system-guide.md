@@ -1,10 +1,15 @@
 # Gamma World 1st Edition — Foundry VTT System Guide
 
-> **System version:** 0.14.9
+> **System version:** 0.14.21
 > **Foundry compatibility:** v13 (verified)
 > **Scope:** every mechanic the system automates, every setting that controls it, and every hook macro/module authors can subscribe to.
 
 This guide pairs with the rulebook prose shipped in the **Rulebook Reference** compendium. The rulebook is the authority on RAW; this document explains how the *automation* implements those rules and where the GM still drives the flow manually.
+
+**Companion documents:**
+- [`api-guide.md`](api-guide.md) — `game.gammaWorld` API reference for macro and module authors.
+- [`migration-guide.md`](migration-guide.md) — what changes per version + what to expect when loading an older world.
+- [`../macros/README.md`](../macros/README.md) — small library of ready-to-paste sample macros.
 
 ---
 

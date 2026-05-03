@@ -6158,3 +6158,74 @@ test("0.14.18 — sheet context exposes a timeOfDay badge derived from isDaytime
   assert.match(src, /isDaytime\(worldTime\)/, "uses the same isDaytime helper Daylight Stasis consumes");
 });
 
+// ---------------------------------------------------------------------------
+// 0.14.21 — HP / AC token-overlay helpers
+// ---------------------------------------------------------------------------
+
+test("0.14.21 — hpOverlayText formats fraction or percent based on mode", async () => {
+  const { hpOverlayText } = await import("../module/token-overlay.mjs");
+  assert.equal(hpOverlayText(12, 30),               "12/30");
+  assert.equal(hpOverlayText(12, 30, "fraction"),   "12/30");
+  assert.equal(hpOverlayText(12, 30, "percent"),    "40%");
+  assert.equal(hpOverlayText(0, 30, "percent"),     "0%");
+  assert.equal(hpOverlayText(40, 30, "percent"),    "100%", "clamps when current exceeds max");
+  // Bad inputs short-circuit cleanly.
+  assert.equal(hpOverlayText(5, 0), null,    "no max → no overlay");
+  assert.equal(hpOverlayText(null, 30, "fraction"), "0/30");
+});
+
+test("0.14.21 — hpOverlayTint maps HP fraction to color tier", async () => {
+  const { hpOverlayTint } = await import("../module/token-overlay.mjs");
+  // > 75% → green
+  assert.equal(hpOverlayTint(30, 30), 0x66cc66);
+  assert.equal(hpOverlayTint(24, 30), 0x66cc66, "80% → green");
+  // 25-75% → amber
+  assert.equal(hpOverlayTint(15, 30), 0xeebb44, "50% → amber");
+  assert.equal(hpOverlayTint(8,  30), 0xeebb44, "26.7% → amber");
+  // 1-25% → red
+  assert.equal(hpOverlayTint(7,  30), 0xee4444, "23.3% → red");
+  assert.equal(hpOverlayTint(1,  30), 0xee4444);
+  // 0 or below → dark red
+  assert.equal(hpOverlayTint(0,  30), 0x801010);
+  assert.equal(hpOverlayTint(-3, 30), 0x801010);
+  // No max → fallback gray
+  assert.equal(hpOverlayTint(10, 0), 0xcccccc);
+});
+
+test("0.14.21 — acOverlayText prefixes with 'AC' so the value reads correctly", async () => {
+  const { acOverlayText } = await import("../module/token-overlay.mjs");
+  assert.equal(acOverlayText(2),  "AC 2");
+  assert.equal(acOverlayText(10), "AC 10");
+  assert.equal(acOverlayText(7.6), "AC 7", "floors to integer");
+  assert.equal(acOverlayText("4"), "AC 4", "string coercion");
+  assert.equal(acOverlayText(null), null);
+  assert.equal(acOverlayText(undefined), null);
+  assert.equal(acOverlayText(NaN), null);
+});
+
+test("0.14.21 — acOverlayTint maps descending AC to color tier", async () => {
+  const { acOverlayTint } = await import("../module/token-overlay.mjs");
+  // AC <= 3 → green (heavy / impressive)
+  assert.equal(acOverlayTint(1), 0x66cc66);
+  assert.equal(acOverlayTint(3), 0x66cc66);
+  // AC 4-6 → amber
+  assert.equal(acOverlayTint(4), 0xeebb44);
+  assert.equal(acOverlayTint(6), 0xeebb44);
+  // AC 7-9 → orange
+  assert.equal(acOverlayTint(7), 0xee9944);
+  assert.equal(acOverlayTint(9), 0xee9944);
+  // AC >= 10 → red (unarmored)
+  assert.equal(acOverlayTint(10), 0xee4444);
+  assert.equal(acOverlayTint(15), 0xee4444);
+  // Bad input → fallback gray
+  assert.equal(acOverlayTint(NaN), 0xcccccc);
+  assert.equal(acOverlayTint("nope"), 0xcccccc);
+});
+
+test("0.14.21 — fatigueOverlayText still works (regression check after refactor)", async () => {
+  const { fatigueOverlayText } = await import("../module/token-overlay.mjs");
+  assert.equal(fatigueOverlayText(0), null);
+  assert.equal(fatigueOverlayText(1), "F-1");
+  assert.equal(fatigueOverlayText(7), "F-7");
+});
+
