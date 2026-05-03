@@ -7,7 +7,7 @@ final asset is already on disk so re-runs are free.
 Pipeline per category:
     1. Read prompts JSONL from `tmp/imagegen/<category>-prompts.jsonl`
        (produced by `npm run build:<category>-prompts`).
-    2. Write a 1024x1024 transparent-background PNG via `gpt-image-1`
+    2. Write a 1024x1024 transparent-background PNG via `gpt-image-2`
        to `output/imagegen/<category>/base/<slug>.png`.
     3. Skip any slug whose FINAL asset (portrait+token for
        monsters/robots, single square for weapons/mutations) already
@@ -46,7 +46,7 @@ except ImportError:
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MODEL = "gpt-image-1.5"
+MODEL = "gpt-image-2"
 IMAGE_SIZE = "1024x1024"
 INTER_CALL_DELAY_SECONDS = 1.5
 
