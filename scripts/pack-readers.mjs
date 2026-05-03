@@ -152,3 +152,25 @@ export async function robotMonsterSources() {
   const all = await readPackTopLevel("monsters", { hydrateEmbedded: true });
   return all.filter(isRobotChassisCatalogEntry);
 }
+
+/**
+ * 0.14.19 — cryptic-alliances sources for art-prompt building.
+ *
+ * Reads the studio JSONs directly (not the compiled LevelDB pack)
+ * because Foundry stores JournalEntry pages as embedded child
+ * documents — `readPackTopLevel` returns the parent JournalEntry
+ * with `pages` as an ID array, which doesn't carry the page text
+ * needed to seed the prompts. The studio JSON has the pages inline
+ * with text content already populated, so we read those.
+ */
+export async function crypticAlliancePackSources() {
+  const fs = await import("node:fs/promises");
+  const dir = path.join(repoRoot, "tools", "content-studio", "content", "cryptic-alliances");
+  const files = (await fs.readdir(dir)).filter((f) => f.endsWith(".json") && f !== "_Folder.json");
+  const out = [];
+  for (const file of files) {
+    const json = JSON.parse(await fs.readFile(path.join(dir, file), "utf8"));
+    out.push(json);
+  }
+  return out;
+}

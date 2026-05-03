@@ -66,6 +66,14 @@ def category_paths(category: str) -> dict:
             "portrait_dir": REPO_ROOT / "assets" / "actors" / "portraits",
             "token_dir":    REPO_ROOT / "assets" / "actors" / "tokens",
         }
+    if category == "cryptic-alliances":
+        # 0.14.19 — alliance banners render as a single full-frame square
+        # image (no transparent trim, no token mask). Use the
+        # `banner-square` shape (added below).
+        return {
+            "base":        REPO_ROOT / "output" / "imagegen" / "cryptic-alliances" / "base",
+            "square_dir":  REPO_ROOT / "assets" / "cryptic-alliances",
+        }
     raise SystemExit(f"Unknown category: {category!r}")
 
 
@@ -182,13 +190,31 @@ def render_square_icon(source: Path, target: Path):
     canvas.save(target)
 
 
+BANNER_SQUARE_SIZE = 768
+
+
+def render_banner_square(source: Path, target: Path):
+    """0.14.19 — emit a single 768² PNG suitable for a JournalEntry
+    page header. Unlike `render_square_icon`, this preserves the full
+    composed scene: no transparency trim, no centering — just resize
+    the original to 768x768 with high-quality resampling. Used by the
+    cryptic-alliances category where each image IS the banner."""
+    image = Image.open(source).convert("RGB")
+    resized = image.resize((BANNER_SQUARE_SIZE, BANNER_SQUARE_SIZE),
+                           Image.Resampling.LANCZOS)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    resized.save(target, format="PNG", optimize=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--category", required=True,
                         choices=["monsters", "weapons", "armor", "gear",
-                                 "mutations", "robots", "sample-actors"])
+                                 "mutations", "robots", "sample-actors",
+                                 "cryptic-alliances"])
     parser.add_argument("--shape", required=True,
-                        choices=["portrait-token", "square-icon"])
+                        choices=["portrait-token", "square-icon",
+                                 "banner-square"])
     args = parser.parse_args()
 
     paths = category_paths(args.category)
@@ -204,10 +230,16 @@ def main() -> int:
             render_token(source, paths["token_dir"] / source.name)
         elif args.shape == "square-icon":
             render_square_icon(source, paths["square_dir"] / source.name)
+        elif args.shape == "banner-square":
+            render_banner_square(source, paths["square_dir"] / source.name)
         generated += 1
         print(f"Rendered {source.name}")
 
-    suffix = " (portrait + token)" if args.shape == "portrait-token" else " (square icon)"
+    suffix = {
+        "portrait-token": " (portrait + token)",
+        "square-icon":    " (square icon)",
+        "banner-square":  " (banner square)"
+    }.get(args.shape, "")
     print(f"Generated {generated} asset{'' if generated == 1 else 's'}{suffix}.")
     return 0
 

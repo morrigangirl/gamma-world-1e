@@ -6,7 +6,8 @@ import {
   equipmentPackSources,
   mutationPackSources,
   robotMonsterSources,
-  samplePackSources
+  samplePackSources,
+  crypticAlliancePackSources
 } from "./pack-readers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -283,11 +284,115 @@ function buildMutationPrompt(mutation) {
 /* Category: robots — bestiary-style portraits                        */
 /* ------------------------------------------------------------------ */
 
+/**
+ * 0.14.19 — robot form-factor classifier. Earlier prompts described
+ * every robot as "full-body" with no shape guidance, so the model
+ * defaulted to bipedal humanoids for everything. Most GW1e robot
+ * monsters are NOT humanoid — only the explicitly-android robotoids
+ * walk on legs. This map gives the prompt builder a per-class
+ * silhouette direction.
+ *
+ * Returns a `{ form, framing, palette }` triple:
+ *   - form: short shape descriptor injected into the subject line
+ *   - framing: composition guidance (full body / wide platform / etc.)
+ *   - palette: optional palette hint (warbots get military, household
+ *     bots get civilian)
+ */
+export function robotFormFactor(name) {
+  const n = String(name || "").toLowerCase();
+  // Battle / heavy combat platforms — tracked or hover, turret-mounted weapons,
+  // distinctly NOT humanoid; warbot specifically is the user's flagship example.
+  if (/warbot|death machine|attack borg|defense borg/.test(n)) {
+    return {
+      form: "tracked or low-hover combat chassis with a centerline turret carrying the listed armament; squat, wide stance; thick angled armor plates; weapon barrels and sensor masts mounted dorsally; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, full chassis visible from a slight three-quarters above angle so treads / hover-skirt and weapon mounts both read; ground shadow under the chassis",
+      palette: "olive drab and gunmetal with warning-yellow stencil-style hazard accents"
+    };
+  }
+  // Cargo / utility transports — wheeled or treaded vehicles, no humanoid form.
+  if (/cargo lifter|cargo transport/.test(n)) {
+    return {
+      form: "wheeled or tracked cargo vehicle; flatbed or boxy cargo hold; manipulator arm or fork-tine on the front for moving crates; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, three-quarter side view so the wheels / treads / manipulator are all visible",
+      palette: "industrial orange and aged aluminum, with reflective hazard stripes"
+    };
+  }
+  // Engineering bots — Heavy Duty is explicitly mistaken for warbots, so it's
+  // a tracked construction chassis with multi-arm. Standard / Light Duty are
+  // utility — keep them small wheeled or low-tripod, NOT humanoid.
+  if (/engineering bot.*heavy/.test(n)) {
+    return {
+      form: "tracked construction chassis with multiple articulated work arms (cutting laser, grapples, cutting torches); low and wide; absolutely NOT a humanoid bipedal robot — this is intentionally mistaken for a warbot at distance",
+      framing: "centered square composition, three-quarter view showing treads + arm complement",
+      palette: "industrial yellow and pre-Fall steel"
+    };
+  }
+  if (/engineering bot/.test(n)) {
+    return {
+      form: "wheeled or tripod-base utility robot, multiple small work arms folded against the body, tool compartments visible; modest size; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, three-quarter view",
+      palette: "civilian gray and brushed steel with safety-orange accents"
+    };
+  }
+  // Ecology bots — quadrupedal field unit (think a four-legged probe walker).
+  if (/ecology bot/.test(n)) {
+    return {
+      form: "quadrupedal field-survey robot with a low body, articulated multi-jointed legs, sensor mast on top, and a single soil/probe arm on a forward gimbal; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, three-quarter view from the side",
+      palette: "weathered field-green and tan with sensor-cluster glow"
+    };
+  }
+  // Security robotoids — patrol units, often quadrupedal or low-wheeled.
+  if (/security robotoid/.test(n)) {
+    return {
+      form: "low quadrupedal patrol robot or wheeled sentry unit; armored body with retractable sidearm; sensor cluster head on a short neck; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, three-quarter side view",
+      palette: "matte black and dark gray with warning-red optic-cluster glow"
+    };
+  }
+  // Supervisor borg — hover command platform.
+  if (/supervisor borg/.test(n)) {
+    return {
+      form: "hovering command platform; flat disc or squat cylinder body floating on quiet repulsor lift; multiple eye-stalk sensors; arm armature with a holstered sidearm; absolutely NOT a humanoid bipedal robot",
+      framing: "centered square composition, three-quarter view; faint hover glow under the chassis to indicate levitation",
+      palette: "polished aluminum and command-blue accents"
+    };
+  }
+  // Think Tank — explicitly immobile cabinet/console.
+  if (/think tank/.test(n)) {
+    return {
+      form: "immobile cognitive engine — a tall cabinet or pillar housing a glowing data-core, with sensor antennae and exposed circuit boards behind glass; no legs, no wheels, no manipulators; absolutely NOT a humanoid robot",
+      framing: "centered square composition, head-on with subtle perspective; cabinet stands on a base plate",
+      palette: "deep green and copper with internal cyan glow"
+    };
+  }
+  // The classic anthropomorphic units — Robotoids and Light/Standard
+  // domestic Engineering bots remain humanoid (these are the andro-form
+  // chassis players expect). Listed last so the more specific patterns
+  // above still win.
+  if (/robotoid/.test(n)) {
+    return {
+      form: "humanoid service-android chassis — bipedal, two arms, smooth featureless faceplate with a single sensor band; clean civilian styling appropriate for indoor environments",
+      framing: "centered square composition, full body visible, slight three-quarter pose",
+      palette: "polished white and pastel accent (medical green, household cream, etc.) appropriate to the role"
+    };
+  }
+  // Default fallback: explicit nudge away from default humanoid for
+  // anything we didn't recognize.
+  return {
+    form: "non-humanoid robotic unit; choose a tracked, wheeled, hover, quadrupedal, or static cabinet form that fits the description; avoid bipedal humanoid silhouettes unless the description is explicit about an android form",
+    framing: "centered square composition, three-quarter view that exposes the chassis's mode of locomotion",
+    palette: "pre-Fall military or industrial palette — olive drab, aged aluminum, brushed steel, warning yellow accents where appropriate"
+  };
+}
+
 function buildRobotPrompt(robot) {
   const biography = stripHtml(robot.system?.biography?.value ?? "");
   const chassis = robot.system?.robotics?.chassis ?? robot.name;
   const powerSource = robot.system?.robotics?.powerSource ?? "";
   const armament = /Armament:\s*([^<.]+)/i.exec(biography)?.[1]?.trim() ?? "";
+
+  const factor = robotFormFactor(robot.name ?? chassis);
 
   const flavorBits = [
     `${chassis} — a pre-Fall robotic unit`,
@@ -300,15 +405,72 @@ function buildRobotPrompt(robot) {
   const lines = [
     "Use case: stylized-concept",
     "Asset type: tabletop RPG robot portrait",
-    `Primary request: full-body original science-fiction bestiary illustration of ${robot.name}, a pre-Fall robotic unit.`,
+    `Primary request: full-body original science-fiction bestiary illustration of ${robot.name}, a pre-Fall robotic unit. SHAPE: ${factor.form}.`,
     "Scene/backdrop: isolated subject on a transparent background for Foundry VTT use.",
     `Subject: ${flavorText}`,
     "Style/medium: original retro-future industrial illustration, worn metal surfaces, exposed cabling, crisp silhouette, detailed but readable at token size, no copyrighted characters or logos.",
-    "Composition/framing: centered square composition, full body visible, all major anatomy / manipulators in frame, slight ground shadow, no cropping.",
+    `Composition/framing: ${factor.framing}.`,
     "Lighting/mood: dramatic but neutral presentation lighting, subtle rim light, clean readable shapes.",
-    "Color palette: pre-Fall military or industrial palette — olive drab, aged aluminum, brushed steel, warning yellow accents where appropriate.",
+    `Color palette: ${factor.palette}.`,
     "Constraints: single subject only; transparent background; NO text, NO letters, NO numbers, NO labels, NO captions, NO serial numbers, NO writing of any kind anywhere in the image; respect the described chassis, sensors, and armament; no frame; no watermark.",
-    "Avoid: multiple robots, scenery clutter, captions, logo marks, text overlays, decorative armor flourishes that are not described, pilot operators riding the machine."
+    "Avoid: bipedal humanoid silhouette UNLESS the SHAPE line above explicitly says humanoid; multiple robots; scenery clutter; captions; logo marks; text overlays; decorative armor flourishes that are not described; pilot operators riding the machine."
+  ];
+  return lines.join("\n");
+}
+
+/* ------------------------------------------------------------------ */
+/* 0.14.19 — Cryptic Alliance banner art                              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Per-alliance scene briefs. Pre-written rather than auto-derived
+ * from the alliance description because the visual vocabulary of each
+ * faction is deliberately distinct (purist soldiers, robe-and-tome
+ * scholars, hidden android conspiracy, etc.) and matters more than
+ * the few-line text card on the page.
+ */
+const ALLIANCE_SCENES = Object.freeze({
+  "Brotherhood of Thought":
+    "A circle of robed scholars — a pure-strain human, a mutated humanoid with a third eye, and a dignified mutated-animal in scribe's robes — gathered at a long oak table in a vast pre-Fall library; a glowing holographic codex hovers above the table; tall stained-glass windows behind; warm amber reading-lamp light. Mood: scholarly, peaceful, illuminated.",
+  "Followers of the Voice":
+    "Silhouetted figures kneeling in a wasteland half-circle around a tall broadcast pylon whose dish glows with eerie green-blue static; the figures wear ragged robes and crude antennae headpieces wired to handheld receivers; a lone full moon behind the pylon. Mood: cult-of-the-signal, mystery, dread.",
+  "Radiationists":
+    "Hooded mutant cultists kneeling before a glowing radioactive altar in a half-buried reactor chamber; the altar's heart is a piece of fissioning material that bathes the scene in green-yellow light; a banner above bears a stylized radiation trefoil and stars; the worshippers' silhouettes show clear mutations. Mood: zealous, ritualistic, irradiated.",
+  "Ranks of the Fit":
+    "A formation of armored human and humanoid soldiers under a stark crimson-and-black banner; the banner shows a clenched mailed fist; brutalist concrete fortifications behind; pre-Fall power armor with bolt-on plate; rifles braced; stern, helmeted faces. Mood: militant purity, severity, intimidation.",
+  "Restorationists":
+    "A team of human engineers in coveralls and hardhats reactivating an enormous pre-Fall machine — a generator hall with cables, gauges, and rising work-light glow; in the background a partially-restored skyscraper rises against a salvaged skyline; blueprints unrolled on a crate. Mood: hopeful reconstruction, warm copper light, civic pride.",
+  "The Archivists":
+    "A solitary archivist at a reading-lectern in a cathedral-scale data vault; floor-to-ceiling shelves rise into shadow stacked with codices, data-tapes, and ancient drives; the archivist holds an open book that emits a soft amber halo onto the page. Mood: hushed reverence, vast preservation, candlelight + readout glow.",
+  "The Created":
+    "A conclave of silhouetted androids inside a dark, half-lit factory floor — three or four humanoid robotic figures standing in a tight circle, their optic sensors glowing cold cyan; one figure holds a humanoid skull-mask casually at its side; a banner in the background bears a stylized gear-and-eye sigil. Mood: secretive, conspiratorial, cold blue palette.",
+  "The Healers":
+    "A medic in a white-and-green coat tending a wounded mutated humanoid lying on a triage cot; a pure-strain human and a mutated-animal patient wait nearby; a battered white banner with a stylized caduceus / staff-and-leaf hangs behind; the field shelter is canvas with surgical-light glow. Mood: compassionate, warm, neutral aid.",
+  "The Seekers":
+    "A pair of explorers — one in scavenged duster, one a mutated humanoid in a goggled hood — standing in a vast collapsed dome; one holds aloft a glowing pre-Fall artifact whose light spills across crumbled marble walls inscribed with faded ancient script; treasure-cart and dim torchlight in the foreground. Mood: wonder, danger, lost-civilization grandeur.",
+  "Zoopremisists":
+    "A coalition of mutated animals in faction regalia — a wolf-headed sergeant in armor at center holding a banner aloft, flanked by a mutated bear, a mutated raven on a perch, and a smaller fox-form runner; banner shows a stylized paw-print with crown; sun-baked plains landscape behind. Mood: dignified animal-led order, defiance, golden sunset light."
+});
+
+function buildAlliancePrompt(alliance) {
+  const html = alliance.pages?.[0]?.text?.content ?? "";
+  const description = stripHtml(html);
+  const scene = ALLIANCE_SCENES[alliance.name]
+    ?? `A faction tableau evoking: ${description.slice(0, 240)}.`;
+
+  const lines = [
+    "Use case: faction banner / journal-page header art",
+    "Asset type: cryptic-alliance heraldic illustration",
+    `Primary request: original square illustration representing the GW1e cryptic alliance "${alliance.name}", suitable for the header of a journal page describing the faction.`,
+    "Scene/backdrop: a single composed scene as described below (NOT a transparent background — this is a banner, fill the frame).",
+    `Subject scene: ${scene}`,
+    `Faction tagline (for tone, do not render as text): ${description.slice(0, 320)}`,
+    "Style/medium: painted fantasy / post-apocalyptic illustration; dramatic but readable shapes; era-evoking detail (pre-Fall ruins, retro-future tech, stylized banners); no copyrighted characters or logos.",
+    "Composition/framing: square composition, mid-distance view of the scene, subject(s) centered, environmental context filling the rest of the frame.",
+    "Lighting/mood: as described in the subject scene; lean into the faction's emotional register.",
+    "Color palette: as described in the subject scene; use it to make each alliance instantly distinguishable from the others.",
+    "Constraints: NO text, NO letters, NO numbers, NO labels, NO captions, NO writing of any kind anywhere in the image; faction banners may show abstract sigils / shapes but never readable letterforms; no watermark; no frame.",
+    "Avoid: copyrighted symbols (real-world flags, brand logos, religious symbols of present-day faiths), generic stock-fantasy clichés that ignore the post-apocalyptic setting."
   ];
   return lines.join("\n");
 }
@@ -347,6 +509,11 @@ const CATEGORIES = {
     default_out: path.join(repoRoot, "tmp", "imagegen", "sample-actor-prompts.jsonl"),
     sources: async () => samplePackSources(),
     promptFor: buildSampleActorPrompt
+  },
+  "cryptic-alliances": {
+    default_out: path.join(repoRoot, "tmp", "imagegen", "cryptic-alliance-prompts.jsonl"),
+    sources: async () => crypticAlliancePackSources(),
+    promptFor: buildAlliancePrompt
   }
 };
 

@@ -114,8 +114,19 @@ def category_paths(category: str) -> dict:
                 REPO_ROOT / "assets" / "actors" / "tokens",
             ],
         }
+    if category == "cryptic-alliances":
+        # 0.14.19 — square banner art for the cryptic-alliance JournalEntry
+        # pages. Single-image final (no portrait/token split); the wire-up
+        # script injects the rendered asset as an <img> at the top of each
+        # alliance's text page content.
+        return {
+            "prompts": REPO_ROOT / "tmp" / "imagegen" / "cryptic-alliance-prompts.jsonl",
+            "base":    REPO_ROOT / "output" / "imagegen" / "cryptic-alliances" / "base",
+            "finals":  [REPO_ROOT / "assets" / "cryptic-alliances"],
+        }
     raise SystemExit(f"Unknown category: {category!r}. "
-                     f"Valid: monsters, weapons, armor, gear, mutations, robots, sample-actors.")
+                     f"Valid: monsters, weapons, armor, gear, mutations, robots, "
+                     f"sample-actors, cryptic-alliances.")
 
 
 def read_prompts(path: Path, category: str) -> list[dict]:
@@ -123,13 +134,14 @@ def read_prompts(path: Path, category: str) -> list[dict]:
         # 0.14.x — guidance string handles the new categories explicitly
         # (sample-actors slug doesn't suffix-strip cleanly to "sample-actor").
         guidance = {
-            "monsters":      "node scripts/build-monster-art-prompts.mjs",
-            "weapons":       "node scripts/build-item-art-prompts.mjs --category weapons",
-            "armor":         "node scripts/build-item-art-prompts.mjs --category armor",
-            "gear":          "node scripts/build-item-art-prompts.mjs --category gear",
-            "mutations":     "node scripts/build-item-art-prompts.mjs --category mutations",
-            "robots":        "node scripts/build-item-art-prompts.mjs --category robots",
-            "sample-actors": "node scripts/build-item-art-prompts.mjs --category sample-actors"
+            "monsters":          "node scripts/build-monster-art-prompts.mjs",
+            "weapons":           "node scripts/build-item-art-prompts.mjs --category weapons",
+            "armor":             "node scripts/build-item-art-prompts.mjs --category armor",
+            "gear":              "node scripts/build-item-art-prompts.mjs --category gear",
+            "mutations":         "node scripts/build-item-art-prompts.mjs --category mutations",
+            "robots":            "node scripts/build-item-art-prompts.mjs --category robots",
+            "sample-actors":     "node scripts/build-item-art-prompts.mjs --category sample-actors",
+            "cryptic-alliances": "node scripts/build-item-art-prompts.mjs --category cryptic-alliances"
         }.get(category, f"node scripts/build-item-art-prompts.mjs --category {category}")
         raise SystemExit(
             f"Prompt JSONL not found at {path}. Run `{guidance}` first."
